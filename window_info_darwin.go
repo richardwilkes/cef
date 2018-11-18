@@ -7,5 +7,5 @@ import (
 )
 
 func (w *WindowInfo) platformInit(parent WindowHandle) {
-	w.native.parent_view = C.cef_window_handle_t(unsafe.Pointer(parent))
+	w.native.parent_view = unsafe.Pointer(parent)
 }

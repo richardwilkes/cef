@@ -2,7 +2,7 @@ package cef
 
 import (
 	// #include <stdlib.h>
-	// #include "include/capi/cef_app_capi.h"
+	// #include "include/internal/cef_types.h"
 	"C"
 )
 
@@ -20,6 +20,7 @@ const (
 type Color uint32
 
 // BrowserSettings holds browser initialization settings.
+//
 // Defined in include/internal/cef_types.h
 type BrowserSettings struct {
 	native *C.cef_browser_settings_t
@@ -225,14 +226,14 @@ func (b *BrowserSettings) SetWebGL(state State) {
 // as the background color. If the alpha component is fully transparent for a
 // windowed browser then the background color value will be used. If the alpha
 // component is fully transparent for a windowless (off-screen) browser then
-// transparent painting will be enabled.
+// transparent painting will be enabled. Defaults to the value in Settings.
 func (b *BrowserSettings) SetBackgroundColor(color Color) {
 	b.native.background_color = C.cef_color_t(color)
 }
 
 // SetAcceptLanguageList sets a comma delimited ordered list of language codes
 // without any whitespace that will be used in the "Accept-Language" HTTP
-// header. Defaults to "en-US,en".
+// header. Defaults to the value in Settings.
 func (b *BrowserSettings) SetAcceptLanguageList(list string) {
 	setCEFStr(list, &b.native.accept_language_list)
 }

@@ -7,6 +7,12 @@ import (
 	"github.com/richardwilkes/toolbox/log/jot"
 )
 
+// Frame represents a frame in the browser window. When used in the browser
+// process the functions of this structure may be called on any thread unless
+// otherwise indicated in the comments. When used in the render process the
+// functions of this structure may only be called on the main thread.
+//
+// Defined in include/capi/cef_frame_capi.h
 type Frame struct {
 	native *C.cef_frame_t
 }
@@ -141,3 +147,7 @@ func (f *Frame) URL() string {
 func (f *Frame) Browser() *Browser {
 	return &Browser{native: C.gocef_call_browser_frame(f.native, f.native.get_browser)}
 }
+
+// RAW: Implement
+//  - get_v8context
+//  - visit_dom

@@ -30,12 +30,12 @@ func ExecuteProcess() error {
 }
 
 // Initialize CEF.
-func Initialize(settings Settings) error {
+func Initialize(settings *Settings) error {
 	args, err := mainArgs()
 	if err != nil {
 		return err
 	}
-	if C.cef_initialize(args, settings, nil, nil) != 1 {
+	if C.cef_initialize(args, settings.native, nil, nil) != 1 {
 		return errs.New("Unable to initialize CEF")
 	}
 	return nil

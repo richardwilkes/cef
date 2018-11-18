@@ -8,6 +8,8 @@ import (
 	"github.com/richardwilkes/toolbox/xmath/geom"
 )
 
+// WindowInfo holds both common and platform-specific window information.
+// The macOS version is defined in include/internal/cef_types_mac.h
 type WindowInfo struct {
 	native *C.cef_window_info_t
 }
