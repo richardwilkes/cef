@@ -25,6 +25,7 @@ func ExecuteProcess() error {
 	if code := C.cef_execute_process(args, nil, nil); code >= 0 {
 		atexit.Exit(int(code))
 	}
+	instantiateCEFApplication()
 	return nil
 }
 
