@@ -15,8 +15,8 @@ import (
 )
 
 // ExecuteProcess is used to start the secondary CEF processes. If this is
-// the main process, this call will do nothing and return. If it is a
-// secondary process, the call will not return.
+// the main process, this call will return. If it is a secondary process, the
+// call will not return.
 func ExecuteProcess() error {
 	args, err := mainArgs()
 	if err != nil {

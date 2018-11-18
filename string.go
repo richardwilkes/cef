@@ -16,6 +16,12 @@ func newCEFStr(str string) *C.cef_string_t {
 	return cefstr
 }
 
+func setCEFStr(str string, cefStr *C.cef_string_t) {
+	utf8str := C.CString(str)
+	C.cef_string_from_utf8(utf8str, C.strlen(utf8str), cefStr)
+	C.free(unsafe.Pointer(utf8str))
+}
+
 func cefuserfreestrToString(cefstr C.cef_string_userfree_t) string {
 	if cefstr == nil {
 		return ""
