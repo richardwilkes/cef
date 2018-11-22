@@ -1,0 +1,35 @@
+package cef
+
+import (
+	// #include "{{.Position.Src}}"
+	"C"
+{{- if .NeedsUnsafeImport}}
+	"unsafe"
+{{- end}}
+)
+
+// {{.GoName}} ({{.Name}})
+{{- $comment := .Position.Comment}}{{if $comment}}
+{{$comment}}
+{{- end}}
+type {{.GoName}} struct {
+{{- range .Fields}}
+	// {{.GoName}} ({{.Name}})
+{{- $comment := .Position.Comment}}{{if $comment}}
+	{{$comment}}
+{{- end}}
+	{{.GoName}} {{.GoReturnType}}
+{{- end}}
+}
+
+func (d *{{.GoName}}) toNative(native *C.{{.Name}}) {
+{{- range .Fields}}
+	{{.ToNative}}
+{{- end}}
+}
+
+func (d *{{.GoName}}) fromNative(native *C.{{.Name}}) {
+{{- range .Fields}}
+	{{.FromNative}}
+{{- end}}
+}

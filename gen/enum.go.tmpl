@@ -1,0 +1,20 @@
+package cef
+{{- range .}}
+
+// {{.GoName}} ({{.Name}})
+{{- $comment := .Position.Comment}}{{if $comment}}
+{{$comment}}
+{{- end}}
+type {{.GoName}} {{.Type}}
+
+// Possible values for {{.GoName}}
+const (
+{{- $e := .}}
+{{- range .Values}}
+{{- $comment := .Position.Comment}}{{if $comment}}
+{{$comment}}
+{{- end}}
+	{{.GoName}} {{$e.GoName}} = {{.Value}} // {{.Name}}
+{{- end}}
+)
+{{- end}}

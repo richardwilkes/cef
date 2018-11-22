@@ -1,0 +1,16 @@
+package cef
+
+import (
+{{- range .Headers}}
+	// #include "{{.}}"
+{{- end}}
+	"C"
+)
+{{- range .Types}}
+
+// {{.GoName}} ({{.Name}})
+{{- $comment := .Position.Comment}}{{if $comment}}
+{{$comment}}
+{{- end}}
+type {{.GoName}} {{.RefersTo}}
+{{- end}}
