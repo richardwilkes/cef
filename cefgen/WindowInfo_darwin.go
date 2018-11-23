@@ -40,7 +40,7 @@ type WindowInfo struct {
 	View unsafe.Pointer
 }
 
-func (d *WindowInfo) toNative(native *C.cef_window_info_t) {
+func (d *WindowInfo) toNative(native *C.cef_window_info_t) *C.cef_window_info_t {
 	setCEFStr(d.WindowName, &native.window_name)
 	native.x = C.int(d.X)
 	native.y = C.int(d.Y)
@@ -50,6 +50,7 @@ func (d *WindowInfo) toNative(native *C.cef_window_info_t) {
 	native.parent_view = d.ParentView
 	native.windowless_rendering_enabled = C.int(d.WindowlessRenderingEnabled)
 	native.view = d.View
+	return native
 }
 
 func (d *WindowInfo) fromNative(native *C.cef_window_info_t) {

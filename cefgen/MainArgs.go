@@ -18,8 +18,9 @@ func newMainArgs() *MainArgs {
 	return args
 }
 
-func (d *MainArgs) toNative(native *C.cef_main_args_t) {
+func (d *MainArgs) toNative(native *C.cef_main_args_t) *C.cef_main_args_t {
 	*native = d.native
+	return native
 }
 
 func (d *MainArgs) fromNative(native *C.cef_main_args_t) {

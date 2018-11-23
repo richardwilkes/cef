@@ -45,6 +45,16 @@ func (s *structDef) isClassEquivalent() bool {
 	return false
 }
 
+func (s *structDef) Trampolines() []string {
+	var result []string
+	for _, f := range s.Fields {
+		if f.FunctionPtr {
+			result = append(result, f.Trampoline())
+		}
+	}
+	return result
+}
+
 func translateStructTypeName(name string) string {
 	if strings.HasPrefix(name, "cef_") && strings.HasSuffix(name, "_t") {
 		name = translateConstantName(name[4 : len(name)-2])
@@ -68,7 +78,7 @@ func processRecordDecl(block []lineInfo) {
 								if space := strings.Index(line, " "); space != -1 {
 									line = line[space+1:]
 									if start = strings.Index(line, " "); space != -1 {
-										sdef.Fields = append(sdef.Fields, newField(line[:start], strings.Trim(line[start+1:], "'"), block[i].Position))
+										sdef.Fields = append(sdef.Fields, newField(sdef, line[:start], strings.Trim(line[start+1:], "'"), block[i].Position))
 									}
 								}
 							}

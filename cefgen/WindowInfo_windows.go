@@ -54,7 +54,7 @@ type WindowInfo struct {
 	Window unsafe.Pointer
 }
 
-func (d *WindowInfo) toNative(native *C.cef_window_info_t) {
+func (d *WindowInfo) toNative(native *C.cef_window_info_t) *C.cef_window_info_t {
 	native.ex_style = C.DWORD(d.ExStyle)
 	setCEFStr(d.WindowName, &native.window_name)
 	native.style = C.DWORD(d.Style)
@@ -68,6 +68,7 @@ func (d *WindowInfo) toNative(native *C.cef_window_info_t) {
 	native.shared_texture_enabled = C.int(d.SharedTextureEnabled)
 	native.external_begin_frame_enabled = C.int(d.ExternalBeginFrameEnabled)
 	native.window = d.Window
+	return native
 }
 
 func (d *WindowInfo) fromNative(native *C.cef_window_info_t) {

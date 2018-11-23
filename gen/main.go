@@ -5,12 +5,14 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"go/format"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 	"sync"
 	"text/template"
@@ -33,9 +35,11 @@ type lineInfo struct {
 }
 
 func main() {
-	examineCEFSource()
+	headers := capiHeaders()
+	examineCEFSource(headers)
 	outputBaseDir = filepath.Join(outputBaseDir, "cefgen") // Remove when done testing
 	cleanOutput()
+	createCommonHeader(headers)
 	dumpStructs()
 	dumpEnums()
 	dumpTypedefs()
@@ -55,9 +59,9 @@ func cleanOutput() {
 	}
 }
 
-func examineCEFSource() {
+func examineCEFSource(headers []string) {
 	var err error
-	cmd := exec.Command("clang", clangArgs()...)
+	cmd := exec.Command("clang", clangArgs(headers)...)
 	cmd.Dir, err = filepath.Abs(cefBaseDir)
 	jot.FatalIfErr(err)
 	stdout, err := cmd.StdoutPipe()
@@ -128,9 +132,25 @@ func scanStderr(wg *sync.WaitGroup, r io.Reader) {
 	}
 }
 
-func clangArgs() []string {
-	path := filepath.Join(cefBaseDir, "include", "capi")
-	args := make([]string, 0)
+func capiHeaders() []string {
+	f, err := os.Open(filepath.Join(cefBaseDir, "include", "capi"))
+	jot.FatalIfErr(err)
+	list, err := f.Readdir(-1)
+	jot.FatalIfErr(err)
+	jot.FatalIfErr(f.Close())
+	headers := make([]string, 0, len(list))
+	for _, one := range list {
+		if !one.IsDir() {
+			header := filepath.Join("include", "capi", one.Name())
+			headers = append(headers, header)
+		}
+	}
+	sort.Strings(headers)
+	return headers
+}
+
+func clangArgs(headers []string) []string {
+	args := make([]string, 0, len(headers)+7)
 	args = append(args, "-I")
 	args = append(args, ".")
 	args = append(args, "-Xclang")
@@ -138,25 +158,17 @@ func clangArgs() []string {
 	args = append(args, "-fsyntax-only")
 	args = append(args, "-fno-color-diagnostics")
 	args = append(args, "-Wno-visibility")
-	f, err := os.Open(path)
-	jot.FatalIfErr(err)
-	list, err := f.Readdir(-1)
-	jot.FatalIfErr(err)
-	jot.FatalIfErr(f.Close())
-	for _, one := range list {
-		if !one.IsDir() {
-			args = append(args, filepath.Join("include", "capi", one.Name()))
-		}
-	}
-	// f, err = os.Open(filepath.Join(path, "views"))
-	// jot.FatalIfErr(err)
-	// list, err = f.Readdir(-1)
-	// jot.FatalIfErr(err)
-	// jot.FatalIfErr(f.Close())
-	// for _, one := range list {
-	// 	if !one.IsDir() {
-	// 		args = append(args, filepath.Join("include", "capi", "views", one.Name()))
-	// 	}
-	// }
+	args = append(args, headers...)
 	return args
+}
+
+func createCommonHeader(headers []string) {
+	f, err := os.Create(filepath.Join(outputBaseDir, "capi_gen.h"))
+	jot.FatalIfErr(err)
+	f.WriteString("#ifndef GOCEF_CAPI_H_\n#define GOCEF_CAPI_H_\n#pragma once\n\n")
+	for _, header := range headers {
+		fmt.Fprintf(f, "#include \"%s\"\n", header)
+	}
+	f.WriteString("\n#endif // GOCEF_CAPI_H_\n")
+	jot.FatalIfErr(f.Close())
 }

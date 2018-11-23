@@ -9,11 +9,13 @@ import (
 )
 
 var specialNames = map[string]bool{
-	"range": true,
-	"type":  true,
+	"range":  true,
+	"select": true,
+	"type":   true,
 }
 
 type field struct {
+	Owner        *structDef
 	Name         string
 	GoName       string
 	CReturnType  string
@@ -25,9 +27,10 @@ type field struct {
 	Position     position
 }
 
-func newField(name, typeInfo string, pos position) *field {
+func newField(owner *structDef, name, typeInfo string, pos position) *field {
 	original := typeInfo
 	f := &field{
+		Owner:    owner,
 		Name:     name,
 		GoName:   txt.ToCamelCase(name),
 		Position: pos,
@@ -86,7 +89,7 @@ var cMappings = []cMapping{
 	{C: "cef_string_utf8_t", Go: "string"},
 	{C: "cef_string_utf16_t", Go: "string"},
 	{C: "cef_string_wide_t", Go: "string"},
-	{C: "size_t", Go: "int64"},
+	{C: "size_t", Go: "uint64"},
 	{C: "int", Go: "int32"},
 	{C: "float", Go: "float32"},
 	{C: "double", Go: "float64"},
@@ -121,12 +124,12 @@ func (f *field) Skip() bool {
 	return f.Name == "base" && (f.CReturnType == "cef_base_ref_counted_t" || f.CReturnType == "cef_base_scoped_t")
 }
 
-func (f *field) ParameterList(d *structDef) string {
+func (f *field) ParameterList() string {
 	var buffer strings.Builder
 	if f.FunctionPtr {
 		count := 0
 		for i, p := range f.GoParams {
-			if i != 0 || p != "*"+d.GoName {
+			if i != 0 || p != "*"+f.Owner.GoName {
 				count++
 				if count != 1 {
 					buffer.WriteString(", ")
@@ -141,42 +144,76 @@ func (f *field) ParameterList(d *structDef) string {
 	return buffer.String()
 }
 
-func (f *field) GoReturn() string {
+func (f *field) CallFunctionPointer() string {
 	var buffer strings.Builder
-	if sdef, exists := sdefsMap[f.CReturnType]; exists && !sdef.isClassEquivalent() {
-		fmt.Fprintf(&buffer, `var result C.%s // RAW: Need impl
-	var goResult %s
-	goResult.fromNative(&result)
-	return goResult
-`, f.CReturnType, sdef.GoName)
+	for i, p := range f.CParams {
+		if i != 0 {
+			p := strings.Replace(p, "const ", "", -1)
+			if p == "cef_string_t *" {
+				fmt.Fprintf(&buffer, "var s%d C.cef_string_t\n", i)
+				fmt.Fprintf(&buffer, "setCEFStr(*p%d, &s%d)\n", i, i)
+			}
+		}
+	}
+	prefixLines := buffer.String()
+	buffer.Reset()
+	fmt.Fprintf(&buffer, "C.%s(d.toNative()", f.trampolineName())
+	for i, p := range f.CParams {
+		if i != 0 {
+			buffer.WriteString(", ")
+			p := strings.Replace(p, "const ", "", -1)
+			if p == "cef_string_t *" {
+				fmt.Fprintf(&buffer, "&s%d", i)
+			} else if f.GoParams[i] == "unsafe.Pointer" {
+				fmt.Fprintf(&buffer, "p%d", i)
+			} else {
+				var stars string
+				if space := strings.Index(p, " "); space != -1 {
+					stars = p[space+1:]
+					p = p[:space]
+				}
+				if sdef, exists := sdefsMap[p]; exists {
+					fmt.Fprintf(&buffer, "p%d.toNative(", i)
+					if !sdef.isClassEquivalent() {
+						fmt.Fprintf(&buffer, "&C.%s{}", p)
+					}
+					buffer.WriteString(")")
+				} else if stars != "" {
+					fmt.Fprintf(&buffer, "(%sC.%s)(p%d)", stars, p, i)
+				} else {
+					fmt.Fprintf(&buffer, "C.%s(p%d)", p, i)
+				}
+			}
+		}
+	}
+	fmt.Fprintf(&buffer, ", d.%s)", f.Name)
+	call := buffer.String()
+	buffer.Reset()
+	buffer.WriteString(prefixLines)
+	if f.GoReturnType == "" {
+		buffer.WriteString(call)
 	} else {
-		buffer.WriteString("return ")
-		switch f.GoReturnType {
-		case "unsafe.Pointer":
-			buffer.WriteString("nil // RAW: Need impl")
-		case "string":
+		if sdef, exists := sdefsMap[f.CReturnType]; exists && !sdef.isClassEquivalent() {
+			fmt.Fprintf(&buffer, `native := %s
+var result %s
+result.fromNative(&native)
+return result`, call, f.GoReturnType)
+		} else {
 			switch f.CReturnType {
 			case "cef_string_t":
-				fmt.Fprintf(&buffer, "cefstrToString(&d.native.%s)", f.Name)
+				fmt.Fprintf(&buffer, "native := %s\nreturn cefstrToString(&native)", call)
 			case "cef_string_t *":
-				fmt.Fprintf(&buffer, "cefstrToString(d.native.%s)", f.Name)
+				fmt.Fprintf(&buffer, "return cefstrToString(%s)", call)
+			case "cef_string_userfree_t":
+				fmt.Fprintf(&buffer, "return cefuserfreestrToString(%s)", call)
 			default:
-				buffer.WriteString(`"" // RAW: Need impl`)
-			}
-		default:
-			if f.FunctionPtr {
-				if strings.HasPrefix(f.GoReturnType, "*") {
-					buffer.WriteString("nil // RAW: Need impl")
-				} else {
-					buffer.WriteString("0 // RAW: Need impl")
-				}
-			} else {
+				buffer.WriteString("return ")
 				if strings.HasPrefix(f.GoReturnType, "*") {
 					fmt.Fprintf(&buffer, "(%s)", f.GoReturnType)
 				} else {
 					buffer.WriteString(f.GoReturnType)
 				}
-				fmt.Fprintf(&buffer, "(d.native.%s)", f.Name)
+				fmt.Fprintf(&buffer, "(%s)", call)
 			}
 		}
 	}
@@ -228,5 +265,41 @@ func (f *field) FromNative() string {
 			fmt.Fprintf(&buffer, "(native.%s)", f.Name)
 		}
 	}
+	return buffer.String()
+}
+
+func (f *field) trampolineName() string {
+	return fmt.Sprintf("gocef_%s_%s", strings.TrimSuffix(strings.TrimPrefix(f.Owner.Name, "cef_"), "_t"), f.Name)
+}
+
+func (f *field) Trampoline() string {
+	if !f.FunctionPtr {
+		return ""
+	}
+	var buffer strings.Builder
+	fmt.Fprintf(&buffer, "%s %s(", f.CReturnType, f.trampolineName())
+	for i, p := range f.CParams {
+		if i == 0 {
+			fmt.Fprintf(&buffer, "%s self", p)
+		} else {
+			fmt.Fprintf(&buffer, ", %s p%d", p, i)
+		}
+	}
+	fmt.Fprintf(&buffer, ", %s (CEF_CALLBACK *callback)(", f.CReturnType)
+	for i, p := range f.CParams {
+		if i != 0 {
+			buffer.WriteString(", ")
+		}
+		fmt.Fprintf(&buffer, "%s", p)
+	}
+	buffer.WriteString(")) { return callback(")
+	for i := range f.CParams {
+		if i == 0 {
+			buffer.WriteString("self")
+		} else {
+			fmt.Fprintf(&buffer, ", p%d", i)
+		}
+	}
+	buffer.WriteString("); }")
 	return buffer.String()
 }

@@ -1,7 +1,10 @@
 package cef
 
 import (
-	// #include "{{.Position.Src}}"
+	// #include "capi_gen.h"
+{{- range .Trampolines}}
+	// {{.}}
+{{- end}}
 	"C"
 {{- if .NeedsUnsafeImport}}
 	"unsafe"
@@ -12,8 +15,10 @@ import (
 {{- $comment := .Position.Comment}}{{if $comment}}
 {{$comment}}
 {{- end}}
-type {{.GoName}} struct {
-	native *C.{{.Name}}
+type {{.GoName}} C.{{.Name}}
+
+func (d *{{.GoName}}) toNative() *C.{{.Name}} {
+	return (*C.{{.Name}})(d)
 }
 {{- $def := .}}
 {{- range .Fields}}
@@ -23,10 +28,8 @@ type {{.GoName}} struct {
 {{- $comment := .Position.Comment}}{{if $comment}}
 {{$comment}}
 {{- end}}
-func (d *{{$def.GoName}}) {{.GoName}}({{.ParameterList $def}}) {{if .GoReturnType}}{{.GoReturnType}} {{end}}{
-{{- if .GoReturnType}}
-	{{.GoReturn}}
-{{- end}}
+func (d *{{$def.GoName}}) {{.GoName}}({{.ParameterList}}) {{if .GoReturnType}}{{.GoReturnType}} {{end}}{
+	{{.CallFunctionPointer}}
 }
 {{- end}}
 {{- end}}

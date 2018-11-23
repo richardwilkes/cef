@@ -1,7 +1,7 @@
 package cef
 
 import (
-	// #include "{{.Position.Src}}"
+	// #include "capi_gen.h"
 	"C"
 {{- if .NeedsUnsafeImport}}
 	"unsafe"
@@ -22,10 +22,11 @@ type {{.GoName}} struct {
 {{- end}}
 }
 
-func (d *{{.GoName}}) toNative(native *C.{{.Name}}) {
+func (d *{{.GoName}}) toNative(native *C.{{.Name}}) *C.{{.Name}} {
 {{- range .Fields}}
 	{{.ToNative}}
 {{- end}}
+	return native
 }
 
 func (d *{{.GoName}}) fromNative(native *C.{{.Name}}) {
