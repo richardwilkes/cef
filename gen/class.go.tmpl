@@ -29,7 +29,13 @@ func (d *{{.GoName}}) toNative() *C.{{.Name}} {
 {{$comment}}
 {{- end}}
 func (d *{{$def.GoName}}) {{.GoName}}({{.ParameterList}}) {{if .GoReturnType}}{{.GoReturnType}} {{end}}{
+{{- if .FunctionPtr}}
 	{{.CallFunctionPointer}}
+{{- else}}
+{{- if .GoReturnType}}
+	return {{.GoReturnType}}(d.{{.Name}})
+{{- end}}
+{{- end}}
 }
 {{- end}}
 {{- end}}

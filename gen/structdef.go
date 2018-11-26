@@ -34,11 +34,8 @@ func (s *structDef) NeedsUnsafeImport() bool {
 }
 
 func (s *structDef) isClassEquivalent() bool {
-	for i, f := range s.Fields {
+	for _, f := range s.Fields {
 		if f.FunctionPtr {
-			return true
-		}
-		if i == 0 && (f.CReturnType == "cef_base_ref_counted_t" || f.CReturnType == "cef_base_scoped_t") {
 			return true
 		}
 	}

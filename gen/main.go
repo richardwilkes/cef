@@ -165,7 +165,7 @@ func clangArgs(headers []string) []string {
 func createCommonHeader(headers []string) {
 	f, err := os.Create(filepath.Join(outputBaseDir, "capi_gen.h"))
 	jot.FatalIfErr(err)
-	f.WriteString("#ifndef GOCEF_CAPI_H_\n#define GOCEF_CAPI_H_\n#pragma once\n\n")
+	f.WriteString("#ifndef GOCEF_CAPI_H_\n#define GOCEF_CAPI_H_\n#pragma once\n\n#include <stdlib.h>\n")
 	for _, header := range headers {
 		fmt.Fprintf(f, "#include \"%s\"\n", header)
 	}

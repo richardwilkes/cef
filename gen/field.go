@@ -78,9 +78,6 @@ type cMapping struct {
 }
 
 var cMappings = []cMapping{
-	// RAW: Look at the cef_base_* mappings...
-	{C: "cef_base_scoped_t", Go: "uintptr"},
-	{C: "cef_base_ref_counted_t", Go: "uintptr"},
 	{C: "cef_string_t", Go: "string"},
 	{C: "cef_string_userfree_t", Go: "string"},
 	{C: "cef_string_userfree_utf8_t", Go: "string"},
@@ -100,24 +97,31 @@ var cMappings = []cMapping{
 
 func deriveGoTypeFromCType(in string, needsUnsafe *bool) string {
 	in = strings.Replace(in, "const ", "", -1)
-	if in == "void" {
+	switch in {
+	case "void":
 		return ""
-	}
-	if in == "void *" || in == "void **" {
+	case "void *":
 		*needsUnsafe = true
 		return "unsafe.Pointer"
-	}
-	prefix := ""
-	if i := strings.Index(in, " "); i != -1 {
-		prefix = in[i+1:]
-		in = in[:i]
-	}
-	for _, one := range cMappings {
-		if one.C == in {
-			return prefix + one.Go
+	case "void **":
+		*needsUnsafe = true
+		return "*unsafe.Pointer"
+	case "char **":
+		*needsUnsafe = true
+		return "[]string"
+	default:
+		prefix := ""
+		if i := strings.Index(in, " "); i != -1 {
+			prefix = in[i+1:]
+			in = in[:i]
 		}
+		for _, one := range cMappings {
+			if one.C == in {
+				return prefix + one.Go
+			}
+		}
+		return prefix + translateStructTypeName(in)
 	}
-	return prefix + translateStructTypeName(in)
 }
 
 func (f *field) Skip() bool {
@@ -144,44 +148,85 @@ func (f *field) ParameterList() string {
 	return buffer.String()
 }
 
+type param struct {
+	Type string
+	Ptrs string
+}
+
 func (f *field) CallFunctionPointer() string {
-	var buffer strings.Builder
+	params := make([]param, len(f.CParams))
 	for i, p := range f.CParams {
+		p := strings.Replace(p, "const ", "", -1)
+		if space := strings.Index(p, " "); space != -1 {
+			params[i] = param{
+				Type: p[:space],
+				Ptrs: p[space+1:],
+			}
+		} else {
+			params[i] = param{Type: p}
+		}
+	}
+	var buffer strings.Builder
+	for i, p := range params {
 		if i != 0 {
-			p := strings.Replace(p, "const ", "", -1)
-			if p == "cef_string_t *" {
+			if p.Type == "cef_string_t" {
 				fmt.Fprintf(&buffer, "var s%d C.cef_string_t\n", i)
-				fmt.Fprintf(&buffer, "setCEFStr(*p%d, &s%d)\n", i, i)
+				fmt.Fprintf(&buffer, "setCEFStr(%sp%d, &s%d)\n", p.Ptrs, i, i)
+			} else if p.Ptrs == "**" {
+				if sdef, exists := sdefsMap[p.Type]; exists {
+					fmt.Fprintf(&buffer, "pd%d := (*p%d).toNative(", i, i)
+					if !sdef.isClassEquivalent() {
+						fmt.Fprintf(&buffer, "&C.%s{}", p)
+					}
+					buffer.WriteString(")\n")
+				} else if p.Type == "char" {
+					fmt.Fprintf(&buffer, `cp%[1]d := C.calloc(C.size_t(len(p%[1]d)), C.size_t(unsafe.Sizeof(uintptr(0))))
+tp%[1]d := (*[1<<30 - 1]*C.char)(cp%[1]d)
+for i, one := range p%[1]d {
+	tp%[1]d[i] = C.CString(one)
+}
+`, i)
+				}
+			} else if p.Ptrs == "*" {
+				if _, exists := edefsMap[p.Type]; exists {
+					fmt.Fprintf(&buffer, "e%d := C.%s(*p%d)\n", i, p.Type, i)
+				}
 			}
 		}
 	}
 	prefixLines := buffer.String()
 	buffer.Reset()
 	fmt.Fprintf(&buffer, "C.%s(d.toNative()", f.trampolineName())
-	for i, p := range f.CParams {
+	for i, p := range params {
 		if i != 0 {
 			buffer.WriteString(", ")
-			p := strings.Replace(p, "const ", "", -1)
-			if p == "cef_string_t *" {
-				fmt.Fprintf(&buffer, "&s%d", i)
-			} else if f.GoParams[i] == "unsafe.Pointer" {
+			if p.Type == "void" {
 				fmt.Fprintf(&buffer, "p%d", i)
+			} else if p.Type == "cef_string_t" && p.Ptrs == "*" {
+				fmt.Fprintf(&buffer, "&s%d", i)
+			} else if p.Type == "char" && p.Ptrs == "**" {
+				fmt.Fprintf(&buffer, "(**C.char)(cp%d)", i)
 			} else {
-				var stars string
-				if space := strings.Index(p, " "); space != -1 {
-					stars = p[space+1:]
-					p = p[:space]
-				}
-				if sdef, exists := sdefsMap[p]; exists {
-					fmt.Fprintf(&buffer, "p%d.toNative(", i)
-					if !sdef.isClassEquivalent() {
-						fmt.Fprintf(&buffer, "&C.%s{}", p)
+				if p.Ptrs == "*" {
+					if _, exists := edefsMap[p.Type]; exists {
+						fmt.Fprintf(&buffer, "&e%d", i)
+						continue
 					}
-					buffer.WriteString(")")
-				} else if stars != "" {
-					fmt.Fprintf(&buffer, "(%sC.%s)(p%d)", stars, p, i)
+				}
+				if sdef, exists := sdefsMap[p.Type]; exists {
+					if len(p.Ptrs) > 1 {
+						fmt.Fprintf(&buffer, "&pd%d", i)
+					} else {
+						fmt.Fprintf(&buffer, "p%d.toNative(", i)
+						if !sdef.isClassEquivalent() {
+							fmt.Fprintf(&buffer, "&C.%s{}", p.Type)
+						}
+						buffer.WriteString(")")
+					}
+				} else if len(p.Ptrs) > 0 {
+					fmt.Fprintf(&buffer, "(%sC.%s)(p%d)", p.Ptrs, p.Type, i)
 				} else {
-					fmt.Fprintf(&buffer, "C.%s(p%d)", p, i)
+					fmt.Fprintf(&buffer, "C.%s(p%d)", p.Type, i)
 				}
 			}
 		}

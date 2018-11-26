@@ -30,8 +30,6 @@ func newTypeDef(name, refersTo string, pos position) *typeDef {
 }
 
 var excludeMap = map[string]bool{
-	"cef_base_ref_counted_t":      true,
-	"cef_base_scoped_t":           true,
 	"cef_string_t":                true,
 	"cef_string_userfree_t":       true,
 	"cef_string_userfree_utf8_t":  true,
