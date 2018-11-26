@@ -44,6 +44,16 @@ func newField(owner *structDef, name, typeInfo string, pos position) *field {
 		typeInfo = typeInfo[:fp]
 	}
 	f.CReturnType = filterCTypeName(typeInfo)
+	if f.Name == "base" {
+		switch f.CReturnType {
+		case "cef_base_ref_counted_t":
+			f.CReturnType = "cef_base_ref_counted_t *"
+		case "cef_base_scoped_t":
+			f.CReturnType = "cef_base_scoped_t *"
+		default:
+			jot.Fatal(1, "Unexpected base type")
+		}
+	}
 	f.GoReturnType = deriveGoTypeFromCType(f.CReturnType, &f.NeedsUnsafe)
 	if f.FunctionPtr {
 		params := original[fp+3:]
@@ -122,10 +132,6 @@ func deriveGoTypeFromCType(in string, needsUnsafe *bool) string {
 		}
 		return prefix + translateStructTypeName(in)
 	}
-}
-
-func (f *field) Skip() bool {
-	return f.Name == "base" && (f.CReturnType == "cef_base_ref_counted_t" || f.CReturnType == "cef_base_scoped_t")
 }
 
 func (f *field) ParameterList() string {
@@ -262,6 +268,22 @@ return result`, call, f.GoReturnType)
 			}
 		}
 	}
+	return buffer.String()
+}
+
+func (f *field) ReturnField() string {
+	var buffer strings.Builder
+	buffer.WriteString("return ")
+	if strings.HasPrefix(f.GoReturnType, "*") {
+		fmt.Fprintf(&buffer, "(%s)", f.GoReturnType)
+	} else {
+		buffer.WriteString(f.GoReturnType)
+	}
+	buffer.WriteString("(")
+	if f.Name == "base" {
+		buffer.WriteString("&")
+	}
+	fmt.Fprintf(&buffer, "d.%s)", f.Name)
 	return buffer.String()
 }
 

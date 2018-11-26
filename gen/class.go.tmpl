@@ -20,9 +20,9 @@ type {{.GoName}} C.{{.Name}}
 func (d *{{.GoName}}) toNative() *C.{{.Name}} {
 	return (*C.{{.Name}})(d)
 }
+
 {{- $def := .}}
 {{- range .Fields}}
-{{- if not .Skip}}
 
 // {{.GoName}} ({{.Name}})
 {{- $comment := .Position.Comment}}{{if $comment}}
@@ -32,10 +32,7 @@ func (d *{{$def.GoName}}) {{.GoName}}({{.ParameterList}}) {{if .GoReturnType}}{{
 {{- if .FunctionPtr}}
 	{{.CallFunctionPointer}}
 {{- else}}
-{{- if .GoReturnType}}
-	return {{.GoReturnType}}(d.{{.Name}})
-{{- end}}
+	{{.ReturnField}}
 {{- end}}
 }
-{{- end}}
 {{- end}}
