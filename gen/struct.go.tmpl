@@ -14,11 +14,11 @@ import (
 {{- end}}
 type {{.GoName}} struct {
 {{- range .Fields}}
-	// {{.GoName}} ({{.Name}})
+	// {{.Var.GoName}} ({{.Var.Name}})
 {{- $comment := .Position.Comment}}{{if $comment}}
 	{{$comment}}
 {{- end}}
-	{{.GoName}} {{.GoReturnType}}
+	{{.Var.GoName}} {{.Var.GoType}}
 {{- end}}
 }
 
@@ -29,8 +29,9 @@ func (d *{{.GoName}}) toNative(native *C.{{.Name}}) *C.{{.Name}} {
 	return native
 }
 
-func (d *{{.GoName}}) fromNative(native *C.{{.Name}}) {
+func (d *{{.GoName}}) fromNative(native *C.{{.Name}}) *{{.GoName}} {
 {{- range .Fields}}
 	{{.FromNative}}
 {{- end}}
+	return d
 }

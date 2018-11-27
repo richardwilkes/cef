@@ -39,9 +39,9 @@ func (e *enumDef) Type() string {
 }
 
 var nameExceptions = []string{
-	"ascii", "com", "ct", "dom", "html", "id", "io", "json", "js", "pdf",
-	"ssl", "ssl2", "ssl3", "st", "tid", "tls", "tls1", "tp", "ts", "tt",
-	"ui", "uri", "url", "v8", "x509", "xml",
+	"ascii", "com", "ct", "dom", "html", "http", "id", "io", "json", "js",
+	"pdf", "ssl", "ssl2", "ssl3", "st", "tid", "tls", "tls1", "tp", "ts",
+	"tt", "ui", "uri", "url", "v8", "x509", "xml",
 }
 
 func translateConstantName(in string) string {

@@ -116,9 +116,15 @@ func genSourceFile(tmpl *template.Template, tmplName, fileName string, data inte
 	var buffer bytes.Buffer
 	jot.FatalIfErr(tmpl.ExecuteTemplate(&buffer, tmplName, data))
 	path := filepath.Join(outputBaseDir, fileName)
-	d, err := format.Source(buffer.Bytes())
-	if err != nil {
-		jot.Error(errs.NewWithCause(path, err))
+	var d []byte
+	if strings.HasSuffix(fileName, ".go") {
+		var err error
+		d, err = format.Source(buffer.Bytes())
+		if err != nil {
+			jot.Error(errs.NewWithCause(path, err))
+			d = buffer.Bytes()
+		}
+	} else {
 		d = buffer.Bytes()
 	}
 	jot.FatalIfErr(ioutil.WriteFile(path, d, 0644))

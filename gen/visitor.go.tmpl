@@ -1,0 +1,69 @@
+package cef
+
+import (
+	// #include "{{.GoName}}_gen.h"
+	"C"
+	"unsafe"
+
+	"github.com/richardwilkes/toolbox/errs"
+	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+// {{.GoName}}Proxy defines methods required for using {{.GoName}}.
+type {{.GoName}}Proxy interface {
+{{- range .Fields}}
+{{- if .Var.FunctionPtr}}
+	{{.Var.GoName}}({{.ProxyParameterList}}) {{.Var.GoType}}
+{{- end}}
+{{- end}}
+}
+
+// {{.GoName}} ({{.Name}})
+{{- $comment := .Position.Comment}}{{if $comment}}
+{{$comment}}
+{{- end}}
+type {{.GoName}} C.{{.Name}}
+
+func New{{.GoName}}(proxy {{.GoName}}Proxy) *{{.GoName}} {
+	return (*{{.GoName}})(unsafe.Pointer(newRefCntObj(C.sizeof_struct__{{.Name}}, proxy)))
+}
+
+func (d *{{.GoName}}) toNative() *C.{{.Name}} {
+	return (*C.{{.Name}})(d)
+}
+
+func lookup{{.GoName}}Proxy(obj *BaseRefCounted) {{.GoName}}Proxy {
+	proxy, exists := lookupProxy(obj)
+	if !exists {
+		jot.Fatal(1, errs.New("Proxy not found for ID"))
+	}
+	actual, ok := proxy.({{.GoName}}Proxy)
+	if !ok {
+		jot.Fatal(1, errs.New("Proxy was not of type {{.GoName}}Proxy"))
+	}
+	return actual
+}
+
+{{- range .Fields}}
+
+// {{.Var.GoName}} ({{.Var.Name}})
+{{- $comment := .Position.Comment}}{{if $comment}}
+{{$comment}}
+{{- end}}
+func (d *{{.Owner.GoName}}) {{.Var.GoName}}({{.ParameterList}}) {{if .Var.GoType}}{{.Var.GoType}} {{end}}{
+{{- if .Var.FunctionPtr}}
+	{{if .Var.GoType}}return {{end}}lookup{{.Owner.GoName}}Proxy(d.Base()).{{.Var.GoName}}({{.ParameterNames}})
+{{- else}}
+	{{.ReturnField}}
+{{- end}}
+}
+{{- if .Var.FunctionPtr}}
+
+//export {{.TrampolineName}}
+func {{.TrampolineName}}({{.CallbackParams}}) {{.CallbackReturnType}} {
+	me := (*{{.Owner.GoName}})(self)
+	proxy := lookup{{.Owner.GoName}}Proxy(me.Base())
+	{{.Callback}}
+}
+{{- end}}
+{{- end}}

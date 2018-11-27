@@ -21,15 +21,14 @@ func (d *{{.GoName}}) toNative() *C.{{.Name}} {
 	return (*C.{{.Name}})(d)
 }
 
-{{- $def := .}}
 {{- range .Fields}}
 
-// {{.GoName}} ({{.Name}})
+// {{.Var.GoName}} ({{.Var.Name}})
 {{- $comment := .Position.Comment}}{{if $comment}}
 {{$comment}}
 {{- end}}
-func (d *{{$def.GoName}}) {{.GoName}}({{.ParameterList}}) {{if .GoReturnType}}{{.GoReturnType}} {{end}}{
-{{- if .FunctionPtr}}
+func (d *{{.Owner.GoName}}) {{.Var.GoName}}({{.ParameterList}}) {{if .Var.GoType}}{{.Var.GoType}} {{end}}{
+{{- if .Var.FunctionPtr}}
 	{{.CallFunctionPointer}}
 {{- else}}
 	{{.ReturnField}}

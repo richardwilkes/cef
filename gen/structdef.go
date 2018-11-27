@@ -26,7 +26,7 @@ func newStructDef(name string, pos position) *structDef {
 
 func (s *structDef) NeedsUnsafeImport() bool {
 	for _, f := range s.Fields {
-		if f.NeedsUnsafe {
+		if f.Var.NeedUnsafe {
 			return true
 		}
 	}
@@ -35,17 +35,21 @@ func (s *structDef) NeedsUnsafeImport() bool {
 
 func (s *structDef) isClassEquivalent() bool {
 	for _, f := range s.Fields {
-		if f.FunctionPtr {
+		if f.Var.FunctionPtr {
 			return true
 		}
 	}
 	return false
 }
 
+func (s *structDef) TrimmedName() string {
+	return strings.TrimSuffix(strings.TrimPrefix(s.Name, "cef_"), "_t")
+}
+
 func (s *structDef) Trampolines() []string {
 	var result []string
 	for _, f := range s.Fields {
-		if f.FunctionPtr {
+		if f.Var.FunctionPtr {
 			result = append(result, f.Trampoline())
 		}
 	}
@@ -96,14 +100,23 @@ func dumpStructs() {
 	sort.Slice(sdefs, func(i, j int) bool { return txt.NaturalLess(sdefs[i].Name, sdefs[j].Name, true) })
 	const classTmplFile = "class.go.tmpl"
 	const structTmplFile = "struct.go.tmpl"
-	tmpl, err := template.ParseFiles(classTmplFile, structTmplFile)
+	const visitorTmplFile = "visitor.go.tmpl"
+	const visitorHeaderTmplFile = "visitor.h.tmpl"
+	const visitorCTmplFile = "visitor.c.tmpl"
+	tmpl, err := template.ParseFiles(classTmplFile, structTmplFile, visitorTmplFile, visitorHeaderTmplFile, visitorCTmplFile)
 	jot.FatalIfErr(err)
 
 	for _, sdef := range sdefs {
 		if sdef.GoName != "MainArgs" && sdef.GoName != "WindowInfo" {
 			var tmplFile string
 			if sdef.isClassEquivalent() {
-				tmplFile = classTmplFile
+				if strings.HasSuffix(sdef.GoName, "Visitor") {
+					genSourceFile(tmpl, visitorHeaderTmplFile, sdef.GoName+"_gen.h", sdef)
+					genSourceFile(tmpl, visitorCTmplFile, sdef.GoName+"_gen.c", sdef)
+					tmplFile = visitorTmplFile
+				} else {
+					tmplFile = classTmplFile
+				}
 			} else {
 				tmplFile = structTmplFile
 			}
