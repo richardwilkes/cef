@@ -61,8 +61,8 @@ func (d *{{.Owner.GoName}}) {{.Var.GoName}}({{.ParameterList}}) {{if .Var.GoType
 
 //export {{.TrampolineName}}
 func {{.TrampolineName}}({{.CallbackParams}}) {{.CallbackReturnType}} {
-	me := (*{{.Owner.GoName}})(self)
-	proxy := lookup{{.Owner.GoName}}Proxy(me.Base())
+	me__ := (*{{.Owner.GoName}})(self)
+	proxy__ := lookup{{.Owner.GoName}}Proxy(me__.Base())
 	{{.Callback}}
 }
 {{- end}}

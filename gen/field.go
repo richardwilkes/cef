@@ -17,7 +17,7 @@ type field struct {
 func newField(owner *structDef, name, typeInfo string, pos position) *field {
 	return &field{
 		Owner:    owner,
-		Var:      newCVar(name, typeInfo),
+		Var:      newCVar(name, typeInfo, pos),
 		Position: pos,
 	}
 }
@@ -30,7 +30,7 @@ func (f *field) ParameterList() string {
 				if i != 1 {
 					buffer.WriteString(", ")
 				}
-				fmt.Fprintf(&buffer, "p%d", i)
+				buffer.WriteString(p.Name)
 				if i == len(f.Var.Params)-1 || f.Var.Params[i+1].GoType != p.GoType {
 					fmt.Fprintf(&buffer, " %s", p.GoType)
 				}
@@ -45,9 +45,9 @@ func (f *field) ProxyParameterList() string {
 	if f.Var.FunctionPtr {
 		for i, p := range f.Var.Params {
 			if i == 0 {
-				buffer.WriteString("obj")
+				buffer.WriteString(p.Name)
 			} else {
-				fmt.Fprintf(&buffer, ", p%d", i)
+				fmt.Fprintf(&buffer, ", %s", p.Name)
 			}
 			fmt.Fprintf(&buffer, " %s", p.GoType)
 		}
@@ -57,11 +57,11 @@ func (f *field) ProxyParameterList() string {
 
 func (f *field) ParameterNames() string {
 	var buffer strings.Builder
-	for i := range f.Var.Params {
+	for i, p := range f.Var.Params {
 		if i == 0 {
 			buffer.WriteString("d")
 		} else {
-			fmt.Fprintf(&buffer, ", p%d", i)
+			fmt.Fprintf(&buffer, ", %s", p.Name)
 		}
 	}
 	return buffer.String()
@@ -93,30 +93,30 @@ func (f *field) CallFunctionPointer() string {
 	for i, p := range f.Var.Params {
 		if i != 0 {
 			if p.BaseType == "cef_string_t" {
-				fmt.Fprintf(&buffer, "var s%d C.cef_string_t\n", i)
+				fmt.Fprintf(&buffer, "var %s_ C.cef_string_t\n", p.Name)
 				ptrs := p.Ptrs
 				if len(ptrs) > 0 {
 					ptrs = ptrs[1:]
 				}
-				fmt.Fprintf(&buffer, "setCEFStr(%sp%d, &s%d)\n", ptrs, i, i)
+				fmt.Fprintf(&buffer, "setCEFStr(%[1]s%[2]s, &%[2]s_)\n", ptrs, p.Name)
 			} else if p.Ptrs == "**" {
 				if sdef, exists := sdefsMap[p.BaseType]; exists {
-					fmt.Fprintf(&buffer, "pd%d := (*p%d).toNative(", i, i)
+					fmt.Fprintf(&buffer, "%[1]s_ := (*%[1]s).toNative(", p.Name)
 					if !sdef.isClassEquivalent() {
 						fmt.Fprintf(&buffer, "&C.%s{}", p.BaseType)
 					}
 					buffer.WriteString(")\n")
 				} else if p.BaseType == "char" {
-					fmt.Fprintf(&buffer, `cp%[1]d := C.calloc(C.size_t(len(p%[1]d)), C.size_t(unsafe.Sizeof(uintptr(0))))
-tp%[1]d := (*[1<<30 - 1]*C.char)(cp%[1]d)
-for i, one := range p%[1]d {
-	tp%[1]d[i] = C.CString(one)
+					fmt.Fprintf(&buffer, `%[1]s_ := C.calloc(C.size_t(len(%[1]s)), C.size_t(unsafe.Sizeof(uintptr(0))))
+%[1]s_p := (*[1<<30 - 1]*C.char)(%[1]s_)
+for i, one := range %[1]s {
+	%[1]s_p[i] = C.CString(one)
 }
-`, i)
+`, p.Name)
 				}
 			} else if p.Ptrs == "*" {
 				if _, exists := edefsMap[p.BaseType]; exists {
-					fmt.Fprintf(&buffer, "e%d := C.%s(*p%d)\n", i, p.BaseType, i)
+					fmt.Fprintf(&buffer, "%[1]s_ := C.%[2]s(*%[1]s)\n", p.Name, p.BaseType)
 				}
 			}
 		}
@@ -128,32 +128,32 @@ for i, one := range p%[1]d {
 		if i != 0 {
 			buffer.WriteString(", ")
 			if p.BaseType == "void" {
-				fmt.Fprintf(&buffer, "p%d", i)
+				buffer.WriteString(p.Name)
 			} else if p.BaseType == "cef_string_t" && p.Ptrs == "*" {
-				fmt.Fprintf(&buffer, "&s%d", i)
+				fmt.Fprintf(&buffer, "&%s_", p.Name)
 			} else if p.BaseType == "char" && p.Ptrs == "**" {
-				fmt.Fprintf(&buffer, "(**C.char)(cp%d)", i)
+				fmt.Fprintf(&buffer, "(**C.char)(%s_)", p.Name)
 			} else {
 				if p.Ptrs == "*" {
 					if _, exists := edefsMap[p.BaseType]; exists {
-						fmt.Fprintf(&buffer, "&e%d", i)
+						fmt.Fprintf(&buffer, "&%s_", p.Name)
 						continue
 					}
 				}
 				if sdef, exists := sdefsMap[p.BaseType]; exists {
 					if len(p.Ptrs) > 1 {
-						fmt.Fprintf(&buffer, "&pd%d", i)
+						fmt.Fprintf(&buffer, "&%s_", p.Name)
 					} else {
-						fmt.Fprintf(&buffer, "p%d.toNative(", i)
+						fmt.Fprintf(&buffer, "%s.toNative(", p.Name)
 						if !sdef.isClassEquivalent() {
 							fmt.Fprintf(&buffer, "&C.%s{}", p.BaseType)
 						}
 						buffer.WriteString(")")
 					}
 				} else if len(p.Ptrs) > 0 {
-					fmt.Fprintf(&buffer, "(%sC.%s)(p%d)", p.Ptrs, p.BaseType, i)
+					fmt.Fprintf(&buffer, "(%sC.%s)(%s)", p.Ptrs, p.BaseType, p.Name)
 				} else {
-					fmt.Fprintf(&buffer, "C.%s(p%d)", p.BaseType, i)
+					fmt.Fprintf(&buffer, "C.%s(%s)", p.BaseType, p.Name)
 				}
 			}
 		}
@@ -271,26 +271,24 @@ func (f *field) Trampoline() string {
 	var buffer strings.Builder
 	fmt.Fprintf(&buffer, "%s %s(", f.Var.CType, f.TrampolineName())
 	for i, p := range f.Var.Params {
-		if i == 0 {
-			fmt.Fprintf(&buffer, "%s self", p.CType)
-		} else {
-			fmt.Fprintf(&buffer, ", %s p%d", p.CType, i)
+		if i != 0 {
+			buffer.WriteString(", ")
 		}
+		fmt.Fprintf(&buffer, "%s %s", p.CType, p.Name)
 	}
-	fmt.Fprintf(&buffer, ", %s (CEF_CALLBACK *callback)(", f.Var.CType)
+	fmt.Fprintf(&buffer, ", %s (CEF_CALLBACK *callback__)(", f.Var.CType)
 	for i, p := range f.Var.Params {
 		if i != 0 {
 			buffer.WriteString(", ")
 		}
 		fmt.Fprintf(&buffer, "%s", p.CType)
 	}
-	buffer.WriteString(")) { return callback(")
-	for i := range f.Var.Params {
-		if i == 0 {
-			buffer.WriteString("self")
-		} else {
-			fmt.Fprintf(&buffer, ", p%d", i)
+	buffer.WriteString(")) { return callback__(")
+	for i, p := range f.Var.Params {
+		if i != 0 {
+			buffer.WriteString(", ")
 		}
+		buffer.WriteString(p.Name)
 	}
 	buffer.WriteString("); }")
 	return buffer.String()
@@ -329,10 +327,10 @@ func (f *field) Callback() string {
 	}
 	prefixLines := buffer.String()
 	buffer.Reset()
-	fmt.Fprintf(&buffer, "proxy.%s(", f.Var.GoName)
+	fmt.Fprintf(&buffer, "proxy__.%s(", f.Var.GoName)
 	for i, p := range f.Var.Params {
 		if i == 0 {
-			buffer.WriteString("me")
+			buffer.WriteString("me__")
 		} else {
 			buffer.WriteString(", ")
 			if pval[i] != "" {
@@ -352,10 +350,10 @@ func (f *field) Callback() string {
 		buffer.WriteString(call)
 	} else {
 		if _, exists := sdefsMap[f.Var.BaseType]; exists && f.Var.Ptrs == "" {
-			fmt.Fprintf(&buffer, "call := %s\n", call)
-			fmt.Fprintf(&buffer, "var result C.%s\n", f.Var.CType)
-			buffer.WriteString("call.toNative(&result)\n")
-			buffer.WriteString("return result")
+			fmt.Fprintf(&buffer, "call__ := %s\n", call)
+			fmt.Fprintf(&buffer, "var result__ C.%s\n", f.Var.CType)
+			buffer.WriteString("call__.toNative(&result__)\n")
+			buffer.WriteString("return result__")
 		} else {
 			fmt.Fprintf(&buffer, "return %s", f.Var.CGoCast(call))
 		}
@@ -366,11 +364,10 @@ func (f *field) Callback() string {
 func (f *field) CallbackParams() string {
 	var buffer strings.Builder
 	for i, p := range f.Var.Params {
-		if i == 0 {
-			buffer.WriteString("self")
-		} else {
-			fmt.Fprintf(&buffer, ", p%d", i)
+		if i != 0 {
+			buffer.WriteString(", ")
 		}
+		buffer.WriteString(p.Name)
 		if p.BaseType == "void" {
 			switch p.Ptrs {
 			case "":

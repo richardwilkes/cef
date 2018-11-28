@@ -23,7 +23,7 @@ type variable struct {
 	NeedUnsafe  bool
 }
 
-func newCVar(name, typeInfo string) *variable {
+func newCVar(name, typeInfo string, pos position) *variable {
 	name = strings.TrimSpace(name)
 	typeInfo = strings.TrimPrefix(strings.Trim(strings.TrimSpace(strings.Replace(typeInfo, "const ", "", -1)), "'"), "struct _")
 	if i := strings.Index(typeInfo, "':'"); i != -1 {
@@ -46,9 +46,14 @@ func newCVar(name, typeInfo string) *variable {
 		if !strings.HasPrefix(params, "(") || !strings.HasSuffix(params, ")") {
 			jot.Fatal(1, errs.Newf("Can't handle params in type: %s", typeInfo))
 		}
+		paramNames := extractParameterNames(pos)
+		paramList := strings.Split(params[1:len(params)-1], ",")
+		if len(paramNames) != len(paramList) {
+			jot.Fatal(1, errs.Newf("Extracted param names (%v) don't match params (%v) for %s: %v", paramNames, paramList, name, pos))
+		}
 		typeInfo = strings.TrimSpace(typeInfo[:fp])
-		for i, param := range strings.Split(params[1:len(params)-1], ",") {
-			one := newCVar(fmt.Sprintf("p%d", i), param)
+		for i, param := range paramList {
+			one := newCVar(paramNames[i], param, pos)
 			if one.NeedUnsafe {
 				v.NeedUnsafe = true
 			}
@@ -117,6 +122,38 @@ func newCVar(name, typeInfo string) *variable {
 		v.GoType = v.Ptrs + translateStructTypeName(v.BaseType)
 	}
 	return v
+}
+
+func extractParameterNames(pos position) []string {
+	var buffer strings.Builder
+	for i := pos.LineStart; i <= pos.LineEnd; i++ {
+		if i != pos.LineStart {
+			buffer.WriteString(" ")
+		}
+		buffer.WriteString(pos.Text(i, 1, 100000))
+	}
+	line := buffer.String()
+	if i := strings.Index(line, "("); i != -1 {
+		line = line[i+1:]
+		if i = strings.Index(line, "("); i != -1 {
+			line = line[i+1:]
+			if i = strings.Index(line, ")"); i != -1 {
+				var params []string
+				line = txt.CollapseSpaces(strings.TrimSpace(line[:i]))
+				for j, param := range strings.Split(line, ",") {
+					param := strings.TrimSpace(param)
+					if i = strings.LastIndex(param, " "); i != -1 {
+						params = append(params, param[i+1:])
+					} else {
+						jot.Fatal(1, errs.Newf("Unable to extract parameter name %d from: %s", j, line))
+					}
+				}
+				return params
+			}
+		}
+	}
+	jot.Fatal(1, errs.Newf("Unable to extract parameter names from: %s", line))
+	return nil
 }
 
 func (v *variable) CGoCast(expression string) string {

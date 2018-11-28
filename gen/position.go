@@ -14,45 +14,57 @@ import (
 
 var (
 	fileLines    = make(map[string][]string)
-	linePosRegex = regexp.MustCompile(`(.*):(\d+):(\d+), (col:(\d+)|line:(\d+):(\d+))`)
+	linePosRegex = regexp.MustCompile(`<([^:]+):(\d+)(?::\d+)?, ([^:]+):(\d+)(?::\d+)?> ([^:]+):(\d+)`)
 )
 
 type position struct {
 	Src       string
 	LineStart int
-	ColStart  int
 	LineEnd   int
-	ColEnd    int
 }
 
 func (p *position) update(line string) {
-	left := strings.Index(line, " <")
-	right := strings.Index(line, "> ")
-	if left != -1 && right > left {
-		if result := linePosRegex.FindAllStringSubmatch(line[left+2:right], -1); len(result) > 0 {
-			if result[0][1] != "line" {
-				p.Src = result[0][1]
-				if strings.HasPrefix(p.Src, "./") {
-					p.Src = p.Src[2:]
-				}
-			}
-			var err error
-			p.LineStart, err = strconv.Atoi(result[0][2])
-			jot.FatalIfErr(err)
-			p.ColStart, err = strconv.Atoi(result[0][3])
-			jot.FatalIfErr(err)
-			if result[0][5] == "" {
-				p.LineEnd, err = strconv.Atoi(result[0][6])
-				jot.FatalIfErr(err)
-				p.ColEnd, err = strconv.Atoi(result[0][7])
-				jot.FatalIfErr(err)
-			} else {
-				p.LineEnd = p.LineStart
-				p.ColEnd, err = strconv.Atoi(result[0][5])
-				jot.FatalIfErr(err)
+	if result := linePosRegex.FindAllStringSubmatch(line, -1); len(result) > 0 {
+		pieces := result[0]
+		src := -1
+		for i := 5; i > 0; i -= 2 {
+			if pieces[i] != "line" && pieces[i] != "col" {
+				p.setSrc(pieces[i])
+				src = i
+				break
 			}
 		}
+		min := 100000000
+		max := -1
+		for i := 1; i < 6; i += 2 {
+			if pieces[i] != "col" && (pieces[i] == "line" || src == i) {
+				v := mustAtoi(pieces[i+1])
+				if min > v {
+					min = v
+				}
+				if max < v {
+					max = v
+				}
+			}
+		}
+		if max != -1 {
+			p.LineStart = min
+			p.LineEnd = max
+		}
 	}
+}
+
+func (p *position) setSrc(src string) {
+	p.Src = src
+	if strings.HasPrefix(p.Src, "./") {
+		p.Src = p.Src[2:]
+	}
+}
+
+func mustAtoi(in string) int {
+	value, err := strconv.Atoi(in)
+	jot.FatalIfErr(err)
+	return value
 }
 
 func (p position) FileLines() []string {
@@ -119,14 +131,18 @@ func (p position) Text(line, startCol, endCol int) string {
 	if line > len(lines) {
 		return ""
 	}
+	text := lines[line-1]
+	if len(text) == 0 {
+		return ""
+	}
 	if startCol < 1 {
 		startCol = 1
 	}
-	if endCol > len(lines[line-1]) {
-		endCol = len(lines[line-1])
+	if endCol > len(text) {
+		endCol = len(text)
 	}
 	if endCol < startCol {
 		endCol = startCol
 	}
-	return lines[line-1][startCol-1 : endCol]
+	return text[startCol-1 : endCol]
 }
