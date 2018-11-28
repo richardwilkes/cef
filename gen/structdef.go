@@ -100,20 +100,20 @@ func dumpStructs() {
 	sort.Slice(sdefs, func(i, j int) bool { return txt.NaturalLess(sdefs[i].Name, sdefs[j].Name, true) })
 	const classTmplFile = "class.go.tmpl"
 	const structTmplFile = "struct.go.tmpl"
-	const visitorTmplFile = "visitor.go.tmpl"
-	const visitorHeaderTmplFile = "visitor.h.tmpl"
-	const visitorCTmplFile = "visitor.c.tmpl"
-	tmpl, err := template.ParseFiles(classTmplFile, structTmplFile, visitorTmplFile, visitorHeaderTmplFile, visitorCTmplFile)
+	const callbackTmplFile = "callback.go.tmpl"
+	const callbackHeaderTmplFile = "callback.h.tmpl"
+	const callbackCTmplFile = "callback.c.tmpl"
+	tmpl, err := template.ParseFiles(classTmplFile, structTmplFile, callbackTmplFile, callbackHeaderTmplFile, callbackCTmplFile)
 	jot.FatalIfErr(err)
 
 	for _, sdef := range sdefs {
 		if sdef.GoName != "MainArgs" && sdef.GoName != "WindowInfo" {
 			var tmplFile string
 			if sdef.isClassEquivalent() {
-				if strings.HasSuffix(sdef.GoName, "Visitor") {
-					genSourceFile(tmpl, visitorHeaderTmplFile, sdef.GoName+"_gen.h", sdef)
-					genSourceFile(tmpl, visitorCTmplFile, sdef.GoName+"_gen.c", sdef)
-					tmplFile = visitorTmplFile
+				if strings.HasSuffix(sdef.GoName, "Visitor") || strings.HasSuffix(sdef.GoName, "Callback") || strings.HasSuffix(sdef.GoName, "Handler") {
+					genSourceFile(tmpl, callbackHeaderTmplFile, sdef.GoName+"_gen.h", sdef)
+					genSourceFile(tmpl, callbackCTmplFile, sdef.GoName+"_gen.c", sdef)
+					tmplFile = callbackTmplFile
 				} else {
 					tmplFile = classTmplFile
 				}

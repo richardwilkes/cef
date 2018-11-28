@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"strings"
+
+	"github.com/richardwilkes/toolbox/errs"
+	"github.com/richardwilkes/toolbox/log/jot"
 )
 
 type field struct {
@@ -295,10 +298,32 @@ func (f *field) Trampoline() string {
 
 func (f *field) Callback() string {
 	var buffer strings.Builder
+	pval := make([]string, len(f.Var.Params))
 	for i, p := range f.Var.Params {
 		if i != 0 {
-			if sdef, exists := sdefsMap[p.BaseType]; exists && !sdef.isClassEquivalent() {
-				fmt.Fprintf(&buffer, "var v%s %s\n", p.Name, p.GoType)
+			if sdef, exists := sdefsMap[p.BaseType]; exists {
+				if sdef.isClassEquivalent() {
+					if p.Ptrs == "**" {
+						fmt.Fprintf(&buffer, "v%s := (%s)(*%s)\n", p.Name, p.GoType[1:], p.Name)
+						pval[i] = fmt.Sprintf("&v%s", p.Name)
+					} else if len(p.Ptrs) > 2 {
+						jot.Fatal(1, errs.Newf("Unhandled param conversion: %s", p.Name))
+					}
+				} else {
+					if p.Ptrs == "*" {
+						fmt.Fprintf(&buffer, "var v%s %s\n", p.Name, p.GoType[1:])
+						pval[i] = fmt.Sprintf("v%[1]s.fromNative(%[1]s)", p.Name)
+					} else {
+						jot.Fatal(1, errs.Newf("Unhandled param conversion: %s", p.Name))
+					}
+				}
+			} else if _, exists := edefsMap[p.BaseType]; exists {
+				if p.Ptrs == "*" {
+					fmt.Fprintf(&buffer, "e%s := %s(*%s)\n", p.Name, p.GoType[1:], p.Name)
+					pval[i] = fmt.Sprintf("&e%s", p.Name)
+				} else if len(p.Ptrs) > 1 {
+					jot.Fatal(1, errs.Newf("Unhandled param conversion: %s", p.Name))
+				}
 			}
 		}
 	}
@@ -310,10 +335,10 @@ func (f *field) Callback() string {
 			buffer.WriteString("me")
 		} else {
 			buffer.WriteString(", ")
-			if p.BaseType == "cef_string_t" {
+			if pval[i] != "" {
+				buffer.WriteString(pval[i])
+			} else if p.BaseType == "cef_string_t" {
 				fmt.Fprintf(&buffer, "cefstrToString(%s)", p.Name)
-			} else if sdef, exists := sdefsMap[p.BaseType]; exists && !sdef.isClassEquivalent() {
-				fmt.Fprintf(&buffer, "v%[1]s.fromNative(%[1]s)", p.Name)
 			} else {
 				buffer.WriteString(p.GoCast(p.Name))
 			}
@@ -326,8 +351,14 @@ func (f *field) Callback() string {
 	if f.Var.GoType == "" {
 		buffer.WriteString(call)
 	} else {
-		buffer.WriteString("return ")
-		buffer.WriteString(f.Var.CGoCast(call))
+		if _, exists := sdefsMap[f.Var.BaseType]; exists && f.Var.Ptrs == "" {
+			fmt.Fprintf(&buffer, "call := %s\n", call)
+			fmt.Fprintf(&buffer, "var result C.%s\n", f.Var.CType)
+			buffer.WriteString("call.toNative(&result)\n")
+			buffer.WriteString("return result")
+		} else {
+			fmt.Fprintf(&buffer, "return %s", f.Var.CGoCast(call))
+		}
 	}
 	return buffer.String()
 }
@@ -340,7 +371,19 @@ func (f *field) CallbackParams() string {
 		} else {
 			fmt.Fprintf(&buffer, ", p%d", i)
 		}
-		fmt.Fprintf(&buffer, " %sC.%s", p.Ptrs, p.BaseType)
+		if p.BaseType == "void" {
+			switch p.Ptrs {
+			case "":
+			case "*":
+				buffer.WriteString(" unsafe.Pointer")
+			case "**":
+				buffer.WriteString(" *unsafe.Pointer")
+			default:
+				jot.Fatal(1, errs.Newf("Unhandled void case: %s", p.Ptrs))
+			}
+		} else {
+			fmt.Fprintf(&buffer, " %sC.%s", p.Ptrs, p.BaseType)
+		}
 	}
 	return buffer.String()
 }

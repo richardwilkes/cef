@@ -84,7 +84,7 @@ func dumpTypedefs() {
 func translateRefersToType(in string) string {
 	switch in {
 	case "void *":
-		return "uintptr"
+		return "unsafe.Pointer"
 	case "uint32":
 		return in
 	case "char16":

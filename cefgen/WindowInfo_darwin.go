@@ -53,7 +53,7 @@ func (d *WindowInfo) toNative(native *C.cef_window_info_t) *C.cef_window_info_t 
 	return native
 }
 
-func (d *WindowInfo) fromNative(native *C.cef_window_info_t) {
+func (d *WindowInfo) fromNative(native *C.cef_window_info_t) *WindowInfo {
 	d.WindowName = cefstrToString(&native.window_name)
 	d.X = int32(native.x)
 	d.Y = int32(native.y)
@@ -63,4 +63,5 @@ func (d *WindowInfo) fromNative(native *C.cef_window_info_t) {
 	d.ParentView = unsafe.Pointer(native.parent_view)
 	d.WindowlessRenderingEnabled = int32(native.windowless_rendering_enabled)
 	d.View = unsafe.Pointer(native.view)
+	return d
 }

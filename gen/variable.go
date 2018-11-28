@@ -103,7 +103,8 @@ func newCVar(name, typeInfo string) *variable {
 	case "size_t":
 		v.GoType = v.Ptrs + "uint64"
 	case "cef_string_t", "cef_string_userfree_t", "cef_string_userfree_utf8_t",
-		"cef_string_userfree_utf16_t", "cef_string_userfree_wide_t", "cef_string_utf8_t", "cef_string_utf16_t", "cef_string_wide_t":
+		"cef_string_userfree_utf16_t", "cef_string_userfree_wide_t",
+		"cef_string_utf8_t", "cef_string_utf16_t", "cef_string_wide_t":
 		switch v.Ptrs {
 		case "", "*":
 			v.GoType = "string"
@@ -132,8 +133,20 @@ func (v *variable) CGoCast(expression string) string {
 }
 
 func (v *variable) GoCast(expression string) string {
+	if v.BaseType == "void" {
+		return expression
+	}
 	if strings.HasPrefix(v.GoType, "*") {
 		return fmt.Sprintf("(%s)(%s)", v.GoType, expression)
 	}
 	return fmt.Sprintf("%s(%s)", v.GoType, expression)
+}
+
+func (v *variable) NameNoMangle() string {
+	for _, one := range cNamesToPrefix {
+		if "_"+one == v.Name {
+			return one
+		}
+	}
+	return v.Name
 }

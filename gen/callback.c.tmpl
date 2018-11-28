@@ -7,7 +7,7 @@ void gocef_set_{{.TrimmedName}}_proxy({{.Name}} *self) {
 {{- $def := .}}
 {{- range .Fields}}
 {{- if .Var.FunctionPtr}}
-	self->{{.Var.Name}} = (void *)&{{.TrampolineName}};
+	self->{{.Var.NameNoMangle}} = (void *)&{{.TrampolineName}};
 {{- end}}
 {{- end}}
 }
