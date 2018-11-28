@@ -110,7 +110,7 @@ func dumpStructs() {
 		if sdef.GoName != "MainArgs" && sdef.GoName != "WindowInfo" {
 			var tmplFile string
 			if sdef.isClassEquivalent() {
-				if strings.HasSuffix(sdef.GoName, "Visitor") || strings.HasSuffix(sdef.GoName, "Callback") || strings.HasSuffix(sdef.GoName, "Handler") {
+				if strings.HasSuffix(sdef.GoName, "Visitor") || strings.HasSuffix(sdef.GoName, "Callback") || strings.HasSuffix(sdef.GoName, "Handler") || strings.HasSuffix(sdef.GoName, "Client") || sdef.GoName == "App" {
 					genSourceFile(tmpl, callbackHeaderTmplFile, sdef.GoName+"_gen.h", sdef)
 					genSourceFile(tmpl, callbackCTmplFile, sdef.GoName+"_gen.c", sdef)
 					tmplFile = callbackTmplFile
