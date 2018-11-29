@@ -6,7 +6,7 @@ CEF_VERSION=3.3538.1852.gcb937fc
 # Setup PLATFORM
 case $(uname -s) in
     Darwin*)  PLATFORM=macosx64 ;;
-    Linux*)   PLATFORM=linux64 ;;
+    #Linux*)   PLATFORM=linux64 ;;
     MINGW64*) PLATFORM=windows64 ;;
     *)        echo "Unsupported OS: $(uname -s)"; false ;;
 esac
