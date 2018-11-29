@@ -38,7 +38,6 @@ type lineInfo struct {
 func main() {
 	headers := capiHeaders()
 	examineCEFSource(headers)
-	outputBaseDir = filepath.Join(outputBaseDir, "cefgen") // Remove when done testing
 	cleanOutput()
 	createCommonHeader(headers)
 	dumpStructs()

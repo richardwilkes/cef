@@ -24,9 +24,13 @@ type {{.GoName}}Proxy interface {
 {{- end}}
 type {{.GoName}} C.{{.Name}}
 
+// New{{.GoName}} creates a new {{.GoName}} with the specified proxy. Passing
+// in nil will result in default handling, if applicable.
 func New{{.GoName}}(proxy {{.GoName}}Proxy) *{{.GoName}} {
 	result := (*{{.GoName}})(unsafe.Pointer(newRefCntObj(C.sizeof_struct__{{.Name}}, proxy)))
-	C.gocef_set_{{.TrimmedName}}_proxy(result.toNative())
+	if proxy != nil {
+		C.gocef_set_{{.TrimmedName}}_proxy(result.toNative())
+	}
 	return result
 }
 

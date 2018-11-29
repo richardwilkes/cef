@@ -22,6 +22,11 @@ type {{.GoName}} struct {
 {{- end}}
 }
 
+// New{{.GoName}} creates a new {{.GoName}}.
+func New{{.GoName}}() *{{.GoName}} {
+	return &{{.GoName}}{ {{if .NeedsSizeSet}} Size: C.sizeof_struct__{{.Name}} {{end}}{{if eq .GoName "Settings"}}, NoSandbox: 1, CommandLineArgsDisabled: 1{{end}} }
+}
+
 func (d *{{.GoName}}) toNative(native *C.{{.Name}}) *C.{{.Name}} {
 {{- range .Fields}}
 	{{.ToNative}}

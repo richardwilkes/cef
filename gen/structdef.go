@@ -24,6 +24,17 @@ func newStructDef(name string, pos position) *structDef {
 	}
 }
 
+func (s *structDef) NeedsSizeSet() bool {
+	if !s.isClassEquivalent() {
+		for _, f := range s.Fields {
+			if f.Var.GoName == "Size" && f.Var.BaseType == "size_t" {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func (s *structDef) NeedsUnsafeImport() bool {
 	for _, f := range s.Fields {
 		if f.Var.NeedUnsafe {
@@ -110,7 +121,7 @@ func dumpStructs() {
 		if sdef.GoName != "MainArgs" && sdef.GoName != "WindowInfo" {
 			var tmplFile string
 			if sdef.isClassEquivalent() {
-				if strings.HasSuffix(sdef.GoName, "Visitor") || strings.HasSuffix(sdef.GoName, "Callback") || strings.HasSuffix(sdef.GoName, "Handler") || strings.HasSuffix(sdef.GoName, "Client") || sdef.GoName == "App" {
+				if strings.HasSuffix(sdef.GoName, "Visitor") || strings.HasSuffix(sdef.GoName, "Callback") || strings.HasSuffix(sdef.GoName, "Handler") || strings.HasSuffix(sdef.GoName, "Delegate") || strings.HasSuffix(sdef.GoName, "Filter") || strings.HasSuffix(sdef.GoName, "Client") || sdef.GoName == "App" || sdef.GoName == "Task" {
 					genSourceFile(tmpl, callbackHeaderTmplFile, sdef.GoName+"_gen.h", sdef)
 					genSourceFile(tmpl, callbackCTmplFile, sdef.GoName+"_gen.c", sdef)
 					tmplFile = callbackTmplFile
