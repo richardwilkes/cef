@@ -40,15 +40,6 @@ type WindowInfo struct {
 	// Transparent painting is enabled by default but can be disabled by setting
 	// CefBrowserSettings.background_color to an opaque value.
 	WindowlessRenderingEnabled int32
-	// SharedTextEnabled (shared_texture_enabled)
-	// Set to true (1) to enable shared textures for windowless rendering. Only
-	// valid if windowless_rendering_enabled above is also set to true. Currently
-	// only supported on Windows (D3D11).
-	SharedTextureEnabled int32
-	// ExternalBeginFrameEnabled (external_begin_frame_enabled)
-	// Set to true (1) to enable the ability to issue BeginFrame requests from the
-	// client application by calling CefBrowserHost::SendExternalBeginFrame.
-	ExternalBeginFrameEnabled int32
 	// Window (window)
 	// Handle for the new browser window. Only used with windowed rendering.
 	Window unsafe.Pointer
@@ -67,19 +58,17 @@ func (d *WindowInfo) toNative(native *C.cef_window_info_t) *C.cef_window_info_t 
 	native.y = C.int(d.Y)
 	native.width = C.int(d.Width)
 	native.height = C.int(d.Height)
-	native.parent_window = d.ParentWindow
-	native.menu = d.Menu
+	native.parent_window = C.HWND(d.ParentWindow)
+	native.menu = C.HMENU(d.Menu)
 	native.windowless_rendering_enabled = C.int(d.WindowlessRenderingEnabled)
-	native.shared_texture_enabled = C.int(d.SharedTextureEnabled)
-	native.external_begin_frame_enabled = C.int(d.ExternalBeginFrameEnabled)
-	native.window = d.Window
+	native.window = C.HWND(d.Window)
 	return native
 }
 
 func (d *WindowInfo) fromNative(native *C.cef_window_info_t) *WindowInfo {
-	d.ExStyle = int32(native.ex_style)
+	d.ExStyle = uint32(native.ex_style)
 	d.WindowName = cefstrToString(&native.window_name)
-	d.Style = int32(native.style)
+	d.Style = uint32(native.style)
 	d.X = int32(native.x)
 	d.Y = int32(native.y)
 	d.Width = int32(native.width)
@@ -87,8 +76,6 @@ func (d *WindowInfo) fromNative(native *C.cef_window_info_t) *WindowInfo {
 	d.ParentWindow = unsafe.Pointer(native.parent_window)
 	d.Menu = unsafe.Pointer(native.menu)
 	d.WindowlessRenderingEnabled = int32(native.windowless_rendering_enabled)
-	d.SharedTextureEnabled = int32(native.shared_texture_enabled)
-	d.ExternalBeginFrameEnabled = int32(native.external_begin_frame_enabled)
 	d.Window = unsafe.Pointer(native.window)
 	return d
 }
