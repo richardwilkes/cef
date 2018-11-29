@@ -2,6 +2,9 @@
 Go bindings for the
 [Chromium Embedded Framework (CEF)](https://bitbucket.org/chromiumembedded/cef).
 
+Currently works for macOS and Windows. Linux support will be coming at some
+point as well.
+
 ## Initial setup
 Run `setup.sh` in this directory to pull the version of CEF these bindings
 were created for.
