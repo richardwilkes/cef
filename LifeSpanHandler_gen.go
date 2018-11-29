@@ -13,7 +13,7 @@ import (
 
 // LifeSpanHandlerProxy defines methods required for using LifeSpanHandler.
 type LifeSpanHandlerProxy interface {
-	OnBeforePopup(self *LifeSpanHandler, browser *Browser, frame *Frame, target_url string, target_frame_name string, target_disposition WindowOpenDisposition, user_gesture int32, popupFeatures *PopupFeatures, windowInfo *WindowInfo, client **Client, settings *BrowserSettings, no_javascript_access *int32) int32
+	OnBeforePopup(self *LifeSpanHandler, browser *Browser, frame *Frame, target_url, target_frame_name string, target_disposition WindowOpenDisposition, user_gesture int32, popupFeatures *PopupFeatures, windowInfo *WindowInfo, client **Client, settings *BrowserSettings, no_javascript_access *int32) int32
 	OnAfterCreated(self *LifeSpanHandler, browser *Browser)
 	DoClose(self *LifeSpanHandler, browser *Browser) int32
 	OnBeforeClose(self *LifeSpanHandler, browser *Browser)

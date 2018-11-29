@@ -16,7 +16,7 @@ type PrintHandlerProxy interface {
 	OnPrintStart(self *PrintHandler, browser *Browser)
 	OnPrintSettings(self *PrintHandler, browser *Browser, settings *PrintSettings, get_defaults int32)
 	OnPrintDialog(self *PrintHandler, browser *Browser, has_selection int32, callback *PrintDialogCallback) int32
-	OnPrintJob(self *PrintHandler, browser *Browser, document_name string, pdf_file_path string, callback *PrintJobCallback) int32
+	OnPrintJob(self *PrintHandler, browser *Browser, document_name, pdf_file_path string, callback *PrintJobCallback) int32
 	OnPrintReset(self *PrintHandler, browser *Browser)
 	GetPdfPaperSize(self *PrintHandler, device_units_per_inch int32) Size
 }

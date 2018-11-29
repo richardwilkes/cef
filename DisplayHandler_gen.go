@@ -19,7 +19,7 @@ type DisplayHandlerProxy interface {
 	OnFullscreenModeChange(self *DisplayHandler, browser *Browser, fullscreen int32)
 	OnTooltip(self *DisplayHandler, browser *Browser, text string) int32
 	OnStatusMessage(self *DisplayHandler, browser *Browser, value string)
-	OnConsoleMessage(self *DisplayHandler, browser *Browser, level LogSeverity, message string, source string, line int32) int32
+	OnConsoleMessage(self *DisplayHandler, browser *Browser, level LogSeverity, message, source string, line int32) int32
 	OnAutoResize(self *DisplayHandler, browser *Browser, new_size *Size) int32
 	OnLoadingProgressChange(self *DisplayHandler, browser *Browser, progress float64)
 }

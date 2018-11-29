@@ -220,8 +220,8 @@ func (d *Domnode) GetElementInnerText() string {
 // GetElementBounds (get_element_bounds)
 // Returns the bounds of the element.
 func (d *Domnode) GetElementBounds() Rect {
-	native := C.gocef_domnode_get_element_bounds(d.toNative(), d.get_element_bounds)
-	var result Rect
-	result.fromNative(&native)
-	return result
+	native__ := C.gocef_domnode_get_element_bounds(d.toNative(), d.get_element_bounds)
+	var result__ Rect
+	result__.fromNative(&native__)
+	return result__
 }

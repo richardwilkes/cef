@@ -85,10 +85,10 @@ func (d *NavigationEntry) HasPostData() int32 {
 // navigation may be completed more than once if the page is reloaded. May be
 // 0 if the navigation has not yet completed.
 func (d *NavigationEntry) GetCompletionTime() Time {
-	native := C.gocef_navigation_entry_get_completion_time(d.toNative(), d.get_completion_time)
-	var result Time
-	result.fromNative(&native)
-	return result
+	native__ := C.gocef_navigation_entry_get_completion_time(d.toNative(), d.get_completion_time)
+	var result__ Time
+	result__.fromNative(&native__)
+	return result__
 }
 
 // GetHttpStatusCode (get_http_status_code)

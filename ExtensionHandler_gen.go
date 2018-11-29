@@ -17,7 +17,7 @@ type ExtensionHandlerProxy interface {
 	OnExtensionLoaded(self *ExtensionHandler, extension *Extension)
 	OnExtensionUnloaded(self *ExtensionHandler, extension *Extension)
 	OnBeforeBackgroundBrowser(self *ExtensionHandler, extension *Extension, url string, client **Client, settings *BrowserSettings) int32
-	OnBeforeBrowser(self *ExtensionHandler, extension *Extension, browser *Browser, active_browser *Browser, index int32, url string, active int32, windowInfo *WindowInfo, client **Client, settings *BrowserSettings) int32
+	OnBeforeBrowser(self *ExtensionHandler, extension *Extension, browser, active_browser *Browser, index int32, url string, active int32, windowInfo *WindowInfo, client **Client, settings *BrowserSettings) int32
 	GetActiveBrowser(self *ExtensionHandler, extension *Extension, browser *Browser, include_incognito int32) *Browser
 	CanAccessBrowser(self *ExtensionHandler, extension *Extension, browser *Browser, include_incognito int32, target_browser *Browser) int32
 	GetExtensionResource(self *ExtensionHandler, extension *Extension, browser *Browser, file string, callback *GetExtensionResourceCallback) int32

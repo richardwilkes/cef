@@ -13,7 +13,7 @@ import (
 
 // WriteHandlerProxy defines methods required for using WriteHandler.
 type WriteHandlerProxy interface {
-	Write(self *WriteHandler, ptr unsafe.Pointer, size uint64, n uint64) uint64
+	Write(self *WriteHandler, ptr unsafe.Pointer, size, n uint64) uint64
 	Seek(self *WriteHandler, offset int64, whence int32) int32
 	Tell(self *WriteHandler) int64
 	Flush(self *WriteHandler) int32

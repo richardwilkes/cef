@@ -13,7 +13,7 @@ import (
 
 // NavigationEntryVisitorProxy defines methods required for using NavigationEntryVisitor.
 type NavigationEntryVisitorProxy interface {
-	Visit(self *NavigationEntryVisitor, entry *NavigationEntry, current int32, index int32, total int32) int32
+	Visit(self *NavigationEntryVisitor, entry *NavigationEntry, current, index, total int32) int32
 }
 
 // NavigationEntryVisitor (cef_navigation_entry_visitor_t from include/capi/cef_browser_capi.h)

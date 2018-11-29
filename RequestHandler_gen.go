@@ -13,7 +13,7 @@ import (
 
 // RequestHandlerProxy defines methods required for using RequestHandler.
 type RequestHandlerProxy interface {
-	OnBeforeBrowse(self *RequestHandler, browser *Browser, frame *Frame, request *Request, user_gesture int32, is_redirect int32) int32
+	OnBeforeBrowse(self *RequestHandler, browser *Browser, frame *Frame, request *Request, user_gesture, is_redirect int32) int32
 	OnOpenUrlfromTab(self *RequestHandler, browser *Browser, frame *Frame, target_url string, target_disposition WindowOpenDisposition, user_gesture int32) int32
 	OnBeforeResourceLoad(self *RequestHandler, browser *Browser, frame *Frame, request *Request, callback *RequestCallback) ReturnValue
 	GetResourceHandler(self *RequestHandler, browser *Browser, frame *Frame, request *Request) *ResourceHandler
@@ -21,7 +21,7 @@ type RequestHandlerProxy interface {
 	OnResourceResponse(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response) int32
 	GetResourceResponseFilter(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response) *ResponseFilter
 	OnResourceLoadComplete(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response, status UrlrequestStatus, received_content_length int64)
-	GetAuthCredentials(self *RequestHandler, browser *Browser, frame *Frame, isProxy int32, host string, port int32, realm string, scheme string, callback *AuthCallback) int32
+	GetAuthCredentials(self *RequestHandler, browser *Browser, frame *Frame, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32
 	CanGetCookies(self *RequestHandler, browser *Browser, frame *Frame, request *Request) int32
 	CanSetCookie(self *RequestHandler, browser *Browser, frame *Frame, request *Request, cookie *Cookie) int32
 	OnQuotaRequest(self *RequestHandler, browser *Browser, origin_url string, new_size int64, callback *RequestCallback) int32

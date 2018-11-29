@@ -13,7 +13,7 @@ import (
 
 // WebPluginInfoVisitorProxy defines methods required for using WebPluginInfoVisitor.
 type WebPluginInfoVisitorProxy interface {
-	Visit(self *WebPluginInfoVisitor, info *WebPluginInfo, count int32, total int32) int32
+	Visit(self *WebPluginInfoVisitor, info *WebPluginInfo, count, total int32) int32
 }
 
 // WebPluginInfoVisitor (cef_web_plugin_info_visitor_t from include/capi/cef_web_plugin_capi.h)

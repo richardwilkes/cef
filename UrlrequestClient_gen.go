@@ -14,10 +14,10 @@ import (
 // UrlrequestClientProxy defines methods required for using UrlrequestClient.
 type UrlrequestClientProxy interface {
 	OnRequestComplete(self *UrlrequestClient, request *Urlrequest)
-	OnUploadProgress(self *UrlrequestClient, request *Urlrequest, current int64, total int64)
-	OnDownloadProgress(self *UrlrequestClient, request *Urlrequest, current int64, total int64)
+	OnUploadProgress(self *UrlrequestClient, request *Urlrequest, current, total int64)
+	OnDownloadProgress(self *UrlrequestClient, request *Urlrequest, current, total int64)
 	OnDownloadData(self *UrlrequestClient, request *Urlrequest, data unsafe.Pointer, data_length uint64)
-	GetAuthCredentials(self *UrlrequestClient, isProxy int32, host string, port int32, realm string, scheme string, callback *AuthCallback) int32
+	GetAuthCredentials(self *UrlrequestClient, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32
 }
 
 // UrlrequestClient (cef_urlrequest_client_t from include/capi/cef_urlrequest_capi.h)

@@ -219,10 +219,10 @@ func (d *DragData) GetImage() *Image {
 // GetImageHotspot (get_image_hotspot)
 // Get the image hotspot (drag start location relative to image dimensions).
 func (d *DragData) GetImageHotspot() Point {
-	native := C.gocef_drag_data_get_image_hotspot(d.toNative(), d.get_image_hotspot)
-	var result Point
-	result.fromNative(&native)
-	return result
+	native__ := C.gocef_drag_data_get_image_hotspot(d.toNative(), d.get_image_hotspot)
+	var result__ Point
+	result__.fromNative(&native__)
+	return result__
 }
 
 // HasImage (has_image)

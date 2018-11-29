@@ -13,7 +13,7 @@ import (
 
 // ReadHandlerProxy defines methods required for using ReadHandler.
 type ReadHandlerProxy interface {
-	Read(self *ReadHandler, ptr unsafe.Pointer, size uint64, n uint64) uint64
+	Read(self *ReadHandler, ptr unsafe.Pointer, size, n uint64) uint64
 	Seek(self *ReadHandler, offset int64, whence int32) int32
 	Tell(self *ReadHandler) int64
 	Eof(self *ReadHandler) int32

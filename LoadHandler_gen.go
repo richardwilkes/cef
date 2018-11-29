@@ -13,10 +13,10 @@ import (
 
 // LoadHandlerProxy defines methods required for using LoadHandler.
 type LoadHandlerProxy interface {
-	OnLoadingStateChange(self *LoadHandler, browser *Browser, isLoading int32, canGoBack int32, canGoForward int32)
+	OnLoadingStateChange(self *LoadHandler, browser *Browser, isLoading, canGoBack, canGoForward int32)
 	OnLoadStart(self *LoadHandler, browser *Browser, frame *Frame, transition_type TransitionType)
 	OnLoadEnd(self *LoadHandler, browser *Browser, frame *Frame, httpStatusCode int32)
-	OnLoadError(self *LoadHandler, browser *Browser, frame *Frame, errorCode Errorcode, errorText string, failedUrl string)
+	OnLoadError(self *LoadHandler, browser *Browser, frame *Frame, errorCode Errorcode, errorText, failedUrl string)
 }
 
 // LoadHandler (cef_load_handler_t from include/capi/cef_load_handler_capi.h)

@@ -13,7 +13,7 @@ import (
 
 // JsdialogHandlerProxy defines methods required for using JsdialogHandler.
 type JsdialogHandlerProxy interface {
-	OnJsdialog(self *JsdialogHandler, browser *Browser, origin_url string, dialog_type JsdialogType, message_text string, default_prompt_text string, callback *JsdialogCallback, suppress_message *int32) int32
+	OnJsdialog(self *JsdialogHandler, browser *Browser, origin_url string, dialog_type JsdialogType, message_text, default_prompt_text string, callback *JsdialogCallback, suppress_message *int32) int32
 	OnBeforeUnloadDialog(self *JsdialogHandler, browser *Browser, message_text string, is_reload int32, callback *JsdialogCallback) int32
 	OnResetDialogState(self *JsdialogHandler, browser *Browser)
 	OnDialogClosed(self *JsdialogHandler, browser *Browser)

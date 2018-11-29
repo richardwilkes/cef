@@ -13,7 +13,7 @@ import (
 
 // AuthCallbackProxy defines methods required for using AuthCallback.
 type AuthCallbackProxy interface {
-	Cont(self *AuthCallback, username string, password string)
+	Cont(self *AuthCallback, username, password string)
 	Cancel(self *AuthCallback)
 }
 

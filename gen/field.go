@@ -23,36 +23,21 @@ func newField(owner *structDef, name, typeInfo string, pos position) *field {
 }
 
 func (f *field) ParameterList() string {
-	var buffer strings.Builder
 	if f.Var.FunctionPtr {
-		for i, p := range f.Var.Params {
-			if i != 0 || p.GoType != "*"+f.Owner.GoName {
-				if i != 1 {
-					buffer.WriteString(", ")
-				}
-				buffer.WriteString(p.Name)
-				if i == len(f.Var.Params)-1 || f.Var.Params[i+1].GoType != p.GoType {
-					fmt.Fprintf(&buffer, " %s", p.GoType)
-				}
-			}
+		params := f.Var.Params
+		if len(params) > 0 && params[0].GoType == "*"+f.Owner.GoName {
+			params = params[1:]
 		}
+		return parameterList(params)
 	}
-	return buffer.String()
+	return ""
 }
 
 func (f *field) ProxyParameterList() string {
-	var buffer strings.Builder
 	if f.Var.FunctionPtr {
-		for i, p := range f.Var.Params {
-			if i == 0 {
-				buffer.WriteString(p.Name)
-			} else {
-				fmt.Fprintf(&buffer, ", %s", p.Name)
-			}
-			fmt.Fprintf(&buffer, " %s", p.GoType)
-		}
+		return parameterList(f.Var.Params)
 	}
-	return buffer.String()
+	return ""
 }
 
 func (f *field) ParameterNames() string {
@@ -89,106 +74,15 @@ func (f *field) processedCParams(in []string) []param {
 }
 
 func (f *field) CallFunctionPointer() string {
+	prep, names := prepGoVarsForC(f.Var.Params)
 	var buffer strings.Builder
-	for i, p := range f.Var.Params {
-		if i != 0 {
-			if p.BaseType == "cef_string_t" {
-				fmt.Fprintf(&buffer, "var %s_ C.cef_string_t\n", p.Name)
-				ptrs := p.Ptrs
-				if len(ptrs) > 0 {
-					ptrs = ptrs[1:]
-				}
-				fmt.Fprintf(&buffer, "setCEFStr(%[1]s%[2]s, &%[2]s_)\n", ptrs, p.Name)
-			} else if p.Ptrs == "**" {
-				if sdef, exists := sdefsMap[p.BaseType]; exists {
-					fmt.Fprintf(&buffer, "%[1]s_ := (*%[1]s).toNative(", p.Name)
-					if !sdef.isClassEquivalent() {
-						fmt.Fprintf(&buffer, "&C.%s{}", p.BaseType)
-					}
-					buffer.WriteString(")\n")
-				} else if p.BaseType == "char" {
-					fmt.Fprintf(&buffer, `%[1]s_ := C.calloc(C.size_t(len(%[1]s)), C.size_t(unsafe.Sizeof(uintptr(0))))
-%[1]s_p := (*[1<<30 - 1]*C.char)(%[1]s_)
-for i, one := range %[1]s {
-	%[1]s_p[i] = C.CString(one)
-}
-`, p.Name)
-				}
-			} else if p.Ptrs == "*" {
-				if _, exists := edefsMap[p.BaseType]; exists {
-					fmt.Fprintf(&buffer, "%[1]s_ := C.%[2]s(*%[1]s)\n", p.Name, p.BaseType)
-				}
-			}
-		}
-	}
-	prefixLines := buffer.String()
-	buffer.Reset()
 	fmt.Fprintf(&buffer, "C.%s(d.toNative()", f.TrampolineName())
-	for i, p := range f.Var.Params {
-		if i != 0 {
-			buffer.WriteString(", ")
-			if p.BaseType == "void" {
-				buffer.WriteString(p.Name)
-			} else if p.BaseType == "cef_string_t" && p.Ptrs == "*" {
-				fmt.Fprintf(&buffer, "&%s_", p.Name)
-			} else if p.BaseType == "char" && p.Ptrs == "**" {
-				fmt.Fprintf(&buffer, "(**C.char)(%s_)", p.Name)
-			} else {
-				if p.Ptrs == "*" {
-					if _, exists := edefsMap[p.BaseType]; exists {
-						fmt.Fprintf(&buffer, "&%s_", p.Name)
-						continue
-					}
-				}
-				if sdef, exists := sdefsMap[p.BaseType]; exists {
-					if len(p.Ptrs) > 1 {
-						fmt.Fprintf(&buffer, "&%s_", p.Name)
-					} else {
-						fmt.Fprintf(&buffer, "%s.toNative(", p.Name)
-						if !sdef.isClassEquivalent() {
-							fmt.Fprintf(&buffer, "&C.%s{}", p.BaseType)
-						}
-						buffer.WriteString(")")
-					}
-				} else if len(p.Ptrs) > 0 {
-					fmt.Fprintf(&buffer, "(%sC.%s)(%s)", p.Ptrs, p.BaseType, p.Name)
-				} else {
-					fmt.Fprintf(&buffer, "C.%s(%s)", p.BaseType, p.Name)
-				}
-			}
-		}
-	}
+	emitParamsForCCall(&buffer, f.Var.Params[1:], names[1:], false)
 	fmt.Fprintf(&buffer, ", d.%s)", f.Var.Name)
-	call := buffer.String()
+	expression := buffer.String()
 	buffer.Reset()
-	buffer.WriteString(prefixLines)
-	if f.Var.GoType == "" {
-		buffer.WriteString(call)
-	} else {
-		if sdef, exists := sdefsMap[f.Var.CType]; exists && !sdef.isClassEquivalent() {
-			fmt.Fprintf(&buffer, `native := %s
-var result %s
-result.fromNative(&native)
-return result`, call, f.Var.GoType)
-		} else {
-			switch f.Var.CType {
-			case "cef_string_t":
-				fmt.Fprintf(&buffer, "native := %s\nreturn cefstrToString(&native)", call)
-			case "cef_string_t *":
-				fmt.Fprintf(&buffer, "return cefstrToString(%s)", call)
-			case "cef_string_userfree_t":
-				fmt.Fprintf(&buffer, "return cefuserfreestrToString(%s)", call)
-			default:
-				buffer.WriteString("return ")
-				if strings.HasPrefix(f.Var.GoType, "*") {
-					fmt.Fprintf(&buffer, "(%s)", f.Var.GoType)
-				} else {
-					buffer.WriteString(f.Var.GoType)
-				}
-				fmt.Fprintf(&buffer, "(%s)", call)
-			}
-		}
-	}
+	buffer.WriteString(prep)
+	emitReturnForCCall(&buffer, expression, f.Var)
 	return buffer.String()
 }
 

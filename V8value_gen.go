@@ -186,10 +186,10 @@ func (d *V8value) GetDoubleValue() float64 {
 // GetDateValue (get_date_value)
 // Return a Date value.
 func (d *V8value) GetDateValue() Time {
-	native := C.gocef_v8value_get_date_value(d.toNative(), d.get_date_value)
-	var result Time
-	result.fromNative(&native)
-	return result
+	native__ := C.gocef_v8value_get_date_value(d.toNative(), d.get_date_value)
+	var result__ Time
+	result__.fromNative(&native__)
+	return result__
 }
 
 // GetStringValue (get_string_value)

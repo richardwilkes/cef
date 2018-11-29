@@ -13,7 +13,7 @@ import (
 
 // DialogHandlerProxy defines methods required for using DialogHandler.
 type DialogHandlerProxy interface {
-	OnFileDialog(self *DialogHandler, browser *Browser, mode FileDialogMode, title string, default_file_path string, accept_filters StringList, selected_accept_filter int32, callback *FileDialogCallback) int32
+	OnFileDialog(self *DialogHandler, browser *Browser, mode FileDialogMode, title, default_file_path string, accept_filters StringList, selected_accept_filter int32, callback *FileDialogCallback) int32
 }
 
 // DialogHandler (cef_dialog_handler_t from include/capi/cef_dialog_handler_capi.h)

@@ -16,15 +16,15 @@ type RenderHandlerProxy interface {
 	GetAccessibilityHandler(self *RenderHandler) *AccessibilityHandler
 	GetRootScreenRect(self *RenderHandler, browser *Browser, rect *Rect) int32
 	GetViewRect(self *RenderHandler, browser *Browser, rect *Rect) int32
-	GetScreenPoint(self *RenderHandler, browser *Browser, viewX int32, viewY int32, screenX *int32, screenY *int32) int32
+	GetScreenPoint(self *RenderHandler, browser *Browser, viewX, viewY int32, screenX, screenY *int32) int32
 	GetScreenInfo(self *RenderHandler, browser *Browser, screen_info *ScreenInfo) int32
 	OnPopupShow(self *RenderHandler, browser *Browser, show int32)
 	OnPopupSize(self *RenderHandler, browser *Browser, rect *Rect)
-	OnPaint(self *RenderHandler, browser *Browser, _type PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, buffer unsafe.Pointer, width int32, height int32)
+	OnPaint(self *RenderHandler, browser *Browser, _type PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, buffer unsafe.Pointer, width, height int32)
 	OnCursorChange(self *RenderHandler, browser *Browser, cursor unsafe.Pointer, _type CursorType, custom_cursor_info *CursorInfo)
-	StartDragging(self *RenderHandler, browser *Browser, drag_data *DragData, allowed_ops DragOperationsMask, x int32, y int32) int32
+	StartDragging(self *RenderHandler, browser *Browser, drag_data *DragData, allowed_ops DragOperationsMask, x, y int32) int32
 	UpdateDragCursor(self *RenderHandler, browser *Browser, operation DragOperationsMask)
-	OnScrollOffsetChanged(self *RenderHandler, browser *Browser, x float64, y float64)
+	OnScrollOffsetChanged(self *RenderHandler, browser *Browser, x, y float64)
 	OnImeCompositionRangeChanged(self *RenderHandler, browser *Browser, selected_range *Range, character_boundsCount uint64, character_bounds *Rect)
 	OnTextSelectionChanged(self *RenderHandler, browser *Browser, selected_text string, selected_range *Range)
 }

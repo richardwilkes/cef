@@ -13,7 +13,7 @@ import (
 
 // FindHandlerProxy defines methods required for using FindHandler.
 type FindHandlerProxy interface {
-	OnFindResult(self *FindHandler, browser *Browser, identifier int32, count int32, selectionRect *Rect, activeMatchOrdinal int32, finalUpdate int32)
+	OnFindResult(self *FindHandler, browser *Browser, identifier, count int32, selectionRect *Rect, activeMatchOrdinal, finalUpdate int32)
 }
 
 // FindHandler (cef_find_handler_t from include/capi/cef_find_handler_capi.h)

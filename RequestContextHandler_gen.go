@@ -15,7 +15,7 @@ import (
 type RequestContextHandlerProxy interface {
 	OnRequestContextInitialized(self *RequestContextHandler, request_context *RequestContext)
 	GetCookieManager(self *RequestContextHandler) *CookieManager
-	OnBeforePluginLoad(self *RequestContextHandler, mime_type string, plugin_url string, is_main_frame int32, top_origin_url string, plugin_info *WebPluginInfo, plugin_policy *PluginPolicy) int32
+	OnBeforePluginLoad(self *RequestContextHandler, mime_type, plugin_url string, is_main_frame int32, top_origin_url string, plugin_info *WebPluginInfo, plugin_policy *PluginPolicy) int32
 }
 
 // RequestContextHandler (cef_request_context_handler_t from include/capi/cef_request_context_handler_capi.h)

@@ -13,7 +13,7 @@ import (
 
 // CookieVisitorProxy defines methods required for using CookieVisitor.
 type CookieVisitorProxy interface {
-	Visit(self *CookieVisitor, cookie *Cookie, count int32, total int32, deleteCookie *int32) int32
+	Visit(self *CookieVisitor, cookie *Cookie, count, total int32, deleteCookie *int32) int32
 }
 
 // CookieVisitor (cef_cookie_visitor_t from include/capi/cef_cookie_capi.h)
