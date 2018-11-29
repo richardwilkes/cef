@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_AuthCallback_H_
 #define GOCEF_AuthCallback_H_
 #pragma once

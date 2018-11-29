@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_BrowserProcessHandler_H_
 #define GOCEF_BrowserProcessHandler_H_
 #pragma once

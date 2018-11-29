@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_DragHandler_H_
 #define GOCEF_DragHandler_H_
 #pragma once

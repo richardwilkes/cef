@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 package cef
 
 // AlphaType (cef_alpha_type_t from include/internal/cef_types.h)

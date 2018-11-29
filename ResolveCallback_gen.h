@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_ResolveCallback_H_
 #define GOCEF_ResolveCallback_H_
 #pragma once

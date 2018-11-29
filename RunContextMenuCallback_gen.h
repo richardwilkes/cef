@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_RunContextMenuCallback_H_
 #define GOCEF_RunContextMenuCallback_H_
 #pragma once

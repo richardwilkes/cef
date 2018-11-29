@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_GetExtensionResourceCallback_H_
 #define GOCEF_GetExtensionResourceCallback_H_
 #pragma once

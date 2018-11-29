@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_CAPI_H_
 #define GOCEF_CAPI_H_
 #pragma once

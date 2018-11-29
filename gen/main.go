@@ -174,10 +174,20 @@ func clangArgs(headers []string) []string {
 func createCommonHeader(headers []string) {
 	f, err := os.Create(filepath.Join(outputBaseDir, "capi_gen.h"))
 	jot.FatalIfErr(err)
-	f.WriteString("#ifndef GOCEF_CAPI_H_\n#define GOCEF_CAPI_H_\n#pragma once\n\n#include <stdlib.h>\n")
+	f.WriteString(`// Code generated - DO NOT EDIT.
+
+#ifndef GOCEF_CAPI_H_
+#define GOCEF_CAPI_H_
+#pragma once
+
+#include <stdlib.h>
+`)
 	for _, header := range headers {
-		fmt.Fprintf(f, "#include \"%s\"\n", header)
+		fmt.Fprintf(f, `#include "%s"
+`, header)
 	}
-	f.WriteString("\n#endif // GOCEF_CAPI_H_\n")
+	f.WriteString(`
+#endif // GOCEF_CAPI_H_
+`)
 	jot.FatalIfErr(f.Close())
 }

@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_ResourceHandler_H_
 #define GOCEF_ResourceHandler_H_
 #pragma once

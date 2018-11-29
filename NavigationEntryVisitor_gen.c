@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #include "NavigationEntryVisitor_gen.h"
 #include "_cgo_export.h"
 

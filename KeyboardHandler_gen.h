@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_KeyboardHandler_H_
 #define GOCEF_KeyboardHandler_H_
 #pragma once

@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_AccessibilityHandler_H_
 #define GOCEF_AccessibilityHandler_H_
 #pragma once

@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_PrintDialogCallback_H_
 #define GOCEF_PrintDialogCallback_H_
 #pragma once

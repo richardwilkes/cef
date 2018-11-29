@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_StringVisitor_H_
 #define GOCEF_StringVisitor_H_
 #pragma once

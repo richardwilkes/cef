@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #include "LoadHandler_gen.h"
 #include "_cgo_export.h"
 

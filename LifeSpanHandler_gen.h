@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_LifeSpanHandler_H_
 #define GOCEF_LifeSpanHandler_H_
 #pragma once

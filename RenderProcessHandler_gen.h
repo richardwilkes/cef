@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_RenderProcessHandler_H_
 #define GOCEF_RenderProcessHandler_H_
 #pragma once

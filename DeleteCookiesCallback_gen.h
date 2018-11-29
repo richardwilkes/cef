@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_DeleteCookiesCallback_H_
 #define GOCEF_DeleteCookiesCallback_H_
 #pragma once

@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_ExtensionHandler_H_
 #define GOCEF_ExtensionHandler_H_
 #pragma once

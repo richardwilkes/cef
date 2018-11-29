@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_BeforeDownloadCallback_H_
 #define GOCEF_BeforeDownloadCallback_H_
 #pragma once

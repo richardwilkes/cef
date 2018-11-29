@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_ResourceBundleHandler_H_
 #define GOCEF_ResourceBundleHandler_H_
 #pragma once

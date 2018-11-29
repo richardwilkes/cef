@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_RegisterCdmCallback_H_
 #define GOCEF_RegisterCdmCallback_H_
 #pragma once

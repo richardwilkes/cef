@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_App_H_
 #define GOCEF_App_H_
 #pragma once

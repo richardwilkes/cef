@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_CookieVisitor_H_
 #define GOCEF_CookieVisitor_H_
 #pragma once

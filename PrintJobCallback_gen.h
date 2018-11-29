@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_PrintJobCallback_H_
 #define GOCEF_PrintJobCallback_H_
 #pragma once

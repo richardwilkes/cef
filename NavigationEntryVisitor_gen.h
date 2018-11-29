@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_NavigationEntryVisitor_H_
 #define GOCEF_NavigationEntryVisitor_H_
 #pragma once

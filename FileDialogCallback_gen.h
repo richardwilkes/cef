@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_FileDialogCallback_H_
 #define GOCEF_FileDialogCallback_H_
 #pragma once

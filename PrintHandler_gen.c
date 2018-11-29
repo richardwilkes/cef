@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #include "PrintHandler_gen.h"
 #include "_cgo_export.h"
 

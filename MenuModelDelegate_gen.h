@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_MenuModelDelegate_H_
 #define GOCEF_MenuModelDelegate_H_
 #pragma once

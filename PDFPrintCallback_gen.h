@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_PDFPrintCallback_H_
 #define GOCEF_PDFPrintCallback_H_
 #pragma once

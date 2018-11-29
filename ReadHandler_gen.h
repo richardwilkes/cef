@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_ReadHandler_H_
 #define GOCEF_ReadHandler_H_
 #pragma once

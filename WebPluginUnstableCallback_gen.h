@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_WebPluginUnstableCallback_H_
 #define GOCEF_WebPluginUnstableCallback_H_
 #pragma once

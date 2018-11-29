@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_RequestHandler_H_
 #define GOCEF_RequestHandler_H_
 #pragma once

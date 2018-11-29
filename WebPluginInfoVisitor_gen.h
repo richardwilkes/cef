@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_WebPluginInfoVisitor_H_
 #define GOCEF_WebPluginInfoVisitor_H_
 #pragma once

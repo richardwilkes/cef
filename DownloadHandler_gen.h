@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_DownloadHandler_H_
 #define GOCEF_DownloadHandler_H_
 #pragma once

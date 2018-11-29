@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_SetCookieCallback_H_
 #define GOCEF_SetCookieCallback_H_
 #pragma once

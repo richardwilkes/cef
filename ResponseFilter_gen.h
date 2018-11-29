@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_ResponseFilter_H_
 #define GOCEF_ResponseFilter_H_
 #pragma once

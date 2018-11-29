@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_JsdialogHandler_H_
 #define GOCEF_JsdialogHandler_H_
 #pragma once

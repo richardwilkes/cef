@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_FocusHandler_H_
 #define GOCEF_FocusHandler_H_
 #pragma once

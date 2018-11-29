@@ -1,3 +1,5 @@
+// Code generated - DO NOT EDIT.
+
 #ifndef GOCEF_V8arrayBufferReleaseCallback_H_
 #define GOCEF_V8arrayBufferReleaseCallback_H_
 #pragma once
