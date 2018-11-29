@@ -20,7 +20,21 @@ if [ $CEF_VERSION != "$EXISTING" ]; then
     curl -L http://opensource.spotify.com/cefbuilds/cef_binary_${CEF_VERSION}_${PLATFORM}_minimal.tar.bz2 | bunzip2 | tar xf -
     mv cef_binary_${CEF_VERSION}_${PLATFORM}_minimal cef
     # Prune out the things we don't need
-    /bin/rm -rf cef/cmake cef/Debug cef/include/capi/test cef/include/test cef/include/views cef/include/wrapper cef/libcef_dll cef/CMakeLists.txt cef/Release/cef_sandbox.a
+    /bin/rm -rf cef/cmake cef/Debug \
+        cef/include/capi/test \
+        cef/include/capi/views \
+        cef/include/test \
+        cef/include/views \
+        cef/include/wrapper \
+        cef/libcef_dll
+    /bin/rm -f cef/CMakeLists.txt \
+        cef/Release/cef_sandbox.a \
+        cef/include/capi/cef_*_util_capi.h \
+        cef/include/capi/cef_parser_capi.h \
+        cef/include/capi/cef_thread_capi.h \
+        cef/include/capi/cef_trace_capi.h \
+        cef/include/capi/cef_xml_reader_capi.h \
+        cef/include/capi/cef_zip_reader_capi.h
     mv cef/include/cef_version.h cef/
     if [ $PLATFORM == "macosx64" ]; then
         mv cef/include/cef_application_mac.h cef/

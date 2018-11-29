@@ -27,6 +27,7 @@ var (
 	sdefsMap      = make(map[string]*structDef)
 	edefsMap      = make(map[string]*enumDef)
 	tdefsMap      = make(map[string]*typeDef)
+	fdefsMap      = make(map[string]*funcDef)
 )
 
 type lineInfo struct {
@@ -43,6 +44,7 @@ func main() {
 	dumpStructs()
 	dumpEnums()
 	dumpTypedefs()
+	dumpFunctions()
 }
 
 func cleanOutput() {
@@ -53,7 +55,7 @@ func cleanOutput() {
 	jot.FatalIfErr(f.Close())
 	for _, one := range list {
 		path := filepath.Join(outputBaseDir, one.Name())
-		if strings.HasSuffix(path, "_gen.go") {
+		if strings.HasSuffix(path, "_gen.go") || strings.HasSuffix(path, "_gen.c") || strings.HasSuffix(path, "_gen.h") {
 			os.Remove(path)
 		}
 	}
@@ -109,6 +111,8 @@ func processBlock(curBlock, prevBlock []lineInfo) {
 		processTypedefDeclEnumDecl(curBlock, prevBlock)
 	case strings.HasPrefix(first, "-TypedefDecl "):
 		processTypedefDecl(curBlock)
+	case strings.HasPrefix(first, "-FunctionDecl "):
+		processFunctionDecl(curBlock)
 	}
 }
 

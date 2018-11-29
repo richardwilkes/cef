@@ -18,14 +18,16 @@ type {{.GoName}}Proxy interface {
 {{- end}}
 }
 
-// {{.GoName}} ({{.Name}})
+// {{.GoName}} ({{.Name}} from {{.Position.Src}})
 {{- $comment := .Position.Comment}}{{if $comment}}
 {{$comment}}
 {{- end}}
 type {{.GoName}} C.{{.Name}}
 
 func New{{.GoName}}(proxy {{.GoName}}Proxy) *{{.GoName}} {
-	return (*{{.GoName}})(unsafe.Pointer(newRefCntObj(C.sizeof_struct__{{.Name}}, proxy)))
+	result := (*{{.GoName}})(unsafe.Pointer(newRefCntObj(C.sizeof_struct__{{.Name}}, proxy)))
+	C.gocef_set_{{.TrimmedName}}_proxy(result.toNative())
+	return result
 }
 
 func (d *{{.GoName}}) toNative() *C.{{.Name}} {

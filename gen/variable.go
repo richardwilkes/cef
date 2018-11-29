@@ -25,7 +25,7 @@ type variable struct {
 
 func newCVar(name, typeInfo string, pos position) *variable {
 	name = strings.TrimSpace(name)
-	typeInfo = strings.TrimPrefix(strings.Trim(strings.TrimSpace(strings.Replace(typeInfo, "const ", "", -1)), "'"), "struct _")
+	typeInfo = strings.Replace(strings.TrimPrefix(strings.Trim(strings.TrimSpace(strings.Replace(typeInfo, "const ", "", -1)), "'"), "struct _"), "long long", "int64_t", -1)
 	if i := strings.Index(typeInfo, "':'"); i != -1 {
 		typeInfo = typeInfo[:i]
 	}
@@ -101,6 +101,8 @@ func newCVar(name, typeInfo string, pos position) *variable {
 		v.GoType = v.Ptrs + "int16"
 	case "int":
 		v.GoType = v.Ptrs + "int32"
+	case "int64_t", "time_t":
+		v.GoType = v.Ptrs + "int64"
 	case "float":
 		v.GoType = v.Ptrs + "float32"
 	case "double":

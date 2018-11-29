@@ -1,7 +1,7 @@
 package cef
 {{- range .}}
 
-// {{.GoName}} ({{.Name}})
+// {{.GoName}} ({{.Name}} from {{.Position.Src}})
 {{- $comment := .Position.Comment}}{{if $comment}}
 {{$comment}}
 {{- end}}

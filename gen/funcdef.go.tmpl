@@ -1,17 +1,17 @@
 package cef
 
 import (
-{{- range .Headers}}
-	// #include "{{.}}"
-{{- end}}
+	// #include "capi_gen.h"
 	"C"
 	"unsafe"
 )
-{{- range .Types}}
+{{- range .}}
 
 // {{.GoName}} ({{.Name}} from {{.Position.Src}})
 {{- $comment := .Position.Comment}}{{if $comment}}
 {{$comment}}
 {{- end}}
-type {{.GoName}} {{.RefersTo}}
+func {{.GoName}}({{.ParameterList}}) {{.Return.GoType}} {
+	{{.Body}}
+}
 {{- end}}

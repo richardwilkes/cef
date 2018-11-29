@@ -4,9 +4,6 @@ import (
 	// #include <stdlib.h>
 	// #include <string.h>
 	// #include "include/capi/cef_base_capi.h"
-	// #cgo CFLAGS: -I ${SRCDIR}/../cef
-	// #cgo darwin LDFLAGS: -framework Cocoa -F ${SRCDIR}/../cef/Release -framework "Chromium Embedded Framework"
-	// #cgo windows LDFLAGS: -L${SRCDIR}/../cef/Release -lcef -Wl,--subsystem,windows
 	"C"
 	"unsafe"
 )

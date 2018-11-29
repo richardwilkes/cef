@@ -11,7 +11,7 @@ import (
 {{- end}}
 )
 
-// {{.GoName}} ({{.Name}})
+// {{.GoName}} ({{.Name}} from {{.Position.Src}})
 {{- $comment := .Position.Comment}}{{if $comment}}
 {{$comment}}
 {{- end}}
@@ -27,7 +27,7 @@ func (d *{{.GoName}}) toNative() *C.{{.Name}} {
 {{- $comment := .Position.Comment}}{{if $comment}}
 {{$comment}}
 {{- end}}
-func (d *{{.Owner.GoName}}) {{.Var.GoName}}({{.ParameterList}}) {{if .Var.GoType}}{{.Var.GoType}} {{end}}{
+func (d *{{.Owner.GoName}}) {{.Var.GoName}}({{.ParameterList}}) {{.Var.GoType}} {
 {{- if .Var.FunctionPtr}}
 	{{.CallFunctionPointer}}
 {{- else}}
