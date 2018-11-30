@@ -146,7 +146,9 @@ type BrowserSettings struct {
 
 // NewBrowserSettings creates a new BrowserSettings.
 func NewBrowserSettings() *BrowserSettings {
-	return &BrowserSettings{Size: C.sizeof_struct__cef_browser_settings_t}
+	return &BrowserSettings{
+		Size: C.sizeof_struct__cef_browser_settings_t,
+	}
 }
 
 func (d *BrowserSettings) toNative(native *C.cef_browser_settings_t) *C.cef_browser_settings_t {

@@ -143,7 +143,7 @@ func extractParameterNames(pos position) []string {
 				var params []string
 				line = txt.CollapseSpaces(strings.TrimSpace(line[:i]))
 				for j, param := range strings.Split(line, ",") {
-					param := strings.TrimSpace(param)
+					param = strings.TrimSpace(param)
 					if i = strings.LastIndex(param, " "); i != -1 {
 						params = append(params, param[i+1:])
 					} else {

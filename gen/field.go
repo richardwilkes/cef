@@ -134,6 +134,8 @@ func (f *field) FromNative() string {
 	} else {
 		fmt.Fprintf(&buffer, "d.%s = ", f.Var.GoName)
 		switch f.Var.CType {
+		case "void *":
+			fmt.Fprintf(&buffer, "native.%s", f.Var.Name)
 		case "cef_string_t":
 			fmt.Fprintf(&buffer, "cefstrToString(&native.%s)", f.Var.Name)
 		case "cef_string_t *":

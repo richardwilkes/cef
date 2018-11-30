@@ -5,6 +5,9 @@ package cef
 import (
 	// #include "capi_gen.h"
 	"C"
+	"path/filepath"
+
+	"github.com/richardwilkes/toolbox/xio/fs/paths"
 )
 
 // Settings (cef_settings_t from include/internal/cef_types.h)
@@ -210,7 +213,15 @@ type Settings struct {
 
 // NewSettings creates a new Settings.
 func NewSettings() *Settings {
-	return &Settings{Size: C.sizeof_struct__cef_settings_t, NoSandbox: 1, CommandLineArgsDisabled: 1}
+	return &Settings{
+		Size:                    C.sizeof_struct__cef_settings_t,
+		NoSandbox:               1,
+		CommandLineArgsDisabled: 1,
+		LogSeverity:             LogseverityWarning,
+		CachePath:               filepath.Join(paths.AppDataDir(), "cache"),
+		UserDataPath:            filepath.Join(paths.AppDataDir(), "data"),
+		LogFile:                 filepath.Join(paths.AppLogDir(), "cef.log"),
+	}
 }
 
 func (d *Settings) toNative(native *C.cef_settings_t) *C.cef_settings_t {

@@ -64,8 +64,8 @@ func (d *WindowInfo) fromNative(native *C.cef_window_info_t) *WindowInfo {
 	d.Width = int32(native.width)
 	d.Height = int32(native.height)
 	d.Hidden = int32(native.hidden)
-	d.ParentView = unsafe.Pointer(native.parent_view)
+	d.ParentView = native.parent_view
 	d.WindowlessRenderingEnabled = int32(native.windowless_rendering_enabled)
-	d.View = unsafe.Pointer(native.view)
+	d.View = native.view
 	return d
 }

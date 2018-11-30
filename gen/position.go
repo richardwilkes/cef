@@ -55,10 +55,7 @@ func (p *position) update(line string) {
 }
 
 func (p *position) setSrc(src string) {
-	p.Src = src
-	if strings.HasPrefix(p.Src, "./") {
-		p.Src = p.Src[2:]
-	}
+	p.Src = strings.TrimPrefix(src, "./")
 }
 
 func mustAtoi(in string) int {

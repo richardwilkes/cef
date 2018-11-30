@@ -104,6 +104,8 @@ result__.fromNative(&native__)
 return result__`, expression, retVar.GoType)
 	} else {
 		switch retVar.CType {
+		case "void *":
+			fmt.Fprintf(buffer, "return %s", expression)
 		case "cef_string_t":
 			fmt.Fprintf(buffer, `native__ := %s
 return cefstrToString(&native__)`, expression)

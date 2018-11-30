@@ -5,8 +5,15 @@ package cef
 import (
 	// #include "capi_gen.h"
 	"C"
+{{- if eq .GoName "Settings"}}
+	"path/filepath"
+{{- end}}
 {{- if .NeedsUnsafeImport}}
 	"unsafe"
+{{- end}}
+{{- if eq .GoName "Settings"}}
+
+	"github.com/richardwilkes/toolbox/xio/fs/paths"
 {{- end}}
 )
 
@@ -26,7 +33,19 @@ type {{.GoName}} struct {
 
 // New{{.GoName}} creates a new {{.GoName}}.
 func New{{.GoName}}() *{{.GoName}} {
-	return &{{.GoName}}{ {{if .NeedsSizeSet}} Size: C.sizeof_struct__{{.Name}} {{end}}{{if eq .GoName "Settings"}}, NoSandbox: 1, CommandLineArgsDisabled: 1{{end}} }
+	return &{{.GoName}}{
+{{- if .NeedsSizeSet}}
+		Size: C.sizeof_struct__{{.Name}},
+{{- end}}
+{{- if eq .GoName "Settings"}}
+		NoSandbox: 1,
+		CommandLineArgsDisabled: 1,
+		LogSeverity: LogseverityWarning,
+		CachePath: filepath.Join(paths.AppDataDir(), "cache"),
+		UserDataPath: filepath.Join(paths.AppDataDir(), "data"),
+		LogFile: filepath.Join(paths.AppLogDir(), "cef.log"),
+{{- end}}
+	}
 }
 
 func (d *{{.GoName}}) toNative(native *C.{{.Name}}) *C.{{.Name}} {

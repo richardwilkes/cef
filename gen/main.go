@@ -55,7 +55,7 @@ func cleanOutput() {
 	for _, one := range list {
 		path := filepath.Join(outputBaseDir, one.Name())
 		if strings.HasSuffix(path, "_gen.go") || strings.HasSuffix(path, "_gen.c") || strings.HasSuffix(path, "_gen.h") {
-			os.Remove(path)
+			jot.FatalIfErr(os.Remove(path))
 		}
 	}
 }

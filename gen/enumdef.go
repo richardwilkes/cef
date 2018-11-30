@@ -45,10 +45,7 @@ var nameExceptions = []string{
 }
 
 func translateConstantName(in string) string {
-	in = strings.TrimSpace(in)
-	if strings.HasPrefix(in, "CEF_") {
-		in = in[4:]
-	}
+	in = strings.TrimPrefix(strings.TrimSpace(in), "CEF_")
 	in = strings.ToLower(in)
 	for _, s := range nameExceptions {
 		upper := strings.ToUpper(s)

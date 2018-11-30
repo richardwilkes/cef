@@ -39,7 +39,7 @@ func (d *CursorInfo) toNative(native *C.cef_cursor_info_t) *C.cef_cursor_info_t 
 func (d *CursorInfo) fromNative(native *C.cef_cursor_info_t) *CursorInfo {
 	d.Hotspot.fromNative(&native.hotspot)
 	d.ImageScaleFactor = float32(native.image_scale_factor)
-	d.Buffer = unsafe.Pointer(native.buffer)
+	d.Buffer = native.buffer
 	d.Size.fromNative(&native.size)
 	return d
 }

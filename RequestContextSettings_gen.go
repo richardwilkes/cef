@@ -65,7 +65,9 @@ type RequestContextSettings struct {
 
 // NewRequestContextSettings creates a new RequestContextSettings.
 func NewRequestContextSettings() *RequestContextSettings {
-	return &RequestContextSettings{Size: C.sizeof_struct__cef_request_context_settings_t}
+	return &RequestContextSettings{
+		Size: C.sizeof_struct__cef_request_context_settings_t,
+	}
 }
 
 func (d *RequestContextSettings) toNative(native *C.cef_request_context_settings_t) *C.cef_request_context_settings_t {

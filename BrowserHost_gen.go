@@ -121,7 +121,7 @@ func (d *BrowserHost) SetFocus(focus int32) {
 // a cef_browser_view_t this function should be called on the browser process
 // UI thread and it will return the handle for the top-level native window.
 func (d *BrowserHost) GetWindowHandle() unsafe.Pointer {
-	return unsafe.Pointer(C.gocef_browser_host_get_window_handle(d.toNative(), d.get_window_handle))
+	return C.gocef_browser_host_get_window_handle(d.toNative(), d.get_window_handle)
 }
 
 // GetOpenerWindowHandle (get_opener_window_handle)
@@ -130,7 +130,7 @@ func (d *BrowserHost) GetWindowHandle() unsafe.Pointer {
 // cef_browser_view_t. This function can be used in combination with custom
 // handling of modal windows.
 func (d *BrowserHost) GetOpenerWindowHandle() unsafe.Pointer {
-	return unsafe.Pointer(C.gocef_browser_host_get_opener_window_handle(d.toNative(), d.get_opener_window_handle))
+	return C.gocef_browser_host_get_opener_window_handle(d.toNative(), d.get_opener_window_handle)
 }
 
 // HasView (has_view)
