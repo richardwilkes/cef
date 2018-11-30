@@ -148,14 +148,7 @@ func extractParameterNames(pos position) []string {
 				for j, param := range strings.Split(line, ",") {
 					param = strings.TrimSpace(param)
 					if i = strings.LastIndex(param, " "); i != -1 {
-						name := param[i+1:]
-						for _, one := range paramRenames {
-							if name == one {
-								name = name + "_r"
-								break
-							}
-						}
-						params = append(params, name)
+						params = append(params, adjustedParamName(param[i+1:]))
 					} else {
 						jot.Fatal(1, errs.Newf("Unable to extract parameter name %d from: %s", j, line))
 					}
@@ -166,6 +159,15 @@ func extractParameterNames(pos position) []string {
 	}
 	jot.Fatal(1, errs.Newf("Unable to extract parameter names from: %s", line))
 	return nil
+}
+
+func adjustedParamName(name string) string {
+	for _, one := range paramRenames {
+		if name == one {
+			return name + "_r"
+		}
+	}
+	return name
 }
 
 func (v *variable) CGoCast(expression string) string {

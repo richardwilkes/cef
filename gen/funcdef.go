@@ -163,7 +163,7 @@ func emitParamsForCCall(buffer *strings.Builder, vars []*variable, names []strin
 }
 
 func processFunctionDecl(block []lineInfo) {
-	if !strings.HasPrefix(block[0].Position.Src, "include/internal") {
+	if block[0].Position.Src != "include/internal/cef_string_types.h" {
 		if result := funcRegex.FindAllStringSubmatch(block[0].Line, -1); len(result) > 0 {
 			name := result[0][1]
 			if _, exclude := fdefsMap[name]; !exclude {
@@ -175,7 +175,7 @@ func processFunctionDecl(block []lineInfo) {
 				}
 				for _, b := range block {
 					if result = paramRegex.FindAllStringSubmatch(b.Line, -1); len(result) > 0 {
-						fdef.Params = append(fdef.Params, newCVar(result[0][1], result[0][2], b.Position))
+						fdef.Params = append(fdef.Params, newCVar(adjustedParamName(result[0][1]), result[0][2], b.Position))
 					}
 				}
 				fdefsMap[name] = fdef

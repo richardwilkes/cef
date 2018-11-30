@@ -586,6 +586,181 @@ func StreamWriterCreateForHandler(handler *WriteHandler) *StreamWriter {
 	return (*StreamWriter)(C.cef_stream_writer_create_for_handler(handler.toNative()))
 }
 
+// StringListAlloc (cef_string_list_alloc from include/internal/cef_string_list.h)
+// Allocate a new string map.
+func StringListAlloc() StringList {
+	return StringList(C.cef_string_list_alloc())
+}
+
+// StringListAppend (cef_string_list_append from include/internal/cef_string_list.h)
+// Append a new value at the end of the string list.
+func StringListAppend(list StringList, value string) {
+	var value_ C.cef_string_t
+	setCEFStr(value, &value_)
+	C.cef_string_list_append(C.cef_string_list_t(list), &value_)
+}
+
+// StringListClear (cef_string_list_clear from include/internal/cef_string_list.h)
+// Clear the string list.
+func StringListClear(list StringList) {
+	C.cef_string_list_clear(C.cef_string_list_t(list))
+}
+
+// StringListCopy (cef_string_list_copy from include/internal/cef_string_list.h)
+// Creates a copy of an existing string list.
+func StringListCopy(list StringList) StringList {
+	return StringList(C.cef_string_list_copy(C.cef_string_list_t(list)))
+}
+
+// StringListFree (cef_string_list_free from include/internal/cef_string_list.h)
+// Free the string list.
+func StringListFree(list StringList) {
+	C.cef_string_list_free(C.cef_string_list_t(list))
+}
+
+// StringListSize (cef_string_list_size from include/internal/cef_string_list.h)
+// Return the number of elements in the string list.
+func StringListSize(list StringList) uint64 {
+	return uint64(C.cef_string_list_size(C.cef_string_list_t(list)))
+}
+
+// StringListValue (cef_string_list_value from include/internal/cef_string_list.h)
+// Retrieve the value at the specified zero-based string list index. Returns
+// true (1) if the value was successfully retrieved.
+func StringListValue(list StringList, index uint64, value string) int32 {
+	var value_ C.cef_string_t
+	setCEFStr(value, &value_)
+	return int32(C.cef_string_list_value(C.cef_string_list_t(list), C.size_t(index), &value_))
+}
+
+// StringMapAlloc (cef_string_map_alloc from include/internal/cef_string_map.h)
+// Allocate a new string map.
+func StringMapAlloc() StringMap {
+	return StringMap(C.cef_string_map_alloc())
+}
+
+// StringMapAppend (cef_string_map_append from include/internal/cef_string_map.h)
+// Append a new key/value pair at the end of the string map.
+func StringMapAppend(map_r StringMap, key, value string) int32 {
+	var key_ C.cef_string_t
+	setCEFStr(key, &key_)
+	var value_ C.cef_string_t
+	setCEFStr(value, &value_)
+	return int32(C.cef_string_map_append(C.cef_string_map_t(map_r), &key_, &value_))
+}
+
+// StringMapClear (cef_string_map_clear from include/internal/cef_string_map.h)
+// Clear the string map.
+func StringMapClear(map_r StringMap) {
+	C.cef_string_map_clear(C.cef_string_map_t(map_r))
+}
+
+// StringMapFind (cef_string_map_find from include/internal/cef_string_map.h)
+// Return the value assigned to the specified key.
+func StringMapFind(map_r StringMap, key, value string) int32 {
+	var key_ C.cef_string_t
+	setCEFStr(key, &key_)
+	var value_ C.cef_string_t
+	setCEFStr(value, &value_)
+	return int32(C.cef_string_map_find(C.cef_string_map_t(map_r), &key_, &value_))
+}
+
+// StringMapFree (cef_string_map_free from include/internal/cef_string_map.h)
+// Free the string map.
+func StringMapFree(map_r StringMap) {
+	C.cef_string_map_free(C.cef_string_map_t(map_r))
+}
+
+// StringMapKey (cef_string_map_key from include/internal/cef_string_map.h)
+// Return the key at the specified zero-based string map index.
+func StringMapKey(map_r StringMap, index uint64, key string) int32 {
+	var key_ C.cef_string_t
+	setCEFStr(key, &key_)
+	return int32(C.cef_string_map_key(C.cef_string_map_t(map_r), C.size_t(index), &key_))
+}
+
+// StringMapSize (cef_string_map_size from include/internal/cef_string_map.h)
+// Return the number of elements in the string map.
+func StringMapSize(map_r StringMap) uint64 {
+	return uint64(C.cef_string_map_size(C.cef_string_map_t(map_r)))
+}
+
+// StringMapValue (cef_string_map_value from include/internal/cef_string_map.h)
+// Return the value at the specified zero-based string map index.
+func StringMapValue(map_r StringMap, index uint64, value string) int32 {
+	var value_ C.cef_string_t
+	setCEFStr(value, &value_)
+	return int32(C.cef_string_map_value(C.cef_string_map_t(map_r), C.size_t(index), &value_))
+}
+
+// StringMultimapAlloc (cef_string_multimap_alloc from include/internal/cef_string_multimap.h)
+// Allocate a new string multimap.
+func StringMultimapAlloc() StringMultimap {
+	return StringMultimap(C.cef_string_multimap_alloc())
+}
+
+// StringMultimapAppend (cef_string_multimap_append from include/internal/cef_string_multimap.h)
+// Append a new key/value pair at the end of the string multimap.
+func StringMultimapAppend(map_r StringMultimap, key, value string) int32 {
+	var key_ C.cef_string_t
+	setCEFStr(key, &key_)
+	var value_ C.cef_string_t
+	setCEFStr(value, &value_)
+	return int32(C.cef_string_multimap_append(C.cef_string_multimap_t(map_r), &key_, &value_))
+}
+
+// StringMultimapClear (cef_string_multimap_clear from include/internal/cef_string_multimap.h)
+// Clear the string multimap.
+func StringMultimapClear(map_r StringMultimap) {
+	C.cef_string_multimap_clear(C.cef_string_multimap_t(map_r))
+}
+
+// StringMultimapEnumerate (cef_string_multimap_enumerate from include/internal/cef_string_multimap.h)
+// Return the value_index-th value with the specified key.
+func StringMultimapEnumerate(map_r StringMultimap, key string, value_index uint64, value string) int32 {
+	var key_ C.cef_string_t
+	setCEFStr(key, &key_)
+	var value_ C.cef_string_t
+	setCEFStr(value, &value_)
+	return int32(C.cef_string_multimap_enumerate(C.cef_string_multimap_t(map_r), &key_, C.size_t(value_index), &value_))
+}
+
+// StringMultimapFindCount (cef_string_multimap_find_count from include/internal/cef_string_multimap.h)
+// Return the number of values with the specified key.
+func StringMultimapFindCount(map_r StringMultimap, key string) uint64 {
+	var key_ C.cef_string_t
+	setCEFStr(key, &key_)
+	return uint64(C.cef_string_multimap_find_count(C.cef_string_multimap_t(map_r), &key_))
+}
+
+// StringMultimapFree (cef_string_multimap_free from include/internal/cef_string_multimap.h)
+// Free the string multimap.
+func StringMultimapFree(map_r StringMultimap) {
+	C.cef_string_multimap_free(C.cef_string_multimap_t(map_r))
+}
+
+// StringMultimapKey (cef_string_multimap_key from include/internal/cef_string_multimap.h)
+// Return the key at the specified zero-based string multimap index.
+func StringMultimapKey(map_r StringMultimap, index uint64, key string) int32 {
+	var key_ C.cef_string_t
+	setCEFStr(key, &key_)
+	return int32(C.cef_string_multimap_key(C.cef_string_multimap_t(map_r), C.size_t(index), &key_))
+}
+
+// StringMultimapSize (cef_string_multimap_size from include/internal/cef_string_multimap.h)
+// Return the number of elements in the string multimap.
+func StringMultimapSize(map_r StringMultimap) uint64 {
+	return uint64(C.cef_string_multimap_size(C.cef_string_multimap_t(map_r)))
+}
+
+// StringMultimapValue (cef_string_multimap_value from include/internal/cef_string_multimap.h)
+// Return the value at the specified zero-based string multimap index.
+func StringMultimapValue(map_r StringMultimap, index uint64, value string) int32 {
+	var value_ C.cef_string_t
+	setCEFStr(value, &value_)
+	return int32(C.cef_string_multimap_value(C.cef_string_multimap_t(map_r), C.size_t(index), &value_))
+}
+
 // TaskRunnerGetForCurrentThread (cef_task_runner_get_for_current_thread from include/capi/cef_task_capi.h)
 // Returns the task runner for the current thread. Only CEF threads will have
 // task runners. An NULL reference will be returned if this function is called
@@ -598,6 +773,46 @@ func TaskRunnerGetForCurrentThread() *TaskRunner {
 // Returns the task runner for the specified CEF thread.
 func TaskRunnerGetForThread(threadId ThreadID) *TaskRunner {
 	return (*TaskRunner)(C.cef_task_runner_get_for_thread(C.cef_thread_id_t(threadId)))
+}
+
+// TimeDelta (cef_time_delta from include/internal/cef_time.h)
+// Retrieve the delta in milliseconds between two time values.
+//
+func TimeDelta(cef_time1, cef_time2 *Time, delta *int64) int32 {
+	return int32(C.cef_time_delta(cef_time1.toNative(&C.cef_time_t{}), cef_time2.toNative(&C.cef_time_t{}), (*C.int64_t)(delta)))
+}
+
+// TimeFromDoublet (cef_time_from_doublet from include/internal/cef_time.h)
+func TimeFromDoublet(time float64, cef_time *Time) int32 {
+	return int32(C.cef_time_from_doublet(C.double(time), cef_time.toNative(&C.cef_time_t{})))
+}
+
+// TimeFromTimet (cef_time_from_timet from include/internal/cef_time.h)
+func TimeFromTimet(time int64, cef_time *Time) int32 {
+	return int32(C.cef_time_from_timet(C.time_t(time), cef_time.toNative(&C.cef_time_t{})))
+}
+
+// TimeNow (cef_time_now from include/internal/cef_time.h)
+// Retrieve the current system time.
+//
+func TimeNow(cef_time *Time) int32 {
+	return int32(C.cef_time_now(cef_time.toNative(&C.cef_time_t{})))
+}
+
+// TimeToDoublet (cef_time_to_doublet from include/internal/cef_time.h)
+// Converts cef_time_t to/from a double which is the number of seconds since
+// epoch (Jan 1, 1970). Webkit uses this format to represent time. A value of 0
+// means "not initialized". Returns true (1) on success and false (0) on
+// failure.
+func TimeToDoublet(cef_time *Time, time *float64) int32 {
+	return int32(C.cef_time_to_doublet(cef_time.toNative(&C.cef_time_t{}), (*C.double)(time)))
+}
+
+// TimeToTimet (cef_time_to_timet from include/internal/cef_time.h)
+// Converts cef_time_t to/from time_t. Returns true (1) on success and false (0)
+// on failure.
+func TimeToTimet(cef_time *Time, time *int64) int32 {
+	return int32(C.cef_time_to_timet(cef_time.toNative(&C.cef_time_t{}), (*C.time_t)(time)))
 }
 
 // UnregisterInternalWebPlugin (cef_unregister_internal_web_plugin from include/capi/cef_web_plugin_capi.h)
