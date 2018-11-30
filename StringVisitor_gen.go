@@ -13,7 +13,7 @@ import (
 
 // StringVisitorProxy defines methods required for using StringVisitor.
 type StringVisitorProxy interface {
-	Visit(self *StringVisitor, string string)
+	Visit(self *StringVisitor, string_r string)
 }
 
 // StringVisitor (cef_string_visitor_t from include/capi/cef_string_visitor_capi.h)
@@ -54,13 +54,13 @@ func (d *StringVisitor) Base() *BaseRefCounted {
 
 // Visit (visit)
 // Method that will be executed.
-func (d *StringVisitor) Visit(string string) {
-	lookupStringVisitorProxy(d.Base()).Visit(d, string)
+func (d *StringVisitor) Visit(string_r string) {
+	lookupStringVisitorProxy(d.Base()).Visit(d, string_r)
 }
 
 //export gocef_string_visitor_visit
-func gocef_string_visitor_visit(self *C.cef_string_visitor_t, string *C.cef_string_t) {
+func gocef_string_visitor_visit(self *C.cef_string_visitor_t, string_r *C.cef_string_t) {
 	me__ := (*StringVisitor)(self)
 	proxy__ := lookupStringVisitorProxy(me__.Base())
-	proxy__.Visit(me__, cefstrToString(string))
+	proxy__.Visit(me__, cefstrToString(string_r))
 }

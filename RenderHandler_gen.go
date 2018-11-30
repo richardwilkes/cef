@@ -20,8 +20,8 @@ type RenderHandlerProxy interface {
 	GetScreenInfo(self *RenderHandler, browser *Browser, screen_info *ScreenInfo) int32
 	OnPopupShow(self *RenderHandler, browser *Browser, show int32)
 	OnPopupSize(self *RenderHandler, browser *Browser, rect *Rect)
-	OnPaint(self *RenderHandler, browser *Browser, _type PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, buffer unsafe.Pointer, width, height int32)
-	OnCursorChange(self *RenderHandler, browser *Browser, cursor unsafe.Pointer, _type CursorType, custom_cursor_info *CursorInfo)
+	OnPaint(self *RenderHandler, browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, buffer unsafe.Pointer, width, height int32)
+	OnCursorChange(self *RenderHandler, browser *Browser, cursor unsafe.Pointer, type_r CursorType, custom_cursor_info *CursorInfo)
 	StartDragging(self *RenderHandler, browser *Browser, drag_data *DragData, allowed_ops DragOperationsMask, x, y int32) int32
 	UpdateDragCursor(self *RenderHandler, browser *Browser, operation DragOperationsMask)
 	OnScrollOffsetChanged(self *RenderHandler, browser *Browser, x, y float64)
@@ -182,31 +182,31 @@ func gocef_render_handler_on_popup_size(self *C.cef_render_handler_t, browser *C
 // of rectangles in pixel coordinates that need to be repainted. |buffer| will
 // be |width|*|height|*4 bytes in size and represents a BGRA image with an
 // upper-left origin.
-func (d *RenderHandler) OnPaint(browser *Browser, _type PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, buffer unsafe.Pointer, width, height int32) {
-	lookupRenderHandlerProxy(d.Base()).OnPaint(d, browser, _type, dirtyRectsCount, dirtyRects, buffer, width, height)
+func (d *RenderHandler) OnPaint(browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, buffer unsafe.Pointer, width, height int32) {
+	lookupRenderHandlerProxy(d.Base()).OnPaint(d, browser, type_r, dirtyRectsCount, dirtyRects, buffer, width, height)
 }
 
 //export gocef_render_handler_on_paint
-func gocef_render_handler_on_paint(self *C.cef_render_handler_t, browser *C.cef_browser_t, _type C.cef_paint_element_type_t, dirtyRectsCount C.size_t, dirtyRects *C.cef_rect_t, buffer unsafe.Pointer, width C.int, height C.int) {
+func gocef_render_handler_on_paint(self *C.cef_render_handler_t, browser *C.cef_browser_t, type_r C.cef_paint_element_type_t, dirtyRectsCount C.size_t, dirtyRects *C.cef_rect_t, buffer unsafe.Pointer, width C.int, height C.int) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
 	var vdirtyRects Rect
-	proxy__.OnPaint(me__, (*Browser)(browser), PaintElementType(_type), uint64(dirtyRectsCount), vdirtyRects.fromNative(dirtyRects), buffer, int32(width), int32(height))
+	proxy__.OnPaint(me__, (*Browser)(browser), PaintElementType(type_r), uint64(dirtyRectsCount), vdirtyRects.fromNative(dirtyRects), buffer, int32(width), int32(height))
 }
 
 // OnCursorChange (on_cursor_change)
 // Called when the browser's cursor has changed. If |type| is CT_CUSTOM then
 // |custom_cursor_info| will be populated with the custom cursor information.
-func (d *RenderHandler) OnCursorChange(browser *Browser, cursor unsafe.Pointer, _type CursorType, custom_cursor_info *CursorInfo) {
-	lookupRenderHandlerProxy(d.Base()).OnCursorChange(d, browser, cursor, _type, custom_cursor_info)
+func (d *RenderHandler) OnCursorChange(browser *Browser, cursor unsafe.Pointer, type_r CursorType, custom_cursor_info *CursorInfo) {
+	lookupRenderHandlerProxy(d.Base()).OnCursorChange(d, browser, cursor, type_r, custom_cursor_info)
 }
 
 //export gocef_render_handler_on_cursor_change
-func gocef_render_handler_on_cursor_change(self *C.cef_render_handler_t, browser *C.cef_browser_t, cursor unsafe.Pointer, _type C.cef_cursor_type_t, custom_cursor_info *C.cef_cursor_info_t) {
+func gocef_render_handler_on_cursor_change(self *C.cef_render_handler_t, browser *C.cef_browser_t, cursor unsafe.Pointer, type_r C.cef_cursor_type_t, custom_cursor_info *C.cef_cursor_info_t) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
 	var vcustom_cursor_info CursorInfo
-	proxy__.OnCursorChange(me__, (*Browser)(browser), cursor, CursorType(_type), vcustom_cursor_info.fromNative(custom_cursor_info))
+	proxy__.OnCursorChange(me__, (*Browser)(browser), cursor, CursorType(type_r), vcustom_cursor_info.fromNative(custom_cursor_info))
 }
 
 // StartDragging (start_dragging)

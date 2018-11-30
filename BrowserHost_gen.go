@@ -34,9 +34,9 @@ import (
 	// void gocef_browser_host_was_resized(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_was_hidden(cef_browser_host_t * self, int hidden, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, hidden); }
 	// void gocef_browser_host_notify_screen_info_changed(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
-	// void gocef_browser_host_invalidate(cef_browser_host_t * self, cef_paint_element_type_t _type, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_paint_element_type_t)) { return callback__(self, _type); }
+	// void gocef_browser_host_invalidate(cef_browser_host_t * self, cef_paint_element_type_t type_r, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_paint_element_type_t)) { return callback__(self, type_r); }
 	// void gocef_browser_host_send_key_event(cef_browser_host_t * self, cef_key_event_t * event, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_key_event_t *)) { return callback__(self, event); }
-	// void gocef_browser_host_send_mouse_click_event(cef_browser_host_t * self, cef_mouse_event_t * event, cef_mouse_button_type_t _type, int mouseUp, int clickCount, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, cef_mouse_button_type_t, int, int)) { return callback__(self, event, _type, mouseUp, clickCount); }
+	// void gocef_browser_host_send_mouse_click_event(cef_browser_host_t * self, cef_mouse_event_t * event, cef_mouse_button_type_t type_r, int mouseUp, int clickCount, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, cef_mouse_button_type_t, int, int)) { return callback__(self, event, type_r, mouseUp, clickCount); }
 	// void gocef_browser_host_send_mouse_move_event(cef_browser_host_t * self, cef_mouse_event_t * event, int mouseLeave, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, int)) { return callback__(self, event, mouseLeave); }
 	// void gocef_browser_host_send_mouse_wheel_event(cef_browser_host_t * self, cef_mouse_event_t * event, int deltaX, int deltaY, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, int, int)) { return callback__(self, event, deltaX, deltaY); }
 	// void gocef_browser_host_send_focus_event(cef_browser_host_t * self, int setFocus, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, setFocus); }
@@ -354,8 +354,8 @@ func (d *BrowserHost) NotifyScreenInfoChanged() {
 // Invalidate the view. The browser will call cef_render_handler_t::OnPaint
 // asynchronously. This function is only used when window rendering is
 // disabled.
-func (d *BrowserHost) Invalidate(_type PaintElementType) {
-	C.gocef_browser_host_invalidate(d.toNative(), C.cef_paint_element_type_t(_type), d.invalidate)
+func (d *BrowserHost) Invalidate(type_r PaintElementType) {
+	C.gocef_browser_host_invalidate(d.toNative(), C.cef_paint_element_type_t(type_r), d.invalidate)
 }
 
 // SendKeyEvent (send_key_event)
@@ -367,8 +367,8 @@ func (d *BrowserHost) SendKeyEvent(event *KeyEvent) {
 // SendMouseClickEvent (send_mouse_click_event)
 // Send a mouse click event to the browser. The |x| and |y| coordinates are
 // relative to the upper-left corner of the view.
-func (d *BrowserHost) SendMouseClickEvent(event *MouseEvent, _type MouseButtonType, mouseUp, clickCount int32) {
-	C.gocef_browser_host_send_mouse_click_event(d.toNative(), event.toNative(&C.cef_mouse_event_t{}), C.cef_mouse_button_type_t(_type), C.int(mouseUp), C.int(clickCount), d.send_mouse_click_event)
+func (d *BrowserHost) SendMouseClickEvent(event *MouseEvent, type_r MouseButtonType, mouseUp, clickCount int32) {
+	C.gocef_browser_host_send_mouse_click_event(d.toNative(), event.toNative(&C.cef_mouse_event_t{}), C.cef_mouse_button_type_t(type_r), C.int(mouseUp), C.int(clickCount), d.send_mouse_click_event)
 }
 
 // SendMouseMoveEvent (send_mouse_move_event)

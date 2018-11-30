@@ -9,7 +9,10 @@ import (
 	"github.com/richardwilkes/toolbox/txt"
 )
 
-var cNamesToPrefix = []string{"range", "select", "type"}
+var (
+	cNamesToPrefixForAccess = []string{"range", "select", "type"}
+	paramRenames            = []string{"chan", "defer", "fallthrough", "func", "go", "import", "interface", "map", "package", "range", "select", "string", "type", "var"}
+)
 
 type variable struct {
 	Name        string
@@ -33,7 +36,7 @@ func newCVar(name, typeInfo string, pos position) *variable {
 		Name:   name,
 		GoName: txt.ToCamelCase(name),
 	}
-	for _, one := range cNamesToPrefix {
+	for _, one := range cNamesToPrefixForAccess {
 		if one == name {
 			v.Name = "_" + name
 			break
@@ -145,7 +148,14 @@ func extractParameterNames(pos position) []string {
 				for j, param := range strings.Split(line, ",") {
 					param = strings.TrimSpace(param)
 					if i = strings.LastIndex(param, " "); i != -1 {
-						params = append(params, param[i+1:])
+						name := param[i+1:]
+						for _, one := range paramRenames {
+							if name == one {
+								name = name + "_r"
+								break
+							}
+						}
+						params = append(params, name)
 					} else {
 						jot.Fatal(1, errs.Newf("Unable to extract parameter name %d from: %s", j, line))
 					}
@@ -182,7 +192,7 @@ func (v *variable) GoCast(expression string) string {
 }
 
 func (v *variable) NameNoMangle() string {
-	for _, one := range cNamesToPrefix {
+	for _, one := range cNamesToPrefixForAccess {
 		if "_"+one == v.Name {
 			return one
 		}

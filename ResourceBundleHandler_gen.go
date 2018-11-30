@@ -13,7 +13,7 @@ import (
 
 // ResourceBundleHandlerProxy defines methods required for using ResourceBundleHandler.
 type ResourceBundleHandlerProxy interface {
-	GetLocalizedString(self *ResourceBundleHandler, string_id int32, string string) int32
+	GetLocalizedString(self *ResourceBundleHandler, string_id int32, string_r string) int32
 	GetDataResource(self *ResourceBundleHandler, resource_id int32, data *unsafe.Pointer, data_size *uint64) int32
 	GetDataResourceForScale(self *ResourceBundleHandler, resource_id int32, scale_factor ScaleFactor, data *unsafe.Pointer, data_size *uint64) int32
 }
@@ -61,15 +61,15 @@ func (d *ResourceBundleHandler) Base() *BaseRefCounted {
 // To provide the translation set |string| to the translation string and
 // return true (1). To use the default translation return false (0). Include
 // cef_pack_strings.h for a listing of valid string ID values.
-func (d *ResourceBundleHandler) GetLocalizedString(string_id int32, string string) int32 {
-	return lookupResourceBundleHandlerProxy(d.Base()).GetLocalizedString(d, string_id, string)
+func (d *ResourceBundleHandler) GetLocalizedString(string_id int32, string_r string) int32 {
+	return lookupResourceBundleHandlerProxy(d.Base()).GetLocalizedString(d, string_id, string_r)
 }
 
 //export gocef_resource_bundle_handler_get_localized_string
-func gocef_resource_bundle_handler_get_localized_string(self *C.cef_resource_bundle_handler_t, string_id C.int, string *C.cef_string_t) C.int {
+func gocef_resource_bundle_handler_get_localized_string(self *C.cef_resource_bundle_handler_t, string_id C.int, string_r *C.cef_string_t) C.int {
 	me__ := (*ResourceBundleHandler)(self)
 	proxy__ := lookupResourceBundleHandlerProxy(me__.Base())
-	return C.int(proxy__.GetLocalizedString(me__, int32(string_id), cefstrToString(string)))
+	return C.int(proxy__.GetLocalizedString(me__, int32(string_id), cefstrToString(string_r)))
 }
 
 // GetDataResource (get_data_resource)
