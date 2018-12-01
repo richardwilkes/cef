@@ -69,7 +69,8 @@ func (d *ResourceBundleHandler) GetLocalizedString(string_id int32, string_r str
 func gocef_resource_bundle_handler_get_localized_string(self *C.cef_resource_bundle_handler_t, string_id C.int, string_r *C.cef_string_t) C.int {
 	me__ := (*ResourceBundleHandler)(self)
 	proxy__ := lookupResourceBundleHandlerProxy(me__.Base())
-	return C.int(proxy__.GetLocalizedString(me__, int32(string_id), cefstrToString(string_r)))
+	string_r_ := cefstrToString(string_r)
+	return C.int(proxy__.GetLocalizedString(me__, int32(string_id), string_r_))
 }
 
 // GetDataResource (get_data_resource)

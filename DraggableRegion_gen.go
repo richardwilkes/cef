@@ -29,8 +29,13 @@ func (d *DraggableRegion) toNative(native *C.cef_draggable_region_t) *C.cef_drag
 	return native
 }
 
-func (d *DraggableRegion) fromNative(native *C.cef_draggable_region_t) *DraggableRegion {
-	d.Bounds.fromNative(&native.bounds)
-	d.Draggable = int32(native.draggable)
-	return d
+func (n *C.cef_draggable_region_t) toGo() *DraggableRegion {
+	var d DraggableRegion
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_draggable_region_t) intoGo(d *DraggableRegion) {
+	n.bounds.intoGo(&d.Bounds)
+	d.Draggable = int32(n.draggable)
 }

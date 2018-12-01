@@ -75,5 +75,7 @@ func (d *DialogHandler) OnFileDialog(browser *Browser, mode FileDialogMode, titl
 func gocef_dialog_handler_on_file_dialog(self *C.cef_dialog_handler_t, browser *C.cef_browser_t, mode C.cef_file_dialog_mode_t, title *C.cef_string_t, default_file_path *C.cef_string_t, accept_filters C.cef_string_list_t, selected_accept_filter C.int, callback *C.cef_file_dialog_callback_t) C.int {
 	me__ := (*DialogHandler)(self)
 	proxy__ := lookupDialogHandlerProxy(me__.Base())
-	return C.int(proxy__.OnFileDialog(me__, (*Browser)(browser), FileDialogMode(mode), cefstrToString(title), cefstrToString(default_file_path), StringList(accept_filters), int32(selected_accept_filter), (*FileDialogCallback)(callback)))
+	title_ := cefstrToString(title)
+	default_file_path_ := cefstrToString(default_file_path)
+	return C.int(proxy__.OnFileDialog(me__, (*Browser)(browser), FileDialogMode(mode), title_, default_file_path_, StringList(accept_filters), int32(selected_accept_filter), (*FileDialogCallback)(callback)))
 }

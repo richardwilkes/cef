@@ -33,10 +33,15 @@ func (d *Insets) toNative(native *C.cef_insets_t) *C.cef_insets_t {
 	return native
 }
 
-func (d *Insets) fromNative(native *C.cef_insets_t) *Insets {
-	d.Top = int32(native.top)
-	d.Left = int32(native.left)
-	d.Bottom = int32(native.bottom)
-	d.Right = int32(native.right)
-	return d
+func (n *C.cef_insets_t) toGo() *Insets {
+	var d Insets
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_insets_t) intoGo(d *Insets) {
+	d.Top = int32(n.top)
+	d.Left = int32(n.left)
+	d.Bottom = int32(n.bottom)
+	d.Right = int32(n.right)
 }

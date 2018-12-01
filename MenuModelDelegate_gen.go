@@ -85,8 +85,8 @@ func (d *MenuModelDelegate) MouseOutsideMenu(menu_model *MenuModel, screen_point
 func gocef_menu_model_delegate_mouse_outside_menu(self *C.cef_menu_model_delegate_t, menu_model *C.cef_menu_model_t, screen_point *C.cef_point_t) {
 	me__ := (*MenuModelDelegate)(self)
 	proxy__ := lookupMenuModelDelegateProxy(me__.Base())
-	var vscreen_point Point
-	proxy__.MouseOutsideMenu(me__, (*MenuModel)(menu_model), vscreen_point.fromNative(screen_point))
+	screen_point_ := screen_point.toGo()
+	proxy__.MouseOutsideMenu(me__, (*MenuModel)(menu_model), screen_point_)
 }
 
 // UnhandledOpenSubmenu (unhandled_open_submenu)
@@ -154,5 +154,6 @@ func (d *MenuModelDelegate) FormatLabel(menu_model *MenuModel, label string) int
 func gocef_menu_model_delegate_format_label(self *C.cef_menu_model_delegate_t, menu_model *C.cef_menu_model_t, label *C.cef_string_t) C.int {
 	me__ := (*MenuModelDelegate)(self)
 	proxy__ := lookupMenuModelDelegateProxy(me__.Base())
-	return C.int(proxy__.FormatLabel(me__, (*MenuModel)(menu_model), cefstrToString(label)))
+	label_ := cefstrToString(label)
+	return C.int(proxy__.FormatLabel(me__, (*MenuModel)(menu_model), label_))
 }

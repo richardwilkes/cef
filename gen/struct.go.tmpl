@@ -55,9 +55,14 @@ func (d *{{.GoName}}) toNative(native *C.{{.Name}}) *C.{{.Name}} {
 	return native
 }
 
-func (d *{{.GoName}}) fromNative(native *C.{{.Name}}) *{{.GoName}} {
+func (n *C.{{.Name}}) toGo() *{{.GoName}} {
+	var d {{.GoName}}
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.{{.Name}}) intoGo(d *{{.GoName}}) {
 {{- range .Fields}}
-	{{.FromNative}}
+	{{.IntoGo}}
 {{- end}}
-	return d
 }

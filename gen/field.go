@@ -127,26 +127,26 @@ func (f *field) ToNative() string {
 	return buffer.String()
 }
 
-func (f *field) FromNative() string {
+func (f *field) IntoGo() string {
 	var buffer strings.Builder
 	if sdef, exists := sdefsMap[f.Var.CType]; exists && !sdef.isClassEquivalent() {
-		fmt.Fprintf(&buffer, "d.%s.fromNative(&native.%s)", f.Var.GoName, f.Var.Name)
+		fmt.Fprintf(&buffer, "n.%s.intoGo(&d.%s)", f.Var.Name, f.Var.GoName)
 	} else {
 		fmt.Fprintf(&buffer, "d.%s = ", f.Var.GoName)
 		switch f.Var.CType {
 		case "void *":
-			fmt.Fprintf(&buffer, "native.%s", f.Var.Name)
+			fmt.Fprintf(&buffer, "n.%s", f.Var.Name)
 		case "cef_string_t":
-			fmt.Fprintf(&buffer, "cefstrToString(&native.%s)", f.Var.Name)
+			fmt.Fprintf(&buffer, "cefstrToString(&n.%s)", f.Var.Name)
 		case "cef_string_t *":
-			fmt.Fprintf(&buffer, "cefstrToString(native.%s)", f.Var.Name)
+			fmt.Fprintf(&buffer, "cefstrToString(n.%s)", f.Var.Name)
 		default:
 			if strings.HasPrefix(f.Var.GoType, "*") {
 				fmt.Fprintf(&buffer, "(%s)", f.Var.GoType)
 			} else {
 				buffer.WriteString(f.Var.GoType)
 			}
-			fmt.Fprintf(&buffer, "(native.%s)", f.Var.Name)
+			fmt.Fprintf(&buffer, "(n.%s)", f.Var.Name)
 		}
 	}
 	return buffer.String()
@@ -192,51 +192,21 @@ func (f *field) Trampoline() string {
 
 func (f *field) Callback() string {
 	var buffer strings.Builder
-	pval := make([]string, len(f.Var.Params))
+	names := make([]string, len(f.Var.Params))
+	names[0] = "me__"
 	for i, p := range f.Var.Params {
 		if i != 0 {
-			if sdef, exists := sdefsMap[p.BaseType]; exists {
-				if sdef.isClassEquivalent() {
-					if p.Ptrs == "**" {
-						fmt.Fprintf(&buffer, "v%s := (%s)(*%s)\n", p.Name, p.GoType[1:], p.Name)
-						pval[i] = fmt.Sprintf("&v%s", p.Name)
-					} else if len(p.Ptrs) > 2 {
-						jot.Fatal(1, errs.Newf("Unhandled param conversion: %s", p.Name))
-					}
-				} else {
-					if p.Ptrs == "*" {
-						fmt.Fprintf(&buffer, "var v%s %s\n", p.Name, p.GoType[1:])
-						pval[i] = fmt.Sprintf("v%[1]s.fromNative(%[1]s)", p.Name)
-					} else {
-						jot.Fatal(1, errs.Newf("Unhandled param conversion: %s", p.Name))
-					}
-				}
-			} else if _, exists := edefsMap[p.BaseType]; exists {
-				if p.Ptrs == "*" {
-					fmt.Fprintf(&buffer, "e%s := %s(*%s)\n", p.Name, p.GoType[1:], p.Name)
-					pval[i] = fmt.Sprintf("&e%s", p.Name)
-				} else if len(p.Ptrs) > 1 {
-					jot.Fatal(1, errs.Newf("Unhandled param conversion: %s", p.Name))
-				}
-			}
+			names[i] = p.transformCToGo(&buffer)
 		}
 	}
 	prefixLines := buffer.String()
 	buffer.Reset()
 	fmt.Fprintf(&buffer, "proxy__.%s(", f.Var.GoName)
-	for i, p := range f.Var.Params {
-		if i == 0 {
-			buffer.WriteString("me__")
-		} else {
+	for i, p := range names {
+		if i != 0 {
 			buffer.WriteString(", ")
-			if pval[i] != "" {
-				buffer.WriteString(pval[i])
-			} else if p.BaseType == "cef_string_t" {
-				fmt.Fprintf(&buffer, "cefstrToString(%s)", p.Name)
-			} else {
-				buffer.WriteString(p.GoCast(p.Name))
-			}
 		}
+		buffer.WriteString(p)
 	}
 	buffer.WriteString(")")
 	call := buffer.String()

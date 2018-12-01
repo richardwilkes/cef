@@ -135,5 +135,8 @@ func (d *UrlrequestClient) GetAuthCredentials(isProxy int32, host string, port i
 func gocef_urlrequest_client_get_auth_credentials(self *C.cef_urlrequest_client_t, isProxy C.int, host *C.cef_string_t, port C.int, realm *C.cef_string_t, scheme *C.cef_string_t, callback *C.cef_auth_callback_t) C.int {
 	me__ := (*UrlrequestClient)(self)
 	proxy__ := lookupUrlrequestClientProxy(me__.Base())
-	return C.int(proxy__.GetAuthCredentials(me__, int32(isProxy), cefstrToString(host), int32(port), cefstrToString(realm), cefstrToString(scheme), (*AuthCallback)(callback)))
+	host_ := cefstrToString(host)
+	realm_ := cefstrToString(realm)
+	scheme_ := cefstrToString(scheme)
+	return C.int(proxy__.GetAuthCredentials(me__, int32(isProxy), host_, int32(port), realm_, scheme_, (*AuthCallback)(callback)))
 }

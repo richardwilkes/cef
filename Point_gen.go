@@ -27,8 +27,13 @@ func (d *Point) toNative(native *C.cef_point_t) *C.cef_point_t {
 	return native
 }
 
-func (d *Point) fromNative(native *C.cef_point_t) *Point {
-	d.X = int32(native.x)
-	d.Y = int32(native.y)
-	return d
+func (n *C.cef_point_t) toGo() *Point {
+	var d Point
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_point_t) intoGo(d *Point) {
+	d.X = int32(n.x)
+	d.Y = int32(n.y)
 }

@@ -81,13 +81,18 @@ func (d *RequestContextSettings) toNative(native *C.cef_request_context_settings
 	return native
 }
 
-func (d *RequestContextSettings) fromNative(native *C.cef_request_context_settings_t) *RequestContextSettings {
-	d.Size = uint64(native.size)
-	d.CachePath = cefstrToString(&native.cache_path)
-	d.PersistSessionCookies = int32(native.persist_session_cookies)
-	d.PersistUserPreferences = int32(native.persist_user_preferences)
-	d.IgnoreCertificateErrors = int32(native.ignore_certificate_errors)
-	d.EnableNetSecurityExpiration = int32(native.enable_net_security_expiration)
-	d.AcceptLanguageList = cefstrToString(&native.accept_language_list)
-	return d
+func (n *C.cef_request_context_settings_t) toGo() *RequestContextSettings {
+	var d RequestContextSettings
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_request_context_settings_t) intoGo(d *RequestContextSettings) {
+	d.Size = uint64(n.size)
+	d.CachePath = cefstrToString(&n.cache_path)
+	d.PersistSessionCookies = int32(n.persist_session_cookies)
+	d.PersistUserPreferences = int32(n.persist_user_preferences)
+	d.IgnoreCertificateErrors = int32(n.ignore_certificate_errors)
+	d.EnableNetSecurityExpiration = int32(n.enable_net_security_expiration)
+	d.AcceptLanguageList = cefstrToString(&n.accept_language_list)
 }

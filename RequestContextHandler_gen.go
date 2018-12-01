@@ -111,6 +111,9 @@ func (d *RequestContextHandler) OnBeforePluginLoad(mime_type, plugin_url string,
 func gocef_request_context_handler_on_before_plugin_load(self *C.cef_request_context_handler_t, mime_type *C.cef_string_t, plugin_url *C.cef_string_t, is_main_frame C.int, top_origin_url *C.cef_string_t, plugin_info *C.cef_web_plugin_info_t, plugin_policy *C.cef_plugin_policy_t) C.int {
 	me__ := (*RequestContextHandler)(self)
 	proxy__ := lookupRequestContextHandlerProxy(me__.Base())
-	eplugin_policy := PluginPolicy(*plugin_policy)
-	return C.int(proxy__.OnBeforePluginLoad(me__, cefstrToString(mime_type), cefstrToString(plugin_url), int32(is_main_frame), cefstrToString(top_origin_url), (*WebPluginInfo)(plugin_info), &eplugin_policy))
+	mime_type_ := cefstrToString(mime_type)
+	plugin_url_ := cefstrToString(plugin_url)
+	top_origin_url_ := cefstrToString(top_origin_url)
+	plugin_policy_ := PluginPolicy(*plugin_policy)
+	return C.int(proxy__.OnBeforePluginLoad(me__, mime_type_, plugin_url_, int32(is_main_frame), top_origin_url_, (*WebPluginInfo)(plugin_info), &plugin_policy_))
 }

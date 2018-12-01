@@ -68,6 +68,6 @@ func (d *FindHandler) OnFindResult(browser *Browser, identifier, count int32, se
 func gocef_find_handler_on_find_result(self *C.cef_find_handler_t, browser *C.cef_browser_t, identifier C.int, count C.int, selectionRect *C.cef_rect_t, activeMatchOrdinal C.int, finalUpdate C.int) {
 	me__ := (*FindHandler)(self)
 	proxy__ := lookupFindHandlerProxy(me__.Base())
-	var vselectionRect Rect
-	proxy__.OnFindResult(me__, (*Browser)(browser), int32(identifier), int32(count), vselectionRect.fromNative(selectionRect), int32(activeMatchOrdinal), int32(finalUpdate))
+	selectionRect_ := selectionRect.toGo()
+	proxy__.OnFindResult(me__, (*Browser)(browser), int32(identifier), int32(count), selectionRect_, int32(activeMatchOrdinal), int32(finalUpdate))
 }

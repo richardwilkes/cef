@@ -67,5 +67,6 @@ func (d *RegisterCdmCallback) OnCdmRegistrationComplete(result CdmRegistrationEr
 func gocef_register_cdm_callback_on_cdm_registration_complete(self *C.cef_register_cdm_callback_t, result C.cef_cdm_registration_error_t, error_message *C.cef_string_t) {
 	me__ := (*RegisterCdmCallback)(self)
 	proxy__ := lookupRegisterCdmCallbackProxy(me__.Base())
-	proxy__.OnCdmRegistrationComplete(me__, CdmRegistrationError(result), cefstrToString(error_message))
+	error_message_ := cefstrToString(error_message)
+	proxy__.OnCdmRegistrationComplete(me__, CdmRegistrationError(result), error_message_)
 }

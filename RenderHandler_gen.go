@@ -91,8 +91,8 @@ func (d *RenderHandler) GetRootScreenRect(browser *Browser, rect *Rect) int32 {
 func gocef_render_handler_get_root_screen_rect(self *C.cef_render_handler_t, browser *C.cef_browser_t, rect *C.cef_rect_t) C.int {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	var vrect Rect
-	return C.int(proxy__.GetRootScreenRect(me__, (*Browser)(browser), vrect.fromNative(rect)))
+	rect_ := rect.toGo()
+	return C.int(proxy__.GetRootScreenRect(me__, (*Browser)(browser), rect_))
 }
 
 // GetViewRect (get_view_rect)
@@ -106,8 +106,8 @@ func (d *RenderHandler) GetViewRect(browser *Browser, rect *Rect) int32 {
 func gocef_render_handler_get_view_rect(self *C.cef_render_handler_t, browser *C.cef_browser_t, rect *C.cef_rect_t) C.int {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	var vrect Rect
-	return C.int(proxy__.GetViewRect(me__, (*Browser)(browser), vrect.fromNative(rect)))
+	rect_ := rect.toGo()
+	return C.int(proxy__.GetViewRect(me__, (*Browser)(browser), rect_))
 }
 
 // GetScreenPoint (get_screen_point)
@@ -140,8 +140,8 @@ func (d *RenderHandler) GetScreenInfo(browser *Browser, screen_info *ScreenInfo)
 func gocef_render_handler_get_screen_info(self *C.cef_render_handler_t, browser *C.cef_browser_t, screen_info *C.cef_screen_info_t) C.int {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	var vscreen_info ScreenInfo
-	return C.int(proxy__.GetScreenInfo(me__, (*Browser)(browser), vscreen_info.fromNative(screen_info)))
+	screen_info_ := screen_info.toGo()
+	return C.int(proxy__.GetScreenInfo(me__, (*Browser)(browser), screen_info_))
 }
 
 // OnPopupShow (on_popup_show)
@@ -169,8 +169,8 @@ func (d *RenderHandler) OnPopupSize(browser *Browser, rect *Rect) {
 func gocef_render_handler_on_popup_size(self *C.cef_render_handler_t, browser *C.cef_browser_t, rect *C.cef_rect_t) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	var vrect Rect
-	proxy__.OnPopupSize(me__, (*Browser)(browser), vrect.fromNative(rect))
+	rect_ := rect.toGo()
+	proxy__.OnPopupSize(me__, (*Browser)(browser), rect_)
 }
 
 // OnPaint (on_paint)
@@ -190,8 +190,8 @@ func (d *RenderHandler) OnPaint(browser *Browser, type_r PaintElementType, dirty
 func gocef_render_handler_on_paint(self *C.cef_render_handler_t, browser *C.cef_browser_t, type_r C.cef_paint_element_type_t, dirtyRectsCount C.size_t, dirtyRects *C.cef_rect_t, buffer unsafe.Pointer, width C.int, height C.int) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	var vdirtyRects Rect
-	proxy__.OnPaint(me__, (*Browser)(browser), PaintElementType(type_r), uint64(dirtyRectsCount), vdirtyRects.fromNative(dirtyRects), buffer, int32(width), int32(height))
+	dirtyRects_ := dirtyRects.toGo()
+	proxy__.OnPaint(me__, (*Browser)(browser), PaintElementType(type_r), uint64(dirtyRectsCount), dirtyRects_, buffer, int32(width), int32(height))
 }
 
 // OnCursorChange (on_cursor_change)
@@ -205,8 +205,8 @@ func (d *RenderHandler) OnCursorChange(browser *Browser, cursor unsafe.Pointer, 
 func gocef_render_handler_on_cursor_change(self *C.cef_render_handler_t, browser *C.cef_browser_t, cursor unsafe.Pointer, type_r C.cef_cursor_type_t, custom_cursor_info *C.cef_cursor_info_t) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	var vcustom_cursor_info CursorInfo
-	proxy__.OnCursorChange(me__, (*Browser)(browser), cursor, CursorType(type_r), vcustom_cursor_info.fromNative(custom_cursor_info))
+	custom_cursor_info_ := custom_cursor_info.toGo()
+	proxy__.OnCursorChange(me__, (*Browser)(browser), cursor, CursorType(type_r), custom_cursor_info_)
 }
 
 // StartDragging (start_dragging)
@@ -273,9 +273,9 @@ func (d *RenderHandler) OnImeCompositionRangeChanged(browser *Browser, selected_
 func gocef_render_handler_on_ime_composition_range_changed(self *C.cef_render_handler_t, browser *C.cef_browser_t, selected_range *C.cef_range_t, character_boundsCount C.size_t, character_bounds *C.cef_rect_t) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	var vselected_range Range
-	var vcharacter_bounds Rect
-	proxy__.OnImeCompositionRangeChanged(me__, (*Browser)(browser), vselected_range.fromNative(selected_range), uint64(character_boundsCount), vcharacter_bounds.fromNative(character_bounds))
+	selected_range_ := selected_range.toGo()
+	character_bounds_ := character_bounds.toGo()
+	proxy__.OnImeCompositionRangeChanged(me__, (*Browser)(browser), selected_range_, uint64(character_boundsCount), character_bounds_)
 }
 
 // OnTextSelectionChanged (on_text_selection_changed)
@@ -290,6 +290,7 @@ func (d *RenderHandler) OnTextSelectionChanged(browser *Browser, selected_text s
 func gocef_render_handler_on_text_selection_changed(self *C.cef_render_handler_t, browser *C.cef_browser_t, selected_text *C.cef_string_t, selected_range *C.cef_range_t) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	var vselected_range Range
-	proxy__.OnTextSelectionChanged(me__, (*Browser)(browser), cefstrToString(selected_text), vselected_range.fromNative(selected_range))
+	selected_text_ := cefstrToString(selected_text)
+	selected_range_ := selected_range.toGo()
+	proxy__.OnTextSelectionChanged(me__, (*Browser)(browser), selected_text_, selected_range_)
 }

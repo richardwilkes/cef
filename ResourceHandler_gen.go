@@ -93,7 +93,8 @@ func (d *ResourceHandler) GetResponseHeaders(response *Response, response_length
 func gocef_resource_handler_get_response_headers(self *C.cef_resource_handler_t, response *C.cef_response_t, response_length *C.int64, redirectUrl *C.cef_string_t) {
 	me__ := (*ResourceHandler)(self)
 	proxy__ := lookupResourceHandlerProxy(me__.Base())
-	proxy__.GetResponseHeaders(me__, (*Response)(response), (*int64)(response_length), cefstrToString(redirectUrl))
+	redirectUrl_ := cefstrToString(redirectUrl)
+	proxy__.GetResponseHeaders(me__, (*Response)(response), (*int64)(response_length), redirectUrl_)
 }
 
 // ReadResponse (read_response)
@@ -125,8 +126,8 @@ func (d *ResourceHandler) CanGetCookie(cookie *Cookie) int32 {
 func gocef_resource_handler_can_get_cookie(self *C.cef_resource_handler_t, cookie *C.cef_cookie_t) C.int {
 	me__ := (*ResourceHandler)(self)
 	proxy__ := lookupResourceHandlerProxy(me__.Base())
-	var vcookie Cookie
-	return C.int(proxy__.CanGetCookie(me__, vcookie.fromNative(cookie)))
+	cookie_ := cookie.toGo()
+	return C.int(proxy__.CanGetCookie(me__, cookie_))
 }
 
 // CanSetCookie (can_set_cookie)
@@ -140,8 +141,8 @@ func (d *ResourceHandler) CanSetCookie(cookie *Cookie) int32 {
 func gocef_resource_handler_can_set_cookie(self *C.cef_resource_handler_t, cookie *C.cef_cookie_t) C.int {
 	me__ := (*ResourceHandler)(self)
 	proxy__ := lookupResourceHandlerProxy(me__.Base())
-	var vcookie Cookie
-	return C.int(proxy__.CanSetCookie(me__, vcookie.fromNative(cookie)))
+	cookie_ := cookie.toGo()
+	return C.int(proxy__.CanSetCookie(me__, cookie_))
 }
 
 // Cancel (cancel)

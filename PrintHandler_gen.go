@@ -117,7 +117,9 @@ func (d *PrintHandler) OnPrintJob(browser *Browser, document_name, pdf_file_path
 func gocef_print_handler_on_print_job(self *C.cef_print_handler_t, browser *C.cef_browser_t, document_name *C.cef_string_t, pdf_file_path *C.cef_string_t, callback *C.cef_print_job_callback_t) C.int {
 	me__ := (*PrintHandler)(self)
 	proxy__ := lookupPrintHandlerProxy(me__.Base())
-	return C.int(proxy__.OnPrintJob(me__, (*Browser)(browser), cefstrToString(document_name), cefstrToString(pdf_file_path), (*PrintJobCallback)(callback)))
+	document_name_ := cefstrToString(document_name)
+	pdf_file_path_ := cefstrToString(pdf_file_path)
+	return C.int(proxy__.OnPrintJob(me__, (*Browser)(browser), document_name_, pdf_file_path_, (*PrintJobCallback)(callback)))
 }
 
 // OnPrintReset (on_print_reset)

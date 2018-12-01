@@ -68,8 +68,8 @@ func (d *KeyboardHandler) OnPreKeyEvent(browser *Browser, event *KeyEvent, os_ev
 func gocef_keyboard_handler_on_pre_key_event(self *C.cef_keyboard_handler_t, browser *C.cef_browser_t, event *C.cef_key_event_t, os_event unsafe.Pointer, is_keyboard_shortcut *C.int) C.int {
 	me__ := (*KeyboardHandler)(self)
 	proxy__ := lookupKeyboardHandlerProxy(me__.Base())
-	var vevent KeyEvent
-	return C.int(proxy__.OnPreKeyEvent(me__, (*Browser)(browser), vevent.fromNative(event), os_event, (*int32)(is_keyboard_shortcut)))
+	event_ := event.toGo()
+	return C.int(proxy__.OnPreKeyEvent(me__, (*Browser)(browser), event_, os_event, (*int32)(is_keyboard_shortcut)))
 }
 
 // OnKeyEvent (on_key_event)
@@ -85,6 +85,6 @@ func (d *KeyboardHandler) OnKeyEvent(browser *Browser, event *KeyEvent, os_event
 func gocef_keyboard_handler_on_key_event(self *C.cef_keyboard_handler_t, browser *C.cef_browser_t, event *C.cef_key_event_t, os_event unsafe.Pointer) C.int {
 	me__ := (*KeyboardHandler)(self)
 	proxy__ := lookupKeyboardHandlerProxy(me__.Base())
-	var vevent KeyEvent
-	return C.int(proxy__.OnKeyEvent(me__, (*Browser)(browser), vevent.fromNative(event), os_event))
+	event_ := event.toGo()
+	return C.int(proxy__.OnKeyEvent(me__, (*Browser)(browser), event_, os_event))
 }

@@ -75,7 +75,8 @@ func (d *App) OnBeforeCommandLineProcessing(process_type string, command_line *C
 func gocef_app_on_before_command_line_processing(self *C.cef_app_t, process_type *C.cef_string_t, command_line *C.cef_command_line_t) {
 	me__ := (*App)(self)
 	proxy__ := lookupAppProxy(me__.Base())
-	proxy__.OnBeforeCommandLineProcessing(me__, cefstrToString(process_type), (*CommandLine)(command_line))
+	process_type_ := cefstrToString(process_type)
+	proxy__.OnBeforeCommandLineProcessing(me__, process_type_, (*CommandLine)(command_line))
 }
 
 // OnRegisterCustomSchemes (on_register_custom_schemes)

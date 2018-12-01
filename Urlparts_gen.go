@@ -61,15 +61,20 @@ func (d *Urlparts) toNative(native *C.cef_urlparts_t) *C.cef_urlparts_t {
 	return native
 }
 
-func (d *Urlparts) fromNative(native *C.cef_urlparts_t) *Urlparts {
-	d.Spec = cefstrToString(&native.spec)
-	d.Scheme = cefstrToString(&native.scheme)
-	d.Username = cefstrToString(&native.username)
-	d.Password = cefstrToString(&native.password)
-	d.Host = cefstrToString(&native.host)
-	d.Port = cefstrToString(&native.port)
-	d.Origin = cefstrToString(&native.origin)
-	d.Path = cefstrToString(&native.path)
-	d.Query = cefstrToString(&native.query)
-	return d
+func (n *C.cef_urlparts_t) toGo() *Urlparts {
+	var d Urlparts
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_urlparts_t) intoGo(d *Urlparts) {
+	d.Spec = cefstrToString(&n.spec)
+	d.Scheme = cefstrToString(&n.scheme)
+	d.Username = cefstrToString(&n.username)
+	d.Password = cefstrToString(&n.password)
+	d.Host = cefstrToString(&n.host)
+	d.Port = cefstrToString(&n.port)
+	d.Origin = cefstrToString(&n.origin)
+	d.Path = cefstrToString(&n.path)
+	d.Query = cefstrToString(&n.query)
 }

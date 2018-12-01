@@ -66,5 +66,6 @@ func (d *DownloadImageCallback) OnDownloadImageFinished(image_url string, http_s
 func gocef_download_image_callback_on_download_image_finished(self *C.cef_download_image_callback_t, image_url *C.cef_string_t, http_status_code C.int, image *C.cef_image_t) {
 	me__ := (*DownloadImageCallback)(self)
 	proxy__ := lookupDownloadImageCallbackProxy(me__.Base())
-	proxy__.OnDownloadImageFinished(me__, cefstrToString(image_url), int32(http_status_code), (*Image)(image))
+	image_url_ := cefstrToString(image_url)
+	proxy__.OnDownloadImageFinished(me__, image_url_, int32(http_status_code), (*Image)(image))
 }

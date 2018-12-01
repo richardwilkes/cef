@@ -71,7 +71,8 @@ func (d *DisplayHandler) OnAddressChange(browser *Browser, frame *Frame, url str
 func gocef_display_handler_on_address_change(self *C.cef_display_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, url *C.cef_string_t) {
 	me__ := (*DisplayHandler)(self)
 	proxy__ := lookupDisplayHandlerProxy(me__.Base())
-	proxy__.OnAddressChange(me__, (*Browser)(browser), (*Frame)(frame), cefstrToString(url))
+	url_ := cefstrToString(url)
+	proxy__.OnAddressChange(me__, (*Browser)(browser), (*Frame)(frame), url_)
 }
 
 // OnTitleChange (on_title_change)
@@ -84,7 +85,8 @@ func (d *DisplayHandler) OnTitleChange(browser *Browser, title string) {
 func gocef_display_handler_on_title_change(self *C.cef_display_handler_t, browser *C.cef_browser_t, title *C.cef_string_t) {
 	me__ := (*DisplayHandler)(self)
 	proxy__ := lookupDisplayHandlerProxy(me__.Base())
-	proxy__.OnTitleChange(me__, (*Browser)(browser), cefstrToString(title))
+	title_ := cefstrToString(title)
+	proxy__.OnTitleChange(me__, (*Browser)(browser), title_)
 }
 
 // OnFaviconUrlchange (on_favicon_urlchange)
@@ -132,7 +134,8 @@ func (d *DisplayHandler) OnTooltip(browser *Browser, text string) int32 {
 func gocef_display_handler_on_tooltip(self *C.cef_display_handler_t, browser *C.cef_browser_t, text *C.cef_string_t) C.int {
 	me__ := (*DisplayHandler)(self)
 	proxy__ := lookupDisplayHandlerProxy(me__.Base())
-	return C.int(proxy__.OnTooltip(me__, (*Browser)(browser), cefstrToString(text)))
+	text_ := cefstrToString(text)
+	return C.int(proxy__.OnTooltip(me__, (*Browser)(browser), text_))
 }
 
 // OnStatusMessage (on_status_message)
@@ -146,7 +149,8 @@ func (d *DisplayHandler) OnStatusMessage(browser *Browser, value string) {
 func gocef_display_handler_on_status_message(self *C.cef_display_handler_t, browser *C.cef_browser_t, value *C.cef_string_t) {
 	me__ := (*DisplayHandler)(self)
 	proxy__ := lookupDisplayHandlerProxy(me__.Base())
-	proxy__.OnStatusMessage(me__, (*Browser)(browser), cefstrToString(value))
+	value_ := cefstrToString(value)
+	proxy__.OnStatusMessage(me__, (*Browser)(browser), value_)
 }
 
 // OnConsoleMessage (on_console_message)
@@ -160,7 +164,9 @@ func (d *DisplayHandler) OnConsoleMessage(browser *Browser, level LogSeverity, m
 func gocef_display_handler_on_console_message(self *C.cef_display_handler_t, browser *C.cef_browser_t, level C.cef_log_severity_t, message *C.cef_string_t, source *C.cef_string_t, line C.int) C.int {
 	me__ := (*DisplayHandler)(self)
 	proxy__ := lookupDisplayHandlerProxy(me__.Base())
-	return C.int(proxy__.OnConsoleMessage(me__, (*Browser)(browser), LogSeverity(level), cefstrToString(message), cefstrToString(source), int32(line)))
+	message_ := cefstrToString(message)
+	source_ := cefstrToString(source)
+	return C.int(proxy__.OnConsoleMessage(me__, (*Browser)(browser), LogSeverity(level), message_, source_, int32(line)))
 }
 
 // OnAutoResize (on_auto_resize)
@@ -176,8 +182,8 @@ func (d *DisplayHandler) OnAutoResize(browser *Browser, new_size *Size) int32 {
 func gocef_display_handler_on_auto_resize(self *C.cef_display_handler_t, browser *C.cef_browser_t, new_size *C.cef_size_t) C.int {
 	me__ := (*DisplayHandler)(self)
 	proxy__ := lookupDisplayHandlerProxy(me__.Base())
-	var vnew_size Size
-	return C.int(proxy__.OnAutoResize(me__, (*Browser)(browser), vnew_size.fromNative(new_size)))
+	new_size_ := new_size.toGo()
+	return C.int(proxy__.OnAutoResize(me__, (*Browser)(browser), new_size_))
 }
 
 // OnLoadingProgressChange (on_loading_progress_change)

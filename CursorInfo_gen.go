@@ -36,10 +36,15 @@ func (d *CursorInfo) toNative(native *C.cef_cursor_info_t) *C.cef_cursor_info_t 
 	return native
 }
 
-func (d *CursorInfo) fromNative(native *C.cef_cursor_info_t) *CursorInfo {
-	d.Hotspot.fromNative(&native.hotspot)
-	d.ImageScaleFactor = float32(native.image_scale_factor)
-	d.Buffer = native.buffer
-	d.Size.fromNative(&native.size)
-	return d
+func (n *C.cef_cursor_info_t) toGo() *CursorInfo {
+	var d CursorInfo
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_cursor_info_t) intoGo(d *CursorInfo) {
+	n.hotspot.intoGo(&d.Hotspot)
+	d.ImageScaleFactor = float32(n.image_scale_factor)
+	d.Buffer = n.buffer
+	n.size.intoGo(&d.Size)
 }

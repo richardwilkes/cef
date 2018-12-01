@@ -65,5 +65,6 @@ func (d *WebPluginUnstableCallback) IsUnstable(path string, unstable int32) {
 func gocef_web_plugin_unstable_callback_is_unstable(self *C.cef_web_plugin_unstable_callback_t, path *C.cef_string_t, unstable C.int) {
 	me__ := (*WebPluginUnstableCallback)(self)
 	proxy__ := lookupWebPluginUnstableCallbackProxy(me__.Base())
-	proxy__.IsUnstable(me__, cefstrToString(path), int32(unstable))
+	path_ := cefstrToString(path)
+	proxy__.IsUnstable(me__, path_, int32(unstable))
 }

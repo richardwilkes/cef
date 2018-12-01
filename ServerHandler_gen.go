@@ -145,7 +145,8 @@ func (d *ServerHandler) OnHttpRequest(server *Server, connection_id int32, clien
 func gocef_server_handler_on_http_request(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int, client_address *C.cef_string_t, request *C.cef_request_t) {
 	me__ := (*ServerHandler)(self)
 	proxy__ := lookupServerHandlerProxy(me__.Base())
-	proxy__.OnHttpRequest(me__, (*Server)(server), int32(connection_id), cefstrToString(client_address), (*Request)(request))
+	client_address_ := cefstrToString(client_address)
+	proxy__.OnHttpRequest(me__, (*Server)(server), int32(connection_id), client_address_, (*Request)(request))
 }
 
 // OnWebSocketRequest (on_web_socket_request)
@@ -169,7 +170,8 @@ func (d *ServerHandler) OnWebSocketRequest(server *Server, connection_id int32, 
 func gocef_server_handler_on_web_socket_request(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int, client_address *C.cef_string_t, request *C.cef_request_t, callback *C.cef_callback_t) {
 	me__ := (*ServerHandler)(self)
 	proxy__ := lookupServerHandlerProxy(me__.Base())
-	proxy__.OnWebSocketRequest(me__, (*Server)(server), int32(connection_id), cefstrToString(client_address), (*Request)(request), (*Callback)(callback))
+	client_address_ := cefstrToString(client_address)
+	proxy__.OnWebSocketRequest(me__, (*Server)(server), int32(connection_id), client_address_, (*Request)(request), (*Callback)(callback))
 }
 
 // OnWebSocketConnected (on_web_socket_connected)

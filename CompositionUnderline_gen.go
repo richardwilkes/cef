@@ -39,10 +39,15 @@ func (d *CompositionUnderline) toNative(native *C.cef_composition_underline_t) *
 	return native
 }
 
-func (d *CompositionUnderline) fromNative(native *C.cef_composition_underline_t) *CompositionUnderline {
-	d.Range.fromNative(&native._range)
-	d.Color = Color(native.color)
-	d.BackgroundColor = Color(native.background_color)
-	d.Thick = int32(native.thick)
-	return d
+func (n *C.cef_composition_underline_t) toGo() *CompositionUnderline {
+	var d CompositionUnderline
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_composition_underline_t) intoGo(d *CompositionUnderline) {
+	n._range.intoGo(&d.Range)
+	d.Color = Color(n.color)
+	d.BackgroundColor = Color(n.background_color)
+	d.Thick = int32(n.thick)
 }

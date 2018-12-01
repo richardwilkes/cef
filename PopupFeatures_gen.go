@@ -57,18 +57,23 @@ func (d *PopupFeatures) toNative(native *C.cef_popup_features_t) *C.cef_popup_fe
 	return native
 }
 
-func (d *PopupFeatures) fromNative(native *C.cef_popup_features_t) *PopupFeatures {
-	d.X = int32(native.x)
-	d.XSet = int32(native.xSet)
-	d.Y = int32(native.y)
-	d.YSet = int32(native.ySet)
-	d.Width = int32(native.width)
-	d.WidthSet = int32(native.widthSet)
-	d.Height = int32(native.height)
-	d.HeightSet = int32(native.heightSet)
-	d.MenuBarVisible = int32(native.menuBarVisible)
-	d.StatusBarVisible = int32(native.statusBarVisible)
-	d.ToolBarVisible = int32(native.toolBarVisible)
-	d.ScrollbarsVisible = int32(native.scrollbarsVisible)
-	return d
+func (n *C.cef_popup_features_t) toGo() *PopupFeatures {
+	var d PopupFeatures
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_popup_features_t) intoGo(d *PopupFeatures) {
+	d.X = int32(n.x)
+	d.XSet = int32(n.xSet)
+	d.Y = int32(n.y)
+	d.YSet = int32(n.ySet)
+	d.Width = int32(n.width)
+	d.WidthSet = int32(n.widthSet)
+	d.Height = int32(n.height)
+	d.HeightSet = int32(n.heightSet)
+	d.MenuBarVisible = int32(n.menuBarVisible)
+	d.StatusBarVisible = int32(n.statusBarVisible)
+	d.ToolBarVisible = int32(n.toolBarVisible)
+	d.ScrollbarsVisible = int32(n.scrollbarsVisible)
 }

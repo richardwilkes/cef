@@ -56,9 +56,9 @@ func (d *X509certificate) GetSerialNumber() *BinaryValue {
 // Returns the date before which the X.509 certificate is invalid.
 // CefTime.GetTimeT() will return 0 if no date was specified.
 func (d *X509certificate) GetValidStart() Time {
-	native__ := C.gocef_x509certificate_get_valid_start(d.toNative(), d.get_valid_start)
+	cresult__ := C.gocef_x509certificate_get_valid_start(d.toNative(), d.get_valid_start)
 	var result__ Time
-	result__.fromNative(&native__)
+	(&cresult__).intoGo(&result__)
 	return result__
 }
 
@@ -66,9 +66,9 @@ func (d *X509certificate) GetValidStart() Time {
 // Returns the date after which the X.509 certificate is invalid.
 // CefTime.GetTimeT() will return 0 if no date was specified.
 func (d *X509certificate) GetValidExpiry() Time {
-	native__ := C.gocef_x509certificate_get_valid_expiry(d.toNative(), d.get_valid_expiry)
+	cresult__ := C.gocef_x509certificate_get_valid_expiry(d.toNative(), d.get_valid_expiry)
 	var result__ Time
-	result__.fromNative(&native__)
+	(&cresult__).intoGo(&result__)
 	return result__
 }
 

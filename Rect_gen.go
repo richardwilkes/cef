@@ -33,10 +33,15 @@ func (d *Rect) toNative(native *C.cef_rect_t) *C.cef_rect_t {
 	return native
 }
 
-func (d *Rect) fromNative(native *C.cef_rect_t) *Rect {
-	d.X = int32(native.x)
-	d.Y = int32(native.y)
-	d.Width = int32(native.width)
-	d.Height = int32(native.height)
-	return d
+func (n *C.cef_rect_t) toGo() *Rect {
+	var d Rect
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_rect_t) intoGo(d *Rect) {
+	d.X = int32(n.x)
+	d.Y = int32(n.y)
+	d.Width = int32(n.width)
+	d.Height = int32(n.height)
 }

@@ -61,16 +61,21 @@ func (d *WindowInfo) toNative(native *C.cef_window_info_t) *C.cef_window_info_t 
 	return native
 }
 
-func (d *WindowInfo) fromNative(native *C.cef_window_info_t) *WindowInfo {
-	d.X = int32(native.x)
-	d.Y = int32(native.y)
-	d.Width = int32(native.width)
-	d.Height = int32(native.height)
-	d.ParentWindow = unsafe.Pointer(native.parent_window)
-	d.Menu = unsafe.Pointer(native.menu)
-	d.WindowlessRenderingEnabled = int32(native.windowless_rendering_enabled)
-	d.SharedTextureEnabled = int32(native.shared_texture_enabled)
-	d.ExternalBeginFrameEnabled = int32(native.external_begin_frame_enabled)
-	d.Window = unsafe.Pointer(native.window)
-	return d
+func (n *C.cef_window_info_t) toGo() *WindowInfo {
+	var d WindowInfo
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_window_info_t) intoGo(d *WindowInfo) {
+	d.X = int32(n.x)
+	d.Y = int32(n.y)
+	d.Width = int32(n.width)
+	d.Height = int32(n.height)
+	d.ParentWindow = unsafe.Pointer(n.parent_window)
+	d.Menu = unsafe.Pointer(n.menu)
+	d.WindowlessRenderingEnabled = int32(n.windowless_rendering_enabled)
+	d.SharedTextureEnabled = int32(n.shared_texture_enabled)
+	d.ExternalBeginFrameEnabled = int32(n.external_begin_frame_enabled)
+	d.Window = unsafe.Pointer(n.window)
 }

@@ -64,7 +64,9 @@ func (d *AuthCallback) Cont(username, password string) {
 func gocef_auth_callback_cont(self *C.cef_auth_callback_t, username *C.cef_string_t, password *C.cef_string_t) {
 	me__ := (*AuthCallback)(self)
 	proxy__ := lookupAuthCallbackProxy(me__.Base())
-	proxy__.Cont(me__, cefstrToString(username), cefstrToString(password))
+	username_ := cefstrToString(username)
+	password_ := cefstrToString(password)
+	proxy__.Cont(me__, username_, password_)
 }
 
 // Cancel (cancel)

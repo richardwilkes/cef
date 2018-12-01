@@ -64,5 +64,6 @@ func (d *JsdialogCallback) Cont(success int32, user_input string) {
 func gocef_jsdialog_callback_cont(self *C.cef_jsdialog_callback_t, success C.int, user_input *C.cef_string_t) {
 	me__ := (*JsdialogCallback)(self)
 	proxy__ := lookupJsdialogCallbackProxy(me__.Base())
-	proxy__.Cont(me__, int32(success), cefstrToString(user_input))
+	user_input_ := cefstrToString(user_input)
+	proxy__.Cont(me__, int32(success), user_input_)
 }

@@ -130,5 +130,7 @@ func (d *LoadHandler) OnLoadError(browser *Browser, frame *Frame, errorCode Erro
 func gocef_load_handler_on_load_error(self *C.cef_load_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, errorCode C.cef_errorcode_t, errorText *C.cef_string_t, failedUrl *C.cef_string_t) {
 	me__ := (*LoadHandler)(self)
 	proxy__ := lookupLoadHandlerProxy(me__.Base())
-	proxy__.OnLoadError(me__, (*Browser)(browser), (*Frame)(frame), Errorcode(errorCode), cefstrToString(errorText), cefstrToString(failedUrl))
+	errorText_ := cefstrToString(errorText)
+	failedUrl_ := cefstrToString(failedUrl)
+	proxy__.OnLoadError(me__, (*Browser)(browser), (*Frame)(frame), Errorcode(errorCode), errorText_, failedUrl_)
 }

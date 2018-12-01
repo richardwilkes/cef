@@ -65,16 +65,21 @@ func (d *Cookie) toNative(native *C.cef_cookie_t) *C.cef_cookie_t {
 	return native
 }
 
-func (d *Cookie) fromNative(native *C.cef_cookie_t) *Cookie {
-	d.Name = cefstrToString(&native.name)
-	d.Value = cefstrToString(&native.value)
-	d.Domain = cefstrToString(&native.domain)
-	d.Path = cefstrToString(&native.path)
-	d.Secure = int32(native.secure)
-	d.Httponly = int32(native.httponly)
-	d.Creation.fromNative(&native.creation)
-	d.LastAccess.fromNative(&native.last_access)
-	d.HasExpires = int32(native.has_expires)
-	d.Expires.fromNative(&native.expires)
-	return d
+func (n *C.cef_cookie_t) toGo() *Cookie {
+	var d Cookie
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_cookie_t) intoGo(d *Cookie) {
+	d.Name = cefstrToString(&n.name)
+	d.Value = cefstrToString(&n.value)
+	d.Domain = cefstrToString(&n.domain)
+	d.Path = cefstrToString(&n.path)
+	d.Secure = int32(n.secure)
+	d.Httponly = int32(n.httponly)
+	n.creation.intoGo(&d.Creation)
+	n.last_access.intoGo(&d.LastAccess)
+	d.HasExpires = int32(n.has_expires)
+	n.expires.intoGo(&d.Expires)
 }

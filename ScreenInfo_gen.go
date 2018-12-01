@@ -66,12 +66,17 @@ func (d *ScreenInfo) toNative(native *C.cef_screen_info_t) *C.cef_screen_info_t 
 	return native
 }
 
-func (d *ScreenInfo) fromNative(native *C.cef_screen_info_t) *ScreenInfo {
-	d.DeviceScaleFactor = float32(native.device_scale_factor)
-	d.Depth = int32(native.depth)
-	d.DepthPerComponent = int32(native.depth_per_component)
-	d.IsMonochrome = int32(native.is_monochrome)
-	d.Rect.fromNative(&native.rect)
-	d.AvailableRect.fromNative(&native.available_rect)
-	return d
+func (n *C.cef_screen_info_t) toGo() *ScreenInfo {
+	var d ScreenInfo
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_screen_info_t) intoGo(d *ScreenInfo) {
+	d.DeviceScaleFactor = float32(n.device_scale_factor)
+	d.Depth = int32(n.depth)
+	d.DepthPerComponent = int32(n.depth_per_component)
+	d.IsMonochrome = int32(n.is_monochrome)
+	n.rect.intoGo(&d.Rect)
+	n.available_rect.intoGo(&d.AvailableRect)
 }

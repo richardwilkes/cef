@@ -47,14 +47,19 @@ func (d *Time) toNative(native *C.cef_time_t) *C.cef_time_t {
 	return native
 }
 
-func (d *Time) fromNative(native *C.cef_time_t) *Time {
-	d.Year = int32(native.year)
-	d.Month = int32(native.month)
-	d.DayOfWeek = int32(native.day_of_week)
-	d.DayOfMonth = int32(native.day_of_month)
-	d.Hour = int32(native.hour)
-	d.Minute = int32(native.minute)
-	d.Second = int32(native.second)
-	d.Millisecond = int32(native.millisecond)
-	return d
+func (n *C.cef_time_t) toGo() *Time {
+	var d Time
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_time_t) intoGo(d *Time) {
+	d.Year = int32(n.year)
+	d.Month = int32(n.month)
+	d.DayOfWeek = int32(n.day_of_week)
+	d.DayOfMonth = int32(n.day_of_month)
+	d.Hour = int32(n.hour)
+	d.Minute = int32(n.minute)
+	d.Second = int32(n.second)
+	d.Millisecond = int32(n.millisecond)
 }

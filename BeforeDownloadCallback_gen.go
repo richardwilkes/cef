@@ -65,5 +65,6 @@ func (d *BeforeDownloadCallback) Cont(download_path string, show_dialog int32) {
 func gocef_before_download_callback_cont(self *C.cef_before_download_callback_t, download_path *C.cef_string_t, show_dialog C.int) {
 	me__ := (*BeforeDownloadCallback)(self)
 	proxy__ := lookupBeforeDownloadCallbackProxy(me__.Base())
-	proxy__.Cont(me__, cefstrToString(download_path), int32(show_dialog))
+	download_path_ := cefstrToString(download_path)
+	proxy__.Cont(me__, download_path_, int32(show_dialog))
 }

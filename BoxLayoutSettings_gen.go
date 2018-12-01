@@ -64,15 +64,20 @@ func (d *BoxLayoutSettings) toNative(native *C.cef_box_layout_settings_t) *C.cef
 	return native
 }
 
-func (d *BoxLayoutSettings) fromNative(native *C.cef_box_layout_settings_t) *BoxLayoutSettings {
-	d.Horizontal = int32(native.horizontal)
-	d.InsideBorderHorizontalSpacing = int32(native.inside_border_horizontal_spacing)
-	d.InsideBorderVerticalSpacing = int32(native.inside_border_vertical_spacing)
-	d.InsideBorderInsets.fromNative(&native.inside_border_insets)
-	d.BetweenChildSpacing = int32(native.between_child_spacing)
-	d.MainAxisAlignment = MainAxisAlignment(native.main_axis_alignment)
-	d.CrossAxisAlignment = CrossAxisAlignment(native.cross_axis_alignment)
-	d.MinimumCrossAxisSize = int32(native.minimum_cross_axis_size)
-	d.DefaultFlex = int32(native.default_flex)
-	return d
+func (n *C.cef_box_layout_settings_t) toGo() *BoxLayoutSettings {
+	var d BoxLayoutSettings
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_box_layout_settings_t) intoGo(d *BoxLayoutSettings) {
+	d.Horizontal = int32(n.horizontal)
+	d.InsideBorderHorizontalSpacing = int32(n.inside_border_horizontal_spacing)
+	d.InsideBorderVerticalSpacing = int32(n.inside_border_vertical_spacing)
+	n.inside_border_insets.intoGo(&d.InsideBorderInsets)
+	d.BetweenChildSpacing = int32(n.between_child_spacing)
+	d.MainAxisAlignment = MainAxisAlignment(n.main_axis_alignment)
+	d.CrossAxisAlignment = CrossAxisAlignment(n.cross_axis_alignment)
+	d.MinimumCrossAxisSize = int32(n.minimum_cross_axis_size)
+	d.DefaultFlex = int32(n.default_flex)
 }

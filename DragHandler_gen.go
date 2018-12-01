@@ -84,6 +84,6 @@ func (d *DragHandler) OnDraggableRegionsChanged(browser *Browser, regionsCount u
 func gocef_drag_handler_on_draggable_regions_changed(self *C.cef_drag_handler_t, browser *C.cef_browser_t, regionsCount C.size_t, regions *C.cef_draggable_region_t) {
 	me__ := (*DragHandler)(self)
 	proxy__ := lookupDragHandlerProxy(me__.Base())
-	var vregions DraggableRegion
-	proxy__.OnDraggableRegionsChanged(me__, (*Browser)(browser), uint64(regionsCount), vregions.fromNative(regions))
+	regions_ := regions.toGo()
+	proxy__.OnDraggableRegionsChanged(me__, (*Browser)(browser), uint64(regionsCount), regions_)
 }

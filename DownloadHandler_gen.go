@@ -68,7 +68,8 @@ func (d *DownloadHandler) OnBeforeDownload(browser *Browser, download_item *Down
 func gocef_download_handler_on_before_download(self *C.cef_download_handler_t, browser *C.cef_browser_t, download_item *C.cef_download_item_t, suggested_name *C.cef_string_t, callback *C.cef_before_download_callback_t) {
 	me__ := (*DownloadHandler)(self)
 	proxy__ := lookupDownloadHandlerProxy(me__.Base())
-	proxy__.OnBeforeDownload(me__, (*Browser)(browser), (*DownloadItem)(download_item), cefstrToString(suggested_name), (*BeforeDownloadCallback)(callback))
+	suggested_name_ := cefstrToString(suggested_name)
+	proxy__.OnBeforeDownload(me__, (*Browser)(browser), (*DownloadItem)(download_item), suggested_name_, (*BeforeDownloadCallback)(callback))
 }
 
 // OnDownloadUpdated (on_download_updated)

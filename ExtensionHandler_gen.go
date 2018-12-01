@@ -124,9 +124,11 @@ func (d *ExtensionHandler) OnBeforeBackgroundBrowser(extension *Extension, url s
 func gocef_extension_handler_on_before_background_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, url *C.cef_string_t, client **C.cef_client_t, settings *C.cef_browser_settings_t) C.int {
 	me__ := (*ExtensionHandler)(self)
 	proxy__ := lookupExtensionHandlerProxy(me__.Base())
-	vclient := (*Client)(*client)
-	var vsettings BrowserSettings
-	return C.int(proxy__.OnBeforeBackgroundBrowser(me__, (*Extension)(extension), cefstrToString(url), &vclient, vsettings.fromNative(settings)))
+	url_ := cefstrToString(url)
+	client_ := (*Client)(*client)
+	client__p := &client_
+	settings_ := settings.toGo()
+	return C.int(proxy__.OnBeforeBackgroundBrowser(me__, (*Extension)(extension), url_, client__p, settings_))
 }
 
 // OnBeforeBrowser (on_before_browser)
@@ -151,10 +153,12 @@ func (d *ExtensionHandler) OnBeforeBrowser(extension *Extension, browser, active
 func gocef_extension_handler_on_before_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, active_browser *C.cef_browser_t, index C.int, url *C.cef_string_t, active C.int, windowInfo *C.cef_window_info_t, client **C.cef_client_t, settings *C.cef_browser_settings_t) C.int {
 	me__ := (*ExtensionHandler)(self)
 	proxy__ := lookupExtensionHandlerProxy(me__.Base())
-	var vwindowInfo WindowInfo
-	vclient := (*Client)(*client)
-	var vsettings BrowserSettings
-	return C.int(proxy__.OnBeforeBrowser(me__, (*Extension)(extension), (*Browser)(browser), (*Browser)(active_browser), int32(index), cefstrToString(url), int32(active), vwindowInfo.fromNative(windowInfo), &vclient, vsettings.fromNative(settings)))
+	url_ := cefstrToString(url)
+	windowInfo_ := windowInfo.toGo()
+	client_ := (*Client)(*client)
+	client__p := &client_
+	settings_ := settings.toGo()
+	return C.int(proxy__.OnBeforeBrowser(me__, (*Extension)(extension), (*Browser)(browser), (*Browser)(active_browser), int32(index), url_, int32(active), windowInfo_, client__p, settings_))
 }
 
 // GetActiveBrowser (get_active_browser)
@@ -211,5 +215,6 @@ func (d *ExtensionHandler) GetExtensionResource(extension *Extension, browser *B
 func gocef_extension_handler_get_extension_resource(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, file *C.cef_string_t, callback *C.cef_get_extension_resource_callback_t) C.int {
 	me__ := (*ExtensionHandler)(self)
 	proxy__ := lookupExtensionHandlerProxy(me__.Base())
-	return C.int(proxy__.GetExtensionResource(me__, (*Extension)(extension), (*Browser)(browser), cefstrToString(file), (*GetExtensionResourceCallback)(callback)))
+	file_ := cefstrToString(file)
+	return C.int(proxy__.GetExtensionResource(me__, (*Extension)(extension), (*Browser)(browser), file_, (*GetExtensionResourceCallback)(callback)))
 }

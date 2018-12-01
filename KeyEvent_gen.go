@@ -61,14 +61,19 @@ func (d *KeyEvent) toNative(native *C.cef_key_event_t) *C.cef_key_event_t {
 	return native
 }
 
-func (d *KeyEvent) fromNative(native *C.cef_key_event_t) *KeyEvent {
-	d.Type = KeyEventType(native._type)
-	d.Modifiers = uint32(native.modifiers)
-	d.WindowsKeyCode = int32(native.windows_key_code)
-	d.NativeKeyCode = int32(native.native_key_code)
-	d.IsSystemKey = int32(native.is_system_key)
-	d.Character = int16(native.character)
-	d.UnmodifiedCharacter = int16(native.unmodified_character)
-	d.FocusOnEditableField = int32(native.focus_on_editable_field)
-	return d
+func (n *C.cef_key_event_t) toGo() *KeyEvent {
+	var d KeyEvent
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_key_event_t) intoGo(d *KeyEvent) {
+	d.Type = KeyEventType(n._type)
+	d.Modifiers = uint32(n.modifiers)
+	d.WindowsKeyCode = int32(n.windows_key_code)
+	d.NativeKeyCode = int32(n.native_key_code)
+	d.IsSystemKey = int32(n.is_system_key)
+	d.Character = int16(n.character)
+	d.UnmodifiedCharacter = int16(n.unmodified_character)
+	d.FocusOnEditableField = int32(n.focus_on_editable_field)
 }

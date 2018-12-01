@@ -255,33 +255,38 @@ func (d *Settings) toNative(native *C.cef_settings_t) *C.cef_settings_t {
 	return native
 }
 
-func (d *Settings) fromNative(native *C.cef_settings_t) *Settings {
-	d.Size = uint64(native.size)
-	d.NoSandbox = int32(native.no_sandbox)
-	d.BrowserSubprocessPath = cefstrToString(&native.browser_subprocess_path)
-	d.FrameworkDirPath = cefstrToString(&native.framework_dir_path)
-	d.MultiThreadedMessageLoop = int32(native.multi_threaded_message_loop)
-	d.ExternalMessagePump = int32(native.external_message_pump)
-	d.WindowlessRenderingEnabled = int32(native.windowless_rendering_enabled)
-	d.CommandLineArgsDisabled = int32(native.command_line_args_disabled)
-	d.CachePath = cefstrToString(&native.cache_path)
-	d.UserDataPath = cefstrToString(&native.user_data_path)
-	d.PersistSessionCookies = int32(native.persist_session_cookies)
-	d.PersistUserPreferences = int32(native.persist_user_preferences)
-	d.UserAgent = cefstrToString(&native.user_agent)
-	d.ProductVersion = cefstrToString(&native.product_version)
-	d.Locale = cefstrToString(&native.locale)
-	d.LogFile = cefstrToString(&native.log_file)
-	d.LogSeverity = LogSeverity(native.log_severity)
-	d.JavascriptFlags = cefstrToString(&native.javascript_flags)
-	d.ResourcesDirPath = cefstrToString(&native.resources_dir_path)
-	d.LocalesDirPath = cefstrToString(&native.locales_dir_path)
-	d.PackLoadingDisabled = int32(native.pack_loading_disabled)
-	d.RemoteDebuggingPort = int32(native.remote_debugging_port)
-	d.UncaughtExceptionStackSize = int32(native.uncaught_exception_stack_size)
-	d.IgnoreCertificateErrors = int32(native.ignore_certificate_errors)
-	d.EnableNetSecurityExpiration = int32(native.enable_net_security_expiration)
-	d.BackgroundColor = Color(native.background_color)
-	d.AcceptLanguageList = cefstrToString(&native.accept_language_list)
-	return d
+func (n *C.cef_settings_t) toGo() *Settings {
+	var d Settings
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_settings_t) intoGo(d *Settings) {
+	d.Size = uint64(n.size)
+	d.NoSandbox = int32(n.no_sandbox)
+	d.BrowserSubprocessPath = cefstrToString(&n.browser_subprocess_path)
+	d.FrameworkDirPath = cefstrToString(&n.framework_dir_path)
+	d.MultiThreadedMessageLoop = int32(n.multi_threaded_message_loop)
+	d.ExternalMessagePump = int32(n.external_message_pump)
+	d.WindowlessRenderingEnabled = int32(n.windowless_rendering_enabled)
+	d.CommandLineArgsDisabled = int32(n.command_line_args_disabled)
+	d.CachePath = cefstrToString(&n.cache_path)
+	d.UserDataPath = cefstrToString(&n.user_data_path)
+	d.PersistSessionCookies = int32(n.persist_session_cookies)
+	d.PersistUserPreferences = int32(n.persist_user_preferences)
+	d.UserAgent = cefstrToString(&n.user_agent)
+	d.ProductVersion = cefstrToString(&n.product_version)
+	d.Locale = cefstrToString(&n.locale)
+	d.LogFile = cefstrToString(&n.log_file)
+	d.LogSeverity = LogSeverity(n.log_severity)
+	d.JavascriptFlags = cefstrToString(&n.javascript_flags)
+	d.ResourcesDirPath = cefstrToString(&n.resources_dir_path)
+	d.LocalesDirPath = cefstrToString(&n.locales_dir_path)
+	d.PackLoadingDisabled = int32(n.pack_loading_disabled)
+	d.RemoteDebuggingPort = int32(n.remote_debugging_port)
+	d.UncaughtExceptionStackSize = int32(n.uncaught_exception_stack_size)
+	d.IgnoreCertificateErrors = int32(n.ignore_certificate_errors)
+	d.EnableNetSecurityExpiration = int32(n.enable_net_security_expiration)
+	d.BackgroundColor = Color(n.background_color)
+	d.AcceptLanguageList = cefstrToString(&n.accept_language_list)
 }

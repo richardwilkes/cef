@@ -86,11 +86,14 @@ func (d *LifeSpanHandler) OnBeforePopup(browser *Browser, frame *Frame, target_u
 func gocef_life_span_handler_on_before_popup(self *C.cef_life_span_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, target_url *C.cef_string_t, target_frame_name *C.cef_string_t, target_disposition C.cef_window_open_disposition_t, user_gesture C.int, popupFeatures *C.cef_popup_features_t, windowInfo *C.cef_window_info_t, client **C.cef_client_t, settings *C.cef_browser_settings_t, no_javascript_access *C.int) C.int {
 	me__ := (*LifeSpanHandler)(self)
 	proxy__ := lookupLifeSpanHandlerProxy(me__.Base())
-	var vpopupFeatures PopupFeatures
-	var vwindowInfo WindowInfo
-	vclient := (*Client)(*client)
-	var vsettings BrowserSettings
-	return C.int(proxy__.OnBeforePopup(me__, (*Browser)(browser), (*Frame)(frame), cefstrToString(target_url), cefstrToString(target_frame_name), WindowOpenDisposition(target_disposition), int32(user_gesture), vpopupFeatures.fromNative(popupFeatures), vwindowInfo.fromNative(windowInfo), &vclient, vsettings.fromNative(settings), (*int32)(no_javascript_access)))
+	target_url_ := cefstrToString(target_url)
+	target_frame_name_ := cefstrToString(target_frame_name)
+	popupFeatures_ := popupFeatures.toGo()
+	windowInfo_ := windowInfo.toGo()
+	client_ := (*Client)(*client)
+	client__p := &client_
+	settings_ := settings.toGo()
+	return C.int(proxy__.OnBeforePopup(me__, (*Browser)(browser), (*Frame)(frame), target_url_, target_frame_name_, WindowOpenDisposition(target_disposition), int32(user_gesture), popupFeatures_, windowInfo_, client__p, settings_, (*int32)(no_javascript_access)))
 }
 
 // OnAfterCreated (on_after_created)

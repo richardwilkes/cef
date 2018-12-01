@@ -91,18 +91,18 @@ func (d *DownloadItem) GetReceivedBytes() int64 {
 // GetStartTime (get_start_time)
 // Returns the time that the download started.
 func (d *DownloadItem) GetStartTime() Time {
-	native__ := C.gocef_download_item_get_start_time(d.toNative(), d.get_start_time)
+	cresult__ := C.gocef_download_item_get_start_time(d.toNative(), d.get_start_time)
 	var result__ Time
-	result__.fromNative(&native__)
+	(&cresult__).intoGo(&result__)
 	return result__
 }
 
 // GetEndTime (get_end_time)
 // Returns the time that the download ended.
 func (d *DownloadItem) GetEndTime() Time {
-	native__ := C.gocef_download_item_get_end_time(d.toNative(), d.get_end_time)
+	cresult__ := C.gocef_download_item_get_end_time(d.toNative(), d.get_end_time)
 	var result__ Time
-	result__.fromNative(&native__)
+	(&cresult__).intoGo(&result__)
 	return result__
 }
 

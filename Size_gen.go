@@ -27,8 +27,13 @@ func (d *Size) toNative(native *C.cef_size_t) *C.cef_size_t {
 	return native
 }
 
-func (d *Size) fromNative(native *C.cef_size_t) *Size {
-	d.Width = int32(native.width)
-	d.Height = int32(native.height)
-	return d
+func (n *C.cef_size_t) toGo() *Size {
+	var d Size
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_size_t) intoGo(d *Size) {
+	d.Width = int32(n.width)
+	d.Height = int32(n.height)
 }

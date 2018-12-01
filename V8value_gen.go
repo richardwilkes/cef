@@ -186,9 +186,9 @@ func (d *V8value) GetDoubleValue() float64 {
 // GetDateValue (get_date_value)
 // Return a Date value.
 func (d *V8value) GetDateValue() Time {
-	native__ := C.gocef_v8value_get_date_value(d.toNative(), d.get_date_value)
+	cresult__ := C.gocef_v8value_get_date_value(d.toNative(), d.get_date_value)
 	var result__ Time
-	result__.fromNative(&native__)
+	(&cresult__).intoGo(&result__)
 	return result__
 }
 

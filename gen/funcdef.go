@@ -98,10 +98,14 @@ func emitReturnForCCall(buffer *strings.Builder, expression string, retVar *vari
 	if retVar.GoType == "" {
 		buffer.WriteString(expression)
 	} else if sdef, exists := sdefsMap[retVar.CType]; exists && !sdef.isClassEquivalent() {
-		fmt.Fprintf(buffer, `native__ := %s
+		if retVar.Ptrs == "*" {
+			fmt.Fprintf(buffer, "return (%s).toGo()", expression)
+		} else {
+			fmt.Fprintf(buffer, `cresult__ := %s
 var result__ %s
-result__.fromNative(&native__)
+(&cresult__).intoGo(&result__)
 return result__`, expression, retVar.GoType)
+		}
 	} else {
 		switch retVar.CType {
 		case "void *":

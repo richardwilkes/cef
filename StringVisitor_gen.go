@@ -62,5 +62,6 @@ func (d *StringVisitor) Visit(string_r string) {
 func gocef_string_visitor_visit(self *C.cef_string_visitor_t, string_r *C.cef_string_t) {
 	me__ := (*StringVisitor)(self)
 	proxy__ := lookupStringVisitorProxy(me__.Base())
-	proxy__.Visit(me__, cefstrToString(string_r))
+	string_r_ := cefstrToString(string_r)
+	proxy__.Visit(me__, string_r_)
 }

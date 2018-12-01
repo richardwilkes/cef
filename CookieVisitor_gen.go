@@ -67,6 +67,6 @@ func (d *CookieVisitor) Visit(cookie *Cookie, count, total int32, deleteCookie *
 func gocef_cookie_visitor_visit(self *C.cef_cookie_visitor_t, cookie *C.cef_cookie_t, count C.int, total C.int, deleteCookie *C.int) C.int {
 	me__ := (*CookieVisitor)(self)
 	proxy__ := lookupCookieVisitorProxy(me__.Base())
-	var vcookie Cookie
-	return C.int(proxy__.Visit(me__, vcookie.fromNative(cookie), int32(count), int32(total), (*int32)(deleteCookie)))
+	cookie_ := cookie.toGo()
+	return C.int(proxy__.Visit(me__, cookie_, int32(count), int32(total), (*int32)(deleteCookie)))
 }

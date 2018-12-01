@@ -80,7 +80,10 @@ func (d *JsdialogHandler) OnJsdialog(browser *Browser, origin_url string, dialog
 func gocef_jsdialog_handler_on_jsdialog(self *C.cef_jsdialog_handler_t, browser *C.cef_browser_t, origin_url *C.cef_string_t, dialog_type C.cef_jsdialog_type_t, message_text *C.cef_string_t, default_prompt_text *C.cef_string_t, callback *C.cef_jsdialog_callback_t, suppress_message *C.int) C.int {
 	me__ := (*JsdialogHandler)(self)
 	proxy__ := lookupJsdialogHandlerProxy(me__.Base())
-	return C.int(proxy__.OnJsdialog(me__, (*Browser)(browser), cefstrToString(origin_url), JsdialogType(dialog_type), cefstrToString(message_text), cefstrToString(default_prompt_text), (*JsdialogCallback)(callback), (*int32)(suppress_message)))
+	origin_url_ := cefstrToString(origin_url)
+	message_text_ := cefstrToString(message_text)
+	default_prompt_text_ := cefstrToString(default_prompt_text)
+	return C.int(proxy__.OnJsdialog(me__, (*Browser)(browser), origin_url_, JsdialogType(dialog_type), message_text_, default_prompt_text_, (*JsdialogCallback)(callback), (*int32)(suppress_message)))
 }
 
 // OnBeforeUnloadDialog (on_before_unload_dialog)
@@ -98,7 +101,8 @@ func (d *JsdialogHandler) OnBeforeUnloadDialog(browser *Browser, message_text st
 func gocef_jsdialog_handler_on_before_unload_dialog(self *C.cef_jsdialog_handler_t, browser *C.cef_browser_t, message_text *C.cef_string_t, is_reload C.int, callback *C.cef_jsdialog_callback_t) C.int {
 	me__ := (*JsdialogHandler)(self)
 	proxy__ := lookupJsdialogHandlerProxy(me__.Base())
-	return C.int(proxy__.OnBeforeUnloadDialog(me__, (*Browser)(browser), cefstrToString(message_text), int32(is_reload), (*JsdialogCallback)(callback)))
+	message_text_ := cefstrToString(message_text)
+	return C.int(proxy__.OnBeforeUnloadDialog(me__, (*Browser)(browser), message_text_, int32(is_reload), (*JsdialogCallback)(callback)))
 }
 
 // OnResetDialogState (on_reset_dialog_state)

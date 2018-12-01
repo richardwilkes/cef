@@ -34,9 +34,14 @@ func (d *MouseEvent) toNative(native *C.cef_mouse_event_t) *C.cef_mouse_event_t 
 	return native
 }
 
-func (d *MouseEvent) fromNative(native *C.cef_mouse_event_t) *MouseEvent {
-	d.X = int32(native.x)
-	d.Y = int32(native.y)
-	d.Modifiers = uint32(native.modifiers)
-	return d
+func (n *C.cef_mouse_event_t) toGo() *MouseEvent {
+	var d MouseEvent
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_mouse_event_t) intoGo(d *MouseEvent) {
+	d.X = int32(n.x)
+	d.Y = int32(n.y)
+	d.Modifiers = uint32(n.modifiers)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"strings"
 
 	"github.com/richardwilkes/toolbox/errs"
@@ -168,6 +169,41 @@ func adjustedParamName(name string) string {
 		}
 	}
 	return name
+}
+
+func (v *variable) transformCToGo(w io.Writer) string {
+	if sdef, exists := sdefsMap[v.BaseType]; exists {
+		if sdef.isClassEquivalent() {
+			switch v.Ptrs {
+			case "", "*":
+				return v.GoCast(v.Name)
+			case "**":
+				fmt.Fprintf(w, "%[1]s_ := (%[2]s)(*%[1]s)\n", v.Name, v.GoType[1:])
+				fmt.Fprintf(w, "%[1]s__p := &%[1]s_\n", v.Name)
+				return fmt.Sprintf("%s__p", v.Name)
+			}
+		} else {
+			if v.Ptrs == "*" {
+				fmt.Fprintf(w, "%[1]s_ := %[1]s.toGo()\n", v.Name)
+				return fmt.Sprintf("%s_", v.Name)
+			}
+		}
+	} else if _, exists := edefsMap[v.BaseType]; exists {
+		switch v.Ptrs {
+		case "":
+			return v.GoCast(v.Name)
+		case "*":
+			fmt.Fprintf(w, "%[1]s_ := %[2]s(*%[1]s)\n", v.Name, v.GoType[1:])
+			return fmt.Sprintf("&%s_", v.Name)
+		}
+	} else if v.BaseType == "cef_string_t" {
+		fmt.Fprintf(w, "%[1]s_ := cefstrToString(%[1]s)\n", v.Name)
+		return fmt.Sprintf("%s_", v.Name)
+	} else {
+		return v.GoCast(v.Name)
+	}
+	jot.Fatal(1, errs.Newf("Unhandled param conversion: %s", v.Name))
+	return ""
 }
 
 func (v *variable) CGoCast(expression string) string {

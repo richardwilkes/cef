@@ -27,8 +27,13 @@ func (d *Range) toNative(native *C.cef_range_t) *C.cef_range_t {
 	return native
 }
 
-func (d *Range) fromNative(native *C.cef_range_t) *Range {
-	d.From = int32(native.from)
-	d.To = int32(native.to)
-	return d
+func (n *C.cef_range_t) toGo() *Range {
+	var d Range
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_range_t) intoGo(d *Range) {
+	d.From = int32(n.from)
+	d.To = int32(n.to)
 }

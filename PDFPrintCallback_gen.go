@@ -65,5 +65,6 @@ func (d *PDFPrintCallback) OnPdfPrintFinished(path string, ok int32) {
 func gocef_pdf_print_callback_on_pdf_print_finished(self *C.cef_pdf_print_callback_t, path *C.cef_string_t, ok C.int) {
 	me__ := (*PDFPrintCallback)(self)
 	proxy__ := lookupPDFPrintCallbackProxy(me__.Base())
-	proxy__.OnPdfPrintFinished(me__, cefstrToString(path), int32(ok))
+	path_ := cefstrToString(path)
+	proxy__.OnPdfPrintFinished(me__, path_, int32(ok))
 }

@@ -81,20 +81,25 @@ func (d *PDFPrintSettings) toNative(native *C.cef_pdf_print_settings_t) *C.cef_p
 	return native
 }
 
-func (d *PDFPrintSettings) fromNative(native *C.cef_pdf_print_settings_t) *PDFPrintSettings {
-	d.HeaderFooterTitle = cefstrToString(&native.header_footer_title)
-	d.HeaderFooterUrl = cefstrToString(&native.header_footer_url)
-	d.PageWidth = int32(native.page_width)
-	d.PageHeight = int32(native.page_height)
-	d.ScaleFactor = int32(native.scale_factor)
-	d.MarginTop = float64(native.margin_top)
-	d.MarginRight = float64(native.margin_right)
-	d.MarginBottom = float64(native.margin_bottom)
-	d.MarginLeft = float64(native.margin_left)
-	d.MarginType = PDFPrintMarginType(native.margin_type)
-	d.HeaderFooterEnabled = int32(native.header_footer_enabled)
-	d.SelectionOnly = int32(native.selection_only)
-	d.Landscape = int32(native.landscape)
-	d.BackgroundsEnabled = int32(native.backgrounds_enabled)
-	return d
+func (n *C.cef_pdf_print_settings_t) toGo() *PDFPrintSettings {
+	var d PDFPrintSettings
+	n.intoGo(&d)
+	return &d
+}
+
+func (n *C.cef_pdf_print_settings_t) intoGo(d *PDFPrintSettings) {
+	d.HeaderFooterTitle = cefstrToString(&n.header_footer_title)
+	d.HeaderFooterUrl = cefstrToString(&n.header_footer_url)
+	d.PageWidth = int32(n.page_width)
+	d.PageHeight = int32(n.page_height)
+	d.ScaleFactor = int32(n.scale_factor)
+	d.MarginTop = float64(n.margin_top)
+	d.MarginRight = float64(n.margin_right)
+	d.MarginBottom = float64(n.margin_bottom)
+	d.MarginLeft = float64(n.margin_left)
+	d.MarginType = PDFPrintMarginType(n.margin_type)
+	d.HeaderFooterEnabled = int32(n.header_footer_enabled)
+	d.SelectionOnly = int32(n.selection_only)
+	d.Landscape = int32(n.landscape)
+	d.BackgroundsEnabled = int32(n.backgrounds_enabled)
 }
