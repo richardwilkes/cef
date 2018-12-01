@@ -29,10 +29,10 @@ type variable struct {
 
 func newCVar(name, typeInfo string, pos position) *variable {
 	name = strings.TrimSpace(name)
-	typeInfo = strings.Replace(strings.TrimPrefix(strings.Trim(strings.TrimSpace(strings.Replace(typeInfo, "const ", "", -1)), "'"), "struct _"), "long long", "int64_t", -1)
-	if i := strings.Index(typeInfo, "':'"); i != -1 {
-		typeInfo = typeInfo[:i]
-	}
+	typeInfo = strings.Replace(typeInfo, "const ", "", -1)
+	typeInfo = strings.TrimSpace(typeInfo)
+	typeInfo = strings.TrimPrefix(typeInfo, "struct _")
+	typeInfo = strings.Replace(typeInfo, "long long", "int64_t", -1)
 	v := &variable{
 		Name:   name,
 		GoName: txt.ToCamelCase(name),

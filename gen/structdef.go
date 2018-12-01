@@ -1,12 +1,18 @@
 package main
 
 import (
+	"regexp"
 	"sort"
 	"strings"
 	"text/template"
 
 	"github.com/richardwilkes/toolbox/log/jot"
 	"github.com/richardwilkes/toolbox/txt"
+)
+
+var (
+	defRegex   = regexp.MustCompile(` struct\s+_(cef_\S+)\s+definition$`)
+	fieldRegex = regexp.MustCompile(`-FieldDecl .*>\s+\S+\s+(\S+)\s+'([^']+)'`)
 )
 
 type structDef struct {
@@ -75,29 +81,17 @@ func translateStructTypeName(name string) string {
 }
 
 func processRecordDecl(block []lineInfo) {
-	line := block[0].Line
-	if strings.HasSuffix(line, " definition") {
-		if i := strings.Index(line, " struct _cef_"); i != -1 {
-			name := line[i+9 : len(line)-11]
-			if _, exclude := excludeMap[name]; !exclude {
-				if _, exists := sdefsMap[name]; !exists {
-					sdef := newStructDef(name, block[0].Position)
-					for i := 1; i < len(block); i++ {
-						line = block[i].Line
-						if len(line) > 3 && strings.HasPrefix(line[3:], "-FieldDecl ") {
-							if start := strings.Index(line, "> "); start != -1 {
-								line = line[start+2:]
-								if space := strings.Index(line, " "); space != -1 {
-									line = line[space+1:]
-									if start = strings.Index(line, " "); space != -1 {
-										sdef.Fields = append(sdef.Fields, newField(sdef, line[:start], strings.Trim(line[start+1:], "'"), block[i].Position))
-									}
-								}
-							}
-						}
+	if result := defRegex.FindAllStringSubmatch(block[0].Line, -1); result != nil {
+		name := result[0][1]
+		if _, exclude := excludeMap[name]; !exclude {
+			if _, exists := sdefsMap[name]; !exists {
+				sdef := newStructDef(name, block[0].Position)
+				for i := 1; i < len(block); i++ {
+					if result = fieldRegex.FindAllStringSubmatch(block[i].Line, -1); result != nil {
+						sdef.Fields = append(sdef.Fields, newField(sdef, result[0][1], result[0][2], block[i].Position))
 					}
-					sdefsMap[name] = sdef
 				}
+				sdefsMap[name] = sdef
 			}
 		}
 	}
