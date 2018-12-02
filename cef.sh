@@ -55,14 +55,14 @@ case $(uname -s) in
         PLATFORM=macosx64
         CACHEDIR="$HOME/Library/Caches"
         ;;
-    Linux*)
-        PLATFORM=linux64
-        if [ "$XDG_CACHE_HOME" != "" ]; then
-            CACHEDIR="$XDG_CACHE_HOME"
-        else
-            CACHEDIR="$HOME/.cache"
-        fi
-        ;;
+#    Linux*)
+#        PLATFORM=linux64
+#        if [ "$XDG_CACHE_HOME" != "" ]; then
+#            CACHEDIR="$XDG_CACHE_HOME"
+#        else
+#            CACHEDIR="$HOME/.cache"
+#        fi
+#        ;;
     MINGW64*)
         PLATFORM=windows64
         CACHEDIR="$LocalAppData"
@@ -91,7 +91,7 @@ function download_cef_archive() {
 
 # Install the CEF headers
 if [ "x$INSTALL_HEADERS" != "x" ]; then
-    EXISTING=""
+    EXISTING=
     if [ -e "$INSTALL_HEADERS/include/cef_version.h" ]; then
         EXISTING=`grep "#define CEF_VERSION " "$INSTALL_HEADERS/include/cef_version.h" | cut -f 2 -d '"'`
     fi
@@ -99,9 +99,12 @@ if [ "x$INSTALL_HEADERS" != "x" ]; then
         download_cef_archive
         /bin/rm -rf "$INSTALL_HEADERS"
         mkdir -p "$INSTALL_HEADERS"
+        EXTRA_INCLUDE=
+        if [ $PLATFORM == "macosx64" ]; then
+            EXTRA_INCLUDE="--include $CEF_BASE/include/cef_application_mac.h"
+        fi
         bunzip2 --stdout "$CACHEDIR/$CEF_ARCHIVE" | tar xf - -C "$INSTALL_HEADERS" \
-            --strip-components 1 \
-            --include $CEF_BASE/include/cef_application_mac.h \
+            --strip-components 1 $EXTRA_INCLUDE \
             --include $CEF_BASE/include/cef_version.h \
             --include $CEF_BASE/include/base \
             --include $CEF_BASE/include/internal \
@@ -119,7 +122,7 @@ fi
 
 # Install the CEF libraries
 if [ "x$INSTALL_LIBS" != "x" ]; then
-    EXISTING=""
+    EXISTING=
     if [ -e "$INSTALL_LIBS/version.txt" ]; then
         EXISTING=`cat "$INSTALL_LIBS/version.txt"`
     fi
@@ -127,8 +130,12 @@ if [ "x$INSTALL_LIBS" != "x" ]; then
         download_cef_archive
         /bin/rm -rf "$INSTALL_LIBS"
         mkdir -p "$INSTALL_LIBS"
+        EXTRA_INCLUDE=
+        if [ $PLATFORM == "windows64" ]; then
+            EXTRA_INCLUDE="--include $CEF_BASE/Resources"
+        fi
         bunzip2 --stdout "$CACHEDIR/$CEF_ARCHIVE" | tar xf - -C "$INSTALL_LIBS" \
-            --strip-components 2 \
+            --strip-components 2 $EXTRA_INCLUDE \
             --include $CEF_BASE/Release \
             --exclude $CEF_BASE/Release/cef_sandbox.a
         echo "$CEF_VERSION" > "$INSTALL_LIBS/version.txt"
