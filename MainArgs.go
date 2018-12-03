@@ -3,9 +3,9 @@ package cef
 import (
 	// #include <stdlib.h>
 	// #include "include/internal/cef_types.h"
-	// #cgo CFLAGS: -I ${SRCDIR}/cef
-	// #cgo darwin LDFLAGS: -framework Cocoa -F ${SRCDIR}/cef/lib -framework "Chromium Embedded Framework"
-	// #cgo windows LDFLAGS: -L${SRCDIR}/cef/lib -lcef -Wl,--subsystem,windows
+	// #cgo CFLAGS: -I/usr/local/cef
+	// #cgo darwin LDFLAGS: -framework Cocoa -F/usr/local/cef/Release -framework "Chromium Embedded Framework"
+	// #cgo windows LDFLAGS: -L/usr/local/cef/Release -lcef -Wl,--subsystem,windows
 	"C"
 )
 

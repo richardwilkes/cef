@@ -16,8 +16,9 @@ point as well.
 In the root of the repo, run (if using Windows, do this from a mingw64 msys2
 console):
 ```
-./cef.sh --headers cef --libs cef/lib
+sudo ./install_cef_for_dev.sh
 ```
+This will install the necessary CEF headers and libraries into /usr/local/cef.
 
 ## Example application
 https://github.com/richardwilkes/webapp and
@@ -25,8 +26,8 @@ https://github.com/richardwilkes/webapp-example use these bindings to create
 an example desktop application.
 
 ## Updating the CEF version to be used
-The CEF version can be updated in the `cef.sh` script file by changing the
-`CEF_VERSION` variable. If a different CEF version is pulled, the source files
-should be generated again by running `go generate ./...` on a macOS machine.
-Code generation might be possible on other platforms, but has not been tested
-there.
+The CEF version can be updated in the `install_cef_for_dev.sh` script file by
+changing the `CEF_VERSION` variable. If a different CEF version is pulled, the
+source files should be generated again by running `go generate ./...` on a
+macOS machine. Code generation might be possible on other platforms, but has
+not been tested there.
