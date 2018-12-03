@@ -23,7 +23,7 @@ import (
 
 const (
 	cefBaseDir    = "/usr/local/cef"
-	outputBaseDir = ".."
+	outputBaseDir = "../../cef"
 )
 
 var (
