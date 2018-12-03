@@ -20,7 +20,8 @@ if [ $CEF_VERSION != "$EXISTING" ] || [ "$1" == "force" ]; then
     curl -L http://opensource.spotify.com/cefbuilds/cef_binary_${CEF_VERSION}_${PLATFORM}_minimal.tar.bz2 | bunzip2 | tar xpof - -C "$CEF_PREFIX" --strip-components 1
     chmod -R go+rX "$CEF_PREFIX"
     if [ $PLATFORM == "macosx64" ]; then
-        cat > /usr/lib/pkgconfig/cef.pc << EOF
+        mkdir -p /usr/local/lib/pkgconfig
+        cat > /usr/local/lib/pkgconfig/cef.pc << EOF
 Name: cef
 Description: Chromium Embedded Framework
 Version: $CEF_VERSION
@@ -31,6 +32,7 @@ Cflags: -I/usr/local/cef
 EOF
     fi
     if [ $PLATFORM == "windows64" ]; then
+        mkdir -p /mingw64/lib/pkgconfig
         cat > /mingw64/lib/pkgconfig/cef.pc << EOF
 Name: cef
 Description: Chromium Embedded Framework
