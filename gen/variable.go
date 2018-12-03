@@ -25,17 +25,22 @@ type variable struct {
 	Params      []*variable
 	FunctionPtr bool
 	NeedUnsafe  bool
+	HadConst    bool
 }
 
 func newCVar(name, typeInfo string, pos position) *variable {
 	name = strings.TrimSpace(name)
-	typeInfo = strings.Replace(typeInfo, "const ", "", -1)
+	hadConst := strings.Contains(typeInfo, "const ")
+	if hadConst {
+		typeInfo = strings.Replace(typeInfo, "const ", "", -1)
+	}
 	typeInfo = strings.TrimSpace(typeInfo)
 	typeInfo = strings.TrimPrefix(typeInfo, "struct _")
 	typeInfo = strings.Replace(typeInfo, "long long", "int64_t", -1)
 	v := &variable{
-		Name:   name,
-		GoName: txt.ToCamelCase(name),
+		Name:     name,
+		GoName:   txt.ToCamelCase(name),
+		HadConst: hadConst,
 	}
 	for _, one := range cNamesToPrefixForAccess {
 		if one == name {
