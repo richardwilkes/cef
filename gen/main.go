@@ -21,13 +21,16 @@ import (
 	"github.com/richardwilkes/toolbox/log/jot"
 )
 
-var (
+const (
+	cefBaseDir    = "/usr/local/cef"
 	outputBaseDir = ".."
-	cefBaseDir    = filepath.Join(outputBaseDir, "cef")
-	sdefsMap      = make(map[string]*structDef)
-	edefsMap      = make(map[string]*enumDef)
-	tdefsMap      = make(map[string]*typeDef)
-	fdefsMap      = make(map[string]*funcDef)
+)
+
+var (
+	sdefsMap = make(map[string]*structDef)
+	edefsMap = make(map[string]*enumDef)
+	tdefsMap = make(map[string]*typeDef)
+	fdefsMap = make(map[string]*funcDef)
 )
 
 type lineInfo struct {
@@ -150,8 +153,15 @@ func capiHeaders() []string {
 	headers := make([]string, 0, len(list))
 	for _, one := range list {
 		if !one.IsDir() {
-			header := filepath.Join("include", "capi", one.Name())
-			headers = append(headers, header)
+			name := one.Name()
+			if name != "cef_parser_capi.h" &&
+				name != "cef_thread_capi.h" &&
+				name != "cef_trace_capi.h" &&
+				!strings.HasSuffix(name, "_reader_capi.h") &&
+				!strings.HasSuffix(name, "_util_capi.h") {
+				header := filepath.Join("include", "capi", name)
+				headers = append(headers, header)
+			}
 		}
 	}
 	sort.Strings(headers)
