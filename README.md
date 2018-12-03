@@ -10,7 +10,7 @@ point as well.
 - In the mingw64 msys2 console, run the following:
   - `pacman -Syu`
   - `pacman -Su`
-  - `pacman -S mingw64/mingw-w64-x86_64-gcc mingw64/mingw-w64-x86_64-go msys/git`
+  - `pacman -S mingw64/mingw-w64-x86_64-gcc mingw64/mingw-w64-x86_64-go mingw64/mingw-w64-x86_64-pkg-config msys/git`
 
 ## Initial setup
 In the root of the repo, run (if using Windows, do this from a mingw64 msys2
