@@ -34,8 +34,8 @@ func parameterList(params []*variable) string {
 		} else {
 			fmt.Fprintf(&buffer, ", %s", p.Name)
 		}
-		if i == len(params)-1 || p.GoType != params[i+1].GoType {
-			fmt.Fprintf(&buffer, " %s", p.GoType)
+		if i == len(params)-1 || p.paramGoType() != params[i+1].paramGoType() {
+			fmt.Fprintf(&buffer, " %s", p.paramGoType())
 		}
 	}
 	return buffer.String()
@@ -61,12 +61,19 @@ func prepGoVarsForC(vars []*variable) (string, []string) {
 		names[i] = p.Name
 		if p.BaseType == "cef_string_t" {
 			names[i] = p.Name + "_"
-			fmt.Fprintf(&buffer, "var %s_ C.cef_string_t\n", p.Name)
+			fmt.Fprintf(&buffer, "%s_ := C.cef_string_userfree_alloc()\n", p.Name)
 			ptrs := p.Ptrs
-			if len(ptrs) > 0 {
+			if !p.HadConst && p.paramGoType() == "*string" {
+				ptrs = "*"
+			} else if len(ptrs) > 0 {
 				ptrs = ptrs[1:]
 			}
-			fmt.Fprintf(&buffer, "setCEFStr(%[1]s%[2]s, &%[2]s_)\n", ptrs, p.Name)
+			fmt.Fprintf(&buffer, "setCEFStr(%[1]s%[2]s, %[2]s_)\n", ptrs, p.Name)
+			buffer.WriteString("defer func() {\n")
+			if !p.HadConst && p.paramGoType() == "*string" {
+				fmt.Fprintf(&buffer, "*%[1]s = cefstrToString(%[1]s_)\n", p.Name)
+			}
+			fmt.Fprintf(&buffer, "C.cef_string_userfree_free(%s_)\n}()\n", p.Name)
 		} else if p.Ptrs == "**" {
 			if sdef, exists := sdefsMap[p.BaseType]; exists {
 				names[i] = p.Name + "_"
@@ -136,8 +143,6 @@ func emitParamsForCCall(buffer *strings.Builder, vars []*variable, names []strin
 		}
 		if p.BaseType == "void" {
 			buffer.WriteString(names[i])
-		} else if p.BaseType == "cef_string_t" && p.Ptrs == "*" {
-			fmt.Fprintf(buffer, "&%s", names[i])
 		} else if p.BaseType == "char" && p.Ptrs == "**" {
 			fmt.Fprintf(buffer, "(**C.char)(%s)", names[i])
 		} else {

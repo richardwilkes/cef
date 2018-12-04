@@ -52,15 +52,15 @@ func (d *SelectClientCertificateCallback) Base() *BaseRefCounted {
 	return (*BaseRefCounted)(&d.base)
 }
 
-// Select (_select)
+// Select (select)
 // Chooses the specified certificate for client certificate authentication.
 // NULL value means that no client certificate should be used.
 func (d *SelectClientCertificateCallback) Select(cert *X509certificate) {
 	lookupSelectClientCertificateCallbackProxy(d.Base()).Select(d, cert)
 }
 
-//export gocef_select_client_certificate_callback__select
-func gocef_select_client_certificate_callback__select(self *C.cef_select_client_certificate_callback_t, cert *C.cef_x509certificate_t) {
+//export gocef_select_client_certificate_callback_select
+func gocef_select_client_certificate_callback_select(self *C.cef_select_client_certificate_callback_t, cert *C.cef_x509certificate_t) {
 	me__ := (*SelectClientCertificateCallback)(self)
 	proxy__ := lookupSelectClientCertificateCallbackProxy(me__.Base())
 	proxy__.Select(me__, (*X509certificate)(cert))

@@ -103,11 +103,17 @@ func (d *V8context) IsSame(that *V8context) int32 {
 // function will return true (1). On failure |exception| will be set to the
 // exception, if any, and the function will return false (0).
 func (d *V8context) Eval(code, script_url string, start_line int32, retval **V8value, exception **V8exception) int32 {
-	var code_ C.cef_string_t
-	setCEFStr(code, &code_)
-	var script_url_ C.cef_string_t
-	setCEFStr(script_url, &script_url_)
+	code_ := C.cef_string_userfree_alloc()
+	setCEFStr(code, code_)
+	defer func() {
+		C.cef_string_userfree_free(code_)
+	}()
+	script_url_ := C.cef_string_userfree_alloc()
+	setCEFStr(script_url, script_url_)
+	defer func() {
+		C.cef_string_userfree_free(script_url_)
+	}()
 	retval_ := (*retval).toNative()
 	exception_ := (*exception).toNative()
-	return int32(C.gocef_v8context_eval(d.toNative(), &code_, &script_url_, C.int(start_line), &retval_, &exception_, d.eval))
+	return int32(C.gocef_v8context_eval(d.toNative(), (*C.cef_string_t)(code_), (*C.cef_string_t)(script_url_), C.int(start_line), &retval_, &exception_, d.eval))
 }

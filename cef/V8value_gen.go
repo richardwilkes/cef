@@ -245,9 +245,12 @@ func (d *V8value) SetRethrowExceptions(rethrow int32) int32 {
 // HasValueBykey (has_value_bykey)
 // Returns true (1) if the object has a value with the specified identifier.
 func (d *V8value) HasValueBykey(key string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_v8value_has_value_bykey(d.toNative(), &key_, d.has_value_bykey))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_v8value_has_value_bykey(d.toNative(), (*C.cef_string_t)(key_), d.has_value_bykey))
 }
 
 // HasValueByindex (has_value_byindex)
@@ -262,9 +265,12 @@ func (d *V8value) HasValueByindex(index int32) int32 {
 // exception is thrown. For read-only and don't-delete values this function
 // will return true (1) even though deletion failed.
 func (d *V8value) DeleteValueBykey(key string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_v8value_delete_value_bykey(d.toNative(), &key_, d.delete_value_bykey))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_v8value_delete_value_bykey(d.toNative(), (*C.cef_string_t)(key_), d.delete_value_bykey))
 }
 
 // DeleteValueByindex (delete_value_byindex)
@@ -280,9 +286,12 @@ func (d *V8value) DeleteValueByindex(index int32) int32 {
 // Returns the value with the specified identifier on success. Returns NULL if
 // this function is called incorrectly or an exception is thrown.
 func (d *V8value) GetValueBykey(key string) *V8value {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return (*V8value)(C.gocef_v8value_get_value_bykey(d.toNative(), &key_, d.get_value_bykey))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return (*V8value)(C.gocef_v8value_get_value_bykey(d.toNative(), (*C.cef_string_t)(key_), d.get_value_bykey))
 }
 
 // GetValueByindex (get_value_byindex)
@@ -298,9 +307,12 @@ func (d *V8value) GetValueByindex(index int32) *V8value {
 // exception is thrown. For read-only values this function will return true
 // (1) even though assignment failed.
 func (d *V8value) SetValueBykey(key string, value *V8value, attribute V8Propertyattribute) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_v8value_set_value_bykey(d.toNative(), &key_, value.toNative(), C.cef_v8_propertyattribute_t(attribute), d.set_value_bykey))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_v8value_set_value_bykey(d.toNative(), (*C.cef_string_t)(key_), value.toNative(), C.cef_v8_propertyattribute_t(attribute), d.set_value_bykey))
 }
 
 // SetValueByindex (set_value_byindex)
@@ -319,9 +331,12 @@ func (d *V8value) SetValueByindex(index int32, value *V8value) int32 {
 // function is called incorrectly or an exception is thrown. For read-only
 // values this function will return true (1) even though assignment failed.
 func (d *V8value) SetValueByaccessor(key string, settings V8Accesscontrol, attribute V8Propertyattribute) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_v8value_set_value_byaccessor(d.toNative(), &key_, C.cef_v8_accesscontrol_t(settings), C.cef_v8_propertyattribute_t(attribute), d.set_value_byaccessor))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_v8value_set_value_byaccessor(d.toNative(), (*C.cef_string_t)(key_), C.cef_v8_accesscontrol_t(settings), C.cef_v8_propertyattribute_t(attribute), d.set_value_byaccessor))
 }
 
 // GetKeys (get_keys)

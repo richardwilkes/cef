@@ -110,9 +110,12 @@ func (d *DictionaryValue) Clear() int32 {
 // HasKey (has_key)
 // Returns true (1) if the current dictionary has a value for the given key.
 func (d *DictionaryValue) HasKey(key string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_has_key(d.toNative(), &key_, d.has_key))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_has_key(d.toNative(), (*C.cef_string_t)(key_), d.has_key))
 }
 
 // GetKeys (get_keys)
@@ -125,17 +128,23 @@ func (d *DictionaryValue) GetKeys(keys StringList) int32 {
 // Removes the value at the specified key. Returns true (1) is the value was
 // removed successfully.
 func (d *DictionaryValue) Remove(key string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_remove(d.toNative(), &key_, d.remove))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_remove(d.toNative(), (*C.cef_string_t)(key_), d.remove))
 }
 
 // GetType (get_type)
 // Returns the value type for the specified key.
 func (d *DictionaryValue) GetType(key string) ValueType {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return ValueType(C.gocef_dictionary_value_get_type(d.toNative(), &key_, d.get_type))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return ValueType(C.gocef_dictionary_value_get_type(d.toNative(), (*C.cef_string_t)(key_), d.get_type))
 }
 
 // GetValue (get_value)
@@ -145,51 +154,69 @@ func (d *DictionaryValue) GetType(key string) ValueType {
 // will reference existing data and modifications to the value will modify
 // this object.
 func (d *DictionaryValue) GetValue(key string) *Value {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return (*Value)(C.gocef_dictionary_value_get_value(d.toNative(), &key_, d.get_value))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return (*Value)(C.gocef_dictionary_value_get_value(d.toNative(), (*C.cef_string_t)(key_), d.get_value))
 }
 
 // GetBool (get_bool)
 // Returns the value at the specified key as type bool.
 func (d *DictionaryValue) GetBool(key string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_get_bool(d.toNative(), &key_, d.get_bool))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_get_bool(d.toNative(), (*C.cef_string_t)(key_), d.get_bool))
 }
 
 // GetInt (get_int)
 // Returns the value at the specified key as type int.
 func (d *DictionaryValue) GetInt(key string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_get_int(d.toNative(), &key_, d.get_int))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_get_int(d.toNative(), (*C.cef_string_t)(key_), d.get_int))
 }
 
 // GetDouble (get_double)
 // Returns the value at the specified key as type double.
 func (d *DictionaryValue) GetDouble(key string) float64 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return float64(C.gocef_dictionary_value_get_double(d.toNative(), &key_, d.get_double))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return float64(C.gocef_dictionary_value_get_double(d.toNative(), (*C.cef_string_t)(key_), d.get_double))
 }
 
 // GetString (get_string)
 // Returns the value at the specified key as type string.
 // The resulting string must be freed by calling cef_string_userfree_free().
 func (d *DictionaryValue) GetString(key string) string {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return cefuserfreestrToString(C.gocef_dictionary_value_get_string(d.toNative(), &key_, d.get_string))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return cefuserfreestrToString(C.gocef_dictionary_value_get_string(d.toNative(), (*C.cef_string_t)(key_), d.get_string))
 }
 
 // GetBinary (get_binary)
 // Returns the value at the specified key as type binary. The returned value
 // will reference existing data.
 func (d *DictionaryValue) GetBinary(key string) *BinaryValue {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return (*BinaryValue)(C.gocef_dictionary_value_get_binary(d.toNative(), &key_, d.get_binary))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return (*BinaryValue)(C.gocef_dictionary_value_get_binary(d.toNative(), (*C.cef_string_t)(key_), d.get_binary))
 }
 
 // GetDictionary (get_dictionary)
@@ -197,9 +224,12 @@ func (d *DictionaryValue) GetBinary(key string) *BinaryValue {
 // value will reference existing data and modifications to the value will
 // modify this object.
 func (d *DictionaryValue) GetDictionary(key string) *DictionaryValue {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return (*DictionaryValue)(C.gocef_dictionary_value_get_dictionary(d.toNative(), &key_, d.get_dictionary))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return (*DictionaryValue)(C.gocef_dictionary_value_get_dictionary(d.toNative(), (*C.cef_string_t)(key_), d.get_dictionary))
 }
 
 // GetList (get_list)
@@ -207,9 +237,12 @@ func (d *DictionaryValue) GetDictionary(key string) *DictionaryValue {
 // will reference existing data and modifications to the value will modify
 // this object.
 func (d *DictionaryValue) GetList(key string) *ListValue {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return (*ListValue)(C.gocef_dictionary_value_get_list(d.toNative(), &key_, d.get_list))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return (*ListValue)(C.gocef_dictionary_value_get_list(d.toNative(), (*C.cef_string_t)(key_), d.get_list))
 }
 
 // SetValue (set_value)
@@ -220,56 +253,77 @@ func (d *DictionaryValue) GetList(key string) *ListValue {
 // underlying data will be referenced and modifications to |value| will modify
 // this object.
 func (d *DictionaryValue) SetValue(key string, value *Value) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_set_value(d.toNative(), &key_, value.toNative(), d.set_value))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_set_value(d.toNative(), (*C.cef_string_t)(key_), value.toNative(), d.set_value))
 }
 
 // SetNull (set_null)
 // Sets the value at the specified key as type null. Returns true (1) if the
 // value was set successfully.
 func (d *DictionaryValue) SetNull(key string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_set_null(d.toNative(), &key_, d.set_null))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_set_null(d.toNative(), (*C.cef_string_t)(key_), d.set_null))
 }
 
 // SetBool (set_bool)
 // Sets the value at the specified key as type bool. Returns true (1) if the
 // value was set successfully.
 func (d *DictionaryValue) SetBool(key string, value int32) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_set_bool(d.toNative(), &key_, C.int(value), d.set_bool))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_set_bool(d.toNative(), (*C.cef_string_t)(key_), C.int(value), d.set_bool))
 }
 
 // SetInt (set_int)
 // Sets the value at the specified key as type int. Returns true (1) if the
 // value was set successfully.
 func (d *DictionaryValue) SetInt(key string, value int32) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_set_int(d.toNative(), &key_, C.int(value), d.set_int))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_set_int(d.toNative(), (*C.cef_string_t)(key_), C.int(value), d.set_int))
 }
 
 // SetDouble (set_double)
 // Sets the value at the specified key as type double. Returns true (1) if the
 // value was set successfully.
 func (d *DictionaryValue) SetDouble(key string, value float64) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_set_double(d.toNative(), &key_, C.double(value), d.set_double))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_set_double(d.toNative(), (*C.cef_string_t)(key_), C.double(value), d.set_double))
 }
 
 // SetString (set_string)
 // Sets the value at the specified key as type string. Returns true (1) if the
 // value was set successfully.
 func (d *DictionaryValue) SetString(key, value string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.gocef_dictionary_value_set_string(d.toNative(), &key_, &value_, d.set_string))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.gocef_dictionary_value_set_string(d.toNative(), (*C.cef_string_t)(key_), (*C.cef_string_t)(value_), d.set_string))
 }
 
 // SetBinary (set_binary)
@@ -279,9 +333,12 @@ func (d *DictionaryValue) SetString(key, value string) int32 {
 // Otherwise, ownership will be transferred to this object and the |value|
 // reference will be invalidated.
 func (d *DictionaryValue) SetBinary(key string, value *BinaryValue) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_set_binary(d.toNative(), &key_, value.toNative(), d.set_binary))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_set_binary(d.toNative(), (*C.cef_string_t)(key_), value.toNative(), d.set_binary))
 }
 
 // SetDictionary (set_dictionary)
@@ -291,9 +348,12 @@ func (d *DictionaryValue) SetBinary(key string, value *BinaryValue) int32 {
 // Otherwise, ownership will be transferred to this object and the |value|
 // reference will be invalidated.
 func (d *DictionaryValue) SetDictionary(key string, value *DictionaryValue) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_set_dictionary(d.toNative(), &key_, value.toNative(), d.set_dictionary))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_set_dictionary(d.toNative(), (*C.cef_string_t)(key_), value.toNative(), d.set_dictionary))
 }
 
 // SetList (set_list)
@@ -303,7 +363,10 @@ func (d *DictionaryValue) SetDictionary(key string, value *DictionaryValue) int3
 // Otherwise, ownership will be transferred to this object and the |value|
 // reference will be invalidated.
 func (d *DictionaryValue) SetList(key string, value *ListValue) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.gocef_dictionary_value_set_list(d.toNative(), &key_, value.toNative(), d.set_list))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.gocef_dictionary_value_set_list(d.toNative(), (*C.cef_string_t)(key_), value.toNative(), d.set_list))
 }

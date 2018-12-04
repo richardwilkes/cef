@@ -6,7 +6,7 @@ import (
 	// #include "capi_gen.h"
 	// int gocef_response_is_read_only(cef_response_t * self, int (CEF_CALLBACK *callback__)(cef_response_t *)) { return callback__(self); }
 	// cef_errorcode_t gocef_response_get_error(cef_response_t * self, cef_errorcode_t (CEF_CALLBACK *callback__)(cef_response_t *)) { return callback__(self); }
-	// void gocef_response_set_error(cef_response_t * self, cef_errorcode_t error, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_errorcode_t)) { return callback__(self, error); }
+	// void gocef_response_set_error(cef_response_t * self, cef_errorcode_t error_r, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_errorcode_t)) { return callback__(self, error_r); }
 	// int gocef_response_get_status(cef_response_t * self, int (CEF_CALLBACK *callback__)(cef_response_t *)) { return callback__(self); }
 	// void gocef_response_set_status(cef_response_t * self, int status, void (CEF_CALLBACK *callback__)(cef_response_t *, int)) { return callback__(self, status); }
 	// cef_string_userfree_t gocef_response_get_status_text(cef_response_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_response_t *)) { return callback__(self); }
@@ -51,8 +51,8 @@ func (d *Response) GetError() Errorcode {
 // SetError (set_error)
 // Set the response error code. This can be used by custom scheme handlers to
 // return errors during initial request processing.
-func (d *Response) SetError(error Errorcode) {
-	C.gocef_response_set_error(d.toNative(), C.cef_errorcode_t(error), d.set_error)
+func (d *Response) SetError(error_r Errorcode) {
+	C.gocef_response_set_error(d.toNative(), C.cef_errorcode_t(error_r), d.set_error)
 }
 
 // GetStatus (get_status)
@@ -77,9 +77,12 @@ func (d *Response) GetStatusText() string {
 // SetStatusText (set_status_text)
 // Set the response status text.
 func (d *Response) SetStatusText(statusText string) {
-	var statusText_ C.cef_string_t
-	setCEFStr(statusText, &statusText_)
-	C.gocef_response_set_status_text(d.toNative(), &statusText_, d.set_status_text)
+	statusText_ := C.cef_string_userfree_alloc()
+	setCEFStr(statusText, statusText_)
+	defer func() {
+		C.cef_string_userfree_free(statusText_)
+	}()
+	C.gocef_response_set_status_text(d.toNative(), (*C.cef_string_t)(statusText_), d.set_status_text)
 }
 
 // GetMimeType (get_mime_type)
@@ -92,18 +95,24 @@ func (d *Response) GetMimeType() string {
 // SetMimeType (set_mime_type)
 // Set the response mime type.
 func (d *Response) SetMimeType(mimeType string) {
-	var mimeType_ C.cef_string_t
-	setCEFStr(mimeType, &mimeType_)
-	C.gocef_response_set_mime_type(d.toNative(), &mimeType_, d.set_mime_type)
+	mimeType_ := C.cef_string_userfree_alloc()
+	setCEFStr(mimeType, mimeType_)
+	defer func() {
+		C.cef_string_userfree_free(mimeType_)
+	}()
+	C.gocef_response_set_mime_type(d.toNative(), (*C.cef_string_t)(mimeType_), d.set_mime_type)
 }
 
 // GetHeader (get_header)
 // Get the value for the specified response header field.
 // The resulting string must be freed by calling cef_string_userfree_free().
 func (d *Response) GetHeader(name string) string {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	return cefuserfreestrToString(C.gocef_response_get_header(d.toNative(), &name_, d.get_header))
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	return cefuserfreestrToString(C.gocef_response_get_header(d.toNative(), (*C.cef_string_t)(name_), d.get_header))
 }
 
 // GetHeaderMap (get_header_map)
@@ -128,7 +137,10 @@ func (d *Response) GetUrl() string {
 // SetUrl (set_url)
 // Set the resolved URL after redirects or changed as a result of HSTS.
 func (d *Response) SetUrl(url string) {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	C.gocef_response_set_url(d.toNative(), &url_, d.set_url)
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	C.gocef_response_set_url(d.toNative(), (*C.cef_string_t)(url_), d.set_url)
 }

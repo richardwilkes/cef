@@ -127,9 +127,12 @@ func (d *Frame) LoadRequest(request *Request) {
 // LoadUrl (load_url)
 // Load the specified |url|.
 func (d *Frame) LoadUrl(url string) {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	C.gocef_frame_load_url(d.toNative(), &url_, d.load_url)
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	C.gocef_frame_load_url(d.toNative(), (*C.cef_string_t)(url_), d.load_url)
 }
 
 // LoadString (load_string)
@@ -137,11 +140,17 @@ func (d *Frame) LoadUrl(url string) {
 // should have a standard scheme (for example, http scheme) or behaviors like
 // link clicks and web security restrictions may not behave as expected.
 func (d *Frame) LoadString(string_val, url string) {
-	var string_val_ C.cef_string_t
-	setCEFStr(string_val, &string_val_)
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	C.gocef_frame_load_string(d.toNative(), &string_val_, &url_, d.load_string)
+	string_val_ := C.cef_string_userfree_alloc()
+	setCEFStr(string_val, string_val_)
+	defer func() {
+		C.cef_string_userfree_free(string_val_)
+	}()
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	C.gocef_frame_load_string(d.toNative(), (*C.cef_string_t)(string_val_), (*C.cef_string_t)(url_), d.load_string)
 }
 
 // ExecuteJavaScript (execute_java_script)
@@ -151,11 +160,17 @@ func (d *Frame) LoadString(string_val, url string) {
 // error.  The |start_line| parameter is the base line number to use for error
 // reporting.
 func (d *Frame) ExecuteJavaScript(code, script_url string, start_line int32) {
-	var code_ C.cef_string_t
-	setCEFStr(code, &code_)
-	var script_url_ C.cef_string_t
-	setCEFStr(script_url, &script_url_)
-	C.gocef_frame_execute_java_script(d.toNative(), &code_, &script_url_, C.int(start_line), d.execute_java_script)
+	code_ := C.cef_string_userfree_alloc()
+	setCEFStr(code, code_)
+	defer func() {
+		C.cef_string_userfree_free(code_)
+	}()
+	script_url_ := C.cef_string_userfree_alloc()
+	setCEFStr(script_url, script_url_)
+	defer func() {
+		C.cef_string_userfree_free(script_url_)
+	}()
+	C.gocef_frame_execute_java_script(d.toNative(), (*C.cef_string_t)(code_), (*C.cef_string_t)(script_url_), C.int(start_line), d.execute_java_script)
 }
 
 // IsMain (is_main)

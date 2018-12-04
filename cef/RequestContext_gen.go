@@ -17,7 +17,7 @@ import (
 	// cef_value_t * gocef_request_context_get_preference(cef_request_context_t * self, cef_string_t * name, cef_value_t * (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, name); }
 	// cef_dictionary_value_t * gocef_request_context_get_all_preferences(cef_request_context_t * self, int include_defaults, cef_dictionary_value_t * (CEF_CALLBACK *callback__)(cef_request_context_t *, int)) { return callback__(self, include_defaults); }
 	// int gocef_request_context_can_set_preference(cef_request_context_t * self, cef_string_t * name, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, name); }
-	// int gocef_request_context_set_preference(cef_request_context_t * self, cef_string_t * name, cef_value_t * value, cef_string_t * error, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_value_t *, cef_string_t *)) { return callback__(self, name, value, error); }
+	// int gocef_request_context_set_preference(cef_request_context_t * self, cef_string_t * name, cef_value_t * value, cef_string_t * error_r, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_value_t *, cef_string_t *)) { return callback__(self, name, value, error_r); }
 	// void gocef_request_context_clear_certificate_exceptions(cef_request_context_t * self, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	// void gocef_request_context_close_all_connections(cef_request_context_t * self, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	// void gocef_request_context_resolve_host(cef_request_context_t * self, cef_string_t * origin, cef_resolve_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_resolve_callback_t *)) { return callback__(self, origin, callback); }
@@ -117,11 +117,17 @@ func (d *RequestContext) GetDefaultCookieManager(callback *CompletionCallback) *
 // optional |domain_name|. Returns false (0) if an error occurs. This function
 // may be called on any thread in the browser process.
 func (d *RequestContext) RegisterSchemeHandlerFactory(scheme_name, domain_name string, factory *SchemeHandlerFactory) int32 {
-	var scheme_name_ C.cef_string_t
-	setCEFStr(scheme_name, &scheme_name_)
-	var domain_name_ C.cef_string_t
-	setCEFStr(domain_name, &domain_name_)
-	return int32(C.gocef_request_context_register_scheme_handler_factory(d.toNative(), &scheme_name_, &domain_name_, factory.toNative(), d.register_scheme_handler_factory))
+	scheme_name_ := C.cef_string_userfree_alloc()
+	setCEFStr(scheme_name, scheme_name_)
+	defer func() {
+		C.cef_string_userfree_free(scheme_name_)
+	}()
+	domain_name_ := C.cef_string_userfree_alloc()
+	setCEFStr(domain_name, domain_name_)
+	defer func() {
+		C.cef_string_userfree_free(domain_name_)
+	}()
+	return int32(C.gocef_request_context_register_scheme_handler_factory(d.toNative(), (*C.cef_string_t)(scheme_name_), (*C.cef_string_t)(domain_name_), factory.toNative(), d.register_scheme_handler_factory))
 }
 
 // ClearSchemeHandlerFactories (clear_scheme_handler_factories)
@@ -145,9 +151,12 @@ func (d *RequestContext) PurgePluginListCache(reload_pages int32) {
 // Returns true (1) if a preference with the specified |name| exists. This
 // function must be called on the browser process UI thread.
 func (d *RequestContext) HasPreference(name string) int32 {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	return int32(C.gocef_request_context_has_preference(d.toNative(), &name_, d.has_preference))
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	return int32(C.gocef_request_context_has_preference(d.toNative(), (*C.cef_string_t)(name_), d.has_preference))
 }
 
 // GetPreference (get_preference)
@@ -157,9 +166,12 @@ func (d *RequestContext) HasPreference(name string) int32 {
 // will not modify the underlying preference value. This function must be
 // called on the browser process UI thread.
 func (d *RequestContext) GetPreference(name string) *Value {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	return (*Value)(C.gocef_request_context_get_preference(d.toNative(), &name_, d.get_preference))
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	return (*Value)(C.gocef_request_context_get_preference(d.toNative(), (*C.cef_string_t)(name_), d.get_preference))
 }
 
 // GetAllPreferences (get_all_preferences)
@@ -179,9 +191,12 @@ func (d *RequestContext) GetAllPreferences(include_defaults int32) *DictionaryVa
 // command-line usually cannot be modified. This function must be called on
 // the browser process UI thread.
 func (d *RequestContext) CanSetPreference(name string) int32 {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	return int32(C.gocef_request_context_can_set_preference(d.toNative(), &name_, d.can_set_preference))
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	return int32(C.gocef_request_context_can_set_preference(d.toNative(), (*C.cef_string_t)(name_), d.can_set_preference))
 }
 
 // SetPreference (set_preference)
@@ -190,12 +205,19 @@ func (d *RequestContext) CanSetPreference(name string) int32 {
 // preference will be restored to its default value. If setting the preference
 // fails then |error| will be populated with a detailed description of the
 // problem. This function must be called on the browser process UI thread.
-func (d *RequestContext) SetPreference(name string, value *Value, error string) int32 {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	var error_ C.cef_string_t
-	setCEFStr(error, &error_)
-	return int32(C.gocef_request_context_set_preference(d.toNative(), &name_, value.toNative(), &error_, d.set_preference))
+func (d *RequestContext) SetPreference(name string, value *Value, error_r *string) int32 {
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	error_r_ := C.cef_string_userfree_alloc()
+	setCEFStr(*error_r, error_r_)
+	defer func() {
+		*error_r = cefstrToString(error_r_)
+		C.cef_string_userfree_free(error_r_)
+	}()
+	return int32(C.gocef_request_context_set_preference(d.toNative(), (*C.cef_string_t)(name_), value.toNative(), (*C.cef_string_t)(error_r_), d.set_preference))
 }
 
 // ClearCertificateExceptions (clear_certificate_exceptions)
@@ -222,9 +244,12 @@ func (d *RequestContext) CloseAllConnections(callback *CompletionCallback) {
 // Attempts to resolve |origin| to a list of associated IP addresses.
 // |callback| will be executed on the UI thread after completion.
 func (d *RequestContext) ResolveHost(origin string, callback *ResolveCallback) {
-	var origin_ C.cef_string_t
-	setCEFStr(origin, &origin_)
-	C.gocef_request_context_resolve_host(d.toNative(), &origin_, callback.toNative(), d.resolve_host)
+	origin_ := C.cef_string_userfree_alloc()
+	setCEFStr(origin, origin_)
+	defer func() {
+		C.cef_string_userfree_free(origin_)
+	}()
+	C.gocef_request_context_resolve_host(d.toNative(), (*C.cef_string_t)(origin_), callback.toNative(), d.resolve_host)
 }
 
 // ResolveHostCached (resolve_host_cached)
@@ -233,9 +258,12 @@ func (d *RequestContext) ResolveHost(origin string, callback *ResolveCallback) {
 // addresses or NULL if no cached data is available. Returns ERR_NONE on
 // success. This function must be called on the browser process IO thread.
 func (d *RequestContext) ResolveHostCached(origin string, resolved_ips StringList) Errorcode {
-	var origin_ C.cef_string_t
-	setCEFStr(origin, &origin_)
-	return Errorcode(C.gocef_request_context_resolve_host_cached(d.toNative(), &origin_, C.cef_string_list_t(resolved_ips), d.resolve_host_cached))
+	origin_ := C.cef_string_userfree_alloc()
+	setCEFStr(origin, origin_)
+	defer func() {
+		C.cef_string_userfree_free(origin_)
+	}()
+	return Errorcode(C.gocef_request_context_resolve_host_cached(d.toNative(), (*C.cef_string_t)(origin_), C.cef_string_list_t(resolved_ips), d.resolve_host_cached))
 }
 
 // LoadExtension (load_extension)
@@ -286,9 +314,12 @@ func (d *RequestContext) ResolveHostCached(origin string, resolved_ips StringLis
 // See https://developer.chrome.com/extensions for extension implementation
 // and usage documentation.
 func (d *RequestContext) LoadExtension(root_directory string, manifest *DictionaryValue, handler *ExtensionHandler) {
-	var root_directory_ C.cef_string_t
-	setCEFStr(root_directory, &root_directory_)
-	C.gocef_request_context_load_extension(d.toNative(), &root_directory_, manifest.toNative(), handler.toNative(), d.load_extension)
+	root_directory_ := C.cef_string_userfree_alloc()
+	setCEFStr(root_directory, root_directory_)
+	defer func() {
+		C.cef_string_userfree_free(root_directory_)
+	}()
+	C.gocef_request_context_load_extension(d.toNative(), (*C.cef_string_t)(root_directory_), manifest.toNative(), handler.toNative(), d.load_extension)
 }
 
 // DidLoadExtension (did_load_extension)
@@ -297,9 +328,12 @@ func (d *RequestContext) LoadExtension(root_directory string, manifest *Dictiona
 // access to the extension (see HasExtension). This function must be called on
 // the browser process UI thread.
 func (d *RequestContext) DidLoadExtension(extension_id string) int32 {
-	var extension_id_ C.cef_string_t
-	setCEFStr(extension_id, &extension_id_)
-	return int32(C.gocef_request_context_did_load_extension(d.toNative(), &extension_id_, d.did_load_extension))
+	extension_id_ := C.cef_string_userfree_alloc()
+	setCEFStr(extension_id, extension_id_)
+	defer func() {
+		C.cef_string_userfree_free(extension_id_)
+	}()
+	return int32(C.gocef_request_context_did_load_extension(d.toNative(), (*C.cef_string_t)(extension_id_), d.did_load_extension))
 }
 
 // HasExtension (has_extension)
@@ -308,9 +342,12 @@ func (d *RequestContext) DidLoadExtension(extension_id string) int32 {
 // extension (see DidLoadExtension). This function must be called on the
 // browser process UI thread.
 func (d *RequestContext) HasExtension(extension_id string) int32 {
-	var extension_id_ C.cef_string_t
-	setCEFStr(extension_id, &extension_id_)
-	return int32(C.gocef_request_context_has_extension(d.toNative(), &extension_id_, d.has_extension))
+	extension_id_ := C.cef_string_userfree_alloc()
+	setCEFStr(extension_id, extension_id_)
+	defer func() {
+		C.cef_string_userfree_free(extension_id_)
+	}()
+	return int32(C.gocef_request_context_has_extension(d.toNative(), (*C.cef_string_t)(extension_id_), d.has_extension))
 }
 
 // GetExtensions (get_extensions)
@@ -327,7 +364,10 @@ func (d *RequestContext) GetExtensions(extension_ids StringList) int32 {
 // extension is accessible in this context (see HasExtension). This function
 // must be called on the browser process UI thread.
 func (d *RequestContext) GetExtension(extension_id string) *Extension {
-	var extension_id_ C.cef_string_t
-	setCEFStr(extension_id, &extension_id_)
-	return (*Extension)(C.gocef_request_context_get_extension(d.toNative(), &extension_id_, d.get_extension))
+	extension_id_ := C.cef_string_userfree_alloc()
+	setCEFStr(extension_id, extension_id_)
+	defer func() {
+		C.cef_string_userfree_free(extension_id_)
+	}()
+	return (*Extension)(C.gocef_request_context_get_extension(d.toNative(), (*C.cef_string_t)(extension_id_), d.get_extension))
 }

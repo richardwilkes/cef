@@ -17,7 +17,7 @@ type RequestHandlerProxy interface {
 	OnOpenUrlfromTab(self *RequestHandler, browser *Browser, frame *Frame, target_url string, target_disposition WindowOpenDisposition, user_gesture int32) int32
 	OnBeforeResourceLoad(self *RequestHandler, browser *Browser, frame *Frame, request *Request, callback *RequestCallback) ReturnValue
 	GetResourceHandler(self *RequestHandler, browser *Browser, frame *Frame, request *Request) *ResourceHandler
-	OnResourceRedirect(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response, new_url string)
+	OnResourceRedirect(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response, new_url *string)
 	OnResourceResponse(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response) int32
 	GetResourceResponseFilter(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response) *ResponseFilter
 	OnResourceLoadComplete(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response, status UrlrequestStatus, received_content_length int64)
@@ -160,7 +160,7 @@ func gocef_request_handler_get_resource_handler(self *C.cef_request_handler_t, b
 // redirect. The |new_url| parameter will contain the new URL and can be
 // changed if desired. The |request| object cannot be modified in this
 // callback.
-func (d *RequestHandler) OnResourceRedirect(browser *Browser, frame *Frame, request *Request, response *Response, new_url string) {
+func (d *RequestHandler) OnResourceRedirect(browser *Browser, frame *Frame, request *Request, response *Response, new_url *string) {
 	lookupRequestHandlerProxy(d.Base()).OnResourceRedirect(d, browser, frame, request, response, new_url)
 }
 
@@ -169,7 +169,7 @@ func gocef_request_handler_on_resource_redirect(self *C.cef_request_handler_t, b
 	me__ := (*RequestHandler)(self)
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
 	new_url_ := cefstrToString(new_url)
-	proxy__.OnResourceRedirect(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*Response)(response), new_url_)
+	proxy__.OnResourceRedirect(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*Response)(response), &new_url_)
 }
 
 // OnResourceResponse (on_resource_response)

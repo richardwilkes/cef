@@ -224,9 +224,12 @@ func (d *ListValue) SetDouble(index uint64, value float64) int32 {
 // Sets the value at the specified index as type string. Returns true (1) if
 // the value was set successfully.
 func (d *ListValue) SetString(index uint64, value string) int32 {
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.gocef_list_value_set_string(d.toNative(), C.size_t(index), &value_, d.set_string))
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.gocef_list_value_set_string(d.toNative(), C.size_t(index), (*C.cef_string_t)(value_), d.set_string))
 }
 
 // SetBinary (set_binary)

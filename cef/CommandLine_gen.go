@@ -86,9 +86,12 @@ func (d *CommandLine) InitFromArgv(argc int32, argv []string) {
 // Initialize the command line with the string returned by calling
 // GetCommandLineW(). This function is only supported on Windows.
 func (d *CommandLine) InitFromString(command_line string) {
-	var command_line_ C.cef_string_t
-	setCEFStr(command_line, &command_line_)
-	C.gocef_command_line_init_from_string(d.toNative(), &command_line_, d.init_from_string)
+	command_line_ := C.cef_string_userfree_alloc()
+	setCEFStr(command_line, command_line_)
+	defer func() {
+		C.cef_string_userfree_free(command_line_)
+	}()
+	C.gocef_command_line_init_from_string(d.toNative(), (*C.cef_string_t)(command_line_), d.init_from_string)
 }
 
 // Reset (reset)
@@ -123,9 +126,12 @@ func (d *CommandLine) GetProgram() string {
 // SetProgram (set_program)
 // Set the program part of the command line string (the first item).
 func (d *CommandLine) SetProgram(program string) {
-	var program_ C.cef_string_t
-	setCEFStr(program, &program_)
-	C.gocef_command_line_set_program(d.toNative(), &program_, d.set_program)
+	program_ := C.cef_string_userfree_alloc()
+	setCEFStr(program, program_)
+	defer func() {
+		C.cef_string_userfree_free(program_)
+	}()
+	C.gocef_command_line_set_program(d.toNative(), (*C.cef_string_t)(program_), d.set_program)
 }
 
 // HasSwitches (has_switches)
@@ -137,9 +143,12 @@ func (d *CommandLine) HasSwitches() int32 {
 // HasSwitch (has_switch)
 // Returns true (1) if the command line contains the given switch.
 func (d *CommandLine) HasSwitch(name string) int32 {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	return int32(C.gocef_command_line_has_switch(d.toNative(), &name_, d.has_switch))
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	return int32(C.gocef_command_line_has_switch(d.toNative(), (*C.cef_string_t)(name_), d.has_switch))
 }
 
 // GetSwitchValue (get_switch_value)
@@ -147,9 +156,12 @@ func (d *CommandLine) HasSwitch(name string) int32 {
 // value or isn't present this function returns the NULL string.
 // The resulting string must be freed by calling cef_string_userfree_free().
 func (d *CommandLine) GetSwitchValue(name string) string {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	return cefuserfreestrToString(C.gocef_command_line_get_switch_value(d.toNative(), &name_, d.get_switch_value))
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	return cefuserfreestrToString(C.gocef_command_line_get_switch_value(d.toNative(), (*C.cef_string_t)(name_), d.get_switch_value))
 }
 
 // GetSwitches (get_switches)
@@ -163,19 +175,28 @@ func (d *CommandLine) GetSwitches(switches StringMap) {
 // Add a switch to the end of the command line. If the switch has no value
 // pass an NULL value string.
 func (d *CommandLine) AppendSwitch(name string) {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	C.gocef_command_line_append_switch(d.toNative(), &name_, d.append_switch)
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	C.gocef_command_line_append_switch(d.toNative(), (*C.cef_string_t)(name_), d.append_switch)
 }
 
 // AppendSwitchWithValue (append_switch_with_value)
 // Add a switch with the specified value to the end of the command line.
 func (d *CommandLine) AppendSwitchWithValue(name, value string) {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	C.gocef_command_line_append_switch_with_value(d.toNative(), &name_, &value_, d.append_switch_with_value)
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	C.gocef_command_line_append_switch_with_value(d.toNative(), (*C.cef_string_t)(name_), (*C.cef_string_t)(value_), d.append_switch_with_value)
 }
 
 // HasArguments (has_arguments)
@@ -193,16 +214,22 @@ func (d *CommandLine) GetArguments(arguments StringList) {
 // AppendArgument (append_argument)
 // Add an argument to the end of the command line.
 func (d *CommandLine) AppendArgument(argument string) {
-	var argument_ C.cef_string_t
-	setCEFStr(argument, &argument_)
-	C.gocef_command_line_append_argument(d.toNative(), &argument_, d.append_argument)
+	argument_ := C.cef_string_userfree_alloc()
+	setCEFStr(argument, argument_)
+	defer func() {
+		C.cef_string_userfree_free(argument_)
+	}()
+	C.gocef_command_line_append_argument(d.toNative(), (*C.cef_string_t)(argument_), d.append_argument)
 }
 
 // PrependWrapper (prepend_wrapper)
 // Insert a command before the current command. Common for debuggers, like
 // "valgrind" or "gdb --args".
 func (d *CommandLine) PrependWrapper(wrapper string) {
-	var wrapper_ C.cef_string_t
-	setCEFStr(wrapper, &wrapper_)
-	C.gocef_command_line_prepend_wrapper(d.toNative(), &wrapper_, d.prepend_wrapper)
+	wrapper_ := C.cef_string_userfree_alloc()
+	setCEFStr(wrapper, wrapper_)
+	defer func() {
+		C.cef_string_userfree_free(wrapper_)
+	}()
+	C.gocef_command_line_prepend_wrapper(d.toNative(), (*C.cef_string_t)(wrapper_), d.prepend_wrapper)
 }

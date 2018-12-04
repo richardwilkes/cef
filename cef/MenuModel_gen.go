@@ -107,34 +107,46 @@ func (d *MenuModel) AddSeparator() int32 {
 // AddItem (add_item)
 // Add an item to the menu. Returns true (1) on success.
 func (d *MenuModel) AddItem(command_id int32, label string) int32 {
-	var label_ C.cef_string_t
-	setCEFStr(label, &label_)
-	return int32(C.gocef_menu_model_add_item(d.toNative(), C.int(command_id), &label_, d.add_item))
+	label_ := C.cef_string_userfree_alloc()
+	setCEFStr(label, label_)
+	defer func() {
+		C.cef_string_userfree_free(label_)
+	}()
+	return int32(C.gocef_menu_model_add_item(d.toNative(), C.int(command_id), (*C.cef_string_t)(label_), d.add_item))
 }
 
 // AddCheckItem (add_check_item)
 // Add a check item to the menu. Returns true (1) on success.
 func (d *MenuModel) AddCheckItem(command_id int32, label string) int32 {
-	var label_ C.cef_string_t
-	setCEFStr(label, &label_)
-	return int32(C.gocef_menu_model_add_check_item(d.toNative(), C.int(command_id), &label_, d.add_check_item))
+	label_ := C.cef_string_userfree_alloc()
+	setCEFStr(label, label_)
+	defer func() {
+		C.cef_string_userfree_free(label_)
+	}()
+	return int32(C.gocef_menu_model_add_check_item(d.toNative(), C.int(command_id), (*C.cef_string_t)(label_), d.add_check_item))
 }
 
 // AddRadioItem (add_radio_item)
 // Add a radio item to the menu. Only a single item with the specified
 // |group_id| can be checked at a time. Returns true (1) on success.
 func (d *MenuModel) AddRadioItem(command_id int32, label string, group_id int32) int32 {
-	var label_ C.cef_string_t
-	setCEFStr(label, &label_)
-	return int32(C.gocef_menu_model_add_radio_item(d.toNative(), C.int(command_id), &label_, C.int(group_id), d.add_radio_item))
+	label_ := C.cef_string_userfree_alloc()
+	setCEFStr(label, label_)
+	defer func() {
+		C.cef_string_userfree_free(label_)
+	}()
+	return int32(C.gocef_menu_model_add_radio_item(d.toNative(), C.int(command_id), (*C.cef_string_t)(label_), C.int(group_id), d.add_radio_item))
 }
 
 // AddSubMenu (add_sub_menu)
 // Add a sub-menu to the menu. The new sub-menu is returned.
 func (d *MenuModel) AddSubMenu(command_id int32, label string) *MenuModel {
-	var label_ C.cef_string_t
-	setCEFStr(label, &label_)
-	return (*MenuModel)(C.gocef_menu_model_add_sub_menu(d.toNative(), C.int(command_id), &label_, d.add_sub_menu))
+	label_ := C.cef_string_userfree_alloc()
+	setCEFStr(label, label_)
+	defer func() {
+		C.cef_string_userfree_free(label_)
+	}()
+	return (*MenuModel)(C.gocef_menu_model_add_sub_menu(d.toNative(), C.int(command_id), (*C.cef_string_t)(label_), d.add_sub_menu))
 }
 
 // InsertSeparatorAt (insert_separator_at)
@@ -148,18 +160,24 @@ func (d *MenuModel) InsertSeparatorAt(index int32) int32 {
 // Insert an item in the menu at the specified |index|. Returns true (1) on
 // success.
 func (d *MenuModel) InsertItemAt(index, command_id int32, label string) int32 {
-	var label_ C.cef_string_t
-	setCEFStr(label, &label_)
-	return int32(C.gocef_menu_model_insert_item_at(d.toNative(), C.int(index), C.int(command_id), &label_, d.insert_item_at))
+	label_ := C.cef_string_userfree_alloc()
+	setCEFStr(label, label_)
+	defer func() {
+		C.cef_string_userfree_free(label_)
+	}()
+	return int32(C.gocef_menu_model_insert_item_at(d.toNative(), C.int(index), C.int(command_id), (*C.cef_string_t)(label_), d.insert_item_at))
 }
 
 // InsertCheckItemAt (insert_check_item_at)
 // Insert a check item in the menu at the specified |index|. Returns true (1)
 // on success.
 func (d *MenuModel) InsertCheckItemAt(index, command_id int32, label string) int32 {
-	var label_ C.cef_string_t
-	setCEFStr(label, &label_)
-	return int32(C.gocef_menu_model_insert_check_item_at(d.toNative(), C.int(index), C.int(command_id), &label_, d.insert_check_item_at))
+	label_ := C.cef_string_userfree_alloc()
+	setCEFStr(label, label_)
+	defer func() {
+		C.cef_string_userfree_free(label_)
+	}()
+	return int32(C.gocef_menu_model_insert_check_item_at(d.toNative(), C.int(index), C.int(command_id), (*C.cef_string_t)(label_), d.insert_check_item_at))
 }
 
 // InsertRadioItemAt (insert_radio_item_at)
@@ -167,18 +185,24 @@ func (d *MenuModel) InsertCheckItemAt(index, command_id int32, label string) int
 // item with the specified |group_id| can be checked at a time. Returns true
 // (1) on success.
 func (d *MenuModel) InsertRadioItemAt(index, command_id int32, label string, group_id int32) int32 {
-	var label_ C.cef_string_t
-	setCEFStr(label, &label_)
-	return int32(C.gocef_menu_model_insert_radio_item_at(d.toNative(), C.int(index), C.int(command_id), &label_, C.int(group_id), d.insert_radio_item_at))
+	label_ := C.cef_string_userfree_alloc()
+	setCEFStr(label, label_)
+	defer func() {
+		C.cef_string_userfree_free(label_)
+	}()
+	return int32(C.gocef_menu_model_insert_radio_item_at(d.toNative(), C.int(index), C.int(command_id), (*C.cef_string_t)(label_), C.int(group_id), d.insert_radio_item_at))
 }
 
 // InsertSubMenuAt (insert_sub_menu_at)
 // Insert a sub-menu in the menu at the specified |index|. The new sub-menu is
 // returned.
 func (d *MenuModel) InsertSubMenuAt(index, command_id int32, label string) *MenuModel {
-	var label_ C.cef_string_t
-	setCEFStr(label, &label_)
-	return (*MenuModel)(C.gocef_menu_model_insert_sub_menu_at(d.toNative(), C.int(index), C.int(command_id), &label_, d.insert_sub_menu_at))
+	label_ := C.cef_string_userfree_alloc()
+	setCEFStr(label, label_)
+	defer func() {
+		C.cef_string_userfree_free(label_)
+	}()
+	return (*MenuModel)(C.gocef_menu_model_insert_sub_menu_at(d.toNative(), C.int(index), C.int(command_id), (*C.cef_string_t)(label_), d.insert_sub_menu_at))
 }
 
 // Remove (remove)
@@ -232,17 +256,23 @@ func (d *MenuModel) GetLabelAt(index int32) string {
 // SetLabel (set_label)
 // Sets the label for the specified |command_id|. Returns true (1) on success.
 func (d *MenuModel) SetLabel(command_id int32, label string) int32 {
-	var label_ C.cef_string_t
-	setCEFStr(label, &label_)
-	return int32(C.gocef_menu_model_set_label(d.toNative(), C.int(command_id), &label_, d.set_label))
+	label_ := C.cef_string_userfree_alloc()
+	setCEFStr(label, label_)
+	defer func() {
+		C.cef_string_userfree_free(label_)
+	}()
+	return int32(C.gocef_menu_model_set_label(d.toNative(), C.int(command_id), (*C.cef_string_t)(label_), d.set_label))
 }
 
 // SetLabelAt (set_label_at)
 // Set the label at the specified |index|. Returns true (1) on success.
 func (d *MenuModel) SetLabelAt(index int32, label string) int32 {
-	var label_ C.cef_string_t
-	setCEFStr(label, &label_)
-	return int32(C.gocef_menu_model_set_label_at(d.toNative(), C.int(index), &label_, d.set_label_at))
+	label_ := C.cef_string_userfree_alloc()
+	setCEFStr(label, label_)
+	defer func() {
+		C.cef_string_userfree_free(label_)
+	}()
+	return int32(C.gocef_menu_model_set_label_at(d.toNative(), C.int(index), (*C.cef_string_t)(label_), d.set_label_at))
 }
 
 // GetType (get_type)
@@ -478,9 +508,12 @@ func (d *MenuModel) GetColorAt(index int32, color_type MenuColorType, color *Col
 // Here are examples of valid font description strings: - "Arial, Helvetica,
 // Bold Italic 14px" - "Arial, 14px"
 func (d *MenuModel) SetFontList(command_id int32, font_list string) int32 {
-	var font_list_ C.cef_string_t
-	setCEFStr(font_list, &font_list_)
-	return int32(C.gocef_menu_model_set_font_list(d.toNative(), C.int(command_id), &font_list_, d.set_font_list))
+	font_list_ := C.cef_string_userfree_alloc()
+	setCEFStr(font_list, font_list_)
+	defer func() {
+		C.cef_string_userfree_free(font_list_)
+	}()
+	return int32(C.gocef_menu_model_set_font_list(d.toNative(), C.int(command_id), (*C.cef_string_t)(font_list_), d.set_font_list))
 }
 
 // SetFontListAt (set_font_list_at)
@@ -496,7 +529,10 @@ func (d *MenuModel) SetFontList(command_id int32, font_list string) int32 {
 // Here are examples of valid font description strings: - "Arial, Helvetica,
 // Bold Italic 14px" - "Arial, 14px"
 func (d *MenuModel) SetFontListAt(index int32, font_list string) int32 {
-	var font_list_ C.cef_string_t
-	setCEFStr(font_list, &font_list_)
-	return int32(C.gocef_menu_model_set_font_list_at(d.toNative(), C.int(index), &font_list_, d.set_font_list_at))
+	font_list_ := C.cef_string_userfree_alloc()
+	setCEFStr(font_list, font_list_)
+	defer func() {
+		C.cef_string_userfree_free(font_list_)
+	}()
+	return int32(C.gocef_menu_model_set_font_list_at(d.toNative(), C.int(index), (*C.cef_string_t)(font_list_), d.set_font_list_at))
 }

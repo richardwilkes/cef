@@ -46,9 +46,12 @@ func (d *PostDataElement) SetToEmpty() {
 // SetToFile (set_to_file)
 // The post data element will represent a file.
 func (d *PostDataElement) SetToFile(fileName string) {
-	var fileName_ C.cef_string_t
-	setCEFStr(fileName, &fileName_)
-	C.gocef_post_data_element_set_to_file(d.toNative(), &fileName_, d.set_to_file)
+	fileName_ := C.cef_string_userfree_alloc()
+	setCEFStr(fileName, fileName_)
+	defer func() {
+		C.cef_string_userfree_free(fileName_)
+	}()
+	C.gocef_post_data_element_set_to_file(d.toNative(), (*C.cef_string_t)(fileName_), d.set_to_file)
 }
 
 // SetToBytes (set_to_bytes)

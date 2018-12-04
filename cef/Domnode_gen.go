@@ -109,9 +109,12 @@ func (d *Domnode) GetValue() string {
 // SetValue (set_value)
 // Set the value of this node. Returns true (1) on success.
 func (d *Domnode) SetValue(value string) int32 {
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.gocef_domnode_set_value(d.toNative(), &value_, d.set_value))
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.gocef_domnode_set_value(d.toNative(), (*C.cef_string_t)(value_), d.set_value))
 }
 
 // GetAsMarkup (get_as_markup)
@@ -179,18 +182,24 @@ func (d *Domnode) HasElementAttributes() int32 {
 // HasElementAttribute (has_element_attribute)
 // Returns true (1) if this element has an attribute named |attrName|.
 func (d *Domnode) HasElementAttribute(attrName string) int32 {
-	var attrName_ C.cef_string_t
-	setCEFStr(attrName, &attrName_)
-	return int32(C.gocef_domnode_has_element_attribute(d.toNative(), &attrName_, d.has_element_attribute))
+	attrName_ := C.cef_string_userfree_alloc()
+	setCEFStr(attrName, attrName_)
+	defer func() {
+		C.cef_string_userfree_free(attrName_)
+	}()
+	return int32(C.gocef_domnode_has_element_attribute(d.toNative(), (*C.cef_string_t)(attrName_), d.has_element_attribute))
 }
 
 // GetElementAttribute (get_element_attribute)
 // Returns the element attribute named |attrName|.
 // The resulting string must be freed by calling cef_string_userfree_free().
 func (d *Domnode) GetElementAttribute(attrName string) string {
-	var attrName_ C.cef_string_t
-	setCEFStr(attrName, &attrName_)
-	return cefuserfreestrToString(C.gocef_domnode_get_element_attribute(d.toNative(), &attrName_, d.get_element_attribute))
+	attrName_ := C.cef_string_userfree_alloc()
+	setCEFStr(attrName, attrName_)
+	defer func() {
+		C.cef_string_userfree_free(attrName_)
+	}()
+	return cefuserfreestrToString(C.gocef_domnode_get_element_attribute(d.toNative(), (*C.cef_string_t)(attrName_), d.get_element_attribute))
 }
 
 // GetElementAttributes (get_element_attributes)
@@ -203,11 +212,17 @@ func (d *Domnode) GetElementAttributes(attrMap StringMap) {
 // Set the value for the element attribute named |attrName|. Returns true (1)
 // on success.
 func (d *Domnode) SetElementAttribute(attrName, value string) int32 {
-	var attrName_ C.cef_string_t
-	setCEFStr(attrName, &attrName_)
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.gocef_domnode_set_element_attribute(d.toNative(), &attrName_, &value_, d.set_element_attribute))
+	attrName_ := C.cef_string_userfree_alloc()
+	setCEFStr(attrName, attrName_)
+	defer func() {
+		C.cef_string_userfree_free(attrName_)
+	}()
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.gocef_domnode_set_element_attribute(d.toNative(), (*C.cef_string_t)(attrName_), (*C.cef_string_t)(value_), d.set_element_attribute))
 }
 
 // GetElementInnerText (get_element_inner_text)

@@ -44,13 +44,22 @@ import (
 // This function may be called on any thread. Returns false (0) if
 // |source_origin| is invalid or the whitelist cannot be accessed.
 func AddCrossOriginWhitelistEntry(source_origin, target_protocol, target_domain string, allow_target_subdomains int32) int32 {
-	var source_origin_ C.cef_string_t
-	setCEFStr(source_origin, &source_origin_)
-	var target_protocol_ C.cef_string_t
-	setCEFStr(target_protocol, &target_protocol_)
-	var target_domain_ C.cef_string_t
-	setCEFStr(target_domain, &target_domain_)
-	return int32(C.cef_add_cross_origin_whitelist_entry(&source_origin_, &target_protocol_, &target_domain_, C.int(allow_target_subdomains)))
+	source_origin_ := C.cef_string_userfree_alloc()
+	setCEFStr(source_origin, source_origin_)
+	defer func() {
+		C.cef_string_userfree_free(source_origin_)
+	}()
+	target_protocol_ := C.cef_string_userfree_alloc()
+	setCEFStr(target_protocol, target_protocol_)
+	defer func() {
+		C.cef_string_userfree_free(target_protocol_)
+	}()
+	target_domain_ := C.cef_string_userfree_alloc()
+	setCEFStr(target_domain, target_domain_)
+	defer func() {
+		C.cef_string_userfree_free(target_domain_)
+	}()
+	return int32(C.cef_add_cross_origin_whitelist_entry((*C.cef_string_t)(source_origin_), (*C.cef_string_t)(target_protocol_), (*C.cef_string_t)(target_domain_), C.int(allow_target_subdomains)))
 }
 
 // BinaryValueCreate (cef_binary_value_create from include/capi/cef_values_capi.h)
@@ -67,9 +76,12 @@ func BinaryValueCreate(data unsafe.Pointer, data_size uint64) *BinaryValue {
 // context will be used. This function can be called on any browser process
 // thread and will not block.
 func BrowserHostCreateBrowser(windowInfo *WindowInfo, client *Client, url string, settings *BrowserSettings, request_context *RequestContext) int32 {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	return int32(C.cef_browser_host_create_browser(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), &url_, settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative()))
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	return int32(C.cef_browser_host_create_browser(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative()))
 }
 
 // BrowserHostCreateBrowserSync (cef_browser_host_create_browser_sync from include/capi/cef_browser_capi.h)
@@ -77,9 +89,12 @@ func BrowserHostCreateBrowser(windowInfo *WindowInfo, client *Client, url string
 // |windowInfo|. If |request_context| is NULL the global request context will be
 // used. This function can only be called on the browser process UI thread.
 func BrowserHostCreateBrowserSync(windowInfo *WindowInfo, client *Client, url string, settings *BrowserSettings, request_context *RequestContext) *Browser {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	return (*Browser)(C.cef_browser_host_create_browser_sync(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), &url_, settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative()))
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	return (*Browser)(C.cef_browser_host_create_browser_sync(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative()))
 }
 
 // ClearCrossOriginWhitelist (cef_clear_cross_origin_whitelist from include/capi/cef_origin_whitelist_capi.h)
@@ -121,9 +136,12 @@ func CommandLineGetGlobal() *CommandLine {
 // non-NULL it will be executed asnychronously on the IO thread after the
 // manager's storage has been initialized.
 func CookieManagerCreateManager(path string, persist_session_cookies int32, callback *CompletionCallback) *CookieManager {
-	var path_ C.cef_string_t
-	setCEFStr(path, &path_)
-	return (*CookieManager)(C.cef_cookie_manager_create_manager(&path_, C.int(persist_session_cookies), callback.toNative()))
+	path_ := C.cef_string_userfree_alloc()
+	setCEFStr(path, path_)
+	defer func() {
+		C.cef_string_userfree_free(path_)
+	}()
+	return (*CookieManager)(C.cef_cookie_manager_create_manager((*C.cef_string_t)(path_), C.int(persist_session_cookies), callback.toNative()))
 }
 
 // CookieManagerGetBlockingManager (cef_cookie_manager_get_blocking_manager from include/capi/cef_cookie_capi.h)
@@ -249,9 +267,12 @@ func IsCertStatusMinorError(status CertStatus) int32 {
 // Query if a plugin is unstable. Can be called on any thread in the browser
 // process.
 func IsWebPluginUnstable(path string, callback *WebPluginUnstableCallback) {
-	var path_ C.cef_string_t
-	setCEFStr(path, &path_)
-	C.cef_is_web_plugin_unstable(&path_, callback.toNative())
+	path_ := C.cef_string_userfree_alloc()
+	setCEFStr(path, path_)
+	defer func() {
+		C.cef_string_userfree_free(path_)
+	}()
+	C.cef_is_web_plugin_unstable((*C.cef_string_t)(path_), callback.toNative())
 }
 
 // ListValueCreate (cef_list_value_create from include/capi/cef_values_capi.h)
@@ -302,9 +323,12 @@ func PrintSettingsCreate() *PrintSettings {
 // ProcessMessageCreate (cef_process_message_create from include/capi/cef_process_message_capi.h)
 // Create a new cef_process_message_t object with the specified name.
 func ProcessMessageCreate(name string) *ProcessMessage {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	return (*ProcessMessage)(C.cef_process_message_create(&name_))
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	return (*ProcessMessage)(C.cef_process_message_create((*C.cef_string_t)(name_)))
 }
 
 // QuitMessageLoop (cef_quit_message_loop from include/capi/cef_app_capi.h)
@@ -379,11 +403,17 @@ func RefreshWebPlugins() {
 //   example.test.increment();
 // </pre>
 func RegisterExtension(extension_name, javascript_code string, handler *V8handler) int32 {
-	var extension_name_ C.cef_string_t
-	setCEFStr(extension_name, &extension_name_)
-	var javascript_code_ C.cef_string_t
-	setCEFStr(javascript_code, &javascript_code_)
-	return int32(C.cef_register_extension(&extension_name_, &javascript_code_, handler.toNative()))
+	extension_name_ := C.cef_string_userfree_alloc()
+	setCEFStr(extension_name, extension_name_)
+	defer func() {
+		C.cef_string_userfree_free(extension_name_)
+	}()
+	javascript_code_ := C.cef_string_userfree_alloc()
+	setCEFStr(javascript_code, javascript_code_)
+	defer func() {
+		C.cef_string_userfree_free(javascript_code_)
+	}()
+	return int32(C.cef_register_extension((*C.cef_string_t)(extension_name_), (*C.cef_string_t)(javascript_code_), handler.toNative()))
 }
 
 // RegisterSchemeHandlerFactory (cef_register_scheme_handler_factory from include/capi/cef_scheme_capi.h)
@@ -401,20 +431,29 @@ func RegisterExtension(extension_name, javascript_code string, handler *V8handle
 // ntext::cef_request_context_get_global_context()->register_scheme_handler_fact
 // ory().
 func RegisterSchemeHandlerFactory(scheme_name, domain_name string, factory *SchemeHandlerFactory) int32 {
-	var scheme_name_ C.cef_string_t
-	setCEFStr(scheme_name, &scheme_name_)
-	var domain_name_ C.cef_string_t
-	setCEFStr(domain_name, &domain_name_)
-	return int32(C.cef_register_scheme_handler_factory(&scheme_name_, &domain_name_, factory.toNative()))
+	scheme_name_ := C.cef_string_userfree_alloc()
+	setCEFStr(scheme_name, scheme_name_)
+	defer func() {
+		C.cef_string_userfree_free(scheme_name_)
+	}()
+	domain_name_ := C.cef_string_userfree_alloc()
+	setCEFStr(domain_name, domain_name_)
+	defer func() {
+		C.cef_string_userfree_free(domain_name_)
+	}()
+	return int32(C.cef_register_scheme_handler_factory((*C.cef_string_t)(scheme_name_), (*C.cef_string_t)(domain_name_), factory.toNative()))
 }
 
 // RegisterWebPluginCrash (cef_register_web_plugin_crash from include/capi/cef_web_plugin_capi.h)
 // Register a plugin crash. Can be called on any thread in the browser process
 // but will be executed on the IO thread.
 func RegisterWebPluginCrash(path string) {
-	var path_ C.cef_string_t
-	setCEFStr(path, &path_)
-	C.cef_register_web_plugin_crash(&path_)
+	path_ := C.cef_string_userfree_alloc()
+	setCEFStr(path, path_)
+	defer func() {
+		C.cef_string_userfree_free(path_)
+	}()
+	C.cef_register_web_plugin_crash((*C.cef_string_t)(path_))
 }
 
 // RegisterWidevineCdm (cef_register_widevine_cdm from include/capi/cef_web_plugin_capi.h)
@@ -459,22 +498,34 @@ func RegisterWebPluginCrash(path string) {
 // |callback| will receive a |result| value of
 // CEF_CDM_REGISTRATION_ERROR_NOT_SUPPORTED.
 func RegisterWidevineCdm(path string, callback *RegisterCdmCallback) {
-	var path_ C.cef_string_t
-	setCEFStr(path, &path_)
-	C.cef_register_widevine_cdm(&path_, callback.toNative())
+	path_ := C.cef_string_userfree_alloc()
+	setCEFStr(path, path_)
+	defer func() {
+		C.cef_string_userfree_free(path_)
+	}()
+	C.cef_register_widevine_cdm((*C.cef_string_t)(path_), callback.toNative())
 }
 
 // RemoveCrossOriginWhitelistEntry (cef_remove_cross_origin_whitelist_entry from include/capi/cef_origin_whitelist_capi.h)
 // Remove an entry from the cross-origin access whitelist. Returns false (0) if
 // |source_origin| is invalid or the whitelist cannot be accessed.
 func RemoveCrossOriginWhitelistEntry(source_origin, target_protocol, target_domain string, allow_target_subdomains int32) int32 {
-	var source_origin_ C.cef_string_t
-	setCEFStr(source_origin, &source_origin_)
-	var target_protocol_ C.cef_string_t
-	setCEFStr(target_protocol, &target_protocol_)
-	var target_domain_ C.cef_string_t
-	setCEFStr(target_domain, &target_domain_)
-	return int32(C.cef_remove_cross_origin_whitelist_entry(&source_origin_, &target_protocol_, &target_domain_, C.int(allow_target_subdomains)))
+	source_origin_ := C.cef_string_userfree_alloc()
+	setCEFStr(source_origin, source_origin_)
+	defer func() {
+		C.cef_string_userfree_free(source_origin_)
+	}()
+	target_protocol_ := C.cef_string_userfree_alloc()
+	setCEFStr(target_protocol, target_protocol_)
+	defer func() {
+		C.cef_string_userfree_free(target_protocol_)
+	}()
+	target_domain_ := C.cef_string_userfree_alloc()
+	setCEFStr(target_domain, target_domain_)
+	defer func() {
+		C.cef_string_userfree_free(target_domain_)
+	}()
+	return int32(C.cef_remove_cross_origin_whitelist_entry((*C.cef_string_t)(source_origin_), (*C.cef_string_t)(target_protocol_), (*C.cef_string_t)(target_domain_), C.int(allow_target_subdomains)))
 }
 
 // RequestContextCreateContext (cef_request_context_create_context from include/capi/cef_request_context_capi.h)
@@ -533,9 +584,12 @@ func RunMessageLoop() {
 // cef_server_handler_t::OnServerCreated documentation for a description of
 // server lifespan.
 func ServerCreate(address string, port uint16, backlog int32, handler *ServerHandler) {
-	var address_ C.cef_string_t
-	setCEFStr(address, &address_)
-	C.cef_server_create(&address_, C.uint16(port), C.int(backlog), handler.toNative())
+	address_ := C.cef_string_userfree_alloc()
+	setCEFStr(address, address_)
+	defer func() {
+		C.cef_string_userfree_free(address_)
+	}()
+	C.cef_server_create((*C.cef_string_t)(address_), C.uint16(port), C.int(backlog), handler.toNative())
 }
 
 // SetOsmodalLoop (cef_set_osmodal_loop from include/capi/cef_app_capi.h)
@@ -561,9 +615,12 @@ func StreamReaderCreateForData(data unsafe.Pointer, size uint64) *StreamReader {
 // StreamReaderCreateForFile (cef_stream_reader_create_for_file from include/capi/cef_stream_capi.h)
 // Create a new cef_stream_reader_t object from a file.
 func StreamReaderCreateForFile(fileName string) *StreamReader {
-	var fileName_ C.cef_string_t
-	setCEFStr(fileName, &fileName_)
-	return (*StreamReader)(C.cef_stream_reader_create_for_file(&fileName_))
+	fileName_ := C.cef_string_userfree_alloc()
+	setCEFStr(fileName, fileName_)
+	defer func() {
+		C.cef_string_userfree_free(fileName_)
+	}()
+	return (*StreamReader)(C.cef_stream_reader_create_for_file((*C.cef_string_t)(fileName_)))
 }
 
 // StreamReaderCreateForHandler (cef_stream_reader_create_for_handler from include/capi/cef_stream_capi.h)
@@ -575,9 +632,12 @@ func StreamReaderCreateForHandler(handler *ReadHandler) *StreamReader {
 // StreamWriterCreateForFile (cef_stream_writer_create_for_file from include/capi/cef_stream_capi.h)
 // Create a new cef_stream_writer_t object for a file.
 func StreamWriterCreateForFile(fileName string) *StreamWriter {
-	var fileName_ C.cef_string_t
-	setCEFStr(fileName, &fileName_)
-	return (*StreamWriter)(C.cef_stream_writer_create_for_file(&fileName_))
+	fileName_ := C.cef_string_userfree_alloc()
+	setCEFStr(fileName, fileName_)
+	defer func() {
+		C.cef_string_userfree_free(fileName_)
+	}()
+	return (*StreamWriter)(C.cef_stream_writer_create_for_file((*C.cef_string_t)(fileName_)))
 }
 
 // StreamWriterCreateForHandler (cef_stream_writer_create_for_handler from include/capi/cef_stream_capi.h)
@@ -595,9 +655,12 @@ func StringListAlloc() StringList {
 // StringListAppend (cef_string_list_append from include/internal/cef_string_list.h)
 // Append a new value at the end of the string list.
 func StringListAppend(list StringList, value string) {
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	C.cef_string_list_append(C.cef_string_list_t(list), &value_)
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	C.cef_string_list_append(C.cef_string_list_t(list), (*C.cef_string_t)(value_))
 }
 
 // StringListClear (cef_string_list_clear from include/internal/cef_string_list.h)
@@ -627,10 +690,14 @@ func StringListSize(list StringList) uint64 {
 // StringListValue (cef_string_list_value from include/internal/cef_string_list.h)
 // Retrieve the value at the specified zero-based string list index. Returns
 // true (1) if the value was successfully retrieved.
-func StringListValue(list StringList, index uint64, value string) int32 {
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.cef_string_list_value(C.cef_string_list_t(list), C.size_t(index), &value_))
+func StringListValue(list StringList, index uint64, value *string) int32 {
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(*value, value_)
+	defer func() {
+		*value = cefstrToString(value_)
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.cef_string_list_value(C.cef_string_list_t(list), C.size_t(index), (*C.cef_string_t)(value_)))
 }
 
 // StringMapAlloc (cef_string_map_alloc from include/internal/cef_string_map.h)
@@ -642,11 +709,17 @@ func StringMapAlloc() StringMap {
 // StringMapAppend (cef_string_map_append from include/internal/cef_string_map.h)
 // Append a new key/value pair at the end of the string map.
 func StringMapAppend(map_r StringMap, key, value string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.cef_string_map_append(C.cef_string_map_t(map_r), &key_, &value_))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.cef_string_map_append(C.cef_string_map_t(map_r), (*C.cef_string_t)(key_), (*C.cef_string_t)(value_)))
 }
 
 // StringMapClear (cef_string_map_clear from include/internal/cef_string_map.h)
@@ -657,12 +730,19 @@ func StringMapClear(map_r StringMap) {
 
 // StringMapFind (cef_string_map_find from include/internal/cef_string_map.h)
 // Return the value assigned to the specified key.
-func StringMapFind(map_r StringMap, key, value string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.cef_string_map_find(C.cef_string_map_t(map_r), &key_, &value_))
+func StringMapFind(map_r StringMap, key string, value *string) int32 {
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(*value, value_)
+	defer func() {
+		*value = cefstrToString(value_)
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.cef_string_map_find(C.cef_string_map_t(map_r), (*C.cef_string_t)(key_), (*C.cef_string_t)(value_)))
 }
 
 // StringMapFree (cef_string_map_free from include/internal/cef_string_map.h)
@@ -673,10 +753,14 @@ func StringMapFree(map_r StringMap) {
 
 // StringMapKey (cef_string_map_key from include/internal/cef_string_map.h)
 // Return the key at the specified zero-based string map index.
-func StringMapKey(map_r StringMap, index uint64, key string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.cef_string_map_key(C.cef_string_map_t(map_r), C.size_t(index), &key_))
+func StringMapKey(map_r StringMap, index uint64, key *string) int32 {
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(*key, key_)
+	defer func() {
+		*key = cefstrToString(key_)
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.cef_string_map_key(C.cef_string_map_t(map_r), C.size_t(index), (*C.cef_string_t)(key_)))
 }
 
 // StringMapSize (cef_string_map_size from include/internal/cef_string_map.h)
@@ -687,10 +771,14 @@ func StringMapSize(map_r StringMap) uint64 {
 
 // StringMapValue (cef_string_map_value from include/internal/cef_string_map.h)
 // Return the value at the specified zero-based string map index.
-func StringMapValue(map_r StringMap, index uint64, value string) int32 {
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.cef_string_map_value(C.cef_string_map_t(map_r), C.size_t(index), &value_))
+func StringMapValue(map_r StringMap, index uint64, value *string) int32 {
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(*value, value_)
+	defer func() {
+		*value = cefstrToString(value_)
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.cef_string_map_value(C.cef_string_map_t(map_r), C.size_t(index), (*C.cef_string_t)(value_)))
 }
 
 // StringMultimapAlloc (cef_string_multimap_alloc from include/internal/cef_string_multimap.h)
@@ -702,11 +790,17 @@ func StringMultimapAlloc() StringMultimap {
 // StringMultimapAppend (cef_string_multimap_append from include/internal/cef_string_multimap.h)
 // Append a new key/value pair at the end of the string multimap.
 func StringMultimapAppend(map_r StringMultimap, key, value string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.cef_string_multimap_append(C.cef_string_multimap_t(map_r), &key_, &value_))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.cef_string_multimap_append(C.cef_string_multimap_t(map_r), (*C.cef_string_t)(key_), (*C.cef_string_t)(value_)))
 }
 
 // StringMultimapClear (cef_string_multimap_clear from include/internal/cef_string_multimap.h)
@@ -717,20 +811,30 @@ func StringMultimapClear(map_r StringMultimap) {
 
 // StringMultimapEnumerate (cef_string_multimap_enumerate from include/internal/cef_string_multimap.h)
 // Return the value_index-th value with the specified key.
-func StringMultimapEnumerate(map_r StringMultimap, key string, value_index uint64, value string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.cef_string_multimap_enumerate(C.cef_string_multimap_t(map_r), &key_, C.size_t(value_index), &value_))
+func StringMultimapEnumerate(map_r StringMultimap, key string, value_index uint64, value *string) int32 {
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(*value, value_)
+	defer func() {
+		*value = cefstrToString(value_)
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.cef_string_multimap_enumerate(C.cef_string_multimap_t(map_r), (*C.cef_string_t)(key_), C.size_t(value_index), (*C.cef_string_t)(value_)))
 }
 
 // StringMultimapFindCount (cef_string_multimap_find_count from include/internal/cef_string_multimap.h)
 // Return the number of values with the specified key.
 func StringMultimapFindCount(map_r StringMultimap, key string) uint64 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return uint64(C.cef_string_multimap_find_count(C.cef_string_multimap_t(map_r), &key_))
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(key, key_)
+	defer func() {
+		C.cef_string_userfree_free(key_)
+	}()
+	return uint64(C.cef_string_multimap_find_count(C.cef_string_multimap_t(map_r), (*C.cef_string_t)(key_)))
 }
 
 // StringMultimapFree (cef_string_multimap_free from include/internal/cef_string_multimap.h)
@@ -741,10 +845,14 @@ func StringMultimapFree(map_r StringMultimap) {
 
 // StringMultimapKey (cef_string_multimap_key from include/internal/cef_string_multimap.h)
 // Return the key at the specified zero-based string multimap index.
-func StringMultimapKey(map_r StringMultimap, index uint64, key string) int32 {
-	var key_ C.cef_string_t
-	setCEFStr(key, &key_)
-	return int32(C.cef_string_multimap_key(C.cef_string_multimap_t(map_r), C.size_t(index), &key_))
+func StringMultimapKey(map_r StringMultimap, index uint64, key *string) int32 {
+	key_ := C.cef_string_userfree_alloc()
+	setCEFStr(*key, key_)
+	defer func() {
+		*key = cefstrToString(key_)
+		C.cef_string_userfree_free(key_)
+	}()
+	return int32(C.cef_string_multimap_key(C.cef_string_multimap_t(map_r), C.size_t(index), (*C.cef_string_t)(key_)))
 }
 
 // StringMultimapSize (cef_string_multimap_size from include/internal/cef_string_multimap.h)
@@ -755,10 +863,14 @@ func StringMultimapSize(map_r StringMultimap) uint64 {
 
 // StringMultimapValue (cef_string_multimap_value from include/internal/cef_string_multimap.h)
 // Return the value at the specified zero-based string multimap index.
-func StringMultimapValue(map_r StringMultimap, index uint64, value string) int32 {
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.cef_string_multimap_value(C.cef_string_multimap_t(map_r), C.size_t(index), &value_))
+func StringMultimapValue(map_r StringMultimap, index uint64, value *string) int32 {
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(*value, value_)
+	defer func() {
+		*value = cefstrToString(value_)
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.cef_string_multimap_value(C.cef_string_multimap_t(map_r), C.size_t(index), (*C.cef_string_t)(value_)))
 }
 
 // TaskRunnerGetForCurrentThread (cef_task_runner_get_for_current_thread from include/capi/cef_task_capi.h)
@@ -820,9 +932,12 @@ func TimeToTimet(cef_time *Time, time *int64) int32 {
 // cef_refresh_web_plugins() is called. Can be called on any thread in the
 // browser process.
 func UnregisterInternalWebPlugin(path string) {
-	var path_ C.cef_string_t
-	setCEFStr(path, &path_)
-	C.cef_unregister_internal_web_plugin(&path_)
+	path_ := C.cef_string_userfree_alloc()
+	setCEFStr(path, path_)
+	defer func() {
+		C.cef_string_userfree_free(path_)
+	}()
+	C.cef_unregister_internal_web_plugin((*C.cef_string_t)(path_))
 }
 
 // UrlrequestCreate (cef_urlrequest_create from include/capi/cef_urlrequest_capi.h)
@@ -919,9 +1034,12 @@ func V8valueCreateDouble(value float64) *V8value {
 // cef_v8handler_t or cef_v8accessor_t callback, or in combination with calling
 // enter() and exit() on a stored cef_v8context_t reference.
 func V8valueCreateFunction(name string, handler *V8handler) *V8value {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	return (*V8value)(C.cef_v8value_create_function(&name_, handler.toNative()))
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	return (*V8value)(C.cef_v8value_create_function((*C.cef_string_t)(name_), handler.toNative()))
 }
 
 // V8valueCreateInt (cef_v8value_create_int from include/capi/cef_v8_capi.h)
@@ -949,9 +1067,12 @@ func V8valueCreateObject(accessor *V8accessor, interceptor *V8interceptor) *V8va
 // V8valueCreateString (cef_v8value_create_string from include/capi/cef_v8_capi.h)
 // Create a new cef_v8value_t object of type string.
 func V8valueCreateString(value string) *V8value {
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return (*V8value)(C.cef_v8value_create_string(&value_))
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	return (*V8value)(C.cef_v8value_create_string((*C.cef_string_t)(value_)))
 }
 
 // V8valueCreateUint (cef_v8value_create_uint from include/capi/cef_v8_capi.h)

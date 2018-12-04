@@ -53,9 +53,12 @@ func (d *CookieManager) VisitAllCookies(visitor *CookieVisitor) int32 {
 // cookies are ordered by longest path, then by earliest creation date.
 // Returns false (0) if cookies cannot be accessed.
 func (d *CookieManager) VisitUrlCookies(url string, includeHttpOnly int32, visitor *CookieVisitor) int32 {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	return int32(C.gocef_cookie_manager_visit_url_cookies(d.toNative(), &url_, C.int(includeHttpOnly), visitor.toNative(), d.visit_url_cookies))
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	return int32(C.gocef_cookie_manager_visit_url_cookies(d.toNative(), (*C.cef_string_t)(url_), C.int(includeHttpOnly), visitor.toNative(), d.visit_url_cookies))
 }
 
 // SetCookie (set_cookie)
@@ -67,9 +70,12 @@ func (d *CookieManager) VisitUrlCookies(url string, includeHttpOnly int32, visit
 // asnychronously on the IO thread after the cookie has been set. Returns
 // false (0) if an invalid URL is specified or if cookies cannot be accessed.
 func (d *CookieManager) SetCookie(url string, cookie *Cookie, callback *SetCookieCallback) int32 {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	return int32(C.gocef_cookie_manager_set_cookie(d.toNative(), &url_, cookie.toNative(&C.cef_cookie_t{}), callback.toNative(), d.set_cookie))
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	return int32(C.gocef_cookie_manager_set_cookie(d.toNative(), (*C.cef_string_t)(url_), cookie.toNative(&C.cef_cookie_t{}), callback.toNative(), d.set_cookie))
 }
 
 // DeleteCookies (delete_cookies)
@@ -83,11 +89,17 @@ func (d *CookieManager) SetCookie(url string, cookie *Cookie, callback *SetCooki
 // or if cookies cannot be accessed. Cookies can alternately be deleted using
 // the Visit*Cookies() functions.
 func (d *CookieManager) DeleteCookies(url, cookie_name string, callback *DeleteCookiesCallback) int32 {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	var cookie_name_ C.cef_string_t
-	setCEFStr(cookie_name, &cookie_name_)
-	return int32(C.gocef_cookie_manager_delete_cookies(d.toNative(), &url_, &cookie_name_, callback.toNative(), d.delete_cookies))
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	cookie_name_ := C.cef_string_userfree_alloc()
+	setCEFStr(cookie_name, cookie_name_)
+	defer func() {
+		C.cef_string_userfree_free(cookie_name_)
+	}()
+	return int32(C.gocef_cookie_manager_delete_cookies(d.toNative(), (*C.cef_string_t)(url_), (*C.cef_string_t)(cookie_name_), callback.toNative(), d.delete_cookies))
 }
 
 // SetStoragePath (set_storage_path)
@@ -100,9 +112,12 @@ func (d *CookieManager) DeleteCookies(url, cookie_name string, callback *DeleteC
 // asnychronously on the IO thread after the manager's storage has been
 // initialized. Returns false (0) if cookies cannot be accessed.
 func (d *CookieManager) SetStoragePath(path string, persist_session_cookies int32, callback *CompletionCallback) int32 {
-	var path_ C.cef_string_t
-	setCEFStr(path, &path_)
-	return int32(C.gocef_cookie_manager_set_storage_path(d.toNative(), &path_, C.int(persist_session_cookies), callback.toNative(), d.set_storage_path))
+	path_ := C.cef_string_userfree_alloc()
+	setCEFStr(path, path_)
+	defer func() {
+		C.cef_string_userfree_free(path_)
+	}()
+	return int32(C.gocef_cookie_manager_set_storage_path(d.toNative(), (*C.cef_string_t)(path_), C.int(persist_session_cookies), callback.toNative(), d.set_storage_path))
 }
 
 // FlushStore (flush_store)

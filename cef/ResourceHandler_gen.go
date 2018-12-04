@@ -14,7 +14,7 @@ import (
 // ResourceHandlerProxy defines methods required for using ResourceHandler.
 type ResourceHandlerProxy interface {
 	ProcessRequest(self *ResourceHandler, request *Request, callback *Callback) int32
-	GetResponseHeaders(self *ResourceHandler, response *Response, response_length *int64, redirectUrl string)
+	GetResponseHeaders(self *ResourceHandler, response *Response, response_length *int64, redirectUrl *string)
 	ReadResponse(self *ResourceHandler, data_out unsafe.Pointer, bytes_to_read int32, bytes_read *int32, callback *Callback) int32
 	CanGetCookie(self *ResourceHandler, cookie *Cookie) int32
 	CanSetCookie(self *ResourceHandler, cookie *Cookie) int32
@@ -85,7 +85,7 @@ func gocef_resource_handler_process_request(self *C.cef_resource_handler_t, requ
 // values. To redirect the request to a new URL set |redirectUrl| to the new
 // URL. If an error occured while setting up the request you can call
 // set_error() on |response| to indicate the error condition.
-func (d *ResourceHandler) GetResponseHeaders(response *Response, response_length *int64, redirectUrl string) {
+func (d *ResourceHandler) GetResponseHeaders(response *Response, response_length *int64, redirectUrl *string) {
 	lookupResourceHandlerProxy(d.Base()).GetResponseHeaders(d, response, response_length, redirectUrl)
 }
 
@@ -94,7 +94,7 @@ func gocef_resource_handler_get_response_headers(self *C.cef_resource_handler_t,
 	me__ := (*ResourceHandler)(self)
 	proxy__ := lookupResourceHandlerProxy(me__.Base())
 	redirectUrl_ := cefstrToString(redirectUrl)
-	proxy__.GetResponseHeaders(me__, (*Response)(response), (*int64)(response_length), redirectUrl_)
+	proxy__.GetResponseHeaders(me__, (*Response)(response), (*int64)(response_length), &redirectUrl_)
 }
 
 // ReadResponse (read_response)

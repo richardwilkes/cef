@@ -19,7 +19,7 @@ type MenuModelDelegateProxy interface {
 	UnhandledCloseSubmenu(self *MenuModelDelegate, menu_model *MenuModel, is_rtl int32)
 	MenuWillShow(self *MenuModelDelegate, menu_model *MenuModel)
 	MenuClosed(self *MenuModelDelegate, menu_model *MenuModel)
-	FormatLabel(self *MenuModelDelegate, menu_model *MenuModel, label string) int32
+	FormatLabel(self *MenuModelDelegate, menu_model *MenuModel, label *string) int32
 }
 
 // MenuModelDelegate (cef_menu_model_delegate_t from include/capi/cef_menu_model_delegate_capi.h)
@@ -146,7 +146,7 @@ func gocef_menu_model_delegate_menu_closed(self *C.cef_menu_model_delegate_t, me
 // FormatLabel (format_label)
 // Optionally modify a menu item label. Return true (1) if |label| was
 // modified.
-func (d *MenuModelDelegate) FormatLabel(menu_model *MenuModel, label string) int32 {
+func (d *MenuModelDelegate) FormatLabel(menu_model *MenuModel, label *string) int32 {
 	return lookupMenuModelDelegateProxy(d.Base()).FormatLabel(d, menu_model, label)
 }
 
@@ -155,5 +155,5 @@ func gocef_menu_model_delegate_format_label(self *C.cef_menu_model_delegate_t, m
 	me__ := (*MenuModelDelegate)(self)
 	proxy__ := lookupMenuModelDelegateProxy(me__.Base())
 	label_ := cefstrToString(label)
-	return C.int(proxy__.FormatLabel(me__, (*MenuModel)(menu_model), label_))
+	return C.int(proxy__.FormatLabel(me__, (*MenuModel)(menu_model), &label_))
 }

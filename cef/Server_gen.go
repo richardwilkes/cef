@@ -90,9 +90,12 @@ func (d *Server) IsValidConnection(connection_id int32) int32 {
 // of |data| in bytes. The contents of |data| will be copied. The connection
 // will be closed automatically after the response is sent.
 func (d *Server) SendHttp200response(connection_id int32, content_type string, data unsafe.Pointer, data_size uint64) {
-	var content_type_ C.cef_string_t
-	setCEFStr(content_type, &content_type_)
-	C.gocef_server_send_http200response(d.toNative(), C.int(connection_id), &content_type_, data, C.size_t(data_size), d.send_http200response)
+	content_type_ := C.cef_string_userfree_alloc()
+	setCEFStr(content_type, content_type_)
+	defer func() {
+		C.cef_string_userfree_free(content_type_)
+	}()
+	C.gocef_server_send_http200response(d.toNative(), C.int(connection_id), (*C.cef_string_t)(content_type_), data, C.size_t(data_size), d.send_http200response)
 }
 
 // SendHttp404response (send_http404response)
@@ -109,9 +112,12 @@ func (d *Server) SendHttp404response(connection_id int32) {
 // message. The connection will be closed automatically after the response is
 // sent.
 func (d *Server) SendHttp500response(connection_id int32, error_message string) {
-	var error_message_ C.cef_string_t
-	setCEFStr(error_message, &error_message_)
-	C.gocef_server_send_http500response(d.toNative(), C.int(connection_id), &error_message_, d.send_http500response)
+	error_message_ := C.cef_string_userfree_alloc()
+	setCEFStr(error_message, error_message_)
+	defer func() {
+		C.cef_string_userfree_free(error_message_)
+	}()
+	C.gocef_server_send_http500response(d.toNative(), C.int(connection_id), (*C.cef_string_t)(error_message_), d.send_http500response)
 }
 
 // SendHttpResponse (send_http_response)
@@ -128,9 +134,12 @@ func (d *Server) SendHttp500response(connection_id int32, error_message string) 
 // SendRawData function to send the content, if applicable, and call
 // CloseConnection after all content has been sent.
 func (d *Server) SendHttpResponse(connection_id, response_code int32, content_type string, content_length int64, extra_headers StringMultimap) {
-	var content_type_ C.cef_string_t
-	setCEFStr(content_type, &content_type_)
-	C.gocef_server_send_http_response(d.toNative(), C.int(connection_id), C.int(response_code), &content_type_, C.int64(content_length), C.cef_string_multimap_t(extra_headers), d.send_http_response)
+	content_type_ := C.cef_string_userfree_alloc()
+	setCEFStr(content_type, content_type_)
+	defer func() {
+		C.cef_string_userfree_free(content_type_)
+	}()
+	C.gocef_server_send_http_response(d.toNative(), C.int(connection_id), C.int(response_code), (*C.cef_string_t)(content_type_), C.int64(content_length), C.cef_string_multimap_t(extra_headers), d.send_http_response)
 }
 
 // SendRawData (send_raw_data)

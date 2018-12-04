@@ -58,9 +58,12 @@ func (d *Request) GetUrl() string {
 // SetUrl (set_url)
 // Set the fully qualified URL.
 func (d *Request) SetUrl(url string) {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	C.gocef_request_set_url(d.toNative(), &url_, d.set_url)
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	C.gocef_request_set_url(d.toNative(), (*C.cef_string_t)(url_), d.set_url)
 }
 
 // GetMethod (get_method)
@@ -74,9 +77,12 @@ func (d *Request) GetMethod() string {
 // SetMethod (set_method)
 // Set the request function type.
 func (d *Request) SetMethod(method string) {
-	var method_ C.cef_string_t
-	setCEFStr(method, &method_)
-	C.gocef_request_set_method(d.toNative(), &method_, d.set_method)
+	method_ := C.cef_string_userfree_alloc()
+	setCEFStr(method, method_)
+	defer func() {
+		C.cef_string_userfree_free(method_)
+	}()
+	C.gocef_request_set_method(d.toNative(), (*C.cef_string_t)(method_), d.set_method)
 }
 
 // SetReferrer (set_referrer)
@@ -84,9 +90,12 @@ func (d *Request) SetMethod(method string) {
 // qualified with an HTTP or HTTPS scheme component. Any username, password or
 // ref component will be removed.
 func (d *Request) SetReferrer(referrer_url string, policy ReferrerPolicy) {
-	var referrer_url_ C.cef_string_t
-	setCEFStr(referrer_url, &referrer_url_)
-	C.gocef_request_set_referrer(d.toNative(), &referrer_url_, C.cef_referrer_policy_t(policy), d.set_referrer)
+	referrer_url_ := C.cef_string_userfree_alloc()
+	setCEFStr(referrer_url, referrer_url_)
+	defer func() {
+		C.cef_string_userfree_free(referrer_url_)
+	}()
+	C.gocef_request_set_referrer(d.toNative(), (*C.cef_string_t)(referrer_url_), C.cef_referrer_policy_t(policy), d.set_referrer)
 }
 
 // GetReferrerUrl (get_referrer_url)
@@ -130,11 +139,17 @@ func (d *Request) SetHeaderMap(headerMap StringMultimap) {
 // Set (set)
 // Set all values at one time.
 func (d *Request) Set(url, method string, postData *PostData, headerMap StringMultimap) {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	var method_ C.cef_string_t
-	setCEFStr(method, &method_)
-	C.gocef_request_set(d.toNative(), &url_, &method_, postData.toNative(), C.cef_string_multimap_t(headerMap), d.set)
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	method_ := C.cef_string_userfree_alloc()
+	setCEFStr(method, method_)
+	defer func() {
+		C.cef_string_userfree_free(method_)
+	}()
+	C.gocef_request_set(d.toNative(), (*C.cef_string_t)(url_), (*C.cef_string_t)(method_), postData.toNative(), C.cef_string_multimap_t(headerMap), d.set)
 }
 
 // GetFlags (get_flags)
@@ -163,9 +178,12 @@ func (d *Request) GetFirstPartyForCookies() string {
 // Set the URL to the first party for cookies used in combination with
 // cef_urlrequest_t.
 func (d *Request) SetFirstPartyForCookies(url string) {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	C.gocef_request_set_first_party_for_cookies(d.toNative(), &url_, d.set_first_party_for_cookies)
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	C.gocef_request_set_first_party_for_cookies(d.toNative(), (*C.cef_string_t)(url_), d.set_first_party_for_cookies)
 }
 
 // GetResourceType (get_resource_type)

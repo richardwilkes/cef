@@ -146,49 +146,67 @@ func (d *DragData) GetFileNames(names StringList) int32 {
 // SetLinkUrl (set_link_url)
 // Set the link URL that is being dragged.
 func (d *DragData) SetLinkUrl(url string) {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	C.gocef_drag_data_set_link_url(d.toNative(), &url_, d.set_link_url)
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	C.gocef_drag_data_set_link_url(d.toNative(), (*C.cef_string_t)(url_), d.set_link_url)
 }
 
 // SetLinkTitle (set_link_title)
 // Set the title associated with the link being dragged.
 func (d *DragData) SetLinkTitle(title string) {
-	var title_ C.cef_string_t
-	setCEFStr(title, &title_)
-	C.gocef_drag_data_set_link_title(d.toNative(), &title_, d.set_link_title)
+	title_ := C.cef_string_userfree_alloc()
+	setCEFStr(title, title_)
+	defer func() {
+		C.cef_string_userfree_free(title_)
+	}()
+	C.gocef_drag_data_set_link_title(d.toNative(), (*C.cef_string_t)(title_), d.set_link_title)
 }
 
 // SetLinkMetadata (set_link_metadata)
 // Set the metadata associated with the link being dragged.
 func (d *DragData) SetLinkMetadata(data string) {
-	var data_ C.cef_string_t
-	setCEFStr(data, &data_)
-	C.gocef_drag_data_set_link_metadata(d.toNative(), &data_, d.set_link_metadata)
+	data_ := C.cef_string_userfree_alloc()
+	setCEFStr(data, data_)
+	defer func() {
+		C.cef_string_userfree_free(data_)
+	}()
+	C.gocef_drag_data_set_link_metadata(d.toNative(), (*C.cef_string_t)(data_), d.set_link_metadata)
 }
 
 // SetFragmentText (set_fragment_text)
 // Set the plain text fragment that is being dragged.
 func (d *DragData) SetFragmentText(text string) {
-	var text_ C.cef_string_t
-	setCEFStr(text, &text_)
-	C.gocef_drag_data_set_fragment_text(d.toNative(), &text_, d.set_fragment_text)
+	text_ := C.cef_string_userfree_alloc()
+	setCEFStr(text, text_)
+	defer func() {
+		C.cef_string_userfree_free(text_)
+	}()
+	C.gocef_drag_data_set_fragment_text(d.toNative(), (*C.cef_string_t)(text_), d.set_fragment_text)
 }
 
 // SetFragmentHtml (set_fragment_html)
 // Set the text/html fragment that is being dragged.
 func (d *DragData) SetFragmentHtml(html string) {
-	var html_ C.cef_string_t
-	setCEFStr(html, &html_)
-	C.gocef_drag_data_set_fragment_html(d.toNative(), &html_, d.set_fragment_html)
+	html_ := C.cef_string_userfree_alloc()
+	setCEFStr(html, html_)
+	defer func() {
+		C.cef_string_userfree_free(html_)
+	}()
+	C.gocef_drag_data_set_fragment_html(d.toNative(), (*C.cef_string_t)(html_), d.set_fragment_html)
 }
 
 // SetFragmentBaseUrl (set_fragment_base_url)
 // Set the base URL that the fragment came from.
 func (d *DragData) SetFragmentBaseUrl(base_url string) {
-	var base_url_ C.cef_string_t
-	setCEFStr(base_url, &base_url_)
-	C.gocef_drag_data_set_fragment_base_url(d.toNative(), &base_url_, d.set_fragment_base_url)
+	base_url_ := C.cef_string_userfree_alloc()
+	setCEFStr(base_url, base_url_)
+	defer func() {
+		C.cef_string_userfree_free(base_url_)
+	}()
+	C.gocef_drag_data_set_fragment_base_url(d.toNative(), (*C.cef_string_t)(base_url_), d.set_fragment_base_url)
 }
 
 // ResetFileContents (reset_file_contents)
@@ -202,11 +220,17 @@ func (d *DragData) ResetFileContents() {
 // AddFile (add_file)
 // Add a file that is being dragged into the webview.
 func (d *DragData) AddFile(path, display_name string) {
-	var path_ C.cef_string_t
-	setCEFStr(path, &path_)
-	var display_name_ C.cef_string_t
-	setCEFStr(display_name, &display_name_)
-	C.gocef_drag_data_add_file(d.toNative(), &path_, &display_name_, d.add_file)
+	path_ := C.cef_string_userfree_alloc()
+	setCEFStr(path, path_)
+	defer func() {
+		C.cef_string_userfree_free(path_)
+	}()
+	display_name_ := C.cef_string_userfree_alloc()
+	setCEFStr(display_name, display_name_)
+	defer func() {
+		C.cef_string_userfree_free(display_name_)
+	}()
+	C.gocef_drag_data_add_file(d.toNative(), (*C.cef_string_t)(path_), (*C.cef_string_t)(display_name_), d.add_file)
 }
 
 // GetImage (get_image)

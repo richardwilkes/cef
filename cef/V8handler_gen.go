@@ -30,12 +30,19 @@ func (d *V8handler) Base() *BaseRefCounted {
 // arguments passed to the function. If execution succeeds set |retval| to the
 // function return value. If execution fails set |exception| to the exception
 // that will be thrown. Return true (1) if execution was handled.
-func (d *V8handler) Execute(name string, object *V8value, argumentsCount uint64, arguments, retval **V8value, exception string) int32 {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
+func (d *V8handler) Execute(name string, object *V8value, argumentsCount uint64, arguments, retval **V8value, exception *string) int32 {
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
 	arguments_ := (*arguments).toNative()
 	retval_ := (*retval).toNative()
-	var exception_ C.cef_string_t
-	setCEFStr(exception, &exception_)
-	return int32(C.gocef_v8handler_execute(d.toNative(), &name_, object.toNative(), C.size_t(argumentsCount), &arguments_, &retval_, &exception_, d.execute))
+	exception_ := C.cef_string_userfree_alloc()
+	setCEFStr(*exception, exception_)
+	defer func() {
+		*exception = cefstrToString(exception_)
+		C.cef_string_userfree_free(exception_)
+	}()
+	return int32(C.gocef_v8handler_execute(d.toNative(), (*C.cef_string_t)(name_), object.toNative(), C.size_t(argumentsCount), &arguments_, &retval_, (*C.cef_string_t)(exception_), d.execute))
 }

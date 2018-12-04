@@ -182,19 +182,28 @@ func (d *BrowserHost) SetZoomLevel(zoomLevel float64) {
 // dismissed or immediately if another dialog is already pending. The dialog
 // will be initiated asynchronously on the UI thread.
 func (d *BrowserHost) RunFileDialog(mode FileDialogMode, title, default_file_path string, accept_filters StringList, selected_accept_filter int32, callback *RunFileDialogCallback) {
-	var title_ C.cef_string_t
-	setCEFStr(title, &title_)
-	var default_file_path_ C.cef_string_t
-	setCEFStr(default_file_path, &default_file_path_)
-	C.gocef_browser_host_run_file_dialog(d.toNative(), C.cef_file_dialog_mode_t(mode), &title_, &default_file_path_, C.cef_string_list_t(accept_filters), C.int(selected_accept_filter), callback.toNative(), d.run_file_dialog)
+	title_ := C.cef_string_userfree_alloc()
+	setCEFStr(title, title_)
+	defer func() {
+		C.cef_string_userfree_free(title_)
+	}()
+	default_file_path_ := C.cef_string_userfree_alloc()
+	setCEFStr(default_file_path, default_file_path_)
+	defer func() {
+		C.cef_string_userfree_free(default_file_path_)
+	}()
+	C.gocef_browser_host_run_file_dialog(d.toNative(), C.cef_file_dialog_mode_t(mode), (*C.cef_string_t)(title_), (*C.cef_string_t)(default_file_path_), C.cef_string_list_t(accept_filters), C.int(selected_accept_filter), callback.toNative(), d.run_file_dialog)
 }
 
 // StartDownload (start_download)
 // Download the file at |url| using cef_download_handler_t.
 func (d *BrowserHost) StartDownload(url string) {
-	var url_ C.cef_string_t
-	setCEFStr(url, &url_)
-	C.gocef_browser_host_start_download(d.toNative(), &url_, d.start_download)
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	C.gocef_browser_host_start_download(d.toNative(), (*C.cef_string_t)(url_), d.start_download)
 }
 
 // DownloadImage (download_image)
@@ -209,9 +218,12 @@ func (d *BrowserHost) StartDownload(url string) {
 // unlimited. If |bypass_cache| is true (1) then |image_url| is requested from
 // the server even if it is present in the browser cache.
 func (d *BrowserHost) DownloadImage(image_url string, is_favicon int32, max_image_size uint32, bypass_cache int32, callback *DownloadImageCallback) {
-	var image_url_ C.cef_string_t
-	setCEFStr(image_url, &image_url_)
-	C.gocef_browser_host_download_image(d.toNative(), &image_url_, C.int(is_favicon), C.uint32(max_image_size), C.int(bypass_cache), callback.toNative(), d.download_image)
+	image_url_ := C.cef_string_userfree_alloc()
+	setCEFStr(image_url, image_url_)
+	defer func() {
+		C.cef_string_userfree_free(image_url_)
+	}()
+	C.gocef_browser_host_download_image(d.toNative(), (*C.cef_string_t)(image_url_), C.int(is_favicon), C.uint32(max_image_size), C.int(bypass_cache), callback.toNative(), d.download_image)
 }
 
 // Print (print)
@@ -226,9 +238,12 @@ func (d *BrowserHost) Print() {
 // |path| when done. For PDF printing to work on Linux you must implement the
 // cef_print_handler_t::GetPdfPaperSize function.
 func (d *BrowserHost) PrintToPdf(path string, settings *PDFPrintSettings, callback *PDFPrintCallback) {
-	var path_ C.cef_string_t
-	setCEFStr(path, &path_)
-	C.gocef_browser_host_print_to_pdf(d.toNative(), &path_, settings.toNative(&C.cef_pdf_print_settings_t{}), callback.toNative(), d.print_to_pdf)
+	path_ := C.cef_string_userfree_alloc()
+	setCEFStr(path, path_)
+	defer func() {
+		C.cef_string_userfree_free(path_)
+	}()
+	C.gocef_browser_host_print_to_pdf(d.toNative(), (*C.cef_string_t)(path_), settings.toNative(&C.cef_pdf_print_settings_t{}), callback.toNative(), d.print_to_pdf)
 }
 
 // Find (find)
@@ -242,9 +257,12 @@ func (d *BrowserHost) PrintToPdf(path string, settings *PDFPrintSettings, callba
 // instance, if any, returned via cef_client_t::GetFindHandler will be called
 // to report find results.
 func (d *BrowserHost) Find(identifier int32, searchText string, forward, matchCase, findNext int32) {
-	var searchText_ C.cef_string_t
-	setCEFStr(searchText, &searchText_)
-	C.gocef_browser_host_find(d.toNative(), C.int(identifier), &searchText_, C.int(forward), C.int(matchCase), C.int(findNext), d.find)
+	searchText_ := C.cef_string_userfree_alloc()
+	setCEFStr(searchText, searchText_)
+	defer func() {
+		C.cef_string_userfree_free(searchText_)
+	}()
+	C.gocef_browser_host_find(d.toNative(), C.int(identifier), (*C.cef_string_t)(searchText_), C.int(forward), C.int(matchCase), C.int(findNext), d.find)
 }
 
 // StopFinding (stop_finding)
@@ -303,17 +321,23 @@ func (d *BrowserHost) IsMouseCursorChangeDisabled() int32 {
 // If a misspelled word is currently selected in an editable node calling this
 // function will replace it with the specified |word|.
 func (d *BrowserHost) ReplaceMisspelling(word string) {
-	var word_ C.cef_string_t
-	setCEFStr(word, &word_)
-	C.gocef_browser_host_replace_misspelling(d.toNative(), &word_, d.replace_misspelling)
+	word_ := C.cef_string_userfree_alloc()
+	setCEFStr(word, word_)
+	defer func() {
+		C.cef_string_userfree_free(word_)
+	}()
+	C.gocef_browser_host_replace_misspelling(d.toNative(), (*C.cef_string_t)(word_), d.replace_misspelling)
 }
 
 // AddWordToDictionary (add_word_to_dictionary)
 // Add the specified |word| to the spelling dictionary.
 func (d *BrowserHost) AddWordToDictionary(word string) {
-	var word_ C.cef_string_t
-	setCEFStr(word, &word_)
-	C.gocef_browser_host_add_word_to_dictionary(d.toNative(), &word_, d.add_word_to_dictionary)
+	word_ := C.cef_string_userfree_alloc()
+	setCEFStr(word, word_)
+	defer func() {
+		C.cef_string_userfree_free(word_)
+	}()
+	C.gocef_browser_host_add_word_to_dictionary(d.toNative(), (*C.cef_string_t)(word_), d.add_word_to_dictionary)
 }
 
 // IsWindowRenderingDisabled (is_window_rendering_disabled)
@@ -450,9 +474,12 @@ func (d *BrowserHost) SetWindowlessFrameRate(frame_rate int32) {
 //
 // This function is only used when window rendering is disabled.
 func (d *BrowserHost) ImeSetComposition(text string, underlinesCount uint64, underlines *CompositionUnderline, replacement_range, selection_range *Range) {
-	var text_ C.cef_string_t
-	setCEFStr(text, &text_)
-	C.gocef_browser_host_ime_set_composition(d.toNative(), &text_, C.size_t(underlinesCount), underlines.toNative(&C.cef_composition_underline_t{}), replacement_range.toNative(&C.cef_range_t{}), selection_range.toNative(&C.cef_range_t{}), d.ime_set_composition)
+	text_ := C.cef_string_userfree_alloc()
+	setCEFStr(text, text_)
+	defer func() {
+		C.cef_string_userfree_free(text_)
+	}()
+	C.gocef_browser_host_ime_set_composition(d.toNative(), (*C.cef_string_t)(text_), C.size_t(underlinesCount), underlines.toNative(&C.cef_composition_underline_t{}), replacement_range.toNative(&C.cef_range_t{}), selection_range.toNative(&C.cef_range_t{}), d.ime_set_composition)
 }
 
 // ImeCommitText (ime_commit_text)
@@ -464,9 +491,12 @@ func (d *BrowserHost) ImeSetComposition(text string, underlinesCount uint64, und
 // |relative_cursor_pos| values are only used on OS X. This function is only
 // used when window rendering is disabled.
 func (d *BrowserHost) ImeCommitText(text string, replacement_range *Range, relative_cursor_pos int32) {
-	var text_ C.cef_string_t
-	setCEFStr(text, &text_)
-	C.gocef_browser_host_ime_commit_text(d.toNative(), &text_, replacement_range.toNative(&C.cef_range_t{}), C.int(relative_cursor_pos), d.ime_commit_text)
+	text_ := C.cef_string_userfree_alloc()
+	setCEFStr(text, text_)
+	defer func() {
+		C.cef_string_userfree_free(text_)
+	}()
+	C.gocef_browser_host_ime_commit_text(d.toNative(), (*C.cef_string_t)(text_), replacement_range.toNative(&C.cef_range_t{}), C.int(relative_cursor_pos), d.ime_commit_text)
 }
 
 // ImeFinishComposingText (ime_finish_composing_text)

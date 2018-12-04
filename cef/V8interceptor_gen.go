@@ -38,13 +38,20 @@ func (d *V8interceptor) Base() *BaseRefCounted {
 // the exception that will be thrown. If the property has an associated
 // accessor, it will be called only if you don't set |retval|. Return true (1)
 // if interceptor retrieval was handled, false (0) otherwise.
-func (d *V8interceptor) GetByname(name string, object *V8value, retval **V8value, exception string) int32 {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
+func (d *V8interceptor) GetByname(name string, object *V8value, retval **V8value, exception *string) int32 {
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
 	retval_ := (*retval).toNative()
-	var exception_ C.cef_string_t
-	setCEFStr(exception, &exception_)
-	return int32(C.gocef_v8interceptor_get_byname(d.toNative(), &name_, object.toNative(), &retval_, &exception_, d.get_byname))
+	exception_ := C.cef_string_userfree_alloc()
+	setCEFStr(*exception, exception_)
+	defer func() {
+		*exception = cefstrToString(exception_)
+		C.cef_string_userfree_free(exception_)
+	}()
+	return int32(C.gocef_v8interceptor_get_byname(d.toNative(), (*C.cef_string_t)(name_), object.toNative(), &retval_, (*C.cef_string_t)(exception_), d.get_byname))
 }
 
 // GetByindex (get_byindex)
@@ -54,11 +61,15 @@ func (d *V8interceptor) GetByname(name string, object *V8value, retval **V8value
 // don't set either |retval| or |exception|. If retrieval fails, set
 // |exception| to the exception that will be thrown. Return true (1) if
 // interceptor retrieval was handled, false (0) otherwise.
-func (d *V8interceptor) GetByindex(index int32, object *V8value, retval **V8value, exception string) int32 {
+func (d *V8interceptor) GetByindex(index int32, object *V8value, retval **V8value, exception *string) int32 {
 	retval_ := (*retval).toNative()
-	var exception_ C.cef_string_t
-	setCEFStr(exception, &exception_)
-	return int32(C.gocef_v8interceptor_get_byindex(d.toNative(), C.int(index), object.toNative(), &retval_, &exception_, d.get_byindex))
+	exception_ := C.cef_string_userfree_alloc()
+	setCEFStr(*exception, exception_)
+	defer func() {
+		*exception = cefstrToString(exception_)
+		C.cef_string_userfree_free(exception_)
+	}()
+	return int32(C.gocef_v8interceptor_get_byindex(d.toNative(), C.int(index), object.toNative(), &retval_, (*C.cef_string_t)(exception_), d.get_byindex))
 }
 
 // SetByname (set_byname)
@@ -68,12 +79,19 @@ func (d *V8interceptor) GetByindex(index int32, object *V8value, retval **V8valu
 // |exception| to the exception that will be thrown. This setter will always
 // be called, even when the property has an associated accessor. Return true
 // (1) if interceptor assignment was handled, false (0) otherwise.
-func (d *V8interceptor) SetByname(name string, object, value *V8value, exception string) int32 {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	var exception_ C.cef_string_t
-	setCEFStr(exception, &exception_)
-	return int32(C.gocef_v8interceptor_set_byname(d.toNative(), &name_, object.toNative(), value.toNative(), &exception_, d.set_byname))
+func (d *V8interceptor) SetByname(name string, object, value *V8value, exception *string) int32 {
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	exception_ := C.cef_string_userfree_alloc()
+	setCEFStr(*exception, exception_)
+	defer func() {
+		*exception = cefstrToString(exception_)
+		C.cef_string_userfree_free(exception_)
+	}()
+	return int32(C.gocef_v8interceptor_set_byname(d.toNative(), (*C.cef_string_t)(name_), object.toNative(), value.toNative(), (*C.cef_string_t)(exception_), d.set_byname))
 }
 
 // SetByindex (set_byindex)
@@ -82,8 +100,12 @@ func (d *V8interceptor) SetByname(name string, object, value *V8value, exception
 // value being assigned to the interceptor. If assignment fails, set
 // |exception| to the exception that will be thrown. Return true (1) if
 // interceptor assignment was handled, false (0) otherwise.
-func (d *V8interceptor) SetByindex(index int32, object, value *V8value, exception string) int32 {
-	var exception_ C.cef_string_t
-	setCEFStr(exception, &exception_)
-	return int32(C.gocef_v8interceptor_set_byindex(d.toNative(), C.int(index), object.toNative(), value.toNative(), &exception_, d.set_byindex))
+func (d *V8interceptor) SetByindex(index int32, object, value *V8value, exception *string) int32 {
+	exception_ := C.cef_string_userfree_alloc()
+	setCEFStr(*exception, exception_)
+	defer func() {
+		*exception = cefstrToString(exception_)
+		C.cef_string_userfree_free(exception_)
+	}()
+	return int32(C.gocef_v8interceptor_set_byindex(d.toNative(), C.int(index), object.toNative(), value.toNative(), (*C.cef_string_t)(exception_), d.set_byindex))
 }

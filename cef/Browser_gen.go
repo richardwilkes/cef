@@ -147,9 +147,12 @@ func (d *Browser) GetFrameByident(identifier int64) *Frame {
 // GetFrame (get_frame)
 // Returns the frame with the specified name, or NULL if not found.
 func (d *Browser) GetFrame(name string) *Frame {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	return (*Frame)(C.gocef_browser_get_frame(d.toNative(), &name_, d.get_frame))
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	return (*Frame)(C.gocef_browser_get_frame(d.toNative(), (*C.cef_string_t)(name_), d.get_frame))
 }
 
 // GetFrameCount (get_frame_count)

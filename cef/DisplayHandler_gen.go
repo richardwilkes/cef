@@ -17,7 +17,7 @@ type DisplayHandlerProxy interface {
 	OnTitleChange(self *DisplayHandler, browser *Browser, title string)
 	OnFaviconUrlchange(self *DisplayHandler, browser *Browser, icon_urls StringList)
 	OnFullscreenModeChange(self *DisplayHandler, browser *Browser, fullscreen int32)
-	OnTooltip(self *DisplayHandler, browser *Browser, text string) int32
+	OnTooltip(self *DisplayHandler, browser *Browser, text *string) int32
 	OnStatusMessage(self *DisplayHandler, browser *Browser, value string)
 	OnConsoleMessage(self *DisplayHandler, browser *Browser, level LogSeverity, message, source string, line int32) int32
 	OnAutoResize(self *DisplayHandler, browser *Browser, new_size *Size) int32
@@ -126,7 +126,7 @@ func gocef_display_handler_on_fullscreen_mode_change(self *C.cef_display_handler
 // |text| and then return false (0) to allow the browser to display the
 // tooltip. When window rendering is disabled the application is responsible
 // for drawing tooltips and the return value is ignored.
-func (d *DisplayHandler) OnTooltip(browser *Browser, text string) int32 {
+func (d *DisplayHandler) OnTooltip(browser *Browser, text *string) int32 {
 	return lookupDisplayHandlerProxy(d.Base()).OnTooltip(d, browser, text)
 }
 
@@ -135,7 +135,7 @@ func gocef_display_handler_on_tooltip(self *C.cef_display_handler_t, browser *C.
 	me__ := (*DisplayHandler)(self)
 	proxy__ := lookupDisplayHandlerProxy(me__.Base())
 	text_ := cefstrToString(text)
-	return C.int(proxy__.OnTooltip(me__, (*Browser)(browser), text_))
+	return C.int(proxy__.OnTooltip(me__, (*Browser)(browser), &text_))
 }
 
 // OnStatusMessage (on_status_message)

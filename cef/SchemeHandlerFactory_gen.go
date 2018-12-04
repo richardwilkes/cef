@@ -32,7 +32,10 @@ func (d *SchemeHandlerFactory) Base() *BaseRefCounted {
 // example, if the request came from cef_urlrequest_t). The |request| object
 // passed to this function will not contain cookie data.
 func (d *SchemeHandlerFactory) Create(browser *Browser, frame *Frame, scheme_name string, request *Request) *ResourceHandler {
-	var scheme_name_ C.cef_string_t
-	setCEFStr(scheme_name, &scheme_name_)
-	return (*ResourceHandler)(C.gocef_scheme_handler_factory_create(d.toNative(), browser.toNative(), frame.toNative(), &scheme_name_, request.toNative(), d.create))
+	scheme_name_ := C.cef_string_userfree_alloc()
+	setCEFStr(scheme_name, scheme_name_)
+	defer func() {
+		C.cef_string_userfree_free(scheme_name_)
+	}()
+	return (*ResourceHandler)(C.gocef_scheme_handler_factory_create(d.toNative(), browser.toNative(), frame.toNative(), (*C.cef_string_t)(scheme_name_), request.toNative(), d.create))
 }

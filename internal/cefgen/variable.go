@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	cNamesToPrefixForAccess = []string{"range", "select", "type"}
-	paramRenames            = []string{"chan", "defer", "fallthrough", "func", "go", "import", "interface", "map", "package", "range", "select", "string", "type", "var"}
+	cNamesToPrefixForAccess = []string{"range", "type"}
+	paramRenames            = []string{"chan", "defer", "error", "fallthrough", "func", "go", "import", "interface", "map", "package", "range", "select", "string", "type", "var"}
 )
 
 type variable struct {
@@ -30,17 +30,9 @@ type variable struct {
 
 func newCVar(name, typeInfo string, pos position) *variable {
 	name = strings.TrimSpace(name)
-	hadConst := strings.Contains(typeInfo, "const ")
-	if hadConst {
-		typeInfo = strings.Replace(typeInfo, "const ", "", -1)
-	}
-	typeInfo = strings.TrimSpace(typeInfo)
-	typeInfo = strings.TrimPrefix(typeInfo, "struct _")
-	typeInfo = strings.Replace(typeInfo, "long long", "int64_t", -1)
 	v := &variable{
-		Name:     name,
-		GoName:   txt.ToCamelCase(name),
-		HadConst: hadConst,
+		Name:   name,
+		GoName: txt.ToCamelCase(name),
 	}
 	for _, one := range cNamesToPrefixForAccess {
 		if one == name {
@@ -48,6 +40,8 @@ func newCVar(name, typeInfo string, pos position) *variable {
 			break
 		}
 	}
+
+	typeInfo = txt.CollapseSpaces(strings.TrimSpace(typeInfo))
 	fp := strings.Index(typeInfo, "(*)")
 	if fp != -1 {
 		v.FunctionPtr = true
@@ -69,6 +63,13 @@ func newCVar(name, typeInfo string, pos position) *variable {
 			v.Params = append(v.Params, one)
 		}
 	}
+
+	if v.HadConst = strings.Contains(typeInfo, "const "); v.HadConst {
+		typeInfo = strings.Replace(typeInfo, "const ", "", -1)
+	}
+	typeInfo = strings.TrimSpace(typeInfo)
+	typeInfo = strings.TrimPrefix(typeInfo, "struct _")
+	typeInfo = strings.Replace(typeInfo, "long long", "int64_t", -1)
 	if v.Name == "base" {
 		switch typeInfo {
 		case "cef_base_ref_counted_t":
@@ -176,6 +177,13 @@ func adjustedParamName(name string) string {
 	return name
 }
 
+func (v *variable) paramGoType() string {
+	if !v.HadConst && v.GoType == "string" {
+		return "*string"
+	}
+	return v.GoType
+}
+
 func (v *variable) transformCToGo(w io.Writer) string {
 	if sdef, exists := sdefsMap[v.BaseType]; exists {
 		if sdef.isClassEquivalent() {
@@ -202,8 +210,12 @@ func (v *variable) transformCToGo(w io.Writer) string {
 			return fmt.Sprintf("&%s_", v.Name)
 		}
 	} else if v.BaseType == "cef_string_t" {
+		addressOf := ""
+		if !v.HadConst {
+			addressOf = "&"
+		}
 		fmt.Fprintf(w, "%[1]s_ := cefstrToString(%[1]s)\n", v.Name)
-		return fmt.Sprintf("%s_", v.Name)
+		return fmt.Sprintf("%s%s_", addressOf, v.Name)
 	} else {
 		return v.GoCast(v.Name)
 	}

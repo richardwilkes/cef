@@ -70,9 +70,12 @@ func (d *Domdocument) GetTitle() string {
 // GetElementById (get_element_by_id)
 // Returns the document element with the specified ID value.
 func (d *Domdocument) GetElementById(id string) *Domnode {
-	var id_ C.cef_string_t
-	setCEFStr(id, &id_)
-	return (*Domnode)(C.gocef_domdocument_get_element_by_id(d.toNative(), &id_, d.get_element_by_id))
+	id_ := C.cef_string_userfree_alloc()
+	setCEFStr(id, id_)
+	defer func() {
+		C.cef_string_userfree_free(id_)
+	}()
+	return (*Domnode)(C.gocef_domdocument_get_element_by_id(d.toNative(), (*C.cef_string_t)(id_), d.get_element_by_id))
 }
 
 // GetFocusedNode (get_focused_node)
@@ -125,7 +128,10 @@ func (d *Domdocument) GetBaseUrl() string {
 // partial URL.
 // The resulting string must be freed by calling cef_string_userfree_free().
 func (d *Domdocument) GetCompleteUrl(partialURL string) string {
-	var partialURL_ C.cef_string_t
-	setCEFStr(partialURL, &partialURL_)
-	return cefuserfreestrToString(C.gocef_domdocument_get_complete_url(d.toNative(), &partialURL_, d.get_complete_url))
+	partialURL_ := C.cef_string_userfree_alloc()
+	setCEFStr(partialURL, partialURL_)
+	defer func() {
+		C.cef_string_userfree_free(partialURL_)
+	}()
+	return cefuserfreestrToString(C.gocef_domdocument_get_complete_url(d.toNative(), (*C.cef_string_t)(partialURL_), d.get_complete_url))
 }

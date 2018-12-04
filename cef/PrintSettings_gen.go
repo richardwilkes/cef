@@ -87,9 +87,12 @@ func (d *PrintSettings) SetPrinterPrintableArea(physical_size_device_units *Size
 // SetDeviceName (set_device_name)
 // Set the device name.
 func (d *PrintSettings) SetDeviceName(name string) {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	C.gocef_print_settings_set_device_name(d.toNative(), &name_, d.set_device_name)
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	C.gocef_print_settings_set_device_name(d.toNative(), (*C.cef_string_t)(name_), d.set_device_name)
 }
 
 // GetDeviceName (get_device_name)

@@ -186,9 +186,12 @@ func (d *Value) SetDouble(value float64) int32 {
 // Sets the underlying value as type string. Returns true (1) if the value was
 // set successfully.
 func (d *Value) SetString(value string) int32 {
-	var value_ C.cef_string_t
-	setCEFStr(value, &value_)
-	return int32(C.gocef_value_set_string(d.toNative(), &value_, d.set_string))
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	return int32(C.gocef_value_set_string(d.toNative(), (*C.cef_string_t)(value_), d.set_string))
 }
 
 // SetBinary (set_binary)

@@ -32,13 +32,20 @@ func (d *V8accessor) Base() *BaseRefCounted {
 // |retval| to the return value. If retrieval fails set |exception| to the
 // exception that will be thrown. Return true (1) if accessor retrieval was
 // handled.
-func (d *V8accessor) Get(name string, object *V8value, retval **V8value, exception string) int32 {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
+func (d *V8accessor) Get(name string, object *V8value, retval **V8value, exception *string) int32 {
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
 	retval_ := (*retval).toNative()
-	var exception_ C.cef_string_t
-	setCEFStr(exception, &exception_)
-	return int32(C.gocef_v8accessor_get(d.toNative(), &name_, object.toNative(), &retval_, &exception_, d.get))
+	exception_ := C.cef_string_userfree_alloc()
+	setCEFStr(*exception, exception_)
+	defer func() {
+		*exception = cefstrToString(exception_)
+		C.cef_string_userfree_free(exception_)
+	}()
+	return int32(C.gocef_v8accessor_get(d.toNative(), (*C.cef_string_t)(name_), object.toNative(), &retval_, (*C.cef_string_t)(exception_), d.get))
 }
 
 // Set (set)
@@ -47,10 +54,17 @@ func (d *V8accessor) Get(name string, object *V8value, retval **V8value, excepti
 // being assigned to the accessor. If assignment fails set |exception| to the
 // exception that will be thrown. Return true (1) if accessor assignment was
 // handled.
-func (d *V8accessor) Set(name string, object, value *V8value, exception string) int32 {
-	var name_ C.cef_string_t
-	setCEFStr(name, &name_)
-	var exception_ C.cef_string_t
-	setCEFStr(exception, &exception_)
-	return int32(C.gocef_v8accessor_set(d.toNative(), &name_, object.toNative(), value.toNative(), &exception_, d.set))
+func (d *V8accessor) Set(name string, object, value *V8value, exception *string) int32 {
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	exception_ := C.cef_string_userfree_alloc()
+	setCEFStr(*exception, exception_)
+	defer func() {
+		*exception = cefstrToString(exception_)
+		C.cef_string_userfree_free(exception_)
+	}()
+	return int32(C.gocef_v8accessor_set(d.toNative(), (*C.cef_string_t)(name_), object.toNative(), value.toNative(), (*C.cef_string_t)(exception_), d.set))
 }
