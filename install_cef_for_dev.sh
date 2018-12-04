@@ -12,7 +12,7 @@ esac
 
 CEF_PREFIX=/usr/local/cef
 if [ -e "$CEF_PREFIX/include/cef_version.h" ]; then
-    EXISTING=`grep "#define CEF_VERSION " "$CEF_PREFIX/include/cef_version.h" | cut -f 2 -d '"'`
+    EXISTING=$(grep "#define CEF_VERSION " "$CEF_PREFIX/include/cef_version.h" | cut -f 2 -d '"')
 fi
 if [ $CEF_VERSION != "$EXISTING" ] || [ "$1" == "force" ]; then
     /bin/rm -rf "$CEF_PREFIX"
