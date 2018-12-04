@@ -14,7 +14,7 @@ point as well.
 
 ## Initial setup
 In the root of the repo, run (if using Windows, do this from a mingw64 msys2
-console):
+console without the leading `sudo`):
 ```
 sudo ./install_cef_for_dev.sh
 ```
