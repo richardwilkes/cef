@@ -11,12 +11,12 @@ github.com/pkg/term v0.0.0-20181116001808-27bbf2edb814 h1:qWlKm6sU/AyVAgBC1Pg1uu
 github.com/pkg/term v0.0.0-20181116001808-27bbf2edb814/go.mod h1:eCbImbZ95eXtAUIbLAuAVnBnwf83mjf6QIVH8SHYwqQ=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/richardwilkes/toolbox v1.1.0 h1:JQXRjia/HmDq7xm/yU2UZTsMYfDIf6XIsvi8ZxLFVsE=
-github.com/richardwilkes/toolbox v1.1.0/go.mod h1:+3AAAjOGg4EL71NOhZud4tSuBHO62vWvoIuDL0GEQqQ=
+github.com/richardwilkes/toolbox v1.1.1 h1:Leica8e2vtoEHweZkxOpH3OsYiqeNlVOAM+72Ri1Tf8=
+github.com/richardwilkes/toolbox v1.1.1/go.mod h1:GMgJlR4yHb6YfYakFQSyPjnAtNunXwyCYzR4dNBq11I=
 github.com/stretchr/testify v1.2.2 h1:bSDNvY7ZPG5RlJ8otE/7V6gMiyenm9RtJ7IUVIAoJ1w=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
-golang.org/x/sys v0.0.0-20181128092732-4ed8d59d0b35 h1:YAFjXN64LMvktoUZH9zgY4lGc/msGN7HQfoSuKCgaDU=
-golang.org/x/sys v0.0.0-20181128092732-4ed8d59d0b35/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+golang.org/x/sys v0.0.0-20181205085412-a5c9d58dba9a h1:1n5lsVfiQW3yfsRGu98756EH1YthsFqr/5mxHduZW2A=
+golang.org/x/sys v0.0.0-20181205085412-a5c9d58dba9a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 h1:qIbj1fsPNlZgppZ+VLlY7N33q108Sa+fhmuc+sWQYwY=
 gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=

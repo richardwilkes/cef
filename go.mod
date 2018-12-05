@@ -1,3 +1,3 @@
 module github.com/richardwilkes/cef
 
-require github.com/richardwilkes/toolbox v1.1.0
+require github.com/richardwilkes/toolbox v1.1.1
