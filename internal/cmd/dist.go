@@ -17,7 +17,6 @@ import (
 
 type dist struct {
 	root           string
-	displayName    string
 	bundleName     string
 	bundleID       string
 	exeName        string
@@ -32,7 +31,6 @@ type dist struct {
 func NewDist() cmdline.Cmd {
 	d := &dist{
 		root:           "dist",
-		displayName:    "Example",
 		bundleName:     "Example",
 		bundleID:       "com.example",
 		exeName:        "example",
@@ -61,7 +59,6 @@ func (d *dist) Usage() string {
 
 func (d *dist) Run(cl *cmdline.CmdLine, args []string) error {
 	cl.NewStringOption(&d.root).SetSingle('d').SetName("dir").SetUsage("Set the root distribution directory")
-	cl.NewStringOption(&d.displayName).SetSingle('n').SetName("name").SetUsage("Set the display name (macOS-only)")
 	cl.NewStringOption(&d.bundleName).SetSingle('b').SetName("bundle").SetUsage("Set the bundle name (macOS-only)")
 	cl.NewStringOption(&d.bundleID).SetSingle('B').SetName("id").SetUsage("Set the bundle ID (macOS-only)")
 	cl.NewStringOption(&d.exeName).SetSingle('e').SetName("executable").SetUsage("Set the executable name (macOS-only)")
@@ -90,7 +87,7 @@ func (d *dist) Run(cl *cmdline.CmdLine, args []string) error {
 }
 
 func (d *dist) distMacOS() {
-	appBundleContentsDir := path.Join(d.root, d.displayName+".app", "Contents")
+	appBundleContentsDir := path.Join(d.root, d.bundleName+".app", "Contents")
 	createDir(path.Join(appBundleContentsDir, "MacOS"), 0755)
 	appBundleResourcesDir := path.Join(appBundleContentsDir, "Resources")
 	createDir(appBundleResourcesDir, 0755)
@@ -153,7 +150,7 @@ func (d *dist) distMacOS() {
 	<true/>
 </dict>
 </plist>
-`, d.displayName, d.bundleName, d.exeName, d.bundleID, d.version, d.shortVersion, d.copyrightYears, d.copyrightOwner)
+`, d.bundleName, d.bundleName, d.exeName, d.bundleID, d.version, d.shortVersion, d.copyrightYears, d.copyrightOwner)
 	checkFileError(err, "write", plist)
 	checkFileError(f.Close(), "write", plist)
 
@@ -188,7 +185,7 @@ func (d *dist) distMacOS() {
 	<true/>
 </dict>
 </plist>
-`, d.displayName, d.bundleName, d.exeName, d.bundleID, d.version, d.shortVersion, d.copyrightYears, d.copyrightOwner)
+`, d.bundleName, d.bundleName, d.exeName, d.bundleID, d.version, d.shortVersion, d.copyrightYears, d.copyrightOwner)
 	checkFileError(err, "write", plist)
 	checkFileError(f.Close(), "write", plist)
 }
