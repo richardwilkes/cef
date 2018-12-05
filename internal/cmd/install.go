@@ -23,23 +23,24 @@ import (
 
 var cefVersionRegex = regexp.MustCompile(`^\s*#define\s+CEF_VERSION\s+"(\d+\.\d+\.\d+\.\w+)"\s*$`)
 
-// Install holds the install command.
-type Install struct {
-	Version string
+type install struct {
+	version string
 }
 
-// Name returns the name of the command as it needs to be entered on the command line.
-func (c *Install) Name() string {
+// NewInstall returns the install command.
+func NewInstall(version string) cmdline.Cmd {
+	return &install{version: version}
+}
+
+func (c *install) Name() string {
 	return "install"
 }
 
-// Usage returns a description of what the command does.
-func (c *Install) Usage() string {
+func (c *install) Usage() string {
 	return "Downloads and installs the headers and libraries necessary use the github.com/richardwilkes/cef/cef package."
 }
 
-// Run the command.
-func (c *Install) Run(cl *cmdline.CmdLine, args []string) error {
+func (c *install) Run(cl *cmdline.CmdLine, args []string) error {
 	var needInstall bool
 	cl.NewBoolOption(&needInstall).SetSingle('f').SetName("force").SetUsage("Force an install")
 	cl.Parse(args)
@@ -58,7 +59,7 @@ func (c *Install) Run(cl *cmdline.CmdLine, args []string) error {
 			}
 			xio.CloseIgnoringErrors(f)
 		}
-		needInstall = existingCEFVersion != c.Version
+		needInstall = existingCEFVersion != c.version
 	}
 
 	if needInstall {
@@ -95,7 +96,7 @@ Version: %[1]s
 Requires:
 Libs: -L%[2]s/Release -lcef
 Cflags: -I%[2]s
-`, c.Version, installPrefix)
+`, c.version, installPrefix)
 			checkFileError(err, "write", name)
 			checkFileError(f.Close(), "write", name)
 		}
@@ -104,11 +105,11 @@ Cflags: -I%[2]s
 	return nil
 }
 
-func (c *Install) archiveName() string {
-	return fmt.Sprintf("cef_binary_%s_%s_minimal", c.Version, cefPlatform)
+func (c *install) archiveName() string {
+	return fmt.Sprintf("cef_binary_%s_%s_minimal", c.version, cefPlatform)
 }
 
-func (c *Install) downloadAndUncompressArchive() []byte {
+func (c *install) downloadAndUncompressArchive() []byte {
 	client := http.Client{Timeout: 10 * time.Minute}
 	url := fmt.Sprintf("http://opensource.spotify.com/cefbuilds/%s.tar.bz2", c.archiveName())
 	fmt.Println("  Downloading...")
@@ -140,7 +141,7 @@ func (c *Install) downloadAndUncompressArchive() []byte {
 	return buffer
 }
 
-func (c *Install) untar(in io.Reader) {
+func (c *install) untar(in io.Reader) {
 	prefix := c.archiveName()
 	fmt.Println("  Unarchiving...")
 	r := tar.NewReader(in)

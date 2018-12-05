@@ -17,7 +17,7 @@ func main() {
 	cmdline.AppIdentifier = "com.trollworks.cef"
 	cl := cmdline.New(true)
 	cl.Description = "Utilities for managing setup of the Chromium Embedded Framework."
-	cl.AddCommand(&cmd.Install{Version: desiredCEFVersion})
+	cl.AddCommand(cmd.NewInstall(desiredCEFVersion))
 	cl.AddCommand(cmd.NewDist())
 	if err := cl.RunCommand(cl.Parse(os.Args[1:])); err != nil {
 		fmt.Fprintln(os.Stderr, err)
