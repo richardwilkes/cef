@@ -10,7 +10,7 @@ import (
 func createDir(dir string, mode os.FileMode) {
 	if err := os.MkdirAll(dir, mode); err != nil {
 		fmt.Println(err)
-		fmt.Println("You may need to run this as root.")
+		fmt.Println("You may need to run the 'cef' tool as root.")
 		atexit.Exit(1)
 	}
 }

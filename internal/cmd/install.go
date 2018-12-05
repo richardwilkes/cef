@@ -67,7 +67,7 @@ func (c *install) Run(cl *cmdline.CmdLine, args []string) error {
 		if err := os.RemoveAll(installPrefix); err != nil {
 			fmt.Printf("Unable to remove old installation at %s\n", installPrefix)
 			fmt.Println(err)
-			fmt.Println("You may need to run this as root.")
+			fmt.Println("You may need to run the 'cef' tool as root.")
 			atexit.Exit(1)
 		}
 		createDir(path.Join(installPrefix, "helper"), 0755)
