@@ -18,6 +18,8 @@ func checkPlatform() {
 	switch runtime.GOOS {
 	case "darwin":
 		cefPlatform = "macosx64"
+	case "linux":
+		cefPlatform = "linux64"
 	case "windows":
 		if os.Getenv("MSYSTEM") != "MINGW64" {
 			fmt.Println("Windows is only supported through the use of MINGW64")

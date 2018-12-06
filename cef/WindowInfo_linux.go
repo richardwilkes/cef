@@ -19,8 +19,6 @@ type WindowInfo struct {
 	Height int32
 	// ParentWindow (parent_window)
 	ParentWindow unsafe.Pointer
-	// Menu (menu)
-	Menu unsafe.Pointer
 	// WindowlessRenderingEnabled (windowless_rendering_enabled)
 	// Set to true (1) to create the browser using windowless (off-screen)
 	// rendering. No window will be created for the browser and all rendering will
@@ -33,31 +31,23 @@ type WindowInfo struct {
 	// Transparent painting is enabled by default but can be disabled by setting
 	// CefBrowserSettings.background_color to an opaque value.
 	WindowlessRenderingEnabled int32
-	// SharedTextEnabled (shared_texture_enabled)
-	// Set to true (1) to enable shared textures for windowless rendering. Only
-	// valid if windowless_rendering_enabled above is also set to true. Currently
-	// only supported on Windows (D3D11).
-	SharedTextureEnabled int32
-	// ExternalBeginFrameEnabled (external_begin_frame_enabled)
-	// Set to true (1) to enable the ability to issue BeginFrame requests from the
-	// client application by calling CefBrowserHost::SendExternalBeginFrame.
-	ExternalBeginFrameEnabled int32
 	// Window (window)
 	// Handle for the new browser window. Only used with windowed rendering.
 	Window unsafe.Pointer
 }
 
+func (d *WindowInfo) platformInit(parent unsafe.Pointer) {
+	d.ParentWindow = parent
+}
+
 func (d *WindowInfo) toNative(native *C.cef_window_info_t) *C.cef_window_info_t {
-	native.x = C.int(d.X)
-	native.y = C.int(d.Y)
-	native.width = C.int(d.Width)
-	native.height = C.int(d.Height)
-	native.parent_window = d.ParentWindow
-	native.menu = d.Menu
+	native.x = C.uint(d.X)
+	native.y = C.uint(d.Y)
+	native.width = C.uint(d.Width)
+	native.height = C.uint(d.Height)
+	native.parent_window = C.ulong(uintptr(d.ParentWindow))
 	native.windowless_rendering_enabled = C.int(d.WindowlessRenderingEnabled)
-	native.shared_texture_enabled = C.int(d.SharedTextureEnabled)
-	native.external_begin_frame_enabled = C.int(d.ExternalBeginFrameEnabled)
-	native.window = d.Window
+	native.window = C.ulong(uintptr(d.Window))
 	return native
 }
 
@@ -72,10 +62,7 @@ func (n *C.cef_window_info_t) intoGo(d *WindowInfo) {
 	d.Y = int32(n.y)
 	d.Width = int32(n.width)
 	d.Height = int32(n.height)
-	d.ParentWindow = unsafe.Pointer(n.parent_window)
-	d.Menu = unsafe.Pointer(n.menu)
+	d.ParentWindow = unsafe.Pointer(uintptr(n.parent_window))
 	d.WindowlessRenderingEnabled = int32(n.windowless_rendering_enabled)
-	d.SharedTextureEnabled = int32(n.shared_texture_enabled)
-	d.ExternalBeginFrameEnabled = int32(n.external_begin_frame_enabled)
-	d.Window = unsafe.Pointer(n.window)
+	d.Window = unsafe.Pointer(uintptr(n.window))
 }

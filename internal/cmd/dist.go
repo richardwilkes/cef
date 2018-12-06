@@ -78,8 +78,8 @@ func (d *dist) Run(cl *cmdline.CmdLine, args []string) error {
 	switch runtime.GOOS {
 	case "darwin":
 		d.distMacOS()
-	case "windows":
-		d.distWindows()
+	case "linux", "windows":
+		d.distNotMacOS()
 	default:
 		return fmt.Errorf("Unhandled OS: %s", runtime.GOOS)
 	}
@@ -190,7 +190,7 @@ func (d *dist) distMacOS() {
 	checkFileError(f.Close(), "write", plist)
 }
 
-func (d *dist) distWindows() {
+func (d *dist) distNotMacOS() {
 	copyDirContents(path.Join(installPrefix, "Release"), d.root)
 	copyDirContents(path.Join(installPrefix, "Resources"), d.root)
 }

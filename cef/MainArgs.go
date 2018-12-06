@@ -3,6 +3,8 @@ package cef
 import (
 	// #cgo darwin CFLAGS: -I/usr/local/cef
 	// #cgo darwin LDFLAGS: -framework Cocoa -F/usr/local/cef/Release -framework "Chromium Embedded Framework"
+	// #cgo linux CFLAGS: -I/usr/local/cef
+	// #cgo linux LDFLAGS: -L/usr/local/cef/Release -lcef
 	// #cgo windows pkg-config: cef
 	// #cgo windows LDFLAGS: -Wl,--subsystem,windows
 	// #include <stdlib.h>
