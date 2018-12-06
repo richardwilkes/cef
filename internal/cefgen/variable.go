@@ -69,7 +69,7 @@ func newCVar(name, typeInfo string, pos position) *variable {
 	}
 	typeInfo = strings.TrimSpace(typeInfo)
 	typeInfo = strings.TrimPrefix(typeInfo, "struct _")
-	typeInfo = strings.Replace(typeInfo, "long long", "int64_t", -1)
+	typeInfo = strings.Replace(typeInfo, "long long", "longlong", -1)
 	if v.Name == "base" {
 		switch typeInfo {
 		case "cef_base_ref_counted_t":
@@ -111,7 +111,7 @@ func newCVar(name, typeInfo string, pos position) *variable {
 		v.GoType = v.Ptrs + "int16"
 	case "int":
 		v.GoType = v.Ptrs + "int32"
-	case "int64_t", "time_t":
+	case "int64_t", "time_t", "longlong":
 		v.GoType = v.Ptrs + "int64"
 	case "float":
 		v.GoType = v.Ptrs + "float32"

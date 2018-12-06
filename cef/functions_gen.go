@@ -891,7 +891,7 @@ func TaskRunnerGetForThread(threadId ThreadID) *TaskRunner {
 // Retrieve the delta in milliseconds between two time values.
 //
 func TimeDelta(cef_time1, cef_time2 *Time, delta *int64) int32 {
-	return int32(C.cef_time_delta(cef_time1.toNative(&C.cef_time_t{}), cef_time2.toNative(&C.cef_time_t{}), (*C.int64_t)(delta)))
+	return int32(C.cef_time_delta(cef_time1.toNative(&C.cef_time_t{}), cef_time2.toNative(&C.cef_time_t{}), (*C.longlong)(delta)))
 }
 
 // TimeFromDoublet (cef_time_from_doublet from include/internal/cef_time.h)
