@@ -2,8 +2,7 @@
 Go bindings for the
 [Chromium Embedded Framework (CEF)](https://bitbucket.org/chromiumembedded/cef).
 
-Currently works for macOS and Windows. Linux support will be coming at some
-point as well.
+Currently works for macOS, Windows and Linux.
 
 ## Initial setup required for Windows
 - Download and run the installer from http://www.msys2.org/
@@ -22,7 +21,7 @@ This will install the necessary CEF headers and libraries into /usr/local/cef.
 ## Example application
 https://github.com/richardwilkes/webapp and
 https://github.com/richardwilkes/webapp-example use these bindings to create
-an example desktop application.
+an example desktop application (currently macOS and Windows only).
 
 ## Updating the CEF version to be used
 The CEF version can be updated in the `main.go` file by changing the
