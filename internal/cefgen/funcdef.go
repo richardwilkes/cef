@@ -95,6 +95,16 @@ for i, one := range %[1]s {
 			if _, exists := edefsMap[p.BaseType]; exists {
 				names[i] = p.Name + "_"
 				fmt.Fprintf(&buffer, "%[1]s_ := C.%[2]s(*%[1]s)\n", p.Name, p.BaseType)
+			} else if p.Name == "delegate" {
+				names[i] = p.Name + "_"
+				fmt.Fprintf(&buffer, "var delegate_ %sC.%s\n", p.Ptrs, p.BaseType)
+				buffer.WriteString("if delegate != nil {\n")
+				buffer.WriteString("delegate_ = delegate.toNative(")
+				if sdef, exists := sdefsMap[p.BaseType]; exists && !sdef.isClassEquivalent() {
+					fmt.Fprintf(&buffer, "&C.%s{}", p.BaseType)
+				}
+				buffer.WriteString(")\n")
+				buffer.WriteString("}\n")
 			}
 		}
 	}
@@ -156,11 +166,15 @@ func emitParamsForCCall(buffer *strings.Builder, vars []*variable, names []strin
 				if len(p.Ptrs) > 1 {
 					fmt.Fprintf(buffer, "&%s", names[i])
 				} else {
-					fmt.Fprintf(buffer, "%s.toNative(", names[i])
-					if !sdef.isClassEquivalent() {
-						fmt.Fprintf(buffer, "&C.%s{}", p.BaseType)
+					if names[i] == "delegate_" {
+						buffer.WriteString("delegate_")
+					} else {
+						fmt.Fprintf(buffer, "%s.toNative(", names[i])
+						if !sdef.isClassEquivalent() {
+							fmt.Fprintf(buffer, "&C.%s{}", p.BaseType)
+						}
+						buffer.WriteString(")")
 					}
-					buffer.WriteString(")")
 				}
 			} else if len(p.Ptrs) > 0 {
 				fmt.Fprintf(buffer, "(%sC.%s)(%s)", p.Ptrs, p.BaseType, names[i])

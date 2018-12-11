@@ -106,7 +106,11 @@ func BrowserViewCreate(client *Client, url string, settings *BrowserSettings, re
 	defer func() {
 		C.cef_string_userfree_free(url_)
 	}()
-	return (*BrowserView)(C.cef_browser_view_create(client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative(), delegate.toNative()))
+	var delegate_ *C.cef_browser_view_delegate_t
+	if delegate != nil {
+		delegate_ = delegate.toNative()
+	}
+	return (*BrowserView)(C.cef_browser_view_create(client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative(), delegate_))
 }
 
 // BrowserViewGetForBrowser (cef_browser_view_get_for_browser from include/capi/views/cef_browser_view_capi.h)
@@ -338,12 +342,16 @@ func IsWebPluginUnstable(path string, callback *WebPluginUnstableCallback) {
 // have a visible frame on hover/press, left alignment, less padding and no
 // default minimum size.
 func LabelButtonCreate(delegate *ButtonDelegate, text string, with_frame int32) *LabelButton {
+	var delegate_ *C.cef_button_delegate_t
+	if delegate != nil {
+		delegate_ = delegate.toNative()
+	}
 	text_ := C.cef_string_userfree_alloc()
 	setCEFStr(text, text_)
 	defer func() {
 		C.cef_string_userfree_free(text_)
 	}()
-	return (*LabelButton)(C.cef_label_button_create(delegate.toNative(), (*C.cef_string_t)(text_), C.int(with_frame)))
+	return (*LabelButton)(C.cef_label_button_create(delegate_, (*C.cef_string_t)(text_), C.int(with_frame)))
 }
 
 // ListValueCreate (cef_list_value_create from include/capi/cef_values_capi.h)
@@ -362,24 +370,36 @@ func ListValueCreate() *ListValue {
 // and no default minimum size. If |with_menu_marker| is true (1) a menu marker
 // will be added to the button.
 func MenuButtonCreate(delegate *MenuButtonDelegate, text string, with_frame, with_menu_marker int32) *MenuButton {
+	var delegate_ *C.cef_menu_button_delegate_t
+	if delegate != nil {
+		delegate_ = delegate.toNative()
+	}
 	text_ := C.cef_string_userfree_alloc()
 	setCEFStr(text, text_)
 	defer func() {
 		C.cef_string_userfree_free(text_)
 	}()
-	return (*MenuButton)(C.cef_menu_button_create(delegate.toNative(), (*C.cef_string_t)(text_), C.int(with_frame), C.int(with_menu_marker)))
+	return (*MenuButton)(C.cef_menu_button_create(delegate_, (*C.cef_string_t)(text_), C.int(with_frame), C.int(with_menu_marker)))
 }
 
 // MenuModelCreate (cef_menu_model_create from include/capi/cef_menu_model_capi.h)
 // Create a new MenuModel with the specified |delegate|.
 func MenuModelCreate(delegate *MenuModelDelegate) *MenuModel {
-	return (*MenuModel)(C.cef_menu_model_create(delegate.toNative()))
+	var delegate_ *C.cef_menu_model_delegate_t
+	if delegate != nil {
+		delegate_ = delegate.toNative()
+	}
+	return (*MenuModel)(C.cef_menu_model_create(delegate_))
 }
 
 // PanelCreate (cef_panel_create from include/capi/views/cef_panel_capi.h)
 // Create a new Panel.
 func PanelCreate(delegate *PanelDelegate) *Panel {
-	return (*Panel)(C.cef_panel_create(delegate.toNative(&C.cef_panel_delegate_t{})))
+	var delegate_ *C.cef_panel_delegate_t
+	if delegate != nil {
+		delegate_ = delegate.toNative(&C.cef_panel_delegate_t{})
+	}
+	return (*Panel)(C.cef_panel_create(delegate_))
 }
 
 // PostDataCreate (cef_post_data_create from include/capi/cef_request_capi.h)
@@ -668,7 +688,11 @@ func RunMessageLoop() {
 // ScrollViewCreate (cef_scroll_view_create from include/capi/views/cef_scroll_view_capi.h)
 // Create a new ScrollView.
 func ScrollViewCreate(delegate *ViewDelegate) *ScrollView {
-	return (*ScrollView)(C.cef_scroll_view_create(delegate.toNative()))
+	var delegate_ *C.cef_view_delegate_t
+	if delegate != nil {
+		delegate_ = delegate.toNative()
+	}
+	return (*ScrollView)(C.cef_scroll_view_create(delegate_))
 }
 
 // ServerCreate (cef_server_create from include/capi/cef_server_capi.h)
@@ -991,7 +1015,11 @@ func TaskRunnerGetForThread(threadId ThreadID) *TaskRunner {
 // TextfieldCreate (cef_textfield_create from include/capi/views/cef_textfield_capi.h)
 // Create a new Textfield.
 func TextfieldCreate(delegate *TextfieldDelegate) *Textfield {
-	return (*Textfield)(C.cef_textfield_create(delegate.toNative()))
+	var delegate_ *C.cef_textfield_delegate_t
+	if delegate != nil {
+		delegate_ = delegate.toNative()
+	}
+	return (*Textfield)(C.cef_textfield_create(delegate_))
 }
 
 // TimeDelta (cef_time_delta from include/internal/cef_time.h)
@@ -1220,5 +1248,9 @@ func WaitableEventCreate(automatic_reset, initially_signaled int32) *WaitableEve
 // WindowCreateTopLevel (cef_window_create_top_level from include/capi/views/cef_window_capi.h)
 // Create a new Window.
 func WindowCreateTopLevel(delegate *WindowDelegate) *Window {
-	return (*Window)(C.cef_window_create_top_level(delegate.toNative()))
+	var delegate_ *C.cef_window_delegate_t
+	if delegate != nil {
+		delegate_ = delegate.toNative()
+	}
+	return (*Window)(C.cef_window_create_top_level(delegate_))
 }
