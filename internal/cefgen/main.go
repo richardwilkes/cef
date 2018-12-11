@@ -145,13 +145,8 @@ func scanStderr(wg *sync.WaitGroup, r io.Reader) {
 }
 
 func capiHeaders() []string {
-	f, err := os.Open(filepath.Join(cefBaseDir, "include", "capi"))
-	jot.FatalIfErr(err)
-	list, err := f.Readdir(-1)
-	jot.FatalIfErr(err)
-	jot.FatalIfErr(f.Close())
-	headers := make([]string, 0, len(list))
-	for _, one := range list {
+	var headers []string
+	for _, one := range headerList(filepath.Join(cefBaseDir, "include", "capi")) {
 		if !one.IsDir() {
 			name := one.Name()
 			if name != "cef_parser_capi.h" &&
@@ -164,8 +159,22 @@ func capiHeaders() []string {
 			}
 		}
 	}
+	for _, one := range headerList(filepath.Join(cefBaseDir, "include", "capi", "views")) {
+		if !one.IsDir() {
+			headers = append(headers, filepath.Join("include", "capi", "views", one.Name()))
+		}
+	}
 	sort.Strings(headers)
 	return headers
+}
+
+func headerList(dir string) []os.FileInfo {
+	f, err := os.Open(dir)
+	jot.FatalIfErr(err)
+	list, err := f.Readdir(-1)
+	jot.FatalIfErr(err)
+	jot.FatalIfErr(f.Close())
+	return list
 }
 
 func clangArgs(headers []string) []string {

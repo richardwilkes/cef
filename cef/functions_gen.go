@@ -97,6 +97,24 @@ func BrowserHostCreateBrowserSync(windowInfo *WindowInfo, client *Client, url st
 	return (*Browser)(C.cef_browser_host_create_browser_sync(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative()))
 }
 
+// BrowserViewCreate (cef_browser_view_create from include/capi/views/cef_browser_view_capi.h)
+// Create a new BrowserView. The underlying cef_browser_t will not be created
+// until this view is added to the views hierarchy.
+func BrowserViewCreate(client *Client, url string, settings *BrowserSettings, request_context *RequestContext, delegate *BrowserViewDelegate) *BrowserView {
+	url_ := C.cef_string_userfree_alloc()
+	setCEFStr(url, url_)
+	defer func() {
+		C.cef_string_userfree_free(url_)
+	}()
+	return (*BrowserView)(C.cef_browser_view_create(client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative(), delegate.toNative()))
+}
+
+// BrowserViewGetForBrowser (cef_browser_view_get_for_browser from include/capi/views/cef_browser_view_capi.h)
+// Returns the BrowserView associated with |browser|.
+func BrowserViewGetForBrowser(browser *Browser) *BrowserView {
+	return (*BrowserView)(C.cef_browser_view_get_for_browser(browser.toNative()))
+}
+
 // ClearCrossOriginWhitelist (cef_clear_cross_origin_whitelist from include/capi/cef_origin_whitelist_capi.h)
 // Remove all entries from the cross-origin access whitelist. Returns false (0)
 // if the whitelist cannot be accessed.
@@ -184,6 +202,42 @@ func CurrentlyOn(threadId ThreadID) int32 {
 // Creates a new object that is not owned by any other object.
 func DictionaryValueCreate() *DictionaryValue {
 	return (*DictionaryValue)(C.cef_dictionary_value_create())
+}
+
+// DisplayGetAlls (cef_display_get_alls from include/capi/views/cef_display_capi.h)
+// Returns all Displays. Mirrored displays are excluded; this function is
+// intended to return distinct, usable displays.
+func DisplayGetAlls(displaysCount *uint64, displays **Display) {
+	displays_ := (*displays).toNative()
+	C.cef_display_get_alls((*C.size_t)(displaysCount), &displays_)
+}
+
+// DisplayGetCount (cef_display_get_count from include/capi/views/cef_display_capi.h)
+// Returns the total number of Displays. Mirrored displays are excluded; this
+// function is intended to return the number of distinct, usable displays.
+func DisplayGetCount() uint64 {
+	return uint64(C.cef_display_get_count())
+}
+
+// DisplayGetMatchingBounds (cef_display_get_matching_bounds from include/capi/views/cef_display_capi.h)
+// Returns the Display that most closely intersects |bounds|.  Set
+// |input_pixel_coords| to true (1) if |bounds| is in pixel coordinates instead
+// of density independent pixels (DIP).
+func DisplayGetMatchingBounds(bounds *Rect, input_pixel_coords int32) *Display {
+	return (*Display)(C.cef_display_get_matching_bounds(bounds.toNative(&C.cef_rect_t{}), C.int(input_pixel_coords)))
+}
+
+// DisplayGetNearestPoint (cef_display_get_nearest_point from include/capi/views/cef_display_capi.h)
+// Returns the Display nearest |point|. Set |input_pixel_coords| to true (1) if
+// |point| is in pixel coordinates instead of density independent pixels (DIP).
+func DisplayGetNearestPoint(point *Point, input_pixel_coords int32) *Display {
+	return (*Display)(C.cef_display_get_nearest_point(point.toNative(&C.cef_point_t{}), C.int(input_pixel_coords)))
+}
+
+// DisplayGetPrimary (cef_display_get_primary from include/capi/views/cef_display_capi.h)
+// Returns the primary Display.
+func DisplayGetPrimary() *Display {
+	return (*Display)(C.cef_display_get_primary())
 }
 
 // DoMessageLoopWork (cef_do_message_loop_work from include/capi/cef_app_capi.h)
@@ -275,16 +329,57 @@ func IsWebPluginUnstable(path string, callback *WebPluginUnstableCallback) {
 	C.cef_is_web_plugin_unstable((*C.cef_string_t)(path_), callback.toNative())
 }
 
+// LabelButtonCreate (cef_label_button_create from include/capi/views/cef_label_button_capi.h)
+// Create a new LabelButton. A |delegate| must be provided to handle the button
+// click. |text| will be shown on the LabelButton and used as the default
+// accessible name. If |with_frame| is true (1) the button will have a visible
+// frame at all times, center alignment, additional padding and a default
+// minimum size of 70x33 DIP. If |with_frame| is false (0) the button will only
+// have a visible frame on hover/press, left alignment, less padding and no
+// default minimum size.
+func LabelButtonCreate(delegate *ButtonDelegate, text string, with_frame int32) *LabelButton {
+	text_ := C.cef_string_userfree_alloc()
+	setCEFStr(text, text_)
+	defer func() {
+		C.cef_string_userfree_free(text_)
+	}()
+	return (*LabelButton)(C.cef_label_button_create(delegate.toNative(), (*C.cef_string_t)(text_), C.int(with_frame)))
+}
+
 // ListValueCreate (cef_list_value_create from include/capi/cef_values_capi.h)
 // Creates a new object that is not owned by any other object.
 func ListValueCreate() *ListValue {
 	return (*ListValue)(C.cef_list_value_create())
 }
 
+// MenuButtonCreate (cef_menu_button_create from include/capi/views/cef_menu_button_capi.h)
+// Create a new MenuButton. A |delegate| must be provided to call show_menu()
+// when the button is clicked. |text| will be shown on the MenuButton and used
+// as the default accessible name. If |with_frame| is true (1) the button will
+// have a visible frame at all times, center alignment, additional padding and a
+// default minimum size of 70x33 DIP. If |with_frame| is false (0) the button
+// will only have a visible frame on hover/press, left alignment, less padding
+// and no default minimum size. If |with_menu_marker| is true (1) a menu marker
+// will be added to the button.
+func MenuButtonCreate(delegate *MenuButtonDelegate, text string, with_frame, with_menu_marker int32) *MenuButton {
+	text_ := C.cef_string_userfree_alloc()
+	setCEFStr(text, text_)
+	defer func() {
+		C.cef_string_userfree_free(text_)
+	}()
+	return (*MenuButton)(C.cef_menu_button_create(delegate.toNative(), (*C.cef_string_t)(text_), C.int(with_frame), C.int(with_menu_marker)))
+}
+
 // MenuModelCreate (cef_menu_model_create from include/capi/cef_menu_model_capi.h)
 // Create a new MenuModel with the specified |delegate|.
 func MenuModelCreate(delegate *MenuModelDelegate) *MenuModel {
 	return (*MenuModel)(C.cef_menu_model_create(delegate.toNative()))
+}
+
+// PanelCreate (cef_panel_create from include/capi/views/cef_panel_capi.h)
+// Create a new Panel.
+func PanelCreate(delegate *PanelDelegate) *Panel {
+	return (*Panel)(C.cef_panel_create(delegate.toNative(&C.cef_panel_delegate_t{})))
 }
 
 // PostDataCreate (cef_post_data_create from include/capi/cef_request_capi.h)
@@ -568,6 +663,12 @@ func ResponseCreate() *Response {
 // will block until a quit message is received by the system.
 func RunMessageLoop() {
 	C.cef_run_message_loop()
+}
+
+// ScrollViewCreate (cef_scroll_view_create from include/capi/views/cef_scroll_view_capi.h)
+// Create a new ScrollView.
+func ScrollViewCreate(delegate *ViewDelegate) *ScrollView {
+	return (*ScrollView)(C.cef_scroll_view_create(delegate.toNative()))
 }
 
 // ServerCreate (cef_server_create from include/capi/cef_server_capi.h)
@@ -887,6 +988,12 @@ func TaskRunnerGetForThread(threadId ThreadID) *TaskRunner {
 	return (*TaskRunner)(C.cef_task_runner_get_for_thread(C.cef_thread_id_t(threadId)))
 }
 
+// TextfieldCreate (cef_textfield_create from include/capi/views/cef_textfield_capi.h)
+// Create a new Textfield.
+func TextfieldCreate(delegate *TextfieldDelegate) *Textfield {
+	return (*Textfield)(C.cef_textfield_create(delegate.toNative()))
+}
+
 // TimeDelta (cef_time_delta from include/internal/cef_time.h)
 // Retrieve the delta in milliseconds between two time values.
 //
@@ -1108,4 +1215,10 @@ func VisitWebPluginInfo(visitor *WebPluginInfoVisitor) {
 // the signaled state.
 func WaitableEventCreate(automatic_reset, initially_signaled int32) *WaitableEvent {
 	return (*WaitableEvent)(C.cef_waitable_event_create(C.int(automatic_reset), C.int(initially_signaled)))
+}
+
+// WindowCreateTopLevel (cef_window_create_top_level from include/capi/views/cef_window_capi.h)
+// Create a new Window.
+func WindowCreateTopLevel(delegate *WindowDelegate) *Window {
+	return (*Window)(C.cef_window_create_top_level(delegate.toNative()))
 }

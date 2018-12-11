@@ -104,7 +104,7 @@ for i, one := range %[1]s {
 func emitReturnForCCall(buffer *strings.Builder, expression string, retVar *variable) {
 	if retVar.GoType == "" {
 		buffer.WriteString(expression)
-	} else if sdef, exists := sdefsMap[retVar.CType]; exists && !sdef.isClassEquivalent() {
+	} else if sdef, exists := sdefsMap[retVar.BaseType]; exists && !sdef.isClassEquivalent() {
 		if retVar.Ptrs == "*" {
 			fmt.Fprintf(buffer, "return (%s).toGo()", expression)
 		} else {

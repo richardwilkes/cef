@@ -89,6 +89,12 @@ func (f *field) CallFunctionPointer() string {
 func (f *field) ReturnField() string {
 	var buffer strings.Builder
 	buffer.WriteString("return ")
+	if f.Var.Name == "base" {
+		if sdef, exists := sdefsMap[f.Var.BaseType]; exists && !sdef.isClassEquivalent() {
+			buffer.WriteString("(&d.base).toGo()")
+			return buffer.String()
+		}
+	}
 	if strings.HasPrefix(f.Var.GoType, "*") {
 		fmt.Fprintf(&buffer, "(%s)", f.Var.GoType)
 	} else {
@@ -117,11 +123,14 @@ func (f *field) ToNative() string {
 		default:
 			fmt.Fprintf(&buffer, "native.%s = ", f.Var.Name)
 			if i := strings.Index(f.Var.CType, " "); i != -1 {
-				fmt.Fprintf(&buffer, "(%sC.%s)", f.Var.CType[i+1:], f.Var.CType[:i])
+				if f.Var.Name == "base" {
+					fmt.Fprintf(&buffer, "*(%sC.%s)(unsafe.Pointer(d.Base))", f.Var.CType[i+1:], f.Var.CType[:i])
+				} else {
+					fmt.Fprintf(&buffer, "(%sC.%s)(d.%s)", f.Var.CType[i+1:], f.Var.CType[:i], f.Var.GoName)
+				}
 			} else {
-				fmt.Fprintf(&buffer, "C.%s", f.Var.CType)
+				fmt.Fprintf(&buffer, "C.%s(d.%s)", f.Var.CType, f.Var.GoName)
 			}
-			fmt.Fprintf(&buffer, "(d.%s)", f.Var.GoName)
 		}
 	}
 	return buffer.String()
@@ -141,12 +150,16 @@ func (f *field) IntoGo() string {
 		case "cef_string_t *":
 			fmt.Fprintf(&buffer, "cefstrToString(n.%s)", f.Var.Name)
 		default:
-			if strings.HasPrefix(f.Var.GoType, "*") {
-				fmt.Fprintf(&buffer, "(%s)", f.Var.GoType)
+			if f.Var.Name == "base" {
+				fmt.Fprintf(&buffer, "(%s)(&n.base)", f.Var.GoType)
 			} else {
-				buffer.WriteString(f.Var.GoType)
+				if strings.HasPrefix(f.Var.GoType, "*") {
+					fmt.Fprintf(&buffer, "(%s)", f.Var.GoType)
+				} else {
+					buffer.WriteString(f.Var.GoType)
+				}
+				fmt.Fprintf(&buffer, "(n.%s)", f.Var.Name)
 			}
-			fmt.Fprintf(&buffer, "(n.%s)", f.Var.Name)
 		}
 	}
 	return buffer.String()
@@ -257,4 +270,22 @@ func (f *field) CallbackReturnType() string {
 	}
 	rt := f.processedCParams([]string{f.Var.CType})[0]
 	return fmt.Sprintf("%sC.%s", rt.Ptrs, rt.Type)
+}
+
+func (f *field) ToBase() string {
+	var buffer strings.Builder
+	buffer.WriteString(".Base()")
+	t := f.Owner.Fields[0].Var.BaseType
+	for !strings.HasPrefix(t, "cef_base_") {
+		buffer.WriteString(".Base")
+		if sdef, exists := sdefsMap[t]; exists {
+			if sdef.isClassEquivalent() {
+				buffer.WriteString("()")
+			}
+			t = sdef.Fields[0].Var.BaseType
+		} else {
+			break
+		}
+	}
+	return buffer.String()
 }

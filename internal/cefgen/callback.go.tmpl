@@ -60,7 +60,7 @@ func lookup{{.GoName}}Proxy(obj *BaseRefCounted) {{.GoName}}Proxy {
 {{- end}}
 func (d *{{.Owner.GoName}}) {{.Var.GoName}}({{.ParameterList}}) {{if .Var.GoType}}{{.Var.GoType}} {{end}}{
 {{- if .Var.FunctionPtr}}
-	{{if .Var.GoType}}return {{end}}lookup{{.Owner.GoName}}Proxy(d.Base()).{{.Var.GoName}}({{.ParameterNames}})
+	{{if .Var.GoType}}return {{end}}lookup{{.Owner.GoName}}Proxy(d{{.ToBase}}).{{.Var.GoName}}({{.ParameterNames}})
 {{- else}}
 	{{.ReturnField}}
 {{- end}}
@@ -70,7 +70,7 @@ func (d *{{.Owner.GoName}}) {{.Var.GoName}}({{.ParameterList}}) {{if .Var.GoType
 //export {{.TrampolineName}}
 func {{.TrampolineName}}({{.CallbackParams}}) {{.CallbackReturnType}} {
 	me__ := (*{{.Owner.GoName}})(self)
-	proxy__ := lookup{{.Owner.GoName}}Proxy(me__.Base())
+	proxy__ := lookup{{.Owner.GoName}}Proxy(me__{{.ToBase}})
 	{{.Callback}}
 }
 {{- end}}

@@ -47,7 +47,11 @@ func (s *structDef) NeedsUnsafeImport() bool {
 			return true
 		}
 	}
-	return false
+	return s.hasInheritance()
+}
+
+func (s *structDef) hasInheritance() bool {
+	return !s.isClassEquivalent() && len(s.Fields) > 0 && s.Fields[0].Var.Name == "base"
 }
 
 func (s *structDef) isClassEquivalent() bool {

@@ -71,14 +71,7 @@ func newCVar(name, typeInfo string, pos position) *variable {
 	typeInfo = strings.TrimPrefix(typeInfo, "struct _")
 	typeInfo = strings.Replace(typeInfo, "long long", "longlong", -1)
 	if v.Name == "base" {
-		switch typeInfo {
-		case "cef_base_ref_counted_t":
-			typeInfo = "cef_base_ref_counted_t *"
-		case "cef_base_scoped_t":
-			typeInfo = "cef_base_scoped_t *"
-		default:
-			jot.Fatal(1, errs.Newf("Unexpected base type: %s", typeInfo))
-		}
+		typeInfo += " *"
 	}
 	v.CType = typeInfo
 	if space := strings.Index(typeInfo, " "); space != -1 {
