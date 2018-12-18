@@ -22,12 +22,18 @@ func NewPoint() *Point {
 }
 
 func (d *Point) toNative(native *C.cef_point_t) *C.cef_point_t {
+	if d == nil {
+		return nil
+	}
 	native.x = C.int(d.X)
 	native.y = C.int(d.Y)
 	return native
 }
 
 func (n *C.cef_point_t) toGo() *Point {
+	if n == nil {
+		return nil
+	}
 	var d Point
 	n.intoGo(&d)
 	return &d

@@ -64,6 +64,9 @@ func NewPDFPrintSettings() *PDFPrintSettings {
 }
 
 func (d *PDFPrintSettings) toNative(native *C.cef_pdf_print_settings_t) *C.cef_pdf_print_settings_t {
+	if d == nil {
+		return nil
+	}
 	setCEFStr(d.HeaderFooterTitle, &native.header_footer_title)
 	setCEFStr(d.HeaderFooterUrl, &native.header_footer_url)
 	native.page_width = C.int(d.PageWidth)
@@ -82,6 +85,9 @@ func (d *PDFPrintSettings) toNative(native *C.cef_pdf_print_settings_t) *C.cef_p
 }
 
 func (n *C.cef_pdf_print_settings_t) toGo() *PDFPrintSettings {
+	if n == nil {
+		return nil
+	}
 	var d PDFPrintSettings
 	n.intoGo(&d)
 	return &d

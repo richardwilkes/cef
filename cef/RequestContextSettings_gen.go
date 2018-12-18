@@ -71,6 +71,9 @@ func NewRequestContextSettings() *RequestContextSettings {
 }
 
 func (d *RequestContextSettings) toNative(native *C.cef_request_context_settings_t) *C.cef_request_context_settings_t {
+	if d == nil {
+		return nil
+	}
 	native.size = C.size_t(d.Size)
 	setCEFStr(d.CachePath, &native.cache_path)
 	native.persist_session_cookies = C.int(d.PersistSessionCookies)
@@ -82,6 +85,9 @@ func (d *RequestContextSettings) toNative(native *C.cef_request_context_settings
 }
 
 func (n *C.cef_request_context_settings_t) toGo() *RequestContextSettings {
+	if n == nil {
+		return nil
+	}
 	var d RequestContextSettings
 	n.intoGo(&d)
 	return &d

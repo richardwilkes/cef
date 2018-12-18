@@ -49,6 +49,9 @@ func New{{.GoName}}() *{{.GoName}} {
 }
 
 func (d *{{.GoName}}) toNative(native *C.{{.Name}}) *C.{{.Name}} {
+	if d == nil {
+		return nil
+	}
 {{- range .Fields}}
 	{{.ToNative}}
 {{- end}}
@@ -56,6 +59,9 @@ func (d *{{.GoName}}) toNative(native *C.{{.Name}}) *C.{{.Name}} {
 }
 
 func (n *C.{{.Name}}) toGo() *{{.GoName}} {
+	if n == nil {
+		return nil
+	}
 	var d {{.GoName}}
 	n.intoGo(&d)
 	return &d

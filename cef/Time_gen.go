@@ -36,6 +36,9 @@ func NewTime() *Time {
 }
 
 func (d *Time) toNative(native *C.cef_time_t) *C.cef_time_t {
+	if d == nil {
+		return nil
+	}
 	native.year = C.int(d.Year)
 	native.month = C.int(d.Month)
 	native.day_of_week = C.int(d.DayOfWeek)
@@ -48,6 +51,9 @@ func (d *Time) toNative(native *C.cef_time_t) *C.cef_time_t {
 }
 
 func (n *C.cef_time_t) toGo() *Time {
+	if n == nil {
+		return nil
+	}
 	var d Time
 	n.intoGo(&d)
 	return &d

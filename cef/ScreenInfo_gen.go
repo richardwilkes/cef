@@ -57,6 +57,9 @@ func NewScreenInfo() *ScreenInfo {
 }
 
 func (d *ScreenInfo) toNative(native *C.cef_screen_info_t) *C.cef_screen_info_t {
+	if d == nil {
+		return nil
+	}
 	native.device_scale_factor = C.float(d.DeviceScaleFactor)
 	native.depth = C.int(d.Depth)
 	native.depth_per_component = C.int(d.DepthPerComponent)
@@ -67,6 +70,9 @@ func (d *ScreenInfo) toNative(native *C.cef_screen_info_t) *C.cef_screen_info_t 
 }
 
 func (n *C.cef_screen_info_t) toGo() *ScreenInfo {
+	if n == nil {
+		return nil
+	}
 	var d ScreenInfo
 	n.intoGo(&d)
 	return &d

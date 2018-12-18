@@ -22,11 +22,17 @@ func NewMenuButtonPressedLock() *MenuButtonPressedLock {
 }
 
 func (d *MenuButtonPressedLock) toNative(native *C.cef_menu_button_pressed_lock_t) *C.cef_menu_button_pressed_lock_t {
+	if d == nil {
+		return nil
+	}
 	native.base = *(*C.cef_base_ref_counted_t)(unsafe.Pointer(d.Base))
 	return native
 }
 
 func (n *C.cef_menu_button_pressed_lock_t) toGo() *MenuButtonPressedLock {
+	if n == nil {
+		return nil
+	}
 	var d MenuButtonPressedLock
 	n.intoGo(&d)
 	return &d

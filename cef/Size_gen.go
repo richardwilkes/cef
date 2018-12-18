@@ -22,12 +22,18 @@ func NewSize() *Size {
 }
 
 func (d *Size) toNative(native *C.cef_size_t) *C.cef_size_t {
+	if d == nil {
+		return nil
+	}
 	native.width = C.int(d.Width)
 	native.height = C.int(d.Height)
 	return native
 }
 
 func (n *C.cef_size_t) toGo() *Size {
+	if n == nil {
+		return nil
+	}
 	var d Size
 	n.intoGo(&d)
 	return &d

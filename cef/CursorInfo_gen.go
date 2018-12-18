@@ -29,6 +29,9 @@ func NewCursorInfo() *CursorInfo {
 }
 
 func (d *CursorInfo) toNative(native *C.cef_cursor_info_t) *C.cef_cursor_info_t {
+	if d == nil {
+		return nil
+	}
 	d.Hotspot.toNative(&native.hotspot)
 	native.image_scale_factor = C.float(d.ImageScaleFactor)
 	native.buffer = d.Buffer
@@ -37,6 +40,9 @@ func (d *CursorInfo) toNative(native *C.cef_cursor_info_t) *C.cef_cursor_info_t 
 }
 
 func (n *C.cef_cursor_info_t) toGo() *CursorInfo {
+	if n == nil {
+		return nil
+	}
 	var d CursorInfo
 	n.intoGo(&d)
 	return &d

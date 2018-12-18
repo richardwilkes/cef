@@ -42,6 +42,9 @@ func NewPopupFeatures() *PopupFeatures {
 }
 
 func (d *PopupFeatures) toNative(native *C.cef_popup_features_t) *C.cef_popup_features_t {
+	if d == nil {
+		return nil
+	}
 	native.x = C.int(d.X)
 	native.xSet = C.int(d.XSet)
 	native.y = C.int(d.Y)
@@ -58,6 +61,9 @@ func (d *PopupFeatures) toNative(native *C.cef_popup_features_t) *C.cef_popup_fe
 }
 
 func (n *C.cef_popup_features_t) toGo() *PopupFeatures {
+	if n == nil {
+		return nil
+	}
 	var d PopupFeatures
 	n.intoGo(&d)
 	return &d

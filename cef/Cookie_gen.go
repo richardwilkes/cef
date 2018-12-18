@@ -52,6 +52,9 @@ func NewCookie() *Cookie {
 }
 
 func (d *Cookie) toNative(native *C.cef_cookie_t) *C.cef_cookie_t {
+	if d == nil {
+		return nil
+	}
 	setCEFStr(d.Name, &native.name)
 	setCEFStr(d.Value, &native.value)
 	setCEFStr(d.Domain, &native.domain)
@@ -66,6 +69,9 @@ func (d *Cookie) toNative(native *C.cef_cookie_t) *C.cef_cookie_t {
 }
 
 func (n *C.cef_cookie_t) toGo() *Cookie {
+	if n == nil {
+		return nil
+	}
 	var d Cookie
 	n.intoGo(&d)
 	return &d

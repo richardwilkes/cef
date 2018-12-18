@@ -26,6 +26,9 @@ func NewInsets() *Insets {
 }
 
 func (d *Insets) toNative(native *C.cef_insets_t) *C.cef_insets_t {
+	if d == nil {
+		return nil
+	}
 	native.top = C.int(d.Top)
 	native.left = C.int(d.Left)
 	native.bottom = C.int(d.Bottom)
@@ -34,6 +37,9 @@ func (d *Insets) toNative(native *C.cef_insets_t) *C.cef_insets_t {
 }
 
 func (n *C.cef_insets_t) toGo() *Insets {
+	if n == nil {
+		return nil
+	}
 	var d Insets
 	n.intoGo(&d)
 	return &d

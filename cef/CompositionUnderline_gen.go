@@ -32,6 +32,9 @@ func NewCompositionUnderline() *CompositionUnderline {
 }
 
 func (d *CompositionUnderline) toNative(native *C.cef_composition_underline_t) *C.cef_composition_underline_t {
+	if d == nil {
+		return nil
+	}
 	d.Range.toNative(&native._range)
 	native.color = C.cef_color_t(d.Color)
 	native.background_color = C.cef_color_t(d.BackgroundColor)
@@ -40,6 +43,9 @@ func (d *CompositionUnderline) toNative(native *C.cef_composition_underline_t) *
 }
 
 func (n *C.cef_composition_underline_t) toGo() *CompositionUnderline {
+	if n == nil {
+		return nil
+	}
 	var d CompositionUnderline
 	n.intoGo(&d)
 	return &d

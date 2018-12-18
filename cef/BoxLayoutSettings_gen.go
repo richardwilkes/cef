@@ -52,6 +52,9 @@ func NewBoxLayoutSettings() *BoxLayoutSettings {
 }
 
 func (d *BoxLayoutSettings) toNative(native *C.cef_box_layout_settings_t) *C.cef_box_layout_settings_t {
+	if d == nil {
+		return nil
+	}
 	native.horizontal = C.int(d.Horizontal)
 	native.inside_border_horizontal_spacing = C.int(d.InsideBorderHorizontalSpacing)
 	native.inside_border_vertical_spacing = C.int(d.InsideBorderVerticalSpacing)
@@ -65,6 +68,9 @@ func (d *BoxLayoutSettings) toNative(native *C.cef_box_layout_settings_t) *C.cef
 }
 
 func (n *C.cef_box_layout_settings_t) toGo() *BoxLayoutSettings {
+	if n == nil {
+		return nil
+	}
 	var d BoxLayoutSettings
 	n.intoGo(&d)
 	return &d

@@ -28,6 +28,9 @@ func NewMouseEvent() *MouseEvent {
 }
 
 func (d *MouseEvent) toNative(native *C.cef_mouse_event_t) *C.cef_mouse_event_t {
+	if d == nil {
+		return nil
+	}
 	native.x = C.int(d.X)
 	native.y = C.int(d.Y)
 	native.modifiers = C.uint32(d.Modifiers)
@@ -35,6 +38,9 @@ func (d *MouseEvent) toNative(native *C.cef_mouse_event_t) *C.cef_mouse_event_t 
 }
 
 func (n *C.cef_mouse_event_t) toGo() *MouseEvent {
+	if n == nil {
+		return nil
+	}
 	var d MouseEvent
 	n.intoGo(&d)
 	return &d

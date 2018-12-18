@@ -152,6 +152,9 @@ func NewBrowserSettings() *BrowserSettings {
 }
 
 func (d *BrowserSettings) toNative(native *C.cef_browser_settings_t) *C.cef_browser_settings_t {
+	if d == nil {
+		return nil
+	}
 	native.size = C.size_t(d.Size)
 	native.windowless_frame_rate = C.int(d.WindowlessFrameRate)
 	setCEFStr(d.StandardFontFamily, &native.standard_font_family)
@@ -188,6 +191,9 @@ func (d *BrowserSettings) toNative(native *C.cef_browser_settings_t) *C.cef_brow
 }
 
 func (n *C.cef_browser_settings_t) toGo() *BrowserSettings {
+	if n == nil {
+		return nil
+	}
 	var d BrowserSettings
 	n.intoGo(&d)
 	return &d

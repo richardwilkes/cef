@@ -24,12 +24,18 @@ func NewDraggableRegion() *DraggableRegion {
 }
 
 func (d *DraggableRegion) toNative(native *C.cef_draggable_region_t) *C.cef_draggable_region_t {
+	if d == nil {
+		return nil
+	}
 	d.Bounds.toNative(&native.bounds)
 	native.draggable = C.int(d.Draggable)
 	return native
 }
 
 func (n *C.cef_draggable_region_t) toGo() *DraggableRegion {
+	if n == nil {
+		return nil
+	}
 	var d DraggableRegion
 	n.intoGo(&d)
 	return &d

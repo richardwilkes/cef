@@ -49,6 +49,9 @@ func NewUrlparts() *Urlparts {
 }
 
 func (d *Urlparts) toNative(native *C.cef_urlparts_t) *C.cef_urlparts_t {
+	if d == nil {
+		return nil
+	}
 	setCEFStr(d.Spec, &native.spec)
 	setCEFStr(d.Scheme, &native.scheme)
 	setCEFStr(d.Username, &native.username)
@@ -62,6 +65,9 @@ func (d *Urlparts) toNative(native *C.cef_urlparts_t) *C.cef_urlparts_t {
 }
 
 func (n *C.cef_urlparts_t) toGo() *Urlparts {
+	if n == nil {
+		return nil
+	}
 	var d Urlparts
 	n.intoGo(&d)
 	return &d

@@ -26,6 +26,9 @@ func NewRect() *Rect {
 }
 
 func (d *Rect) toNative(native *C.cef_rect_t) *C.cef_rect_t {
+	if d == nil {
+		return nil
+	}
 	native.x = C.int(d.X)
 	native.y = C.int(d.Y)
 	native.width = C.int(d.Width)
@@ -34,6 +37,9 @@ func (d *Rect) toNative(native *C.cef_rect_t) *C.cef_rect_t {
 }
 
 func (n *C.cef_rect_t) toGo() *Rect {
+	if n == nil {
+		return nil
+	}
 	var d Rect
 	n.intoGo(&d)
 	return &d

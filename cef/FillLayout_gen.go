@@ -24,11 +24,17 @@ func NewFillLayout() *FillLayout {
 }
 
 func (d *FillLayout) toNative(native *C.cef_fill_layout_t) *C.cef_fill_layout_t {
+	if d == nil {
+		return nil
+	}
 	native.base = *(*C.cef_layout_t)(unsafe.Pointer(d.Base))
 	return native
 }
 
 func (n *C.cef_fill_layout_t) toGo() *FillLayout {
+	if n == nil {
+		return nil
+	}
 	var d FillLayout
 	n.intoGo(&d)
 	return &d

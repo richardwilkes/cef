@@ -50,6 +50,9 @@ func NewKeyEvent() *KeyEvent {
 }
 
 func (d *KeyEvent) toNative(native *C.cef_key_event_t) *C.cef_key_event_t {
+	if d == nil {
+		return nil
+	}
 	native._type = C.cef_key_event_type_t(d.Type)
 	native.modifiers = C.uint32(d.Modifiers)
 	native.windows_key_code = C.int(d.WindowsKeyCode)
@@ -62,6 +65,9 @@ func (d *KeyEvent) toNative(native *C.cef_key_event_t) *C.cef_key_event_t {
 }
 
 func (n *C.cef_key_event_t) toGo() *KeyEvent {
+	if n == nil {
+		return nil
+	}
 	var d KeyEvent
 	n.intoGo(&d)
 	return &d

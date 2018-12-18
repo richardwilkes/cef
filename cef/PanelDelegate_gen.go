@@ -24,11 +24,17 @@ func NewPanelDelegate() *PanelDelegate {
 }
 
 func (d *PanelDelegate) toNative(native *C.cef_panel_delegate_t) *C.cef_panel_delegate_t {
+	if d == nil {
+		return nil
+	}
 	native.base = *(*C.cef_view_delegate_t)(unsafe.Pointer(d.Base))
 	return native
 }
 
 func (n *C.cef_panel_delegate_t) toGo() *PanelDelegate {
+	if n == nil {
+		return nil
+	}
 	var d PanelDelegate
 	n.intoGo(&d)
 	return &d

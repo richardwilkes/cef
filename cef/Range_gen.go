@@ -22,12 +22,18 @@ func NewRange() *Range {
 }
 
 func (d *Range) toNative(native *C.cef_range_t) *C.cef_range_t {
+	if d == nil {
+		return nil
+	}
 	native.from = C.int(d.From)
 	native.to = C.int(d.To)
 	return native
 }
 
 func (n *C.cef_range_t) toGo() *Range {
+	if n == nil {
+		return nil
+	}
 	var d Range
 	n.intoGo(&d)
 	return &d

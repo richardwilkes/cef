@@ -225,6 +225,9 @@ func NewSettings() *Settings {
 }
 
 func (d *Settings) toNative(native *C.cef_settings_t) *C.cef_settings_t {
+	if d == nil {
+		return nil
+	}
 	native.size = C.size_t(d.Size)
 	native.no_sandbox = C.int(d.NoSandbox)
 	setCEFStr(d.BrowserSubprocessPath, &native.browser_subprocess_path)
@@ -256,6 +259,9 @@ func (d *Settings) toNative(native *C.cef_settings_t) *C.cef_settings_t {
 }
 
 func (n *C.cef_settings_t) toGo() *Settings {
+	if n == nil {
+		return nil
+	}
 	var d Settings
 	n.intoGo(&d)
 	return &d
