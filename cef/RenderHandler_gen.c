@@ -14,6 +14,7 @@ void gocef_set_render_handler_proxy(cef_render_handler_t *self) {
 	self->on_popup_show = (void *)&gocef_render_handler_on_popup_show;
 	self->on_popup_size = (void *)&gocef_render_handler_on_popup_size;
 	self->on_paint = (void *)&gocef_render_handler_on_paint;
+	self->on_accelerated_paint = (void *)&gocef_render_handler_on_accelerated_paint;
 	self->on_cursor_change = (void *)&gocef_render_handler_on_cursor_change;
 	self->start_dragging = (void *)&gocef_render_handler_start_dragging;
 	self->update_drag_cursor = (void *)&gocef_render_handler_update_drag_cursor;

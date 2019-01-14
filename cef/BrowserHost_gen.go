@@ -35,6 +35,7 @@ import (
 	// void gocef_browser_host_was_hidden(cef_browser_host_t * self, int hidden, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, hidden); }
 	// void gocef_browser_host_notify_screen_info_changed(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_invalidate(cef_browser_host_t * self, cef_paint_element_type_t type_r, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_paint_element_type_t)) { return callback__(self, type_r); }
+	// void gocef_browser_host_send_external_begin_frame(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_send_key_event(cef_browser_host_t * self, cef_key_event_t * event, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_key_event_t *)) { return callback__(self, event); }
 	// void gocef_browser_host_send_mouse_click_event(cef_browser_host_t * self, cef_mouse_event_t * event, cef_mouse_button_type_t type_r, int mouseUp, int clickCount, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, cef_mouse_button_type_t, int, int)) { return callback__(self, event, type_r, mouseUp, clickCount); }
 	// void gocef_browser_host_send_mouse_move_event(cef_browser_host_t * self, cef_mouse_event_t * event, int mouseLeave, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, int)) { return callback__(self, event, mouseLeave); }
@@ -380,6 +381,13 @@ func (d *BrowserHost) NotifyScreenInfoChanged() {
 // disabled.
 func (d *BrowserHost) Invalidate(type_r PaintElementType) {
 	C.gocef_browser_host_invalidate(d.toNative(), C.cef_paint_element_type_t(type_r), d.invalidate)
+}
+
+// SendExternalBeginFrame (send_external_begin_frame)
+// Issue a BeginFrame request to Chromium.  Only valid when
+// cef_window_tInfo::external_begin_frame_enabled is set to true (1).
+func (d *BrowserHost) SendExternalBeginFrame() {
+	C.gocef_browser_host_send_external_begin_frame(d.toNative(), d.send_external_begin_frame)
 }
 
 // SendKeyEvent (send_key_event)

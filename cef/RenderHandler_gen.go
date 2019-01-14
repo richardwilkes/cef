@@ -15,12 +15,13 @@ import (
 type RenderHandlerProxy interface {
 	GetAccessibilityHandler(self *RenderHandler) *AccessibilityHandler
 	GetRootScreenRect(self *RenderHandler, browser *Browser, rect *Rect) int32
-	GetViewRect(self *RenderHandler, browser *Browser, rect *Rect) int32
+	GetViewRect(self *RenderHandler, browser *Browser, rect *Rect)
 	GetScreenPoint(self *RenderHandler, browser *Browser, viewX, viewY int32, screenX, screenY *int32) int32
 	GetScreenInfo(self *RenderHandler, browser *Browser, screen_info *ScreenInfo) int32
 	OnPopupShow(self *RenderHandler, browser *Browser, show int32)
 	OnPopupSize(self *RenderHandler, browser *Browser, rect *Rect)
 	OnPaint(self *RenderHandler, browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, buffer unsafe.Pointer, width, height int32)
+	OnAcceleratedPaint(self *RenderHandler, browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, shared_handle unsafe.Pointer)
 	OnCursorChange(self *RenderHandler, browser *Browser, cursor unsafe.Pointer, type_r CursorType, custom_cursor_info *CursorInfo)
 	StartDragging(self *RenderHandler, browser *Browser, drag_data *DragData, allowed_ops DragOperationsMask, x, y int32) int32
 	UpdateDragCursor(self *RenderHandler, browser *Browser, operation DragOperationsMask)
@@ -82,7 +83,8 @@ func gocef_render_handler_get_accessibility_handler(self *C.cef_render_handler_t
 
 // GetRootScreenRect (get_root_screen_rect)
 // Called to retrieve the root window rectangle in screen coordinates. Return
-// true (1) if the rectangle was provided.
+// true (1) if the rectangle was provided. If this function returns false (0)
+// the rectangle from GetViewRect will be used.
 func (d *RenderHandler) GetRootScreenRect(browser *Browser, rect *Rect) int32 {
 	return lookupRenderHandlerProxy(d.Base()).GetRootScreenRect(d, browser, rect)
 }
@@ -97,17 +99,17 @@ func gocef_render_handler_get_root_screen_rect(self *C.cef_render_handler_t, bro
 
 // GetViewRect (get_view_rect)
 // Called to retrieve the view rectangle which is relative to screen
-// coordinates. Return true (1) if the rectangle was provided.
-func (d *RenderHandler) GetViewRect(browser *Browser, rect *Rect) int32 {
-	return lookupRenderHandlerProxy(d.Base()).GetViewRect(d, browser, rect)
+// coordinates. This function must always provide a non-NULL rectangle.
+func (d *RenderHandler) GetViewRect(browser *Browser, rect *Rect) {
+	lookupRenderHandlerProxy(d.Base()).GetViewRect(d, browser, rect)
 }
 
 //export gocef_render_handler_get_view_rect
-func gocef_render_handler_get_view_rect(self *C.cef_render_handler_t, browser *C.cef_browser_t, rect *C.cef_rect_t) C.int {
+func gocef_render_handler_get_view_rect(self *C.cef_render_handler_t, browser *C.cef_browser_t, rect *C.cef_rect_t) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
 	rect_ := rect.toGo()
-	return C.int(proxy__.GetViewRect(me__, (*Browser)(browser), rect_))
+	proxy__.GetViewRect(me__, (*Browser)(browser), rect_)
 }
 
 // GetScreenPoint (get_screen_point)
@@ -181,7 +183,8 @@ func gocef_render_handler_on_popup_size(self *C.cef_render_handler_t, browser *C
 // contains the pixel data for the whole image. |dirtyRects| contains the set
 // of rectangles in pixel coordinates that need to be repainted. |buffer| will
 // be |width|*|height|*4 bytes in size and represents a BGRA image with an
-// upper-left origin.
+// upper-left origin. This function is only called when
+// cef_window_tInfo::shared_texture_enabled is set to false (0).
 func (d *RenderHandler) OnPaint(browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, buffer unsafe.Pointer, width, height int32) {
 	lookupRenderHandlerProxy(d.Base()).OnPaint(d, browser, type_r, dirtyRectsCount, dirtyRects, buffer, width, height)
 }
@@ -192,6 +195,26 @@ func gocef_render_handler_on_paint(self *C.cef_render_handler_t, browser *C.cef_
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
 	dirtyRects_ := dirtyRects.toGo()
 	proxy__.OnPaint(me__, (*Browser)(browser), PaintElementType(type_r), uint64(dirtyRectsCount), dirtyRects_, buffer, int32(width), int32(height))
+}
+
+// OnAcceleratedPaint (on_accelerated_paint)
+// Called when an element has been rendered to the shared texture handle.
+// |type| indicates whether the element is the view or the popup widget.
+// |dirtyRects| contains the set of rectangles in pixel coordinates that need
+// to be repainted. |shared_handle| is the handle for a D3D11 Texture2D that
+// can be accessed via ID3D11Device using the OpenSharedResource function.
+// This function is only called when cef_window_tInfo::shared_texture_enabled
+// is set to true (1), and is currently only supported on Windows.
+func (d *RenderHandler) OnAcceleratedPaint(browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, shared_handle unsafe.Pointer) {
+	lookupRenderHandlerProxy(d.Base()).OnAcceleratedPaint(d, browser, type_r, dirtyRectsCount, dirtyRects, shared_handle)
+}
+
+//export gocef_render_handler_on_accelerated_paint
+func gocef_render_handler_on_accelerated_paint(self *C.cef_render_handler_t, browser *C.cef_browser_t, type_r C.cef_paint_element_type_t, dirtyRectsCount C.size_t, dirtyRects *C.cef_rect_t, shared_handle unsafe.Pointer) {
+	me__ := (*RenderHandler)(self)
+	proxy__ := lookupRenderHandlerProxy(me__.Base())
+	dirtyRects_ := dirtyRects.toGo()
+	proxy__.OnAcceleratedPaint(me__, (*Browser)(browser), PaintElementType(type_r), uint64(dirtyRectsCount), dirtyRects_, shared_handle)
 }
 
 // OnCursorChange (on_cursor_change)

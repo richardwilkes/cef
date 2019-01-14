@@ -9,10 +9,10 @@ import (
 	"github.com/richardwilkes/toolbox/cmdline"
 )
 
-const desiredCEFVersion = "3.3538.1852.gcb937fc"
+const desiredCEFVersion = "3.3578.1863.gbf8cff2"
 
 func main() {
-	cmdline.CopyrightYears = "2018"
+	cmdline.CopyrightYears = "2018-2019"
 	cmdline.CopyrightHolder = "Richard A. Wilkes"
 	cmdline.AppIdentifier = "com.trollworks.cef"
 	cl := cmdline.New(true)
