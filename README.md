@@ -14,7 +14,11 @@ Currently works for macOS, Windows and Linux.
 ## Initial setup
 In the root of the repo, run:
 ```
-go run main.go install
+go install
+```
+Then add `$GOPATH/bin` to your `$PATH` and run:
+```
+cef install
 ```
 This will install the necessary CEF headers and libraries into /usr/local/cef.
 
