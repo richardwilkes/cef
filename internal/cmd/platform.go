@@ -9,6 +9,13 @@ import (
 	"github.com/richardwilkes/toolbox/atexit"
 )
 
+// Constants for comparison to runtime.GOOS
+const (
+	MacOS     = "darwin"
+	WindowsOS = "windows"
+	LinuxOS   = "linux"
+)
+
 var (
 	installPrefix = "/usr/local/cef"
 	cefPlatform   string
@@ -16,11 +23,11 @@ var (
 
 func checkPlatform() {
 	switch runtime.GOOS {
-	case "darwin":
+	case MacOS:
 		cefPlatform = "macosx64"
-	case "linux":
+	case LinuxOS:
 		cefPlatform = "linux64"
-	case "windows":
+	case WindowsOS:
 		if os.Getenv("MSYSTEM") != "MINGW64" {
 			fmt.Println("Windows is only supported through the use of MINGW64")
 			atexit.Exit(1)

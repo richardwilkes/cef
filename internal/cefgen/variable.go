@@ -10,6 +10,15 @@ import (
 	"github.com/richardwilkes/toolbox/txt"
 )
 
+const (
+	voidType         = "void"
+	voidPtrType      = "void *"
+	charType         = "char"
+	cefStringType    = "cef_string_t"
+	cefStringPtrType = "cef_string_t *"
+	stringPtrGoType  = "*string"
+)
+
 var (
 	cNamesToPrefixForAccess = []string{"range", "type"}
 	paramRenames            = []string{"chan", "defer", "error", "fallthrough", "func", "go", "import", "interface", "map", "package", "range", "select", "string", "type", "var"}
@@ -70,7 +79,7 @@ func newCVar(name, typeInfo string, pos position) *variable {
 	typeInfo = strings.TrimSpace(typeInfo)
 	typeInfo = strings.TrimPrefix(typeInfo, "struct _")
 	typeInfo = strings.Replace(typeInfo, "long long", "longlong", -1)
-	if v.Name == "base" {
+	if v.Name == baseFieldName {
 		typeInfo += " *"
 	}
 	v.CType = typeInfo
@@ -81,7 +90,7 @@ func newCVar(name, typeInfo string, pos position) *variable {
 		v.BaseType = typeInfo
 	}
 	switch v.BaseType {
-	case "void":
+	case voidType:
 		switch v.Ptrs {
 		case "":
 		case "*":
@@ -93,7 +102,7 @@ func newCVar(name, typeInfo string, pos position) *variable {
 		default:
 			jot.Fatal(1, errs.Newf("Unhandled void case: %s", v.Ptrs))
 		}
-	case "char":
+	case charType:
 		if v.Ptrs == "**" {
 			v.NeedUnsafe = true
 			v.GoType = "[]string"
@@ -112,14 +121,14 @@ func newCVar(name, typeInfo string, pos position) *variable {
 		v.GoType = v.Ptrs + "float64"
 	case "size_t":
 		v.GoType = v.Ptrs + "uint64"
-	case "cef_string_t", "cef_string_userfree_t", "cef_string_userfree_utf8_t",
+	case cefStringType, "cef_string_userfree_t", "cef_string_userfree_utf8_t",
 		"cef_string_userfree_utf16_t", "cef_string_userfree_wide_t",
 		"cef_string_utf8_t", "cef_string_utf16_t", "cef_string_wide_t":
 		switch v.Ptrs {
 		case "", "*":
 			v.GoType = "string"
 		case "**":
-			v.GoType = "*string"
+			v.GoType = stringPtrGoType
 		default:
 			jot.Fatal(1, errs.Newf("Unhandled string case: %s", v.Ptrs))
 		}
@@ -172,7 +181,7 @@ func adjustedParamName(name string) string {
 
 func (v *variable) paramGoType() string {
 	if !v.HadConst && v.GoType == "string" {
-		return "*string"
+		return stringPtrGoType
 	}
 	return v.GoType
 }
@@ -188,29 +197,31 @@ func (v *variable) transformCToGo(w io.Writer) string {
 				fmt.Fprintf(w, "%[1]s__p := &%[1]s_\n", v.Name)
 				return fmt.Sprintf("%s__p", v.Name)
 			}
-		} else {
-			if v.Ptrs == "*" {
-				fmt.Fprintf(w, "%[1]s_ := %[1]s.toGo()\n", v.Name)
-				return fmt.Sprintf("%s_", v.Name)
-			}
+		} else if v.Ptrs == "*" {
+			fmt.Fprintf(w, "%[1]s_ := %[1]s.toGo()\n", v.Name)
+			return fmt.Sprintf("%s_", v.Name)
 		}
-	} else if _, exists := edefsMap[v.BaseType]; exists {
-		switch v.Ptrs {
-		case "":
-			return v.GoCast(v.Name)
-		case "*":
-			fmt.Fprintf(w, "%[1]s_ := %[2]s(*%[1]s)\n", v.Name, v.GoType[1:])
-			return fmt.Sprintf("&%s_", v.Name)
-		}
-	} else if v.BaseType == "cef_string_t" {
-		addressOf := ""
-		if !v.HadConst {
-			addressOf = "&"
-		}
-		fmt.Fprintf(w, "%[1]s_ := cefstrToString(%[1]s)\n", v.Name)
-		return fmt.Sprintf("%s%s_", addressOf, v.Name)
 	} else {
-		return v.GoCast(v.Name)
+		_, exists := edefsMap[v.BaseType]
+		switch {
+		case exists:
+			switch v.Ptrs {
+			case "":
+				return v.GoCast(v.Name)
+			case "*":
+				fmt.Fprintf(w, "%[1]s_ := %[2]s(*%[1]s)\n", v.Name, v.GoType[1:])
+				return fmt.Sprintf("&%s_", v.Name)
+			}
+		case v.BaseType == cefStringType:
+			addressOf := ""
+			if !v.HadConst {
+				addressOf = "&"
+			}
+			fmt.Fprintf(w, "%[1]s_ := cefstrToString(%[1]s)\n", v.Name)
+			return fmt.Sprintf("%s%s_", addressOf, v.Name)
+		default:
+			return v.GoCast(v.Name)
+		}
 	}
 	jot.Fatal(1, errs.Newf("Unhandled param conversion: %s", v.Name))
 	return ""
@@ -230,7 +241,7 @@ func (v *variable) CGoCast(expression string) string {
 }
 
 func (v *variable) GoCast(expression string) string {
-	if v.BaseType == "void" {
+	if v.BaseType == voidType {
 		return expression
 	}
 	if strings.HasPrefix(v.GoType, "*") {

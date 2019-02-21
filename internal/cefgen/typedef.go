@@ -30,7 +30,7 @@ func newTypeDef(name, refersTo string, pos position) *typeDef {
 }
 
 var excludeMap = map[string]bool{
-	"cef_string_t":                true,
+	cefStringType:                 true,
 	"cef_string_userfree_t":       true,
 	"cef_string_userfree_utf8_t":  true,
 	"cef_string_userfree_utf16_t": true,
@@ -83,7 +83,7 @@ func dumpTypedefs() {
 
 func translateRefersToType(in string) string {
 	switch in {
-	case "void *":
+	case voidPtrType:
 		return "unsafe.Pointer"
 	case "uint32":
 		return in

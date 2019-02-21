@@ -367,9 +367,8 @@ func ListValueCreate() *ListValue {
 // have a visible frame at all times, center alignment, additional padding and a
 // default minimum size of 70x33 DIP. If |with_frame| is false (0) the button
 // will only have a visible frame on hover/press, left alignment, less padding
-// and no default minimum size. If |with_menu_marker| is true (1) a menu marker
-// will be added to the button.
-func MenuButtonCreate(delegate *MenuButtonDelegate, text string, with_frame, with_menu_marker int32) *MenuButton {
+// and no default minimum size.
+func MenuButtonCreate(delegate *MenuButtonDelegate, text string, with_frame int32) *MenuButton {
 	var delegate_ *C.cef_menu_button_delegate_t
 	if delegate != nil {
 		delegate_ = delegate.toNative()
@@ -379,7 +378,7 @@ func MenuButtonCreate(delegate *MenuButtonDelegate, text string, with_frame, wit
 	defer func() {
 		C.cef_string_userfree_free(text_)
 	}()
-	return (*MenuButton)(C.cef_menu_button_create(delegate_, (*C.cef_string_t)(text_), C.int(with_frame), C.int(with_menu_marker)))
+	return (*MenuButton)(C.cef_menu_button_create(delegate_, (*C.cef_string_t)(text_), C.int(with_frame)))
 }
 
 // MenuModelCreate (cef_menu_model_create from include/capi/cef_menu_model_capi.h)

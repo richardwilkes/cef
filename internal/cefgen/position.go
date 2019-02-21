@@ -129,7 +129,7 @@ func (p position) Text(line, startCol, endCol int) string {
 		return ""
 	}
 	text := lines[line-1]
-	if len(text) == 0 {
+	if text == "" {
 		return ""
 	}
 	if startCol < 1 {

@@ -8,6 +8,8 @@ import (
 	"github.com/richardwilkes/toolbox/log/jot"
 )
 
+const baseFieldName = "base"
+
 type field struct {
 	Owner    *structDef
 	Var      *variable
@@ -89,7 +91,7 @@ func (f *field) CallFunctionPointer() string {
 func (f *field) ReturnField() string {
 	var buffer strings.Builder
 	buffer.WriteString("return ")
-	if f.Var.Name == "base" {
+	if f.Var.Name == baseFieldName {
 		if sdef, exists := sdefsMap[f.Var.BaseType]; exists && !sdef.isClassEquivalent() {
 			buffer.WriteString("(&d.base).toGo()")
 			return buffer.String()
@@ -101,7 +103,7 @@ func (f *field) ReturnField() string {
 		buffer.WriteString(f.Var.GoType)
 	}
 	buffer.WriteString("(")
-	if f.Var.Name == "base" {
+	if f.Var.Name == baseFieldName {
 		buffer.WriteString("&")
 	}
 	fmt.Fprintf(&buffer, "d.%s)", f.Var.Name)
@@ -114,16 +116,16 @@ func (f *field) ToNative() string {
 		fmt.Fprintf(&buffer, "d.%s.toNative(&native.%s)", f.Var.GoName, f.Var.Name)
 	} else {
 		switch f.Var.CType {
-		case "void *":
+		case voidPtrType:
 			fmt.Fprintf(&buffer, "native.%s = d.%s", f.Var.Name, f.Var.GoName)
-		case "cef_string_t":
+		case cefStringType:
 			fmt.Fprintf(&buffer, `setCEFStr(d.%s, &native.%s)`, f.Var.GoName, f.Var.Name)
-		case "cef_string_t *":
+		case cefStringPtrType:
 			fmt.Fprintf(&buffer, `setCEFStr(d.%s, native.%s)`, f.Var.GoName, f.Var.Name)
 		default:
 			fmt.Fprintf(&buffer, "native.%s = ", f.Var.Name)
 			if i := strings.Index(f.Var.CType, " "); i != -1 {
-				if f.Var.Name == "base" {
+				if f.Var.Name == baseFieldName {
 					fmt.Fprintf(&buffer, "*(%sC.%s)(unsafe.Pointer(d.Base))", f.Var.CType[i+1:], f.Var.CType[:i])
 				} else {
 					fmt.Fprintf(&buffer, "(%sC.%s)(d.%s)", f.Var.CType[i+1:], f.Var.CType[:i], f.Var.GoName)
@@ -143,14 +145,14 @@ func (f *field) IntoGo() string {
 	} else {
 		fmt.Fprintf(&buffer, "d.%s = ", f.Var.GoName)
 		switch f.Var.CType {
-		case "void *":
+		case voidPtrType:
 			fmt.Fprintf(&buffer, "n.%s", f.Var.Name)
-		case "cef_string_t":
+		case cefStringType:
 			fmt.Fprintf(&buffer, "cefstrToString(&n.%s)", f.Var.Name)
-		case "cef_string_t *":
+		case cefStringPtrType:
 			fmt.Fprintf(&buffer, "cefstrToString(n.%s)", f.Var.Name)
 		default:
-			if f.Var.Name == "base" {
+			if f.Var.Name == baseFieldName {
 				fmt.Fprintf(&buffer, "(%s)(&n.base)", f.Var.GoType)
 			} else {
 				if strings.HasPrefix(f.Var.GoType, "*") {
@@ -247,7 +249,7 @@ func (f *field) CallbackParams() string {
 			buffer.WriteString(", ")
 		}
 		buffer.WriteString(p.Name)
-		if p.BaseType == "void" {
+		if p.BaseType == voidType {
 			switch p.Ptrs {
 			case "":
 			case "*":

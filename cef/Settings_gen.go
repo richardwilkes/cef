@@ -127,9 +127,10 @@ type Settings struct {
 	LogFile string
 	// LogSeverity (log_severity)
 	// The log severity. Only messages of this severity level or higher will be
-	// logged. Also configurable using the "log-severity" command-line switch with
-	// a value of "verbose", "info", "warning", "error", "error-report" or
-	// "disable".
+	// logged. When set to DISABLE no messages will be written to the log file,
+	// but FATAL messages will still be output to stderr. Also configurable using
+	// the "log-severity" command-line switch with a value of "verbose", "info",
+	// "warning", "error", "fatal" or "disable".
 	LogSeverity LogSeverity
 	// JavascriptFlags (javascript_flags)
 	// Custom flags that will be used when initializing the V8 JavaScript engine.

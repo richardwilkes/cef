@@ -83,8 +83,12 @@ func gocef_resource_handler_process_request(self *C.cef_resource_handler_t, requ
 // (0) or the specified number of bytes have been read. Use the |response|
 // object to set the mime type, http status code and other optional header
 // values. To redirect the request to a new URL set |redirectUrl| to the new
-// URL. If an error occured while setting up the request you can call
-// set_error() on |response| to indicate the error condition.
+// URL. |redirectUrl| can be either a relative or fully qualified URL. It is
+// also possible to set |response| to a redirect http status code and pass the
+// new URL via a Location header. Likewise with |redirectUrl| it is valid to
+// set a relative or fully qualified URL as the Location header value. If an
+// error occured while setting up the request you can call set_error() on
+// |response| to indicate the error condition.
 func (d *ResourceHandler) GetResponseHeaders(response *Response, response_length *int64, redirectUrl *string) {
 	lookupResourceHandlerProxy(d.Base()).GetResponseHeaders(d, response, response_length, redirectUrl)
 }

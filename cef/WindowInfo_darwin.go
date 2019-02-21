@@ -8,7 +8,7 @@ import (
 
 // WindowInfo (cef_window_info_t) - Mac-specific variant
 // Class representing window information.
-type WindowInfo struct {
+type WindowInfo struct { //nolint:maligned
 	// WindowName (window_name)
 	WindowName string
 	// X (x)

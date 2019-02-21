@@ -644,7 +644,10 @@ const (
 	LogseverityWarning LogSeverity = ((LogseverityVerbose) + 1) + 1 // LOGSEVERITY_WARNING
 	// DEBUG logging.
 	LogseverityError LogSeverity = (((LogseverityVerbose) + 1) + 1) + 1 // LOGSEVERITY_ERROR
-	// Completely disable logging.
+	// DEBUG logging.
+	LogseverityFatal LogSeverity = ((((LogseverityVerbose) + 1) + 1) + 1) + 1 // LOGSEVERITY_FATAL
+	// Disable logging to file for all messages, and to stderr for messages with
+	// severity less than FATAL.
 	LogseverityDisable LogSeverity = 99 // LOGSEVERITY_DISABLE
 )
 

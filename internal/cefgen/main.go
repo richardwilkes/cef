@@ -179,13 +179,14 @@ func headerList(dir string) []os.FileInfo {
 
 func clangArgs(headers []string) []string {
 	args := make([]string, 0, len(headers)+7)
-	args = append(args, "-I")
-	args = append(args, ".")
-	args = append(args, "-Xclang")
-	args = append(args, "-ast-dump")
-	args = append(args, "-fsyntax-only")
-	args = append(args, "-fno-color-diagnostics")
-	args = append(args, "-Wno-visibility")
+	args = append(args,
+		"-I",
+		".",
+		"-Xclang",
+		"-ast-dump",
+		"-fsyntax-only",
+		"-fno-color-diagnostics",
+		"-Wno-visibility")
 	args = append(args, headers...)
 	return args
 }
@@ -193,7 +194,7 @@ func clangArgs(headers []string) []string {
 func createCommonHeader(headers []string) {
 	f, err := os.Create(filepath.Join(outputBaseDir, "capi_gen.h"))
 	jot.FatalIfErr(err)
-	f.WriteString(`// Code generated - DO NOT EDIT.
+	_, err = f.WriteString(`// Code generated - DO NOT EDIT.
 
 #ifndef GOCEF_CAPI_H_
 #define GOCEF_CAPI_H_
@@ -201,12 +202,14 @@ func createCommonHeader(headers []string) {
 
 #include <stdlib.h>
 `)
+	jot.FatalIfErr(err)
 	for _, header := range headers {
 		fmt.Fprintf(f, `#include "%s"
 `, header)
 	}
-	f.WriteString(`
+	_, err = f.WriteString(`
 #endif // GOCEF_CAPI_H_
 `)
+	jot.FatalIfErr(err)
 	jot.FatalIfErr(f.Close())
 }

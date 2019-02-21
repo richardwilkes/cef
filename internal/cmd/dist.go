@@ -40,7 +40,7 @@ func NewDist() cmdline.Cmd {
 		copyrightOwner: "Unknown",
 	}
 	switch runtime.GOOS {
-	case "darwin":
+	case MacOS:
 		d.root = path.Join(d.root, "macos")
 		d.icon = "AppIcon.icns"
 	default:
@@ -76,9 +76,9 @@ func (d *dist) Run(cl *cmdline.CmdLine, args []string) error {
 	}
 	createDir(d.root, 0755)
 	switch runtime.GOOS {
-	case "darwin":
+	case MacOS:
 		d.distMacOS()
-	case "linux", "windows":
+	case LinuxOS, WindowsOS:
 		d.distNotMacOS()
 	default:
 		return fmt.Errorf("Unhandled OS: %s", runtime.GOOS)
