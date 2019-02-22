@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/richardwilkes/toolbox"
 	"github.com/richardwilkes/toolbox/atexit"
 	"github.com/richardwilkes/toolbox/cmdline"
 	"github.com/richardwilkes/toolbox/xio/fs"
@@ -40,7 +41,7 @@ func NewDist() cmdline.Cmd {
 		copyrightOwner: "Unknown",
 	}
 	switch runtime.GOOS {
-	case MacOS:
+	case toolbox.MacOS:
 		d.root = path.Join(d.root, "macos")
 		d.icon = "AppIcon.icns"
 	default:
@@ -74,11 +75,11 @@ func (d *dist) Run(cl *cmdline.CmdLine, args []string) error {
 		fmt.Println(err)
 		atexit.Exit(1)
 	}
-	createDir(d.root, 0755)
+	createDir(d.root, 0755) //nolint:gocritic
 	switch runtime.GOOS {
-	case MacOS:
+	case toolbox.MacOS:
 		d.distMacOS()
-	case LinuxOS, WindowsOS:
+	case toolbox.LinuxOS, toolbox.WindowsOS:
 		d.distNotMacOS()
 	default:
 		return fmt.Errorf("Unhandled OS: %s", runtime.GOOS)
@@ -88,14 +89,14 @@ func (d *dist) Run(cl *cmdline.CmdLine, args []string) error {
 
 func (d *dist) distMacOS() {
 	appBundleContentsDir := path.Join(d.root, d.bundleName+".app", "Contents")
-	createDir(path.Join(appBundleContentsDir, "MacOS"), 0755)
+	createDir(path.Join(appBundleContentsDir, "MacOS"), 0755) //nolint:gocritic
 	appBundleResourcesDir := path.Join(appBundleContentsDir, "Resources")
-	createDir(appBundleResourcesDir, 0755)
+	createDir(appBundleResourcesDir, 0755) //nolint:gocritic
 	appFrameworksDir := path.Join(appBundleContentsDir, "Frameworks")
 	helperAppBundleContentsDir := path.Join(appFrameworksDir, d.exeName+" Helper.app", "Contents")
 	helperAppBundleMacOSDir := path.Join(helperAppBundleContentsDir, "MacOS")
-	createDir(helperAppBundleMacOSDir, 0755)
-	createDir(path.Join(helperAppBundleContentsDir, "Frameworks"), 0755)
+	createDir(helperAppBundleMacOSDir, 0755)                             //nolint:gocritic
+	createDir(path.Join(helperAppBundleContentsDir, "Frameworks"), 0755) //nolint:gocritic
 	releaseDir := path.Join(installPrefix, "Release")
 	cc := exec.Command("cc", "-I", installPrefix, path.Join(installPrefix, "helper", "helper.c"), "-F", releaseDir, "-framework", "Chromium Embedded Framework", "-o", path.Join(helperAppBundleMacOSDir, d.exeName+" Helper"))
 	if result, err := cc.CombinedOutput(); err != nil {

@@ -16,6 +16,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/richardwilkes/toolbox"
 	"github.com/richardwilkes/toolbox/atexit"
 	"github.com/richardwilkes/toolbox/cmdline"
 	"github.com/richardwilkes/toolbox/xio"
@@ -70,7 +71,7 @@ func (c *install) Run(cl *cmdline.CmdLine, args []string) error {
 			fmt.Println("You may need to run the 'cef' tool as root.")
 			atexit.Exit(1)
 		}
-		createDir(path.Join(installPrefix, "helper"), 0755)
+		createDir(path.Join(installPrefix, "helper"), 0755) //nolint:gocritic
 		name := path.Join(installPrefix, "helper", "helper.c")
 		checkFileError(ioutil.WriteFile(name, []byte(`#include <stdlib.h>
 #include "include/capi/cef_app_capi.h"
@@ -83,9 +84,9 @@ int main(int argc, char **argv) {
 }
 `), 0644), "write", name)
 		c.untar(bytes.NewBuffer(c.downloadAndUncompressArchive()))
-		if runtime.GOOS == WindowsOS {
+		if runtime.GOOS == toolbox.WindowsOS {
 			dir := path.Join(path.Dir(os.Getenv("MINGW_PREFIX")), "lib/pkgconfig")
-			createDir(dir, 0755)
+			createDir(dir, 0755) //nolint:gocritic
 			name = path.Join(dir, "cef.pc")
 			f, err := os.Create(name)
 			checkFileError(err, "create", name)

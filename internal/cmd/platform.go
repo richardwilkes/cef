@@ -6,14 +6,8 @@ import (
 	"path"
 	"runtime"
 
+	"github.com/richardwilkes/toolbox"
 	"github.com/richardwilkes/toolbox/atexit"
-)
-
-// Constants for comparison to runtime.GOOS
-const (
-	MacOS     = "darwin"
-	WindowsOS = "windows"
-	LinuxOS   = "linux"
 )
 
 var (
@@ -23,11 +17,11 @@ var (
 
 func checkPlatform() {
 	switch runtime.GOOS {
-	case MacOS:
+	case toolbox.MacOS:
 		cefPlatform = "macosx64"
-	case LinuxOS:
+	case toolbox.LinuxOS:
 		cefPlatform = "linux64"
-	case WindowsOS:
+	case toolbox.WindowsOS:
 		if os.Getenv("MSYSTEM") != "MINGW64" {
 			fmt.Println("Windows is only supported through the use of MINGW64")
 			atexit.Exit(1)
