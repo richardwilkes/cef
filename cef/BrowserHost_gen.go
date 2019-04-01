@@ -40,6 +40,7 @@ import (
 	// void gocef_browser_host_send_mouse_click_event(cef_browser_host_t * self, cef_mouse_event_t * event, cef_mouse_button_type_t type_r, int mouseUp, int clickCount, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, cef_mouse_button_type_t, int, int)) { return callback__(self, event, type_r, mouseUp, clickCount); }
 	// void gocef_browser_host_send_mouse_move_event(cef_browser_host_t * self, cef_mouse_event_t * event, int mouseLeave, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, int)) { return callback__(self, event, mouseLeave); }
 	// void gocef_browser_host_send_mouse_wheel_event(cef_browser_host_t * self, cef_mouse_event_t * event, int deltaX, int deltaY, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, int, int)) { return callback__(self, event, deltaX, deltaY); }
+	// void gocef_browser_host_send_touch_event(cef_browser_host_t * self, cef_touch_event_t * event, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_touch_event_t *)) { return callback__(self, event); }
 	// void gocef_browser_host_send_focus_event(cef_browser_host_t * self, int setFocus, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, setFocus); }
 	// void gocef_browser_host_send_capture_lost_event(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_notify_move_or_resize_started(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
@@ -60,6 +61,8 @@ import (
 	// void gocef_browser_host_set_auto_resize_enabled(cef_browser_host_t * self, int enabled, cef_size_t * min_size, cef_size_t * max_size, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int, cef_size_t *, cef_size_t *)) { return callback__(self, enabled, min_size, max_size); }
 	// cef_extension_t * gocef_browser_host_get_extension(cef_browser_host_t * self, cef_extension_t * (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// int gocef_browser_host_is_background_host(cef_browser_host_t * self, int (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
+	// void gocef_browser_host_set_audio_muted(cef_browser_host_t * self, int mute, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, mute); }
+	// int gocef_browser_host_is_audio_muted(cef_browser_host_t * self, int (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	"C"
 	"unsafe"
 )
@@ -420,6 +423,12 @@ func (d *BrowserHost) SendMouseWheelEvent(event *MouseEvent, deltaX, deltaY int3
 	C.gocef_browser_host_send_mouse_wheel_event(d.toNative(), event.toNative(&C.cef_mouse_event_t{}), C.int(deltaX), C.int(deltaY), d.send_mouse_wheel_event)
 }
 
+// SendTouchEvent (send_touch_event)
+// Send a touch event to the browser for a windowless browser.
+func (d *BrowserHost) SendTouchEvent(event *TouchEvent) {
+	C.gocef_browser_host_send_touch_event(d.toNative(), event.toNative(&C.cef_touch_event_t{}), d.send_touch_event)
+}
+
 // SendFocusEvent (send_focus_event)
 // Send a focus event to the browser.
 func (d *BrowserHost) SendFocusEvent(setFocus int32) {
@@ -642,4 +651,17 @@ func (d *BrowserHost) GetExtension() *Extension {
 // cef_request_tContext::LoadExtension for details.
 func (d *BrowserHost) IsBackgroundHost() int32 {
 	return int32(C.gocef_browser_host_is_background_host(d.toNative(), d.is_background_host))
+}
+
+// SetAudioMuted (set_audio_muted)
+//  Set whether the browser's audio is muted.
+func (d *BrowserHost) SetAudioMuted(mute int32) {
+	C.gocef_browser_host_set_audio_muted(d.toNative(), C.int(mute), d.set_audio_muted)
+}
+
+// IsAudioMuted (is_audio_muted)
+// Returns true (1) if the browser's audio is muted.  This function can only
+// be called on the UI thread.
+func (d *BrowserHost) IsAudioMuted() int32 {
+	return int32(C.gocef_browser_host_is_audio_muted(d.toNative(), d.is_audio_muted))
 }

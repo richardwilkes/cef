@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "include/capi/cef_accessibility_handler_capi.h"
 #include "include/capi/cef_app_capi.h"
+#include "include/capi/cef_audio_handler_capi.h"
 #include "include/capi/cef_auth_callback_capi.h"
 #include "include/capi/cef_base_capi.h"
 #include "include/capi/cef_browser_capi.h"

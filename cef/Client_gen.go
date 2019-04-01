@@ -13,6 +13,7 @@ import (
 
 // ClientProxy defines methods required for using Client.
 type ClientProxy interface {
+	GetAudioHandler(self *Client) *AudioHandler
 	GetContextMenuHandler(self *Client) *ContextMenuHandler
 	GetDialogHandler(self *Client) *DialogHandler
 	GetDisplayHandler(self *Client) *DisplayHandler
@@ -63,6 +64,19 @@ func lookupClientProxy(obj *BaseRefCounted) ClientProxy {
 // Base structure.
 func (d *Client) Base() *BaseRefCounted {
 	return (*BaseRefCounted)(&d.base)
+}
+
+// GetAudioHandler (get_audio_handler)
+// Return the handler for audio rendering events.
+func (d *Client) GetAudioHandler() *AudioHandler {
+	return lookupClientProxy(d.Base()).GetAudioHandler(d)
+}
+
+//export gocef_client_get_audio_handler
+func gocef_client_get_audio_handler(self *C.cef_client_t) *C.cef_audio_handler_t {
+	me__ := (*Client)(self)
+	proxy__ := lookupClientProxy(me__.Base())
+	return (proxy__.GetAudioHandler(me__)).toNative()
 }
 
 // GetContextMenuHandler (get_context_menu_handler)

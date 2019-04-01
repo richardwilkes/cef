@@ -21,4 +21,5 @@ void gocef_set_render_handler_proxy(cef_render_handler_t *self) {
 	self->on_scroll_offset_changed = (void *)&gocef_render_handler_on_scroll_offset_changed;
 	self->on_ime_composition_range_changed = (void *)&gocef_render_handler_on_ime_composition_range_changed;
 	self->on_text_selection_changed = (void *)&gocef_render_handler_on_text_selection_changed;
+	self->on_virtual_keyboard_requested = (void *)&gocef_render_handler_on_virtual_keyboard_requested;
 }

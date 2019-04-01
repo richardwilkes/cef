@@ -245,6 +245,10 @@ func (v *variable) GoCast(expression string) string {
 		return expression
 	}
 	if strings.HasPrefix(v.GoType, "*") {
+		if v.GoType == "**float32" {
+			// Go doesn't like this cast: (**float32)(x) where x is a **C.float32, so work around it
+			return fmt.Sprintf("(%s)(unsafe.Pointer(%s))", v.GoType, expression)
+		}
 		return fmt.Sprintf("(%s)(%s)", v.GoType, expression)
 	}
 	return fmt.Sprintf("%s(%s)", v.GoType, expression)

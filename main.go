@@ -9,7 +9,7 @@ import (
 	"github.com/richardwilkes/toolbox/cmdline"
 )
 
-const desiredCEFVersion = "3.3626.1895.g7001d56"
+const desiredCEFVersion = "73.1.12+gee4b49f+chromium-73.0.3683.75"
 
 func main() {
 	cmdline.CopyrightYears = "2018-2019"

@@ -81,6 +81,87 @@ const (
 	CertStatusCTComplianceFailed   CertStatus = 1 << 20 // CERT_STATUS_CT_COMPLIANCE_FAILED
 )
 
+// ChannelLayout (cef_channel_layout_t from include/internal/cef_types.h)
+// Enumerates the various representations of the ordering of audio channels.
+// Logged to UMA, so never reuse a value, always add new/greater ones!
+// See media\base\channel_layout.h
+type ChannelLayout int
+
+// Possible values for ChannelLayout
+const (
+	ChannelLayoutNone        ChannelLayout = 0 // CEF_CHANNEL_LAYOUT_NONE
+	ChannelLayoutUnsupported ChannelLayout = 1 // CEF_CHANNEL_LAYOUT_UNSUPPORTED
+	// Front C
+	ChannelLayoutMono ChannelLayout = 2 // CEF_CHANNEL_LAYOUT_MONO
+	// Front L, Front R
+	ChannelLayoutStereo ChannelLayout = 3 // CEF_CHANNEL_LAYOUT_STEREO
+	// Front L, Front R, Back C
+	ChannelLayout21 ChannelLayout = 4 // CEF_CHANNEL_LAYOUT_2_1
+	// Front L, Front R, Front C
+	ChannelLayoutSurround ChannelLayout = 5 // CEF_CHANNEL_LAYOUT_SURROUND
+	// Front L, Front R, Front C, Back C
+	ChannelLayout40 ChannelLayout = 6 // CEF_CHANNEL_LAYOUT_4_0
+	// Front L, Front R, Side L, Side R
+	ChannelLayout22 ChannelLayout = 7 // CEF_CHANNEL_LAYOUT_2_2
+	// Front L, Front R, Back L, Back R
+	ChannelLayoutQuad ChannelLayout = 8 // CEF_CHANNEL_LAYOUT_QUAD
+	// Front L, Front R, Front C, Side L, Side R
+	ChannelLayout50 ChannelLayout = 9 // CEF_CHANNEL_LAYOUT_5_0
+	// Front L, Front R, Front C, LFE, Side L, Side R
+	ChannelLayout51 ChannelLayout = 10 // CEF_CHANNEL_LAYOUT_5_1
+	// Front L, Front R, Front C, Back L, Back R
+	ChannelLayout50Back ChannelLayout = 11 // CEF_CHANNEL_LAYOUT_5_0_BACK
+	// Front L, Front R, Front C, LFE, Back L, Back R
+	ChannelLayout51Back ChannelLayout = 12 // CEF_CHANNEL_LAYOUT_5_1_BACK
+	// Front L, Front R, Front C, Side L, Side R, Back L, Back R
+	ChannelLayout70 ChannelLayout = 13 // CEF_CHANNEL_LAYOUT_7_0
+	// Front L, Front R, Front C, LFE, Side L, Side R, Back L, Back R
+	ChannelLayout71 ChannelLayout = 14 // CEF_CHANNEL_LAYOUT_7_1
+	// Front L, Front R, Front C, LFE, Side L, Side R, Front LofC, Front RofC
+	ChannelLayout71Wide ChannelLayout = 15 // CEF_CHANNEL_LAYOUT_7_1_WIDE
+	// Stereo L, Stereo R
+	ChannelLayoutStereoDownmix ChannelLayout = 16 // CEF_CHANNEL_LAYOUT_STEREO_DOWNMIX
+	// Stereo L, Stereo R, LFE
+	ChannelLayout2point1 ChannelLayout = 17 // CEF_CHANNEL_LAYOUT_2POINT1
+	// Stereo L, Stereo R, Front C, LFE
+	ChannelLayout31 ChannelLayout = 18 // CEF_CHANNEL_LAYOUT_3_1
+	// Stereo L, Stereo R, Front C, Rear C, LFE
+	ChannelLayout41 ChannelLayout = 19 // CEF_CHANNEL_LAYOUT_4_1
+	// Stereo L, Stereo R, Front C, Side L, Side R, Back C
+	ChannelLayout60 ChannelLayout = 20 // CEF_CHANNEL_LAYOUT_6_0
+	// Stereo L, Stereo R, Side L, Side R, Front LofC, Front RofC
+	ChannelLayout60Front ChannelLayout = 21 // CEF_CHANNEL_LAYOUT_6_0_FRONT
+	// Stereo L, Stereo R, Front C, Rear L, Rear R, Rear C
+	ChannelLayoutHexagonal ChannelLayout = 22 // CEF_CHANNEL_LAYOUT_HEXAGONAL
+	// Stereo L, Stereo R, Front C, LFE, Side L, Side R, Rear Center
+	ChannelLayout61 ChannelLayout = 23 // CEF_CHANNEL_LAYOUT_6_1
+	// Stereo L, Stereo R, Front C, LFE, Back L, Back R, Rear Center
+	ChannelLayout61Back ChannelLayout = 24 // CEF_CHANNEL_LAYOUT_6_1_BACK
+	// Stereo L, Stereo R, Side L, Side R, Front LofC, Front RofC, LFE
+	ChannelLayout61Front ChannelLayout = 25 // CEF_CHANNEL_LAYOUT_6_1_FRONT
+	// Front L, Front R, Front C, Side L, Side R, Front LofC, Front RofC
+	ChannelLayout70Front ChannelLayout = 26 // CEF_CHANNEL_LAYOUT_7_0_FRONT
+	// Front L, Front R, Front C, LFE, Back L, Back R, Front LofC, Front RofC
+	ChannelLayout71WideBack ChannelLayout = 27 // CEF_CHANNEL_LAYOUT_7_1_WIDE_BACK
+	// Front L, Front R, Front C, Side L, Side R, Rear L, Back R, Back C.
+	ChannelLayoutOctagonal ChannelLayout = 28 // CEF_CHANNEL_LAYOUT_OCTAGONAL
+	// Channels are not explicitly mapped to speakers.
+	ChannelLayoutDiscrete ChannelLayout = 29 // CEF_CHANNEL_LAYOUT_DISCRETE
+	// Front L, Front R, Front C. Front C contains the keyboard mic audio. This
+	// layout is only intended for input for WebRTC. The Front C channel
+	// is stripped away in the WebRTC audio input pipeline and never seen outside
+	// of that.
+	ChannelLayoutStereoAndKeyboardMic ChannelLayout = 30 // CEF_CHANNEL_LAYOUT_STEREO_AND_KEYBOARD_MIC
+	// Front L, Front R, Side L, Side R, LFE
+	ChannelLayout41QuadSide ChannelLayout = 31 // CEF_CHANNEL_LAYOUT_4_1_QUAD_SIDE
+	// Actual channel layout is specified in the bitstream and the actual channel
+	// count is unknown at Chromium media pipeline level (useful for audio
+	// pass-through mode).
+	ChannelLayoutBitstream ChannelLayout = 32 // CEF_CHANNEL_LAYOUT_BITSTREAM
+	// Max value, must always equal the largest entry ever logged.
+	ChannelLayoutMax ChannelLayout = ChannelLayoutBitstream // CEF_CHANNEL_LAYOUT_MAX
+)
+
 // ColorModel (cef_color_model_t from include/internal/cef_types.h)
 // Print job color mode values.
 type ColorModel int
@@ -885,6 +966,19 @@ const (
 	PluginPolicyDisable PluginPolicy = 3 // PLUGIN_POLICY_DISABLE
 )
 
+// PointerType (cef_pointer_type_t from include/internal/cef_types.h)
+// The device type that caused the event.
+type PointerType int
+
+// Possible values for PointerType
+const (
+	PointerTypeTouch   PointerType = 0 // CEF_POINTER_TYPE_TOUCH
+	PointerTypeMouse   PointerType = 1 // CEF_POINTER_TYPE_MOUSE
+	PointerTypePen     PointerType = 2 // CEF_POINTER_TYPE_PEN
+	PointerTypeEraser  PointerType = 3 // CEF_POINTER_TYPE_ERASER
+	PointerTypeUnknown PointerType = 4 // CEF_POINTER_TYPE_UNKNOWN
+)
+
 // PostdataelementType (cef_postdataelement_type_t from include/internal/cef_types.h)
 // Post data elements may represent either bytes or files.
 type PostdataelementType int
@@ -930,7 +1024,8 @@ const (
 	ReferrerPolicyClearReferrerOnTransitionCrossOrigin             ReferrerPolicy = 6 // REFERRER_POLICY_CLEAR_REFERRER_ON_TRANSITION_CROSS_ORIGIN
 	ReferrerPolicyOriginClearOnTransitionFromSecureToInsecure      ReferrerPolicy = 7 // REFERRER_POLICY_ORIGIN_CLEAR_ON_TRANSITION_FROM_SECURE_TO_INSECURE
 	ReferrerPolicyNoReferrer                                       ReferrerPolicy = 8 // REFERRER_POLICY_NO_REFERRER
-	ReferrerPolicyLastValue                                        ReferrerPolicy = 9 // REFERRER_POLICY_LAST_VALUE
+	// Always the last value in this enumeration.
+	ReferrerPolicyLastValue ReferrerPolicy = ReferrerPolicyNoReferrer // REFERRER_POLICY_LAST_VALUE
 )
 
 // ResourceType (cef_resource_type_t from include/internal/cef_types.h)
@@ -1025,6 +1120,73 @@ const (
 	ScaleFactor300p ScaleFactor = 9 // SCALE_FACTOR_300P
 )
 
+// SchemeOptions (cef_scheme_options_t from include/internal/cef_types.h)
+//
+// Configuration options for registering a custom scheme.
+// These values are used when calling AddCustomScheme.
+//
+type SchemeOptions int
+
+// Possible values for SchemeOptions
+const (
+	SchemeOptionNone SchemeOptions = 0 // CEF_SCHEME_OPTION_NONE
+	// If CEF_SCHEME_OPTION_STANDARD is set the scheme will be treated as a
+	// standard scheme. Standard schemes are subject to URL canonicalization and
+	// parsing rules as defined in the Common Internet Scheme Syntax RFC 1738
+	// Section 3.1 available at http://www.ietf.org/rfc/rfc1738.txt
+	//
+	// In particular, the syntax for standard scheme URLs must be of the form:
+	// <pre>
+	//  [scheme]://[username]:[password]@[host]:[port]/[url-path]
+	// </pre> Standard scheme URLs must have a host component that is a fully
+	// qualified domain name as defined in Section 3.5 of RFC 1034 [13] and
+	// Section 2.1 of RFC 1123. These URLs will be canonicalized to
+	// "scheme://host/path" in the simplest case and
+	// "scheme://username:password@host:port/path" in the most explicit case. For
+	// example, "scheme:host/path" and "scheme:///host/path" will both be
+	// canonicalized to "scheme://host/path". The origin of a standard scheme URL
+	// is the combination of scheme, host and port (i.e., "scheme://host:port" in
+	// the most explicit case).
+	//
+	// For non-standard scheme URLs only the "scheme:" component is parsed and
+	// canonicalized. The remainder of the URL will be passed to the handler as-
+	// is. For example, "scheme:///some%20text" will remain the same. Non-standard
+	// scheme URLs cannot be used as a target for form submission.
+	SchemeOptionStandard SchemeOptions = 1 << 0 // CEF_SCHEME_OPTION_STANDARD
+	// If CEF_SCHEME_OPTION_LOCAL is set the scheme will be treated with the same
+	// security rules as those applied to "file" URLs. Normal pages cannot link to
+	// or access local URLs. Also, by default, local URLs can only perform
+	// XMLHttpRequest calls to the same URL (origin + path) that originated the
+	// request. To allow XMLHttpRequest calls from a local URL to other URLs with
+	// the same origin set the CefSettings.file_access_from_file_urls_allowed
+	// value to true (1). To allow XMLHttpRequest calls from a local URL to all
+	// origins set the CefSettings.universal_access_from_file_urls_allowed value
+	// to true (1).
+	SchemeOptionLocal SchemeOptions = 1 << 1 // CEF_SCHEME_OPTION_LOCAL
+	// If CEF_SCHEME_OPTION_DISPLAY_ISOLATED is set the scheme can only be
+	// displayed from other content hosted with the same scheme. For example,
+	// pages in other origins cannot create iframes or hyperlinks to URLs with the
+	// scheme. For schemes that must be accessible from other schemes don't set
+	// this, set CEF_SCHEME_OPTION_CORS_ENABLED, and use CORS
+	// "Access-Control-Allow-Origin" headers to further restrict access.
+	SchemeOptionDisplayIsolated SchemeOptions = 1 << 2 // CEF_SCHEME_OPTION_DISPLAY_ISOLATED
+	// If CEF_SCHEME_OPTION_SECURE is set the scheme will be treated with the same
+	// security rules as those applied to "https" URLs. For example, loading this
+	// scheme from other secure schemes will not trigger mixed content warnings.
+	SchemeOptionSecure SchemeOptions = 1 << 3 // CEF_SCHEME_OPTION_SECURE
+	// If CEF_SCHEME_OPTION_CORS_ENABLED is set the scheme can be sent CORS
+	// requests. This value should be set in most cases where
+	// CEF_SCHEME_OPTION_STANDARD is set.
+	SchemeOptionCorsEnabled SchemeOptions = 1 << 4 // CEF_SCHEME_OPTION_CORS_ENABLED
+	// If CEF_SCHEME_OPTION_CSP_BYPASSING is set the scheme can bypass Content-
+	// Security-Policy (CSP) checks. This value should not be set in most cases
+	// where CEF_SCHEME_OPTION_STANDARD is set.
+	SchemeOptionCspBypassing SchemeOptions = 1 << 5 // CEF_SCHEME_OPTION_CSP_BYPASSING
+	// If CEF_SCHEME_OPTION_FETCH_ENABLED is set the scheme can perform Fetch API
+	// requests.
+	SchemeOptionFetchEnabled SchemeOptions = 1 << 6 // CEF_SCHEME_OPTION_FETCH_ENABLED
+)
+
 // SSLContentStatus (cef_ssl_content_status_t from include/internal/cef_types.h)
 // Supported SSL content status flags. See content/public/common/ssl_status.h
 // for more information.
@@ -1094,6 +1256,53 @@ const (
 	TSProcessOom TerminationStatus = 3 // TS_PROCESS_OOM
 )
 
+// TextInputMode (cef_text_input_mode_t from include/internal/cef_types.h)
+// Input mode of a virtual keyboard. These constants match their equivalents
+// in Chromium's text_input_mode.h and should not be renumbered.
+// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
+type TextInputMode int
+
+// Possible values for TextInputMode
+const (
+	// Input mode of a virtual keyboard. These constants match their equivalents
+	// in Chromium's text_input_mode.h and should not be renumbered.
+	// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
+	TextInputModeDefault TextInputMode = 0 // CEF_TEXT_INPUT_MODE_DEFAULT
+	// Input mode of a virtual keyboard. These constants match their equivalents
+	// in Chromium's text_input_mode.h and should not be renumbered.
+	// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
+	TextInputModeNone TextInputMode = 1 // CEF_TEXT_INPUT_MODE_NONE
+	// Input mode of a virtual keyboard. These constants match their equivalents
+	// in Chromium's text_input_mode.h and should not be renumbered.
+	// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
+	TextInputModeText TextInputMode = 2 // CEF_TEXT_INPUT_MODE_TEXT
+	// Input mode of a virtual keyboard. These constants match their equivalents
+	// in Chromium's text_input_mode.h and should not be renumbered.
+	// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
+	TextInputModeTel TextInputMode = 3 // CEF_TEXT_INPUT_MODE_TEL
+	// Input mode of a virtual keyboard. These constants match their equivalents
+	// in Chromium's text_input_mode.h and should not be renumbered.
+	// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
+	TextInputModeURL TextInputMode = 4 // CEF_TEXT_INPUT_MODE_URL
+	// Input mode of a virtual keyboard. These constants match their equivalents
+	// in Chromium's text_input_mode.h and should not be renumbered.
+	// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
+	TextInputModeEmail TextInputMode = 5 // CEF_TEXT_INPUT_MODE_EMAIL
+	// Input mode of a virtual keyboard. These constants match their equivalents
+	// in Chromium's text_input_mode.h and should not be renumbered.
+	// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
+	TextInputModeNumeric TextInputMode = 6 // CEF_TEXT_INPUT_MODE_NUMERIC
+	// Input mode of a virtual keyboard. These constants match their equivalents
+	// in Chromium's text_input_mode.h and should not be renumbered.
+	// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
+	TextInputModeDecimal TextInputMode = 7 // CEF_TEXT_INPUT_MODE_DECIMAL
+	// Input mode of a virtual keyboard. These constants match their equivalents
+	// in Chromium's text_input_mode.h and should not be renumbered.
+	// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
+	TextInputModeSearch TextInputMode = 8                   // CEF_TEXT_INPUT_MODE_SEARCH
+	TextInputModeMax    TextInputMode = TextInputModeSearch // CEF_TEXT_INPUT_MODE_MAX
+)
+
 // TextStyle (cef_text_style_t from include/internal/cef_types.h)
 // Text style types. Should be kepy in sync with gfx::TextStyle.
 type TextStyle int
@@ -1144,6 +1353,18 @@ const (
 	TPDisplay ThreadPriority = 2 // TP_DISPLAY
 	// Thread priority values listed in increasing order of importance.
 	TPRealtimeAudio ThreadPriority = 3 // TP_REALTIME_AUDIO
+)
+
+// TouchEventType (cef_touch_event_type_t from include/internal/cef_types.h)
+// Touch points states types.
+type TouchEventType int
+
+// Possible values for TouchEventType
+const (
+	TetReleased  TouchEventType = 0 // CEF_TET_RELEASED
+	TetPressed   TouchEventType = 1 // CEF_TET_PRESSED
+	TetMoved     TouchEventType = 2 // CEF_TET_MOVED
+	TetCancelled TouchEventType = 3 // CEF_TET_CANCELLED
 )
 
 // TransitionType (cef_transition_type_t from include/internal/cef_types.h)
@@ -1261,22 +1482,28 @@ const (
 	// If set the request will fail if it cannot be served from the cache (or some
 	// equivalent local store). Setting this value is equivalent to specifying the
 	// "Cache-Control: only-if-cached" request header. Setting this value in
-	// combination with UR_FLAG_SKIP_CACHE will cause the request to fail.
+	// combination with UR_FLAG_SKIP_CACHE or UR_FLAG_DISABLE_CACHE will cause the
+	// request to fail.
 	UrFlagOnlyFromCache UrlrequestFlags = 1 << 1 // UR_FLAG_ONLY_FROM_CACHE
+	// If set the cache will not be used at all. Setting this value is equivalent
+	// to specifying the "Cache-Control: no-store" request header. Setting this
+	// value in combination with UR_FLAG_ONLY_FROM_CACHE will cause the request to
+	// fail.
+	UrFlagDisableCache UrlrequestFlags = 1 << 2 // UR_FLAG_DISABLE_CACHE
 	// If set user name, password, and cookies may be sent with the request, and
 	// cookies may be saved from the response.
-	UrFlagAllowStoredCredentials UrlrequestFlags = 1 << 2 // UR_FLAG_ALLOW_STORED_CREDENTIALS
+	UrFlagAllowStoredCredentials UrlrequestFlags = 1 << 3 // UR_FLAG_ALLOW_STORED_CREDENTIALS
 	// If set upload progress events will be generated when a request has a body.
-	UrFlagReportUploadProgress UrlrequestFlags = 1 << 3 // UR_FLAG_REPORT_UPLOAD_PROGRESS
+	UrFlagReportUploadProgress UrlrequestFlags = 1 << 4 // UR_FLAG_REPORT_UPLOAD_PROGRESS
 	// If set the CefURLRequestClient::OnDownloadData method will not be called.
-	UrFlagNoDownloadData UrlrequestFlags = 1 << 4 // UR_FLAG_NO_DOWNLOAD_DATA
+	UrFlagNoDownloadData UrlrequestFlags = 1 << 5 // UR_FLAG_NO_DOWNLOAD_DATA
 	// If set 5XX redirect errors will be propagated to the observer instead of
 	// automatically re-tried. This currently only applies for requests
 	// originated in the browser process.
-	UrFlagNoRetryOn5xx UrlrequestFlags = 1 << 5 // UR_FLAG_NO_RETRY_ON_5XX
+	UrFlagNoRetryOn5xx UrlrequestFlags = 1 << 6 // UR_FLAG_NO_RETRY_ON_5XX
 	// If set 3XX responses will cause the fetch to halt immediately rather than
 	// continue through the redirect.
-	UrFlagStopOnRedirect UrlrequestFlags = 1 << 6 // UR_FLAG_STOP_ON_REDIRECT
+	UrFlagStopOnRedirect UrlrequestFlags = 1 << 7 // UR_FLAG_STOP_ON_REDIRECT
 )
 
 // UrlrequestStatus (cef_urlrequest_status_t from include/internal/cef_types.h)

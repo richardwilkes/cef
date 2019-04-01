@@ -22,7 +22,7 @@ import (
 	"github.com/richardwilkes/toolbox/xio"
 )
 
-var cefVersionRegex = regexp.MustCompile(`^\s*#define\s+CEF_VERSION\s+"(\d+\.\d+\.\d+\.\w+)"\s*$`)
+var cefVersionRegex = regexp.MustCompile(`^\s*#define\s+CEF_VERSION\s+"(\d+\.\d+\.\d+.+)"\s*$`)
 
 type install struct {
 	version string
@@ -112,7 +112,7 @@ func (c *install) archiveName() string {
 
 func (c *install) downloadAndUncompressArchive() []byte {
 	client := http.Client{Timeout: 10 * time.Minute}
-	url := fmt.Sprintf("http://opensource.spotify.com/cefbuilds/%s.tar.bz2", c.archiveName())
+	url := fmt.Sprintf("http://opensource.spotify.com/cefbuilds/%s.tar.bz2", strings.ReplaceAll(c.archiveName(), "+", "%2B"))
 	fmt.Println("  Downloading...")
 	resp, err := client.Get(url)
 	if err != nil {

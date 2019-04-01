@@ -28,6 +28,7 @@ type RenderHandlerProxy interface {
 	OnScrollOffsetChanged(self *RenderHandler, browser *Browser, x, y float64)
 	OnImeCompositionRangeChanged(self *RenderHandler, browser *Browser, selected_range *Range, character_boundsCount uint64, character_bounds *Rect)
 	OnTextSelectionChanged(self *RenderHandler, browser *Browser, selected_text string, selected_range *Range)
+	OnVirtualKeyboardRequested(self *RenderHandler, browser *Browser, input_mode TextInputMode)
 }
 
 // RenderHandler (cef_render_handler_t from include/capi/cef_render_handler_capi.h)
@@ -316,4 +317,20 @@ func gocef_render_handler_on_text_selection_changed(self *C.cef_render_handler_t
 	selected_text_ := cefstrToString(selected_text)
 	selected_range_ := selected_range.toGo()
 	proxy__.OnTextSelectionChanged(me__, (*Browser)(browser), selected_text_, selected_range_)
+}
+
+// OnVirtualKeyboardRequested (on_virtual_keyboard_requested)
+// Called when an on-screen keyboard should be shown or hidden for the
+// specified |browser|. |input_mode| specifies what kind of keyboard should be
+// opened. If |input_mode| is CEF_TEXT_INPUT_MODE_NONE, any existing keyboard
+// for this browser should be hidden.
+func (d *RenderHandler) OnVirtualKeyboardRequested(browser *Browser, input_mode TextInputMode) {
+	lookupRenderHandlerProxy(d.Base()).OnVirtualKeyboardRequested(d, browser, input_mode)
+}
+
+//export gocef_render_handler_on_virtual_keyboard_requested
+func gocef_render_handler_on_virtual_keyboard_requested(self *C.cef_render_handler_t, browser *C.cef_browser_t, input_mode C.cef_text_input_mode_t) {
+	me__ := (*RenderHandler)(self)
+	proxy__ := lookupRenderHandlerProxy(me__.Base())
+	proxy__.OnVirtualKeyboardRequested(me__, (*Browser)(browser), TextInputMode(input_mode))
 }
