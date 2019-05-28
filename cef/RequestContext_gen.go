@@ -21,7 +21,6 @@ import (
 	// void gocef_request_context_clear_certificate_exceptions(cef_request_context_t * self, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	// void gocef_request_context_close_all_connections(cef_request_context_t * self, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	// void gocef_request_context_resolve_host(cef_request_context_t * self, cef_string_t * origin, cef_resolve_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_resolve_callback_t *)) { return callback__(self, origin, callback); }
-	// cef_errorcode_t gocef_request_context_resolve_host_cached(cef_request_context_t * self, cef_string_t * origin, cef_string_list_t resolved_ips, cef_errorcode_t (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_string_list_t)) { return callback__(self, origin, resolved_ips); }
 	// void gocef_request_context_load_extension(cef_request_context_t * self, cef_string_t * root_directory, cef_dictionary_value_t * manifest, cef_extension_handler_t * handler, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_dictionary_value_t *, cef_extension_handler_t *)) { return callback__(self, root_directory, manifest, handler); }
 	// int gocef_request_context_did_load_extension(cef_request_context_t * self, cef_string_t * extension_id, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, extension_id); }
 	// int gocef_request_context_has_extension(cef_request_context_t * self, cef_string_t * extension_id, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, extension_id); }
@@ -250,20 +249,6 @@ func (d *RequestContext) ResolveHost(origin string, callback *ResolveCallback) {
 		C.cef_string_userfree_free(origin_)
 	}()
 	C.gocef_request_context_resolve_host(d.toNative(), (*C.cef_string_t)(origin_), callback.toNative(), d.resolve_host)
-}
-
-// ResolveHostCached (resolve_host_cached)
-// Attempts to resolve |origin| to a list of associated IP addresses using
-// cached data. |resolved_ips| will be populated with the list of resolved IP
-// addresses or NULL if no cached data is available. Returns ERR_NONE on
-// success. This function must be called on the browser process IO thread.
-func (d *RequestContext) ResolveHostCached(origin string, resolved_ips StringList) Errorcode {
-	origin_ := C.cef_string_userfree_alloc()
-	setCEFStr(origin, origin_)
-	defer func() {
-		C.cef_string_userfree_free(origin_)
-	}()
-	return Errorcode(C.gocef_request_context_resolve_host_cached(d.toNative(), (*C.cef_string_t)(origin_), C.cef_string_list_t(resolved_ips), d.resolve_host_cached))
 }
 
 // LoadExtension (load_extension)

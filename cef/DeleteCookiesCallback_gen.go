@@ -55,7 +55,7 @@ func (d *DeleteCookiesCallback) Base() *BaseRefCounted {
 
 // OnComplete (on_complete)
 // Method that will be called upon completion. |num_deleted| will be the
-// number of cookies that were deleted or -1 if unknown.
+// number of cookies that were deleted.
 func (d *DeleteCookiesCallback) OnComplete(num_deleted int32) {
 	lookupDeleteCookiesCallbackProxy(d.Base()).OnComplete(d, num_deleted)
 }

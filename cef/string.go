@@ -8,14 +8,6 @@ import (
 	"unsafe"
 )
 
-func newCEFStr(str string) *C.cef_string_t {
-	utf8str := C.CString(str)
-	cefstr := (*C.cef_string_t)(C.calloc(1, C.size_t(unsafe.Sizeof(C.cef_string_t{}))))
-	C.cef_string_from_utf8(utf8str, C.strlen(utf8str), cefstr)
-	C.free(unsafe.Pointer(utf8str))
-	return cefstr
-}
-
 func setCEFStr(str string, cefStr *C.cef_string_t) {
 	utf8str := C.CString(str)
 	C.cef_string_from_utf8(utf8str, C.strlen(utf8str), cefStr)

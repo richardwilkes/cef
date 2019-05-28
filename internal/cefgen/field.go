@@ -62,7 +62,7 @@ type param struct {
 func (f *field) processedCParams(in []string) []param {
 	params := make([]param, len(in))
 	for i, p := range in {
-		p = strings.Replace(p, "const ", "", -1)
+		p = strings.ReplaceAll(p, "const ", "")
 		if space := strings.Index(p, " "); space != -1 {
 			params[i] = param{
 				Type: p[:space],

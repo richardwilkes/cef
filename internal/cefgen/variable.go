@@ -74,11 +74,11 @@ func newCVar(name, typeInfo string, pos position) *variable {
 	}
 
 	if v.HadConst = strings.Contains(typeInfo, "const "); v.HadConst {
-		typeInfo = strings.Replace(typeInfo, "const ", "", -1)
+		typeInfo = strings.ReplaceAll(typeInfo, "const ", "")
 	}
 	typeInfo = strings.TrimSpace(typeInfo)
 	typeInfo = strings.TrimPrefix(typeInfo, "struct _")
-	typeInfo = strings.Replace(typeInfo, "long long", "longlong", -1)
+	typeInfo = strings.ReplaceAll(typeInfo, "long long", "longlong")
 	if v.Name == baseFieldName {
 		typeInfo += " *"
 	}

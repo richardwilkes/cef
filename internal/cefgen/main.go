@@ -65,7 +65,7 @@ func cleanOutput() {
 
 func examineCEFSource(headers []string) {
 	var err error
-	cmd := exec.Command("clang", clangArgs(headers)...)
+	cmd := exec.Command("clang", clangArgs(headers)...) //nolint:gosec
 	cmd.Dir, err = filepath.Abs(cefBaseDir)
 	jot.FatalIfErr(err)
 	stdout, err := cmd.StdoutPipe()
