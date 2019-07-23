@@ -24,7 +24,6 @@ import (
 	// size_t gocef_browser_get_frame_count(cef_browser_t * self, size_t (CEF_CALLBACK *callback__)(cef_browser_t *)) { return callback__(self); }
 	// void gocef_browser_get_frame_identifiers(cef_browser_t * self, size_t * identifiersCount, int64 * identifiers, void (CEF_CALLBACK *callback__)(cef_browser_t *, size_t *, int64 *)) { return callback__(self, identifiersCount, identifiers); }
 	// void gocef_browser_get_frame_names(cef_browser_t * self, cef_string_list_t names, void (CEF_CALLBACK *callback__)(cef_browser_t *, cef_string_list_t)) { return callback__(self, names); }
-	// int gocef_browser_send_process_message(cef_browser_t * self, cef_process_id_t target_process, cef_process_message_t * message, int (CEF_CALLBACK *callback__)(cef_browser_t *, cef_process_id_t, cef_process_message_t *)) { return callback__(self, target_process, message); }
 	"C"
 )
 
@@ -171,11 +170,4 @@ func (d *Browser) GetFrameIdentifiers(identifiersCount *uint64, identifiers *int
 // Returns the names of all existing frames.
 func (d *Browser) GetFrameNames(names StringList) {
 	C.gocef_browser_get_frame_names(d.toNative(), C.cef_string_list_t(names), d.get_frame_names)
-}
-
-// SendProcessMessage (send_process_message)
-// Send a message to the specified |target_process|. Returns true (1) if the
-// message was sent successfully.
-func (d *Browser) SendProcessMessage(target_process ProcessID, message *ProcessMessage) int32 {
-	return int32(C.gocef_browser_send_process_message(d.toNative(), C.cef_process_id_t(target_process), message.toNative(), d.send_process_message))
 }

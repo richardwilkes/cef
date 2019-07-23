@@ -16,17 +16,18 @@ import (
 
 // ResourceHandlerProxy defines methods required for using ResourceHandler.
 type ResourceHandlerProxy interface {
+	Open(self *ResourceHandler, request *Request, handle_request *int32, callback *Callback) int32
 	ProcessRequest(self *ResourceHandler, request *Request, callback *Callback) int32
 	GetResponseHeaders(self *ResourceHandler, response *Response, response_length *int64, redirectUrl *string)
+	Skip(self *ResourceHandler, bytes_to_skip int64, bytes_skipped *int64, callback *ResourceSkipCallback) int32
+	Read(self *ResourceHandler, data_out unsafe.Pointer, bytes_to_read int32, bytes_read *int32, callback *ResourceReadCallback) int32
 	ReadResponse(self *ResourceHandler, data_out unsafe.Pointer, bytes_to_read int32, bytes_read *int32, callback *Callback) int32
-	CanGetCookie(self *ResourceHandler, cookie *Cookie) int32
-	CanSetCookie(self *ResourceHandler, cookie *Cookie) int32
 	Cancel(self *ResourceHandler)
 }
 
 // ResourceHandler (cef_resource_handler_t from include/capi/cef_resource_handler_capi.h)
 // Structure used to implement a custom request handler structure. The functions
-// of this structure will always be called on the IO thread.
+// of this structure will be called on the IO thread unless otherwise indicated.
 type ResourceHandler C.cef_resource_handler_t
 
 // NewResourceHandler creates a new ResourceHandler with the specified proxy. Passing
@@ -61,12 +62,35 @@ func (d *ResourceHandler) Base() *BaseRefCounted {
 	return (*BaseRefCounted)(&d.base)
 }
 
+// Open (open)
+// Open the response stream. To handle the request immediately set
+// |handle_request| to true (1) and return true (1). To decide at a later time
+// set |handle_request| to false (0), return true (1), and execute |callback|
+// to continue or cancel the request. To cancel the request immediately set
+// |handle_request| to true (1) and return false (0). This function will be
+// called in sequence but not from a dedicated thread. For backwards
+// compatibility set |handle_request| to false (0) and return false (0) and
+// the ProcessRequest function will be called.
+func (d *ResourceHandler) Open(request *Request, handle_request *int32, callback *Callback) int32 {
+	return lookupResourceHandlerProxy(d.Base()).Open(d, request, handle_request, callback)
+}
+
+//nolint:gocritic
+//export gocef_resource_handler_open
+func gocef_resource_handler_open(self *C.cef_resource_handler_t, request *C.cef_request_t, handle_request *C.int, callback *C.cef_callback_t) C.int {
+	me__ := (*ResourceHandler)(self)
+	proxy__ := lookupResourceHandlerProxy(me__.Base())
+	return C.int(proxy__.Open(me__, (*Request)(request), (*int32)(handle_request), (*Callback)(callback)))
+}
+
 // ProcessRequest (process_request)
 // Begin processing the request. To handle the request return true (1) and
 // call cef_callback_t::cont() once the response header information is
 // available (cef_callback_t::cont() can also be called from inside this
 // function if header information is available immediately). To cancel the
 // request return false (0).
+//
+// WARNING: This function is deprecated. Use Open instead.
 func (d *ResourceHandler) ProcessRequest(request *Request, callback *Callback) int32 {
 	return lookupResourceHandlerProxy(d.Base()).ProcessRequest(d, request, callback)
 }
@@ -106,12 +130,58 @@ func gocef_resource_handler_get_response_headers(self *C.cef_resource_handler_t,
 	proxy__.GetResponseHeaders(me__, (*Response)(response), (*int64)(response_length), &redirectUrl_)
 }
 
+// Skip (skip)
+// Skip response data when requested by a Range header. Skip over and discard
+// |bytes_to_skip| bytes of response data. If data is available immediately
+// set |bytes_skipped| to the number of of bytes skipped and return true (1).
+// To read the data at a later time set |bytes_skipped| to 0, return true (1)
+// and execute |callback| when the data is available. To indicate failure set
+// |bytes_skipped| to < 0 (e.g. -2 for ERR_FAILED) and return false (0). This
+// function will be called in sequence but not from a dedicated thread.
+func (d *ResourceHandler) Skip(bytes_to_skip int64, bytes_skipped *int64, callback *ResourceSkipCallback) int32 {
+	return lookupResourceHandlerProxy(d.Base()).Skip(d, bytes_to_skip, bytes_skipped, callback)
+}
+
+//nolint:gocritic
+//export gocef_resource_handler_skip
+func gocef_resource_handler_skip(self *C.cef_resource_handler_t, bytes_to_skip C.int64, bytes_skipped *C.int64, callback *C.cef_resource_skip_callback_t) C.int {
+	me__ := (*ResourceHandler)(self)
+	proxy__ := lookupResourceHandlerProxy(me__.Base())
+	return C.int(proxy__.Skip(me__, int64(bytes_to_skip), (*int64)(bytes_skipped), (*ResourceSkipCallback)(callback)))
+}
+
+// Read (read)
+// Read response data. If data is available immediately copy up to
+// |bytes_to_read| bytes into |data_out|, set |bytes_read| to the number of
+// bytes copied, and return true (1). To read the data at a later time keep a
+// pointer to |data_out|, set |bytes_read| to 0, return true (1) and execute
+// |callback| when the data is available (|data_out| will remain valid until
+// the callback is executed). To indicate response completion set |bytes_read|
+// to 0 and return false (0). To indicate failure set |bytes_read| to < 0
+// (e.g. -2 for ERR_FAILED) and return false (0). This function will be called
+// in sequence but not from a dedicated thread. For backwards compatibility
+// set |bytes_read| to -1 and return false (0) and the ReadResponse function
+// will be called.
+func (d *ResourceHandler) Read(data_out unsafe.Pointer, bytes_to_read int32, bytes_read *int32, callback *ResourceReadCallback) int32 {
+	return lookupResourceHandlerProxy(d.Base()).Read(d, data_out, bytes_to_read, bytes_read, callback)
+}
+
+//nolint:gocritic
+//export gocef_resource_handler_read
+func gocef_resource_handler_read(self *C.cef_resource_handler_t, data_out unsafe.Pointer, bytes_to_read C.int, bytes_read *C.int, callback *C.cef_resource_read_callback_t) C.int {
+	me__ := (*ResourceHandler)(self)
+	proxy__ := lookupResourceHandlerProxy(me__.Base())
+	return C.int(proxy__.Read(me__, data_out, int32(bytes_to_read), (*int32)(bytes_read), (*ResourceReadCallback)(callback)))
+}
+
 // ReadResponse (read_response)
 // Read response data. If data is available immediately copy up to
 // |bytes_to_read| bytes into |data_out|, set |bytes_read| to the number of
 // bytes copied, and return true (1). To read the data at a later time set
 // |bytes_read| to 0, return true (1) and call cef_callback_t::cont() when the
 // data is available. To indicate response completion return false (0).
+//
+// WARNING: This function is deprecated. Use Skip and Read instead.
 func (d *ResourceHandler) ReadResponse(data_out unsafe.Pointer, bytes_to_read int32, bytes_read *int32, callback *Callback) int32 {
 	return lookupResourceHandlerProxy(d.Base()).ReadResponse(d, data_out, bytes_to_read, bytes_read, callback)
 }
@@ -122,39 +192,6 @@ func gocef_resource_handler_read_response(self *C.cef_resource_handler_t, data_o
 	me__ := (*ResourceHandler)(self)
 	proxy__ := lookupResourceHandlerProxy(me__.Base())
 	return C.int(proxy__.ReadResponse(me__, data_out, int32(bytes_to_read), (*int32)(bytes_read), (*Callback)(callback)))
-}
-
-// CanGetCookie (can_get_cookie)
-// Return true (1) if the specified cookie can be sent with the request or
-// false (0) otherwise. If false (0) is returned for any cookie then no
-// cookies will be sent with the request.
-func (d *ResourceHandler) CanGetCookie(cookie *Cookie) int32 {
-	return lookupResourceHandlerProxy(d.Base()).CanGetCookie(d, cookie)
-}
-
-//nolint:gocritic
-//export gocef_resource_handler_can_get_cookie
-func gocef_resource_handler_can_get_cookie(self *C.cef_resource_handler_t, cookie *C.cef_cookie_t) C.int {
-	me__ := (*ResourceHandler)(self)
-	proxy__ := lookupResourceHandlerProxy(me__.Base())
-	cookie_ := cookie.toGo()
-	return C.int(proxy__.CanGetCookie(me__, cookie_))
-}
-
-// CanSetCookie (can_set_cookie)
-// Return true (1) if the specified cookie returned with the response can be
-// set or false (0) otherwise.
-func (d *ResourceHandler) CanSetCookie(cookie *Cookie) int32 {
-	return lookupResourceHandlerProxy(d.Base()).CanSetCookie(d, cookie)
-}
-
-//nolint:gocritic
-//export gocef_resource_handler_can_set_cookie
-func gocef_resource_handler_can_set_cookie(self *C.cef_resource_handler_t, cookie *C.cef_cookie_t) C.int {
-	me__ := (*ResourceHandler)(self)
-	proxy__ := lookupResourceHandlerProxy(me__.Base())
-	cookie_ := cookie.toGo()
-	return C.int(proxy__.CanSetCookie(me__, cookie_))
 }
 
 // Cancel (cancel)

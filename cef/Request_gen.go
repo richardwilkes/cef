@@ -16,6 +16,8 @@ import (
 	// void gocef_request_set_post_data(cef_request_t * self, cef_post_data_t * postData, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_post_data_t *)) { return callback__(self, postData); }
 	// void gocef_request_get_header_map(cef_request_t * self, cef_string_multimap_t headerMap, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_multimap_t)) { return callback__(self, headerMap); }
 	// void gocef_request_set_header_map(cef_request_t * self, cef_string_multimap_t headerMap, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_multimap_t)) { return callback__(self, headerMap); }
+	// cef_string_userfree_t gocef_request_get_header_by_name(cef_request_t * self, cef_string_t * name, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *)) { return callback__(self, name); }
+	// void gocef_request_set_header_by_name(cef_request_t * self, cef_string_t * name, cef_string_t * value, int overwrite, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *, cef_string_t *, int)) { return callback__(self, name, value, overwrite); }
 	// void gocef_request_set(cef_request_t * self, cef_string_t * url, cef_string_t * method, cef_post_data_t * postData, cef_string_multimap_t headerMap, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *, cef_string_t *, cef_post_data_t *, cef_string_multimap_t)) { return callback__(self, url, method, postData, headerMap); }
 	// int gocef_request_get_flags(cef_request_t * self, int (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
 	// void gocef_request_set_flags(cef_request_t * self, int flags, void (CEF_CALLBACK *callback__)(cef_request_t *, int)) { return callback__(self, flags); }
@@ -136,6 +138,39 @@ func (d *Request) SetHeaderMap(headerMap StringMultimap) {
 	C.gocef_request_set_header_map(d.toNative(), C.cef_string_multimap_t(headerMap), d.set_header_map)
 }
 
+// GetHeaderByName (get_header_by_name)
+// Returns the first header value for |name| or an NULL string if not found.
+// Will not return the Referer value if any. Use GetHeaderMap instead if
+// |name| might have multiple values.
+// The resulting string must be freed by calling cef_string_userfree_free().
+func (d *Request) GetHeaderByName(name string) string {
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	return cefuserfreestrToString(C.gocef_request_get_header_by_name(d.toNative(), (*C.cef_string_t)(name_), d.get_header_by_name))
+}
+
+// SetHeaderByName (set_header_by_name)
+// Set the header |name| to |value|. If |overwrite| is true (1) any existing
+// values will be replaced with the new value. If |overwrite| is false (0) any
+// existing values will not be overwritten. The Referer value cannot be set
+// using this function.
+func (d *Request) SetHeaderByName(name, value string, overwrite int32) {
+	name_ := C.cef_string_userfree_alloc()
+	setCEFStr(name, name_)
+	defer func() {
+		C.cef_string_userfree_free(name_)
+	}()
+	value_ := C.cef_string_userfree_alloc()
+	setCEFStr(value, value_)
+	defer func() {
+		C.cef_string_userfree_free(value_)
+	}()
+	C.gocef_request_set_header_by_name(d.toNative(), (*C.cef_string_t)(name_), (*C.cef_string_t)(value_), C.int(overwrite), d.set_header_by_name)
+}
+
 // Set (set)
 // Set all values at one time.
 func (d *Request) Set(url, method string, postData *PostData, headerMap StringMultimap) {
@@ -203,8 +238,8 @@ func (d *Request) GetTransitionType() TransitionType {
 
 // GetIdentifier (get_identifier)
 // Returns the globally unique identifier for this request or 0 if not
-// specified. Can be used by cef_request_tHandler implementations in the
-// browser process to track a single request across multiple callbacks.
+// specified. Can be used by cef_resource_request_handler_t implementations in
+// the browser process to track a single request across multiple callbacks.
 func (d *Request) GetIdentifier() uint64 {
 	return uint64(C.gocef_request_get_identifier(d.toNative(), d.get_identifier))
 }

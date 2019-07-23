@@ -9,7 +9,7 @@ import (
 	// int gocef_request_context_is_global(cef_request_context_t * self, int (CEF_CALLBACK *callback__)(cef_request_context_t *)) { return callback__(self); }
 	// cef_request_context_handler_t * gocef_request_context_get_handler(cef_request_context_t * self, cef_request_context_handler_t * (CEF_CALLBACK *callback__)(cef_request_context_t *)) { return callback__(self); }
 	// cef_string_userfree_t gocef_request_context_get_cache_path(cef_request_context_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_request_context_t *)) { return callback__(self); }
-	// cef_cookie_manager_t * gocef_request_context_get_default_cookie_manager(cef_request_context_t * self, cef_completion_callback_t * callback, cef_cookie_manager_t * (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
+	// cef_cookie_manager_t * gocef_request_context_get_cookie_manager(cef_request_context_t * self, cef_completion_callback_t * callback, cef_cookie_manager_t * (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	// int gocef_request_context_register_scheme_handler_factory(cef_request_context_t * self, cef_string_t * scheme_name, cef_string_t * domain_name, cef_scheme_handler_factory_t * factory, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_string_t *, cef_scheme_handler_factory_t *)) { return callback__(self, scheme_name, domain_name, factory); }
 	// int gocef_request_context_clear_scheme_handler_factories(cef_request_context_t * self, int (CEF_CALLBACK *callback__)(cef_request_context_t *)) { return callback__(self); }
 	// void gocef_request_context_purge_plugin_list_cache(cef_request_context_t * self, int reload_pages, void (CEF_CALLBACK *callback__)(cef_request_context_t *, int)) { return callback__(self, reload_pages); }
@@ -19,6 +19,7 @@ import (
 	// int gocef_request_context_can_set_preference(cef_request_context_t * self, cef_string_t * name, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, name); }
 	// int gocef_request_context_set_preference(cef_request_context_t * self, cef_string_t * name, cef_value_t * value, cef_string_t * error_r, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_value_t *, cef_string_t *)) { return callback__(self, name, value, error_r); }
 	// void gocef_request_context_clear_certificate_exceptions(cef_request_context_t * self, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
+	// void gocef_request_context_clear_http_auth_credentials(cef_request_context_t * self, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	// void gocef_request_context_close_all_connections(cef_request_context_t * self, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	// void gocef_request_context_resolve_host(cef_request_context_t * self, cef_string_t * origin, cef_resolve_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_resolve_callback_t *)) { return callback__(self, origin, callback); }
 	// void gocef_request_context_load_extension(cef_request_context_t * self, cef_string_t * root_directory, cef_dictionary_value_t * manifest, cef_extension_handler_t * handler, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_dictionary_value_t *, cef_extension_handler_t *)) { return callback__(self, root_directory, manifest, handler); }
@@ -92,15 +93,12 @@ func (d *RequestContext) GetCachePath() string {
 	return cefuserfreestrToString(C.gocef_request_context_get_cache_path(d.toNative(), d.get_cache_path))
 }
 
-// GetDefaultCookieManager (get_default_cookie_manager)
-// Returns the default cookie manager for this object. This will be the global
-// cookie manager if this object is the global request context. Otherwise,
-// this will be the default cookie manager used when this request context does
-// not receive a value via cef_request_tContextHandler::get_cookie_manager().
-// If |callback| is non-NULL it will be executed asnychronously on the IO
-// thread after the manager's storage has been initialized.
-func (d *RequestContext) GetDefaultCookieManager(callback *CompletionCallback) *CookieManager {
-	return (*CookieManager)(C.gocef_request_context_get_default_cookie_manager(d.toNative(), callback.toNative(), d.get_default_cookie_manager))
+// GetCookieManager (get_cookie_manager)
+// Returns the cookie manager for this object. If |callback| is non-NULL it
+// will be executed asnychronously on the IO thread after the manager's
+// storage has been initialized.
+func (d *RequestContext) GetCookieManager(callback *CompletionCallback) *CookieManager {
+	return (*CookieManager)(C.gocef_request_context_get_cookie_manager(d.toNative(), callback.toNative(), d.get_cookie_manager))
 }
 
 // RegisterSchemeHandlerFactory (register_scheme_handler_factory)
@@ -228,6 +226,14 @@ func (d *RequestContext) SetPreference(name string, value *Value, error_r *strin
 // completion.
 func (d *RequestContext) ClearCertificateExceptions(callback *CompletionCallback) {
 	C.gocef_request_context_clear_certificate_exceptions(d.toNative(), callback.toNative(), d.clear_certificate_exceptions)
+}
+
+// ClearHttpAuthCredentials (clear_http_auth_credentials)
+// Clears all HTTP authentication credentials that were added as part of
+// handling GetAuthCredentials. If |callback| is non-NULL it will be executed
+// on the UI thread after completion.
+func (d *RequestContext) ClearHttpAuthCredentials(callback *CompletionCallback) {
+	C.gocef_request_context_clear_http_auth_credentials(d.toNative(), callback.toNative(), d.clear_http_auth_credentials)
 }
 
 // CloseAllConnections (close_all_connections)

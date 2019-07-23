@@ -75,33 +75,42 @@ func BinaryValueCreate(data unsafe.Pointer, data_size uint64) *BinaryValue {
 // |windowInfo|. All values will be copied internally and the actual window will
 // be created on the UI thread. If |request_context| is NULL the global request
 // context will be used. This function can be called on any browser process
-// thread and will not block.
-func BrowserHostCreateBrowser(windowInfo *WindowInfo, client *Client, url string, settings *BrowserSettings, request_context *RequestContext) int32 {
+// thread and will not block. The optional |extra_info| parameter provides an
+// opportunity to specify extra information specific to the created browser that
+// will be passed to cef_render_process_handler_t::on_browser_created() in the
+// render process.
+func BrowserHostCreateBrowser(windowInfo *WindowInfo, client *Client, url string, settings *BrowserSettings, extra_info *DictionaryValue, request_context *RequestContext) int32 {
 	url_ := C.cef_string_userfree_alloc()
 	setCEFStr(url, url_)
 	defer func() {
 		C.cef_string_userfree_free(url_)
 	}()
-	return int32(C.cef_browser_host_create_browser(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative()))
+	return int32(C.cef_browser_host_create_browser(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), extra_info.toNative(), request_context.toNative()))
 }
 
 // BrowserHostCreateBrowserSync (cef_browser_host_create_browser_sync from include/capi/cef_browser_capi.h)
 // Create a new browser window using the window parameters specified by
 // |windowInfo|. If |request_context| is NULL the global request context will be
-// used. This function can only be called on the browser process UI thread.
-func BrowserHostCreateBrowserSync(windowInfo *WindowInfo, client *Client, url string, settings *BrowserSettings, request_context *RequestContext) *Browser {
+// used. This function can only be called on the browser process UI thread. The
+// optional |extra_info| parameter provides an opportunity to specify extra
+// information specific to the created browser that will be passed to
+// cef_render_process_handler_t::on_browser_created() in the render process.
+func BrowserHostCreateBrowserSync(windowInfo *WindowInfo, client *Client, url string, settings *BrowserSettings, extra_info *DictionaryValue, request_context *RequestContext) *Browser {
 	url_ := C.cef_string_userfree_alloc()
 	setCEFStr(url, url_)
 	defer func() {
 		C.cef_string_userfree_free(url_)
 	}()
-	return (*Browser)(C.cef_browser_host_create_browser_sync(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative()))
+	return (*Browser)(C.cef_browser_host_create_browser_sync(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), extra_info.toNative(), request_context.toNative()))
 }
 
 // BrowserViewCreate (cef_browser_view_create from include/capi/views/cef_browser_view_capi.h)
 // Create a new BrowserView. The underlying cef_browser_t will not be created
-// until this view is added to the views hierarchy.
-func BrowserViewCreate(client *Client, url string, settings *BrowserSettings, request_context *RequestContext, delegate *BrowserViewDelegate) *BrowserView {
+// until this view is added to the views hierarchy. The optional |extra_info|
+// parameter provides an opportunity to specify extra information specific to
+// the created browser that will be passed to
+// cef_render_process_handler_t::on_browser_created() in the render process.
+func BrowserViewCreate(client *Client, url string, settings *BrowserSettings, extra_info *DictionaryValue, request_context *RequestContext, delegate *BrowserViewDelegate) *BrowserView {
 	url_ := C.cef_string_userfree_alloc()
 	setCEFStr(url, url_)
 	defer func() {
@@ -111,7 +120,7 @@ func BrowserViewCreate(client *Client, url string, settings *BrowserSettings, re
 	if delegate != nil {
 		delegate_ = delegate.toNative()
 	}
-	return (*BrowserView)(C.cef_browser_view_create(client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), request_context.toNative(), delegate_))
+	return (*BrowserView)(C.cef_browser_view_create(client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), extra_info.toNative(), request_context.toNative(), delegate_))
 }
 
 // BrowserViewGetForBrowser (cef_browser_view_get_for_browser from include/capi/views/cef_browser_view_capi.h)
@@ -150,41 +159,13 @@ func CommandLineGetGlobal() *CommandLine {
 	return (*CommandLine)(C.cef_command_line_get_global())
 }
 
-// CookieManagerCreateManager (cef_cookie_manager_create_manager from include/capi/cef_cookie_capi.h)
-// Creates a new cookie manager. If |path| is NULL data will be stored in memory
-// only. Otherwise, data will be stored at the specified |path|. To persist
-// session cookies (cookies without an expiry date or validity interval) set
-// |persist_session_cookies| to true (1). Session cookies are generally intended
-// to be transient and most Web browsers do not persist them. If |callback| is
-// non-NULL it will be executed asnychronously on the IO thread after the
-// manager's storage has been initialized.
-func CookieManagerCreateManager(path string, persist_session_cookies int32, callback *CompletionCallback) *CookieManager {
-	path_ := C.cef_string_userfree_alloc()
-	setCEFStr(path, path_)
-	defer func() {
-		C.cef_string_userfree_free(path_)
-	}()
-	return (*CookieManager)(C.cef_cookie_manager_create_manager((*C.cef_string_t)(path_), C.int(persist_session_cookies), callback.toNative()))
-}
-
-// CookieManagerGetBlockingManager (cef_cookie_manager_get_blocking_manager from include/capi/cef_cookie_capi.h)
-// Returns a cookie manager that neither stores nor retrieves cookies. All usage
-// of cookies will be blocked including cookies accessed via the network
-// (request/response headers), via JavaScript (document.cookie), and via
-// cef_cookie_manager_t functions. No cookies will be displayed in DevTools. If
-// you wish to only block cookies sent via the network use the
-// cef_request_tHandler CanGetCookies and CanSetCookie functions instead.
-func CookieManagerGetBlockingManager() *CookieManager {
-	return (*CookieManager)(C.cef_cookie_manager_get_blocking_manager())
-}
-
 // CookieManagerGetGlobalManager (cef_cookie_manager_get_global_manager from include/capi/cef_cookie_capi.h)
 // Returns the global cookie manager. By default data will be stored at
 // CefSettings.cache_path if specified or in memory otherwise. If |callback| is
-// non-NULL it will be executed asnychronously on the IO thread after the
+// non-NULL it will be executed asnychronously on the UI thread after the
 // manager's storage has been initialized. Using this function is equivalent to
-// calling cef_request_tContext::cef_request_context_get_global_context()->get_d
-// efault_cookie_manager().
+// calling cef_request_tContext::cef_request_context_get_global_context()->GetDe
+// faultCookieManager().
 func CookieManagerGetGlobalManager(callback *CompletionCallback) *CookieManager {
 	return (*CookieManager)(C.cef_cookie_manager_get_global_manager(callback.toNative()))
 }
@@ -1076,19 +1057,25 @@ func UnregisterInternalWebPlugin(path string) {
 }
 
 // UrlrequestCreate (cef_urlrequest_create from include/capi/cef_urlrequest_capi.h)
-// Create a new URL request. Only GET, POST, HEAD, DELETE and PUT request
-// functions are supported. Multiple post data elements are not supported and
-// elements of type PDE_TYPE_FILE are only supported for requests originating
-// from the browser process. Requests originating from the render process will
-// receive the same handling as requests originating from Web content -- if the
-// response contains Content-Disposition or Mime-Type header values that would
-// not normally be rendered then the response may receive special handling
-// inside the browser (for example, via the file download code path instead of
-// the URL request code path). The |request| object will be marked as read-only
-// after calling this function. In the browser process if |request_context| is
-// NULL the global request context will be used. In the render process
-// |request_context| must be NULL and the context associated with the current
-// renderer process' browser will be used.
+// Create a new URL request that is not associated with a specific browser or
+// frame. Use cef_frame_t::CreateURLRequest instead if you want the request to
+// have this association, in which case it may be handled differently (see
+// documentation on that function). Requests may originate from the both browser
+// process and the render process.
+//
+// For requests originating from the browser process:
+//   - It may be intercepted by the client via CefResourceRequestHandler or
+//     CefSchemeHandlerFactory.
+//   - POST data may only contain only a single element of type PDE_TYPE_FILE
+//     or PDE_TYPE_BYTES.
+//   - If |request_context| is empty the global request context will be used.
+// For requests originating from the render process:
+//   - It cannot be intercepted by the client so only http(s) and blob schemes
+//     are supported.
+//   - POST data may only contain a single element of type PDE_TYPE_BYTES.
+//   - The |request_context| parameter must be NULL.
+//
+// The |request| object will be marked as read-only after calling this function.
 func UrlrequestCreate(request *Request, client *UrlrequestClient, request_context *RequestContext) *Urlrequest {
 	return (*Urlrequest)(C.cef_urlrequest_create(request.toNative(), client.toNative(), request_context.toNative()))
 }

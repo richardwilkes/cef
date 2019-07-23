@@ -30,7 +30,7 @@ type ClientProxy interface {
 	GetLoadHandler(self *Client) *LoadHandler
 	GetRenderHandler(self *Client) *RenderHandler
 	GetRequestHandler(self *Client) *RequestHandler
-	OnProcessMessageReceived(self *Client, browser *Browser, source_process ProcessID, message *ProcessMessage) int32
+	OnProcessMessageReceived(self *Client, browser *Browser, frame *Frame, source_process ProcessID, message *ProcessMessage) int32
 }
 
 // Client (cef_client_t from include/capi/cef_client_capi.h)
@@ -273,14 +273,14 @@ func gocef_client_get_request_handler(self *C.cef_client_t) *C.cef_request_handl
 // Called when a new message is received from a different process. Return true
 // (1) if the message was handled or false (0) otherwise. Do not keep a
 // reference to or attempt to access the message outside of this callback.
-func (d *Client) OnProcessMessageReceived(browser *Browser, source_process ProcessID, message *ProcessMessage) int32 {
-	return lookupClientProxy(d.Base()).OnProcessMessageReceived(d, browser, source_process, message)
+func (d *Client) OnProcessMessageReceived(browser *Browser, frame *Frame, source_process ProcessID, message *ProcessMessage) int32 {
+	return lookupClientProxy(d.Base()).OnProcessMessageReceived(d, browser, frame, source_process, message)
 }
 
 //nolint:gocritic
 //export gocef_client_on_process_message_received
-func gocef_client_on_process_message_received(self *C.cef_client_t, browser *C.cef_browser_t, source_process C.cef_process_id_t, message *C.cef_process_message_t) C.int {
+func gocef_client_on_process_message_received(self *C.cef_client_t, browser *C.cef_browser_t, frame *C.cef_frame_t, source_process C.cef_process_id_t, message *C.cef_process_message_t) C.int {
 	me__ := (*Client)(self)
 	proxy__ := lookupClientProxy(me__.Base())
-	return C.int(proxy__.OnProcessMessageReceived(me__, (*Browser)(browser), ProcessID(source_process), (*ProcessMessage)(message)))
+	return C.int(proxy__.OnProcessMessageReceived(me__, (*Browser)(browser), (*Frame)(frame), ProcessID(source_process), (*ProcessMessage)(message)))
 }

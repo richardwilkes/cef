@@ -30,7 +30,7 @@ func (d *SchemeHandlerFactory) Base() *BaseRefCounted {
 // will be the browser window and frame respectively that originated the
 // request or NULL if the request did not originate from a browser window (for
 // example, if the request came from cef_urlrequest_t). The |request| object
-// passed to this function will not contain cookie data.
+// passed to this function cannot be modified.
 func (d *SchemeHandlerFactory) Create(browser *Browser, frame *Frame, scheme_name string, request *Request) *ResourceHandler {
 	scheme_name_ := C.cef_string_userfree_alloc()
 	setCEFStr(scheme_name, scheme_name_)

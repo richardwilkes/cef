@@ -17,8 +17,8 @@ import (
 // RequestContextHandlerProxy defines methods required for using RequestContextHandler.
 type RequestContextHandlerProxy interface {
 	OnRequestContextInitialized(self *RequestContextHandler, request_context *RequestContext)
-	GetCookieManager(self *RequestContextHandler) *CookieManager
 	OnBeforePluginLoad(self *RequestContextHandler, mime_type, plugin_url string, is_main_frame int32, top_origin_url string, plugin_info *WebPluginInfo, plugin_policy *PluginPolicy) int32
+	GetResourceRequestHandler(self *RequestContextHandler, browser *Browser, frame *Frame, request *Request, is_navigation, is_download int32, request_initiator string, disable_default_handling *int32) *ResourceRequestHandler
 }
 
 // RequestContextHandler (cef_request_context_handler_t from include/capi/cef_request_context_handler_capi.h)
@@ -74,22 +74,6 @@ func gocef_request_context_handler_on_request_context_initialized(self *C.cef_re
 	proxy__.OnRequestContextInitialized(me__, (*RequestContext)(request_context))
 }
 
-// GetCookieManager (get_cookie_manager)
-// Called on the browser process IO thread to retrieve the cookie manager. If
-// this function returns NULL the default cookie manager retrievable via
-// cef_request_tContext::get_default_cookie_manager() will be used.
-func (d *RequestContextHandler) GetCookieManager() *CookieManager {
-	return lookupRequestContextHandlerProxy(d.Base()).GetCookieManager(d)
-}
-
-//nolint:gocritic
-//export gocef_request_context_handler_get_cookie_manager
-func gocef_request_context_handler_get_cookie_manager(self *C.cef_request_context_handler_t) *C.cef_cookie_manager_t {
-	me__ := (*RequestContextHandler)(self)
-	proxy__ := lookupRequestContextHandlerProxy(me__.Base())
-	return (proxy__.GetCookieManager(me__)).toNative()
-}
-
 // OnBeforePluginLoad (on_before_plugin_load)
 // Called on multiple browser process threads before a plugin instance is
 // loaded. |mime_type| is the mime type of the plugin that will be loaded.
@@ -122,4 +106,34 @@ func gocef_request_context_handler_on_before_plugin_load(self *C.cef_request_con
 	top_origin_url_ := cefstrToString(top_origin_url)
 	plugin_policy_ := PluginPolicy(*plugin_policy)
 	return C.int(proxy__.OnBeforePluginLoad(me__, mime_type_, plugin_url_, int32(is_main_frame), top_origin_url_, (*WebPluginInfo)(plugin_info), &plugin_policy_))
+}
+
+// GetResourceRequestHandler (get_resource_request_handler)
+// Called on the browser process IO thread before a resource request is
+// initiated. The |browser| and |frame| values represent the source of the
+// request, and may be NULL for requests originating from service workers or
+// cef_urlrequest_t. |request| represents the request contents and cannot be
+// modified in this callback. |is_navigation| will be true (1) if the resource
+// request is a navigation. |is_download| will be true (1) if the resource
+// request is a download. |request_initiator| is the origin (scheme + domain)
+// of the page that initiated the request. Set |disable_default_handling| to
+// true (1) to disable default handling of the request, in which case it will
+// need to be handled via cef_resource_request_handler_t::GetResourceHandler
+// or it will be canceled. To allow the resource load to proceed with default
+// handling return NULL. To specify a handler for the resource return a
+// cef_resource_request_handler_t object. This function will not be called if
+// the client associated with |browser| returns a non-NULL value from
+// cef_request_tHandler::GetResourceRequestHandler for the same request
+// (identified by cef_request_t::GetIdentifier).
+func (d *RequestContextHandler) GetResourceRequestHandler(browser *Browser, frame *Frame, request *Request, is_navigation, is_download int32, request_initiator string, disable_default_handling *int32) *ResourceRequestHandler {
+	return lookupRequestContextHandlerProxy(d.Base()).GetResourceRequestHandler(d, browser, frame, request, is_navigation, is_download, request_initiator, disable_default_handling)
+}
+
+//nolint:gocritic
+//export gocef_request_context_handler_get_resource_request_handler
+func gocef_request_context_handler_get_resource_request_handler(self *C.cef_request_context_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, is_navigation C.int, is_download C.int, request_initiator *C.cef_string_t, disable_default_handling *C.int) *C.cef_resource_request_handler_t {
+	me__ := (*RequestContextHandler)(self)
+	proxy__ := lookupRequestContextHandlerProxy(me__.Base())
+	request_initiator_ := cefstrToString(request_initiator)
+	return (proxy__.GetResourceRequestHandler(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), int32(is_navigation), int32(is_download), request_initiator_, (*int32)(disable_default_handling))).toNative()
 }

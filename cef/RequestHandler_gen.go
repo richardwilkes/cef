@@ -18,17 +18,9 @@ import (
 type RequestHandlerProxy interface {
 	OnBeforeBrowse(self *RequestHandler, browser *Browser, frame *Frame, request *Request, user_gesture, is_redirect int32) int32
 	OnOpenUrlfromTab(self *RequestHandler, browser *Browser, frame *Frame, target_url string, target_disposition WindowOpenDisposition, user_gesture int32) int32
-	OnBeforeResourceLoad(self *RequestHandler, browser *Browser, frame *Frame, request *Request, callback *RequestCallback) ReturnValue
-	GetResourceHandler(self *RequestHandler, browser *Browser, frame *Frame, request *Request) *ResourceHandler
-	OnResourceRedirect(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response, new_url *string)
-	OnResourceResponse(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response) int32
-	GetResourceResponseFilter(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response) *ResponseFilter
-	OnResourceLoadComplete(self *RequestHandler, browser *Browser, frame *Frame, request *Request, response *Response, status UrlrequestStatus, received_content_length int64)
-	GetAuthCredentials(self *RequestHandler, browser *Browser, frame *Frame, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32
-	CanGetCookies(self *RequestHandler, browser *Browser, frame *Frame, request *Request) int32
-	CanSetCookie(self *RequestHandler, browser *Browser, frame *Frame, request *Request, cookie *Cookie) int32
+	GetResourceRequestHandler(self *RequestHandler, browser *Browser, frame *Frame, request *Request, is_navigation, is_download int32, request_initiator string, disable_default_handling *int32) *ResourceRequestHandler
+	GetAuthCredentials(self *RequestHandler, browser *Browser, origin_url string, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32
 	OnQuotaRequest(self *RequestHandler, browser *Browser, origin_url string, new_size int64, callback *RequestCallback) int32
-	OnProtocolExecution(self *RequestHandler, browser *Browser, url string, allow_os_execution *int32)
 	OnCertificateError(self *RequestHandler, browser *Browser, cert_error Errorcode, request_url string, ssl_info *Sslinfo, callback *RequestCallback) int32
 	OnSelectClientCertificate(self *RequestHandler, browser *Browser, isProxy int32, host string, port int32, certificatesCount uint64, certificates **X509certificate, callback *SelectClientCertificateCallback) int32
 	OnPluginCrashed(self *RequestHandler, browser *Browser, plugin_path string)
@@ -124,170 +116,59 @@ func gocef_request_handler_on_open_urlfrom_tab(self *C.cef_request_handler_t, br
 	return C.int(proxy__.OnOpenUrlfromTab(me__, (*Browser)(browser), (*Frame)(frame), target_url_, WindowOpenDisposition(target_disposition), int32(user_gesture)))
 }
 
-// OnBeforeResourceLoad (on_before_resource_load)
-// Called on the IO thread before a resource request is loaded. The |request|
-// object may be modified. Return RV_CONTINUE to continue the request
-// immediately. Return RV_CONTINUE_ASYNC and call cef_request_tCallback::
-// cont() at a later time to continue or cancel the request asynchronously.
-// Return RV_CANCEL to cancel the request immediately.
-//
-func (d *RequestHandler) OnBeforeResourceLoad(browser *Browser, frame *Frame, request *Request, callback *RequestCallback) ReturnValue {
-	return lookupRequestHandlerProxy(d.Base()).OnBeforeResourceLoad(d, browser, frame, request, callback)
+// GetResourceRequestHandler (get_resource_request_handler)
+// Called on the browser process IO thread before a resource request is
+// initiated. The |browser| and |frame| values represent the source of the
+// request. |request| represents the request contents and cannot be modified
+// in this callback. |is_navigation| will be true (1) if the resource request
+// is a navigation. |is_download| will be true (1) if the resource request is
+// a download. |request_initiator| is the origin (scheme + domain) of the page
+// that initiated the request. Set |disable_default_handling| to true (1) to
+// disable default handling of the request, in which case it will need to be
+// handled via cef_resource_request_handler_t::GetResourceHandler or it will
+// be canceled. To allow the resource load to proceed with default handling
+// return NULL. To specify a handler for the resource return a
+// cef_resource_request_handler_t object. If this callback returns NULL the
+// same function will be called on the associated cef_request_tContextHandler,
+// if any.
+func (d *RequestHandler) GetResourceRequestHandler(browser *Browser, frame *Frame, request *Request, is_navigation, is_download int32, request_initiator string, disable_default_handling *int32) *ResourceRequestHandler {
+	return lookupRequestHandlerProxy(d.Base()).GetResourceRequestHandler(d, browser, frame, request, is_navigation, is_download, request_initiator, disable_default_handling)
 }
 
 //nolint:gocritic
-//export gocef_request_handler_on_before_resource_load
-func gocef_request_handler_on_before_resource_load(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, callback *C.cef_request_callback_t) C.cef_return_value_t {
+//export gocef_request_handler_get_resource_request_handler
+func gocef_request_handler_get_resource_request_handler(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, is_navigation C.int, is_download C.int, request_initiator *C.cef_string_t, disable_default_handling *C.int) *C.cef_resource_request_handler_t {
 	me__ := (*RequestHandler)(self)
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	return C.cef_return_value_t(proxy__.OnBeforeResourceLoad(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*RequestCallback)(callback)))
-}
-
-// GetResourceHandler (get_resource_handler)
-// Called on the IO thread before a resource is loaded. To allow the resource
-// to load normally return NULL. To specify a handler for the resource return
-// a cef_resource_handler_t object. The |request| object should not be
-// modified in this callback.
-func (d *RequestHandler) GetResourceHandler(browser *Browser, frame *Frame, request *Request) *ResourceHandler {
-	return lookupRequestHandlerProxy(d.Base()).GetResourceHandler(d, browser, frame, request)
-}
-
-//nolint:gocritic
-//export gocef_request_handler_get_resource_handler
-func gocef_request_handler_get_resource_handler(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t) *C.cef_resource_handler_t {
-	me__ := (*RequestHandler)(self)
-	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	return (proxy__.GetResourceHandler(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request))).toNative()
-}
-
-// OnResourceRedirect (on_resource_redirect)
-// Called on the IO thread when a resource load is redirected. The |request|
-// parameter will contain the old URL and other request-related information.
-// The |response| parameter will contain the response that resulted in the
-// redirect. The |new_url| parameter will contain the new URL and can be
-// changed if desired. The |request| object cannot be modified in this
-// callback.
-func (d *RequestHandler) OnResourceRedirect(browser *Browser, frame *Frame, request *Request, response *Response, new_url *string) {
-	lookupRequestHandlerProxy(d.Base()).OnResourceRedirect(d, browser, frame, request, response, new_url)
-}
-
-//nolint:gocritic
-//export gocef_request_handler_on_resource_redirect
-func gocef_request_handler_on_resource_redirect(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t, new_url *C.cef_string_t) {
-	me__ := (*RequestHandler)(self)
-	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	new_url_ := cefstrToString(new_url)
-	proxy__.OnResourceRedirect(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*Response)(response), &new_url_)
-}
-
-// OnResourceResponse (on_resource_response)
-// Called on the IO thread when a resource response is received. To allow the
-// resource to load normally return false (0). To redirect or retry the
-// resource modify |request| (url, headers or post body) and return true (1).
-// The |response| object cannot be modified in this callback.
-func (d *RequestHandler) OnResourceResponse(browser *Browser, frame *Frame, request *Request, response *Response) int32 {
-	return lookupRequestHandlerProxy(d.Base()).OnResourceResponse(d, browser, frame, request, response)
-}
-
-//nolint:gocritic
-//export gocef_request_handler_on_resource_response
-func gocef_request_handler_on_resource_response(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t) C.int {
-	me__ := (*RequestHandler)(self)
-	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	return C.int(proxy__.OnResourceResponse(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*Response)(response)))
-}
-
-// GetResourceResponseFilter (get_resource_response_filter)
-// Called on the IO thread to optionally filter resource response content.
-// |request| and |response| represent the request and response respectively
-// and cannot be modified in this callback.
-func (d *RequestHandler) GetResourceResponseFilter(browser *Browser, frame *Frame, request *Request, response *Response) *ResponseFilter {
-	return lookupRequestHandlerProxy(d.Base()).GetResourceResponseFilter(d, browser, frame, request, response)
-}
-
-//nolint:gocritic
-//export gocef_request_handler_get_resource_response_filter
-func gocef_request_handler_get_resource_response_filter(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t) *C.cef_response_filter_t {
-	me__ := (*RequestHandler)(self)
-	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	return (proxy__.GetResourceResponseFilter(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*Response)(response))).toNative()
-}
-
-// OnResourceLoadComplete (on_resource_load_complete)
-// Called on the IO thread when a resource load has completed. |request| and
-// |response| represent the request and response respectively and cannot be
-// modified in this callback. |status| indicates the load completion status.
-// |received_content_length| is the number of response bytes actually read.
-func (d *RequestHandler) OnResourceLoadComplete(browser *Browser, frame *Frame, request *Request, response *Response, status UrlrequestStatus, received_content_length int64) {
-	lookupRequestHandlerProxy(d.Base()).OnResourceLoadComplete(d, browser, frame, request, response, status, received_content_length)
-}
-
-//nolint:gocritic
-//export gocef_request_handler_on_resource_load_complete
-func gocef_request_handler_on_resource_load_complete(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t, status C.cef_urlrequest_status_t, received_content_length C.int64) {
-	me__ := (*RequestHandler)(self)
-	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	proxy__.OnResourceLoadComplete(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*Response)(response), UrlrequestStatus(status), int64(received_content_length))
+	request_initiator_ := cefstrToString(request_initiator)
+	return (proxy__.GetResourceRequestHandler(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), int32(is_navigation), int32(is_download), request_initiator_, (*int32)(disable_default_handling))).toNative()
 }
 
 // GetAuthCredentials (get_auth_credentials)
 // Called on the IO thread when the browser needs credentials from the user.
-// |isProxy| indicates whether the host is a proxy server. |host| contains the
-// hostname and |port| contains the port number. |realm| is the realm of the
-// challenge and may be NULL. |scheme| is the authentication scheme used, such
-// as "basic" or "digest", and will be NULL if the source of the request is an
+// |origin_url| is the origin making this authentication request. |isProxy|
+// indicates whether the host is a proxy server. |host| contains the hostname
+// and |port| contains the port number. |realm| is the realm of the challenge
+// and may be NULL. |scheme| is the authentication scheme used, such as
+// "basic" or "digest", and will be NULL if the source of the request is an
 // FTP server. Return true (1) to continue the request and call
 // cef_auth_callback_t::cont() either in this function or at a later time when
 // the authentication information is available. Return false (0) to cancel the
 // request immediately.
-func (d *RequestHandler) GetAuthCredentials(browser *Browser, frame *Frame, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32 {
-	return lookupRequestHandlerProxy(d.Base()).GetAuthCredentials(d, browser, frame, isProxy, host, port, realm, scheme, callback)
+func (d *RequestHandler) GetAuthCredentials(browser *Browser, origin_url string, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32 {
+	return lookupRequestHandlerProxy(d.Base()).GetAuthCredentials(d, browser, origin_url, isProxy, host, port, realm, scheme, callback)
 }
 
 //nolint:gocritic
 //export gocef_request_handler_get_auth_credentials
-func gocef_request_handler_get_auth_credentials(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, isProxy C.int, host *C.cef_string_t, port C.int, realm *C.cef_string_t, scheme *C.cef_string_t, callback *C.cef_auth_callback_t) C.int {
+func gocef_request_handler_get_auth_credentials(self *C.cef_request_handler_t, browser *C.cef_browser_t, origin_url *C.cef_string_t, isProxy C.int, host *C.cef_string_t, port C.int, realm *C.cef_string_t, scheme *C.cef_string_t, callback *C.cef_auth_callback_t) C.int {
 	me__ := (*RequestHandler)(self)
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
+	origin_url_ := cefstrToString(origin_url)
 	host_ := cefstrToString(host)
 	realm_ := cefstrToString(realm)
 	scheme_ := cefstrToString(scheme)
-	return C.int(proxy__.GetAuthCredentials(me__, (*Browser)(browser), (*Frame)(frame), int32(isProxy), host_, int32(port), realm_, scheme_, (*AuthCallback)(callback)))
-}
-
-// CanGetCookies (can_get_cookies)
-// Called on the IO thread before sending a network request with a "Cookie"
-// request header. Return true (1) to allow cookies to be included in the
-// network request or false (0) to block cookies. The |request| object should
-// not be modified in this callback.
-func (d *RequestHandler) CanGetCookies(browser *Browser, frame *Frame, request *Request) int32 {
-	return lookupRequestHandlerProxy(d.Base()).CanGetCookies(d, browser, frame, request)
-}
-
-//nolint:gocritic
-//export gocef_request_handler_can_get_cookies
-func gocef_request_handler_can_get_cookies(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t) C.int {
-	me__ := (*RequestHandler)(self)
-	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	return C.int(proxy__.CanGetCookies(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request)))
-}
-
-// CanSetCookie (can_set_cookie)
-// Called on the IO thread when receiving a network request with a "Set-
-// Cookie" response header value represented by |cookie|. Return true (1) to
-// allow the cookie to be stored or false (0) to block the cookie. The
-// |request| object should not be modified in this callback.
-func (d *RequestHandler) CanSetCookie(browser *Browser, frame *Frame, request *Request, cookie *Cookie) int32 {
-	return lookupRequestHandlerProxy(d.Base()).CanSetCookie(d, browser, frame, request, cookie)
-}
-
-//nolint:gocritic
-//export gocef_request_handler_can_set_cookie
-func gocef_request_handler_can_set_cookie(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, cookie *C.cef_cookie_t) C.int {
-	me__ := (*RequestHandler)(self)
-	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	cookie_ := cookie.toGo()
-	return C.int(proxy__.CanSetCookie(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), cookie_))
+	return C.int(proxy__.GetAuthCredentials(me__, (*Browser)(browser), origin_url_, int32(isProxy), host_, int32(port), realm_, scheme_, (*AuthCallback)(callback)))
 }
 
 // OnQuotaRequest (on_quota_request)
@@ -309,25 +190,6 @@ func gocef_request_handler_on_quota_request(self *C.cef_request_handler_t, brows
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
 	origin_url_ := cefstrToString(origin_url)
 	return C.int(proxy__.OnQuotaRequest(me__, (*Browser)(browser), origin_url_, int64(new_size), (*RequestCallback)(callback)))
-}
-
-// OnProtocolExecution (on_protocol_execution)
-// Called on the UI thread to handle requests for URLs with an unknown
-// protocol component. Set |allow_os_execution| to true (1) to attempt
-// execution via the registered OS protocol handler, if any. SECURITY WARNING:
-// YOU SHOULD USE THIS METHOD TO ENFORCE RESTRICTIONS BASED ON SCHEME, HOST OR
-// OTHER URL ANALYSIS BEFORE ALLOWING OS EXECUTION.
-func (d *RequestHandler) OnProtocolExecution(browser *Browser, url string, allow_os_execution *int32) {
-	lookupRequestHandlerProxy(d.Base()).OnProtocolExecution(d, browser, url, allow_os_execution)
-}
-
-//nolint:gocritic
-//export gocef_request_handler_on_protocol_execution
-func gocef_request_handler_on_protocol_execution(self *C.cef_request_handler_t, browser *C.cef_browser_t, url *C.cef_string_t, allow_os_execution *C.int) {
-	me__ := (*RequestHandler)(self)
-	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	url_ := cefstrToString(url)
-	proxy__.OnProtocolExecution(me__, (*Browser)(browser), url_, (*int32)(allow_os_execution))
 }
 
 // OnCertificateError (on_certificate_error)

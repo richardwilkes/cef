@@ -13,6 +13,8 @@ import (
 	// void gocef_response_set_status_text(cef_response_t * self, cef_string_t * statusText, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_string_t *)) { return callback__(self, statusText); }
 	// cef_string_userfree_t gocef_response_get_mime_type(cef_response_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_response_t *)) { return callback__(self); }
 	// void gocef_response_set_mime_type(cef_response_t * self, cef_string_t * mimeType, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_string_t *)) { return callback__(self, mimeType); }
+	// cef_string_userfree_t gocef_response_get_charset(cef_response_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_response_t *)) { return callback__(self); }
+	// void gocef_response_set_charset(cef_response_t * self, cef_string_t * charset, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_string_t *)) { return callback__(self, charset); }
 	// cef_string_userfree_t gocef_response_get_header(cef_response_t * self, cef_string_t * name, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_response_t *, cef_string_t *)) { return callback__(self, name); }
 	// void gocef_response_get_header_map(cef_response_t * self, cef_string_multimap_t headerMap, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_string_multimap_t)) { return callback__(self, headerMap); }
 	// void gocef_response_set_header_map(cef_response_t * self, cef_string_multimap_t headerMap, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_string_multimap_t)) { return callback__(self, headerMap); }
@@ -101,6 +103,24 @@ func (d *Response) SetMimeType(mimeType string) {
 		C.cef_string_userfree_free(mimeType_)
 	}()
 	C.gocef_response_set_mime_type(d.toNative(), (*C.cef_string_t)(mimeType_), d.set_mime_type)
+}
+
+// GetCharset (get_charset)
+// Get the response charset.
+// The resulting string must be freed by calling cef_string_userfree_free().
+func (d *Response) GetCharset() string {
+	return cefuserfreestrToString(C.gocef_response_get_charset(d.toNative(), d.get_charset))
+}
+
+// SetCharset (set_charset)
+// Set the response charset.
+func (d *Response) SetCharset(charset string) {
+	charset_ := C.cef_string_userfree_alloc()
+	setCEFStr(charset, charset_)
+	defer func() {
+		C.cef_string_userfree_free(charset_)
+	}()
+	C.gocef_response_set_charset(d.toNative(), (*C.cef_string_t)(charset_), d.set_charset)
 }
 
 // GetHeader (get_header)

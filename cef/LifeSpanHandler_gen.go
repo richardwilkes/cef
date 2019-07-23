@@ -16,7 +16,7 @@ import (
 
 // LifeSpanHandlerProxy defines methods required for using LifeSpanHandler.
 type LifeSpanHandlerProxy interface {
-	OnBeforePopup(self *LifeSpanHandler, browser *Browser, frame *Frame, target_url, target_frame_name string, target_disposition WindowOpenDisposition, user_gesture int32, popupFeatures *PopupFeatures, windowInfo *WindowInfo, client **Client, settings *BrowserSettings, no_javascript_access *int32) int32
+	OnBeforePopup(self *LifeSpanHandler, browser *Browser, frame *Frame, target_url, target_frame_name string, target_disposition WindowOpenDisposition, user_gesture int32, popupFeatures *PopupFeatures, windowInfo *WindowInfo, client **Client, settings *BrowserSettings, extra_info **DictionaryValue, no_javascript_access *int32) int32
 	OnAfterCreated(self *LifeSpanHandler, browser *Browser)
 	DoClose(self *LifeSpanHandler, browser *Browser) int32
 	OnBeforeClose(self *LifeSpanHandler, browser *Browser)
@@ -80,14 +80,17 @@ func (d *LifeSpanHandler) Base() *BaseRefCounted {
 // modifications to |windowInfo| will be ignored if the parent browser is
 // wrapped in a cef_browser_view_t. Popup browser creation will be canceled if
 // the parent browser is destroyed before the popup browser creation completes
-// (indicated by a call to OnAfterCreated for the popup browser).
-func (d *LifeSpanHandler) OnBeforePopup(browser *Browser, frame *Frame, target_url, target_frame_name string, target_disposition WindowOpenDisposition, user_gesture int32, popupFeatures *PopupFeatures, windowInfo *WindowInfo, client **Client, settings *BrowserSettings, no_javascript_access *int32) int32 {
-	return lookupLifeSpanHandlerProxy(d.Base()).OnBeforePopup(d, browser, frame, target_url, target_frame_name, target_disposition, user_gesture, popupFeatures, windowInfo, client, settings, no_javascript_access)
+// (indicated by a call to OnAfterCreated for the popup browser). The
+// |extra_info| parameter provides an opportunity to specify extra information
+// specific to the created popup browser that will be passed to
+// cef_render_process_handler_t::on_browser_created() in the render process.
+func (d *LifeSpanHandler) OnBeforePopup(browser *Browser, frame *Frame, target_url, target_frame_name string, target_disposition WindowOpenDisposition, user_gesture int32, popupFeatures *PopupFeatures, windowInfo *WindowInfo, client **Client, settings *BrowserSettings, extra_info **DictionaryValue, no_javascript_access *int32) int32 {
+	return lookupLifeSpanHandlerProxy(d.Base()).OnBeforePopup(d, browser, frame, target_url, target_frame_name, target_disposition, user_gesture, popupFeatures, windowInfo, client, settings, extra_info, no_javascript_access)
 }
 
 //nolint:gocritic
 //export gocef_life_span_handler_on_before_popup
-func gocef_life_span_handler_on_before_popup(self *C.cef_life_span_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, target_url *C.cef_string_t, target_frame_name *C.cef_string_t, target_disposition C.cef_window_open_disposition_t, user_gesture C.int, popupFeatures *C.cef_popup_features_t, windowInfo *C.cef_window_info_t, client **C.cef_client_t, settings *C.cef_browser_settings_t, no_javascript_access *C.int) C.int {
+func gocef_life_span_handler_on_before_popup(self *C.cef_life_span_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, target_url *C.cef_string_t, target_frame_name *C.cef_string_t, target_disposition C.cef_window_open_disposition_t, user_gesture C.int, popupFeatures *C.cef_popup_features_t, windowInfo *C.cef_window_info_t, client **C.cef_client_t, settings *C.cef_browser_settings_t, extra_info **C.cef_dictionary_value_t, no_javascript_access *C.int) C.int {
 	me__ := (*LifeSpanHandler)(self)
 	proxy__ := lookupLifeSpanHandlerProxy(me__.Base())
 	target_url_ := cefstrToString(target_url)
@@ -97,7 +100,9 @@ func gocef_life_span_handler_on_before_popup(self *C.cef_life_span_handler_t, br
 	client_ := (*Client)(*client)
 	client__p := &client_
 	settings_ := settings.toGo()
-	return C.int(proxy__.OnBeforePopup(me__, (*Browser)(browser), (*Frame)(frame), target_url_, target_frame_name_, WindowOpenDisposition(target_disposition), int32(user_gesture), popupFeatures_, windowInfo_, client__p, settings_, (*int32)(no_javascript_access)))
+	extra_info_ := (*DictionaryValue)(*extra_info)
+	extra_info__p := &extra_info_
+	return C.int(proxy__.OnBeforePopup(me__, (*Browser)(browser), (*Frame)(frame), target_url_, target_frame_name_, WindowOpenDisposition(target_disposition), int32(user_gesture), popupFeatures_, windowInfo_, client__p, settings_, extra_info__p, (*int32)(no_javascript_access)))
 }
 
 // OnAfterCreated (on_after_created)
@@ -218,9 +223,13 @@ func gocef_life_span_handler_do_close(self *C.cef_life_span_handler_t, browser *
 // OnBeforeClose (on_before_close)
 // Called just before a browser is destroyed. Release all references to the
 // browser object and do not attempt to execute any functions on the browser
-// object after this callback returns. This callback will be the last
-// notification that references |browser|. See do_close() documentation for
-// additional usage information.
+// object (other than GetIdentifier or IsSame) after this callback returns.
+// This callback will be the last notification that references |browser| on
+// the UI thread. Any in-progress network requests associated with |browser|
+// will be aborted when the browser is destroyed, and
+// cef_resource_request_handler_t callbacks related to those requests may
+// still arrive on the IO thread after this function is called. See do_close()
+// documentation for additional usage information.
 func (d *LifeSpanHandler) OnBeforeClose(browser *Browser) {
 	lookupLifeSpanHandlerProxy(d.Base()).OnBeforeClose(d, browser)
 }

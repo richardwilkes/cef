@@ -15,12 +15,14 @@ type RequestContextSettings struct {
 	// Size of this structure.
 	Size uint64
 	// CachePath (cache_path)
-	// The location where cache data will be stored on disk. If empty then
-	// browsers will be created in "incognito mode" where in-memory caches are
-	// used for storage and no data is persisted to disk. HTML5 databases such as
-	// localStorage will only persist across sessions if a cache path is
-	// specified. To share the global browser cache and related configuration set
-	// this value to match the CefSettings.cache_path value.
+	// The location where cache data for this request context will be stored on
+	// disk. If non-empty this must be either equal to or a child directory of
+	// CefSettings.root_cache_path. If empty then browsers will be created in
+	// "incognito mode" where in-memory caches are used for storage and no data is
+	// persisted to disk. HTML5 databases such as localStorage will only persist
+	// across sessions if a cache path is specified. To share the global browser
+	// cache and related configuration set this value to match the
+	// CefSettings.cache_path value.
 	CachePath string
 	// PersistSessionCookies (persist_session_cookies)
 	// To persist session cookies (cookies without an expiry date or validity

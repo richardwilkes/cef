@@ -69,13 +69,23 @@ type Settings struct {
 	// CefApp::OnBeforeCommandLineProcessing() method.
 	CommandLineArgsDisabled int32
 	// CachePath (cache_path)
-	// The location where cache data will be stored on disk. If empty then
-	// browsers will be created in "incognito mode" where in-memory caches are
-	// used for storage and no data is persisted to disk. HTML5 databases such as
-	// localStorage will only persist across sessions if a cache path is
-	// specified. Can be overridden for individual CefRequestContext instances via
-	// the CefRequestContextSettings.cache_path value.
+	// The location where data for the global browser cache will be stored on
+	// disk. In non-empty this must be either equal to or a child directory of
+	// CefSettings.root_cache_path. If empty then browsers will be created in
+	// "incognito mode" where in-memory caches are used for storage and no data is
+	// persisted to disk. HTML5 databases such as localStorage will only persist
+	// across sessions if a cache path is specified. Can be overridden for
+	// individual CefRequestContext instances via the
+	// CefRequestContextSettings.cache_path value.
 	CachePath string
+	// RootCachePath (root_cache_path)
+	// The root directory that all CefSettings.cache_path and
+	// CefRequestContextSettings.cache_path values must have in common. If this
+	// value is empty and CefSettings.cache_path is non-empty then this value will
+	// default to the CefSettings.cache_path value. Failure to set this value
+	// correctly may result in the sandbox blocking read/write access to the
+	// cache_path directory.
+	RootCachePath string
 	// UserDataPath (user_data_path)
 	// The location where user data such as spell checking dictionary files will
 	// be stored on disk. If empty then the default platform-specific user data
@@ -213,6 +223,12 @@ type Settings struct {
 	// for individual CefRequestContext instances via the
 	// CefRequestContextSettings.accept_language_list value.
 	AcceptLanguageList string
+	// ApplicationClientIdForFileScanning (application_client_id_for_file_scanning)
+	// GUID string used for identifying the application. This is passed to the
+	// system AV function for scanning downloaded files. By default, the GUID
+	// will be an empty string and the file will be treated as an untrusted
+	// file when the GUID is empty.
+	ApplicationClientIdForFileScanning string
 }
 
 // NewSettings creates a new Settings.
@@ -241,6 +257,7 @@ func (d *Settings) toNative(native *C.cef_settings_t) *C.cef_settings_t {
 	native.windowless_rendering_enabled = C.int(d.WindowlessRenderingEnabled)
 	native.command_line_args_disabled = C.int(d.CommandLineArgsDisabled)
 	setCEFStr(d.CachePath, &native.cache_path)
+	setCEFStr(d.RootCachePath, &native.root_cache_path)
 	setCEFStr(d.UserDataPath, &native.user_data_path)
 	native.persist_session_cookies = C.int(d.PersistSessionCookies)
 	native.persist_user_preferences = C.int(d.PersistUserPreferences)
@@ -259,6 +276,7 @@ func (d *Settings) toNative(native *C.cef_settings_t) *C.cef_settings_t {
 	native.enable_net_security_expiration = C.int(d.EnableNetSecurityExpiration)
 	native.background_color = C.cef_color_t(d.BackgroundColor)
 	setCEFStr(d.AcceptLanguageList, &native.accept_language_list)
+	setCEFStr(d.ApplicationClientIdForFileScanning, &native.application_client_id_for_file_scanning)
 	return native
 }
 
@@ -281,6 +299,7 @@ func (n *C.cef_settings_t) intoGo(d *Settings) {
 	d.WindowlessRenderingEnabled = int32(n.windowless_rendering_enabled)
 	d.CommandLineArgsDisabled = int32(n.command_line_args_disabled)
 	d.CachePath = cefstrToString(&n.cache_path)
+	d.RootCachePath = cefstrToString(&n.root_cache_path)
 	d.UserDataPath = cefstrToString(&n.user_data_path)
 	d.PersistSessionCookies = int32(n.persist_session_cookies)
 	d.PersistUserPreferences = int32(n.persist_user_preferences)
@@ -299,4 +318,5 @@ func (n *C.cef_settings_t) intoGo(d *Settings) {
 	d.EnableNetSecurityExpiration = int32(n.enable_net_security_expiration)
 	d.BackgroundColor = Color(n.background_color)
 	d.AcceptLanguageList = cefstrToString(&n.accept_language_list)
+	d.ApplicationClientIdForFileScanning = cefstrToString(&n.application_client_id_for_file_scanning)
 }

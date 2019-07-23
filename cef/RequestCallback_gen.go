@@ -20,7 +20,7 @@ type RequestCallbackProxy interface {
 	Cancel(self *RequestCallback)
 }
 
-// RequestCallback (cef_request_callback_t from include/capi/cef_request_handler_capi.h)
+// RequestCallback (cef_request_callback_t from include/capi/cef_request_callback_capi.h)
 // Callback structure used for asynchronous continuation of url requests.
 type RequestCallback C.cef_request_callback_t
 

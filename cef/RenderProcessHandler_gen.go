@@ -18,14 +18,14 @@ import (
 type RenderProcessHandlerProxy interface {
 	OnRenderThreadCreated(self *RenderProcessHandler, extra_info *ListValue)
 	OnWebKitInitialized(self *RenderProcessHandler)
-	OnBrowserCreated(self *RenderProcessHandler, browser *Browser)
+	OnBrowserCreated(self *RenderProcessHandler, browser *Browser, extra_info *DictionaryValue)
 	OnBrowserDestroyed(self *RenderProcessHandler, browser *Browser)
 	GetLoadHandler(self *RenderProcessHandler) *LoadHandler
 	OnContextCreated(self *RenderProcessHandler, browser *Browser, frame *Frame, context *V8context)
 	OnContextReleased(self *RenderProcessHandler, browser *Browser, frame *Frame, context *V8context)
 	OnUncaughtException(self *RenderProcessHandler, browser *Browser, frame *Frame, context *V8context, exception *V8exception, stackTrace *V8stackTrace)
 	OnFocusedNodeChanged(self *RenderProcessHandler, browser *Browser, frame *Frame, node *Domnode)
-	OnProcessMessageReceived(self *RenderProcessHandler, browser *Browser, source_process ProcessID, message *ProcessMessage) int32
+	OnProcessMessageReceived(self *RenderProcessHandler, browser *Browser, frame *Frame, source_process ProcessID, message *ProcessMessage) int32
 }
 
 // RenderProcessHandler (cef_render_process_handler_t from include/capi/cef_render_process_handler_capi.h)
@@ -100,17 +100,21 @@ func gocef_render_process_handler_on_web_kit_initialized(self *C.cef_render_proc
 // OnBrowserCreated (on_browser_created)
 // Called after a browser has been created. When browsing cross-origin a new
 // browser will be created before the old browser with the same identifier is
-// destroyed.
-func (d *RenderProcessHandler) OnBrowserCreated(browser *Browser) {
-	lookupRenderProcessHandlerProxy(d.Base()).OnBrowserCreated(d, browser)
+// destroyed. |extra_info| is a read-only value originating from
+// cef_browser_host_t::cef_browser_host_create_browser(),
+// cef_browser_host_t::cef_browser_host_create_browser_sync(),
+// cef_life_span_handler_t::on_before_popup() or
+// cef_browser_view_t::cef_browser_view_create().
+func (d *RenderProcessHandler) OnBrowserCreated(browser *Browser, extra_info *DictionaryValue) {
+	lookupRenderProcessHandlerProxy(d.Base()).OnBrowserCreated(d, browser, extra_info)
 }
 
 //nolint:gocritic
 //export gocef_render_process_handler_on_browser_created
-func gocef_render_process_handler_on_browser_created(self *C.cef_render_process_handler_t, browser *C.cef_browser_t) {
+func gocef_render_process_handler_on_browser_created(self *C.cef_render_process_handler_t, browser *C.cef_browser_t, extra_info *C.cef_dictionary_value_t) {
 	me__ := (*RenderProcessHandler)(self)
 	proxy__ := lookupRenderProcessHandlerProxy(me__.Base())
-	proxy__.OnBrowserCreated(me__, (*Browser)(browser))
+	proxy__.OnBrowserCreated(me__, (*Browser)(browser), (*DictionaryValue)(extra_info))
 }
 
 // OnBrowserDestroyed (on_browser_destroyed)
@@ -214,14 +218,14 @@ func gocef_render_process_handler_on_focused_node_changed(self *C.cef_render_pro
 // Called when a new message is received from a different process. Return true
 // (1) if the message was handled or false (0) otherwise. Do not keep a
 // reference to or attempt to access the message outside of this callback.
-func (d *RenderProcessHandler) OnProcessMessageReceived(browser *Browser, source_process ProcessID, message *ProcessMessage) int32 {
-	return lookupRenderProcessHandlerProxy(d.Base()).OnProcessMessageReceived(d, browser, source_process, message)
+func (d *RenderProcessHandler) OnProcessMessageReceived(browser *Browser, frame *Frame, source_process ProcessID, message *ProcessMessage) int32 {
+	return lookupRenderProcessHandlerProxy(d.Base()).OnProcessMessageReceived(d, browser, frame, source_process, message)
 }
 
 //nolint:gocritic
 //export gocef_render_process_handler_on_process_message_received
-func gocef_render_process_handler_on_process_message_received(self *C.cef_render_process_handler_t, browser *C.cef_browser_t, source_process C.cef_process_id_t, message *C.cef_process_message_t) C.int {
+func gocef_render_process_handler_on_process_message_received(self *C.cef_render_process_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, source_process C.cef_process_id_t, message *C.cef_process_message_t) C.int {
 	me__ := (*RenderProcessHandler)(self)
 	proxy__ := lookupRenderProcessHandlerProxy(me__.Base())
-	return C.int(proxy__.OnProcessMessageReceived(me__, (*Browser)(browser), ProcessID(source_process), (*ProcessMessage)(message)))
+	return C.int(proxy__.OnProcessMessageReceived(me__, (*Browser)(browser), (*Frame)(frame), ProcessID(source_process), (*ProcessMessage)(message)))
 }

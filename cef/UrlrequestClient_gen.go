@@ -131,9 +131,11 @@ func gocef_urlrequest_client_on_download_data(self *C.cef_urlrequest_client_t, r
 // |isProxy| indicates whether the host is a proxy server. |host| contains the
 // hostname and |port| contains the port number. Return true (1) to continue
 // the request and call cef_auth_callback_t::cont() when the authentication
-// information is available. Return false (0) to cancel the request. This
-// function will only be called for requests initiated from the browser
-// process.
+// information is available. If the request has an associated browser/frame
+// then returning false (0) will result in a call to GetAuthCredentials on the
+// cef_request_tHandler associated with that browser, if any. Otherwise,
+// returning false (0) will cancel the request immediately. This function will
+// only be called for requests initiated from the browser process.
 func (d *UrlrequestClient) GetAuthCredentials(isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32 {
 	return lookupUrlrequestClientProxy(d.Base()).GetAuthCredentials(d, isProxy, host, port, realm, scheme, callback)
 }

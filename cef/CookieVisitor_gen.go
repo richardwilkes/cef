@@ -21,7 +21,7 @@ type CookieVisitorProxy interface {
 
 // CookieVisitor (cef_cookie_visitor_t from include/capi/cef_cookie_capi.h)
 // Structure to implement for visiting cookie values. The functions of this
-// structure will always be called on the IO thread.
+// structure will always be called on the UI thread.
 type CookieVisitor C.cef_cookie_visitor_t
 
 // NewCookieVisitor creates a new CookieVisitor with the specified proxy. Passing

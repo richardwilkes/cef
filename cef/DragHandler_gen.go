@@ -17,7 +17,7 @@ import (
 // DragHandlerProxy defines methods required for using DragHandler.
 type DragHandlerProxy interface {
 	OnDragEnter(self *DragHandler, browser *Browser, dragData *DragData, mask DragOperationsMask) int32
-	OnDraggableRegionsChanged(self *DragHandler, browser *Browser, regionsCount uint64, regions *DraggableRegion)
+	OnDraggableRegionsChanged(self *DragHandler, browser *Browser, frame *Frame, regionsCount uint64, regions *DraggableRegion)
 }
 
 // DragHandler (cef_drag_handler_t from include/capi/cef_drag_handler_capi.h)
@@ -80,15 +80,15 @@ func gocef_drag_handler_on_drag_enter(self *C.cef_drag_handler_t, browser *C.cef
 // draggable regions are never defined in a document this function will also
 // never be called. If the last draggable region is removed from a document
 // this function will be called with an NULL vector.
-func (d *DragHandler) OnDraggableRegionsChanged(browser *Browser, regionsCount uint64, regions *DraggableRegion) {
-	lookupDragHandlerProxy(d.Base()).OnDraggableRegionsChanged(d, browser, regionsCount, regions)
+func (d *DragHandler) OnDraggableRegionsChanged(browser *Browser, frame *Frame, regionsCount uint64, regions *DraggableRegion) {
+	lookupDragHandlerProxy(d.Base()).OnDraggableRegionsChanged(d, browser, frame, regionsCount, regions)
 }
 
 //nolint:gocritic
 //export gocef_drag_handler_on_draggable_regions_changed
-func gocef_drag_handler_on_draggable_regions_changed(self *C.cef_drag_handler_t, browser *C.cef_browser_t, regionsCount C.size_t, regions *C.cef_draggable_region_t) {
+func gocef_drag_handler_on_draggable_regions_changed(self *C.cef_drag_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, regionsCount C.size_t, regions *C.cef_draggable_region_t) {
 	me__ := (*DragHandler)(self)
 	proxy__ := lookupDragHandlerProxy(me__.Base())
 	regions_ := regions.toGo()
-	proxy__.OnDraggableRegionsChanged(me__, (*Browser)(browser), uint64(regionsCount), regions_)
+	proxy__.OnDraggableRegionsChanged(me__, (*Browser)(browser), (*Frame)(frame), uint64(regionsCount), regions_)
 }

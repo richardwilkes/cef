@@ -28,6 +28,8 @@ import (
 	// cef_browser_t * gocef_frame_get_browser(cef_frame_t * self, cef_browser_t * (CEF_CALLBACK *callback__)(cef_frame_t *)) { return callback__(self); }
 	// cef_v8context_t * gocef_frame_get_v8context(cef_frame_t * self, cef_v8context_t * (CEF_CALLBACK *callback__)(cef_frame_t *)) { return callback__(self); }
 	// void gocef_frame_visit_dom(cef_frame_t * self, cef_domvisitor_t * visitor, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_domvisitor_t *)) { return callback__(self, visitor); }
+	// cef_urlrequest_t * gocef_frame_create_urlrequest(cef_frame_t * self, cef_request_t * request, cef_urlrequest_client_t * client, cef_urlrequest_t * (CEF_CALLBACK *callback__)(cef_frame_t *, cef_request_t *, cef_urlrequest_client_t *)) { return callback__(self, request, client); }
+	// void gocef_frame_send_process_message(cef_frame_t * self, cef_process_id_t target_process, cef_process_message_t * message, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_process_id_t, cef_process_message_t *)) { return callback__(self, target_process, message); }
 	"C"
 )
 
@@ -235,4 +237,38 @@ func (d *Frame) GetV8context() *V8context {
 // process.
 func (d *Frame) VisitDom(visitor *Domvisitor) {
 	C.gocef_frame_visit_dom(d.toNative(), visitor.toNative(), d.visit_dom)
+}
+
+// CreateUrlrequest (create_urlrequest)
+// Create a new URL request that will be treated as originating from this
+// frame and the associated browser. This request may be intercepted by the
+// client via cef_resource_request_handler_t or cef_scheme_handler_factory_t.
+// Use cef_urlrequest_t::Create instead if you do not want the request to have
+// this association, in which case it may be handled differently (see
+// documentation on that function). Requests may originate from both the
+// browser process and the render process.
+//
+// For requests originating from the browser process:
+//   - POST data may only contain a single element of type PDE_TYPE_FILE or
+//     PDE_TYPE_BYTES.
+// For requests originating from the render process:
+//   - POST data may only contain a single element of type PDE_TYPE_BYTES.
+//   - If the response contains Content-Disposition or Mime-Type header values
+//     that would not normally be rendered then the response may receive
+//     special handling inside the browser (for example, via the file download
+//     code path instead of the URL request code path).
+//
+// The |request| object will be marked as read-only after calling this
+// function.
+func (d *Frame) CreateUrlrequest(request *Request, client *UrlrequestClient) *Urlrequest {
+	return (*Urlrequest)(C.gocef_frame_create_urlrequest(d.toNative(), request.toNative(), client.toNative(), d.create_urlrequest))
+}
+
+// SendProcessMessage (send_process_message)
+// Send a message to the specified |target_process|. Message delivery is not
+// guaranteed in all cases (for example, if the browser is closing,
+// navigating, or if the target process crashes). Send an ACK message back
+// from the target process if confirmation is required.
+func (d *Frame) SendProcessMessage(target_process ProcessID, message *ProcessMessage) {
+	C.gocef_frame_send_process_message(d.toNative(), C.cef_process_id_t(target_process), message.toNative(), d.send_process_message)
 }
