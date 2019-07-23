@@ -73,7 +73,7 @@ func (p position) FileLines() []string {
 		}
 		f, err := os.Open(path)
 		if err != nil {
-			if !filepath.IsAbs(p.Src) {
+			if !filepath.IsAbs(p.Src) && !strings.HasSuffix(p.Src, "<scratch space>") {
 				jot.Error(errs.NewWithCause(path, err))
 			}
 		} else {
