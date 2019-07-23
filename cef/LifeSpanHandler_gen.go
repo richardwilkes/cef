@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "LifeSpanHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "LifeSpanHandler_gen.h"
+	"C"
 )
 
 // LifeSpanHandlerProxy defines methods required for using LifeSpanHandler.
@@ -82,6 +85,7 @@ func (d *LifeSpanHandler) OnBeforePopup(browser *Browser, frame *Frame, target_u
 	return lookupLifeSpanHandlerProxy(d.Base()).OnBeforePopup(d, browser, frame, target_url, target_frame_name, target_disposition, user_gesture, popupFeatures, windowInfo, client, settings, no_javascript_access)
 }
 
+//nolint:gocritic
 //export gocef_life_span_handler_on_before_popup
 func gocef_life_span_handler_on_before_popup(self *C.cef_life_span_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, target_url *C.cef_string_t, target_frame_name *C.cef_string_t, target_disposition C.cef_window_open_disposition_t, user_gesture C.int, popupFeatures *C.cef_popup_features_t, windowInfo *C.cef_window_info_t, client **C.cef_client_t, settings *C.cef_browser_settings_t, no_javascript_access *C.int) C.int {
 	me__ := (*LifeSpanHandler)(self)
@@ -103,6 +107,7 @@ func (d *LifeSpanHandler) OnAfterCreated(browser *Browser) {
 	lookupLifeSpanHandlerProxy(d.Base()).OnAfterCreated(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_life_span_handler_on_after_created
 func gocef_life_span_handler_on_after_created(self *C.cef_life_span_handler_t, browser *C.cef_browser_t) {
 	me__ := (*LifeSpanHandler)(self)
@@ -202,6 +207,7 @@ func (d *LifeSpanHandler) DoClose(browser *Browser) int32 {
 	return lookupLifeSpanHandlerProxy(d.Base()).DoClose(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_life_span_handler_do_close
 func gocef_life_span_handler_do_close(self *C.cef_life_span_handler_t, browser *C.cef_browser_t) C.int {
 	me__ := (*LifeSpanHandler)(self)
@@ -219,6 +225,7 @@ func (d *LifeSpanHandler) OnBeforeClose(browser *Browser) {
 	lookupLifeSpanHandlerProxy(d.Base()).OnBeforeClose(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_life_span_handler_on_before_close
 func gocef_life_span_handler_on_before_close(self *C.cef_life_span_handler_t, browser *C.cef_browser_t) {
 	me__ := (*LifeSpanHandler)(self)

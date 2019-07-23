@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "Callback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "Callback_gen.h"
+	"C"
 )
 
 // CallbackProxy defines methods required for using Callback.
@@ -59,6 +62,7 @@ func (d *Callback) Cont() {
 	lookupCallbackProxy(d.Base()).Cont(d)
 }
 
+//nolint:gocritic
 //export gocef_callback_cont
 func gocef_callback_cont(self *C.cef_callback_t) {
 	me__ := (*Callback)(self)
@@ -72,6 +76,7 @@ func (d *Callback) Cancel() {
 	lookupCallbackProxy(d.Base()).Cancel(d)
 }
 
+//nolint:gocritic
 //export gocef_callback_cancel
 func gocef_callback_cancel(self *C.cef_callback_t) {
 	me__ := (*Callback)(self)

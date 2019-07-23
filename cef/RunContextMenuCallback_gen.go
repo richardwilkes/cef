@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "RunContextMenuCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "RunContextMenuCallback_gen.h"
+	"C"
 )
 
 // RunContextMenuCallbackProxy defines methods required for using RunContextMenuCallback.
@@ -60,6 +63,7 @@ func (d *RunContextMenuCallback) Cont(command_id int32, event_flags EventFlags) 
 	lookupRunContextMenuCallbackProxy(d.Base()).Cont(d, command_id, event_flags)
 }
 
+//nolint:gocritic
 //export gocef_run_context_menu_callback_cont
 func gocef_run_context_menu_callback_cont(self *C.cef_run_context_menu_callback_t, command_id C.int, event_flags C.cef_event_flags_t) {
 	me__ := (*RunContextMenuCallback)(self)
@@ -73,6 +77,7 @@ func (d *RunContextMenuCallback) Cancel() {
 	lookupRunContextMenuCallbackProxy(d.Base()).Cancel(d)
 }
 
+//nolint:gocritic
 //export gocef_run_context_menu_callback_cancel
 func gocef_run_context_menu_callback_cancel(self *C.cef_run_context_menu_callback_t) {
 	me__ := (*RunContextMenuCallback)(self)

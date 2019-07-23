@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
+// Code created from "class.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "capi_gen.h"
@@ -12,7 +14,6 @@ import (
 	// size_t gocef_binary_value_get_size(cef_binary_value_t * self, size_t (CEF_CALLBACK *callback__)(cef_binary_value_t *)) { return callback__(self); }
 	// size_t gocef_binary_value_get_data(cef_binary_value_t * self, void * buffer, size_t buffer_size, size_t data_offset, size_t (CEF_CALLBACK *callback__)(cef_binary_value_t *, void *, size_t, size_t)) { return callback__(self, buffer, buffer_size, data_offset); }
 	"C"
-	"unsafe"
 )
 
 // BinaryValue (cef_binary_value_t from include/capi/cef_values_capi.h)

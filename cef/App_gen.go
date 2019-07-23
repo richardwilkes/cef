@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "App_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "App_gen.h"
+	"C"
 )
 
 // AppProxy defines methods required for using App.
@@ -71,6 +74,7 @@ func (d *App) OnBeforeCommandLineProcessing(process_type string, command_line *C
 	lookupAppProxy(d.Base()).OnBeforeCommandLineProcessing(d, process_type, command_line)
 }
 
+//nolint:gocritic
 //export gocef_app_on_before_command_line_processing
 func gocef_app_on_before_command_line_processing(self *C.cef_app_t, process_type *C.cef_string_t, command_line *C.cef_command_line_t) {
 	me__ := (*App)(self)
@@ -88,6 +92,7 @@ func (d *App) OnRegisterCustomSchemes(registrar *SchemeRegistrar) {
 	lookupAppProxy(d.Base()).OnRegisterCustomSchemes(d, registrar)
 }
 
+//nolint:gocritic
 //export gocef_app_on_register_custom_schemes
 func gocef_app_on_register_custom_schemes(self *C.cef_app_t, registrar *C.cef_scheme_registrar_t) {
 	me__ := (*App)(self)
@@ -104,6 +109,7 @@ func (d *App) GetResourceBundleHandler() *ResourceBundleHandler {
 	return lookupAppProxy(d.Base()).GetResourceBundleHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_app_get_resource_bundle_handler
 func gocef_app_get_resource_bundle_handler(self *C.cef_app_t) *C.cef_resource_bundle_handler_t {
 	me__ := (*App)(self)
@@ -118,6 +124,7 @@ func (d *App) GetBrowserProcessHandler() *BrowserProcessHandler {
 	return lookupAppProxy(d.Base()).GetBrowserProcessHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_app_get_browser_process_handler
 func gocef_app_get_browser_process_handler(self *C.cef_app_t) *C.cef_browser_process_handler_t {
 	me__ := (*App)(self)
@@ -132,6 +139,7 @@ func (d *App) GetRenderProcessHandler() *RenderProcessHandler {
 	return lookupAppProxy(d.Base()).GetRenderProcessHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_app_get_render_process_handler
 func gocef_app_get_render_process_handler(self *C.cef_app_t) *C.cef_render_process_handler_t {
 	me__ := (*App)(self)

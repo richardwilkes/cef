@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
+// Code created from "class.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "capi_gen.h"
@@ -10,7 +12,6 @@ import (
 	// int gocef_stream_writer_flush(cef_stream_writer_t * self, int (CEF_CALLBACK *callback__)(cef_stream_writer_t *)) { return callback__(self); }
 	// int gocef_stream_writer_may_block(cef_stream_writer_t * self, int (CEF_CALLBACK *callback__)(cef_stream_writer_t *)) { return callback__(self); }
 	"C"
-	"unsafe"
 )
 
 // StreamWriter (cef_stream_writer_t from include/capi/cef_stream_capi.h)

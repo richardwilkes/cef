@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "ContextMenuHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "ContextMenuHandler_gen.h"
+	"C"
 )
 
 // ContextMenuHandlerProxy defines methods required for using ContextMenuHandler.
@@ -66,6 +69,7 @@ func (d *ContextMenuHandler) OnBeforeContextMenu(browser *Browser, frame *Frame,
 	lookupContextMenuHandlerProxy(d.Base()).OnBeforeContextMenu(d, browser, frame, params, model)
 }
 
+//nolint:gocritic
 //export gocef_context_menu_handler_on_before_context_menu
 func gocef_context_menu_handler_on_before_context_menu(self *C.cef_context_menu_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, params *C.cef_context_menu_params_t, model *C.cef_menu_model_t) {
 	me__ := (*ContextMenuHandler)(self)
@@ -84,6 +88,7 @@ func (d *ContextMenuHandler) RunContextMenu(browser *Browser, frame *Frame, para
 	return lookupContextMenuHandlerProxy(d.Base()).RunContextMenu(d, browser, frame, params, model, callback)
 }
 
+//nolint:gocritic
 //export gocef_context_menu_handler_run_context_menu
 func gocef_context_menu_handler_run_context_menu(self *C.cef_context_menu_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, params *C.cef_context_menu_params_t, model *C.cef_menu_model_t, callback *C.cef_run_context_menu_callback_t) C.int {
 	me__ := (*ContextMenuHandler)(self)
@@ -103,6 +108,7 @@ func (d *ContextMenuHandler) OnContextMenuCommand(browser *Browser, frame *Frame
 	return lookupContextMenuHandlerProxy(d.Base()).OnContextMenuCommand(d, browser, frame, params, command_id, event_flags)
 }
 
+//nolint:gocritic
 //export gocef_context_menu_handler_on_context_menu_command
 func gocef_context_menu_handler_on_context_menu_command(self *C.cef_context_menu_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, params *C.cef_context_menu_params_t, command_id C.int, event_flags C.cef_event_flags_t) C.int {
 	me__ := (*ContextMenuHandler)(self)
@@ -117,6 +123,7 @@ func (d *ContextMenuHandler) OnContextMenuDismissed(browser *Browser, frame *Fra
 	lookupContextMenuHandlerProxy(d.Base()).OnContextMenuDismissed(d, browser, frame)
 }
 
+//nolint:gocritic
 //export gocef_context_menu_handler_on_context_menu_dismissed
 func gocef_context_menu_handler_on_context_menu_dismissed(self *C.cef_context_menu_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t) {
 	me__ := (*ContextMenuHandler)(self)

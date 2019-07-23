@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "ResponseFilter_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "ResponseFilter_gen.h"
+	"C"
 )
 
 // ResponseFilterProxy defines methods required for using ResponseFilter.
@@ -61,6 +64,7 @@ func (d *ResponseFilter) InitFilter() int32 {
 	return lookupResponseFilterProxy(d.Base()).InitFilter(d)
 }
 
+//nolint:gocritic
 //export gocef_response_filter_init_filter
 func gocef_response_filter_init_filter(self *C.cef_response_filter_t) C.int {
 	me__ := (*ResponseFilter)(self)
@@ -102,6 +106,7 @@ func (d *ResponseFilter) Filter(data_in unsafe.Pointer, data_in_size uint64, dat
 	return lookupResponseFilterProxy(d.Base()).Filter(d, data_in, data_in_size, data_in_read, data_out, data_out_size, data_out_written)
 }
 
+//nolint:gocritic
 //export gocef_response_filter_filter
 func gocef_response_filter_filter(self *C.cef_response_filter_t, data_in unsafe.Pointer, data_in_size C.size_t, data_in_read *C.size_t, data_out unsafe.Pointer, data_out_size C.size_t, data_out_written *C.size_t) C.cef_response_filter_status_t {
 	me__ := (*ResponseFilter)(self)

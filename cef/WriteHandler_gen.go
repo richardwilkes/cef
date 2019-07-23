@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "WriteHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "WriteHandler_gen.h"
+	"C"
 )
 
 // WriteHandlerProxy defines methods required for using WriteHandler.
@@ -63,6 +66,7 @@ func (d *WriteHandler) Write(ptr unsafe.Pointer, size, n uint64) uint64 {
 	return lookupWriteHandlerProxy(d.Base()).Write(d, ptr, size, n)
 }
 
+//nolint:gocritic
 //export gocef_write_handler_write
 func gocef_write_handler_write(self *C.cef_write_handler_t, ptr unsafe.Pointer, size C.size_t, n C.size_t) C.size_t {
 	me__ := (*WriteHandler)(self)
@@ -77,6 +81,7 @@ func (d *WriteHandler) Seek(offset int64, whence int32) int32 {
 	return lookupWriteHandlerProxy(d.Base()).Seek(d, offset, whence)
 }
 
+//nolint:gocritic
 //export gocef_write_handler_seek
 func gocef_write_handler_seek(self *C.cef_write_handler_t, offset C.int64, whence C.int) C.int {
 	me__ := (*WriteHandler)(self)
@@ -90,6 +95,7 @@ func (d *WriteHandler) Tell() int64 {
 	return lookupWriteHandlerProxy(d.Base()).Tell(d)
 }
 
+//nolint:gocritic
 //export gocef_write_handler_tell
 func gocef_write_handler_tell(self *C.cef_write_handler_t) C.int64 {
 	me__ := (*WriteHandler)(self)
@@ -103,6 +109,7 @@ func (d *WriteHandler) Flush() int32 {
 	return lookupWriteHandlerProxy(d.Base()).Flush(d)
 }
 
+//nolint:gocritic
 //export gocef_write_handler_flush
 func gocef_write_handler_flush(self *C.cef_write_handler_t) C.int {
 	me__ := (*WriteHandler)(self)
@@ -118,6 +125,7 @@ func (d *WriteHandler) MayBlock() int32 {
 	return lookupWriteHandlerProxy(d.Base()).MayBlock(d)
 }
 
+//nolint:gocritic
 //export gocef_write_handler_may_block
 func gocef_write_handler_may_block(self *C.cef_write_handler_t) C.int {
 	me__ := (*WriteHandler)(self)

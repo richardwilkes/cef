@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "ReadHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "ReadHandler_gen.h"
+	"C"
 )
 
 // ReadHandlerProxy defines methods required for using ReadHandler.
@@ -63,6 +66,7 @@ func (d *ReadHandler) Read(ptr unsafe.Pointer, size, n uint64) uint64 {
 	return lookupReadHandlerProxy(d.Base()).Read(d, ptr, size, n)
 }
 
+//nolint:gocritic
 //export gocef_read_handler_read
 func gocef_read_handler_read(self *C.cef_read_handler_t, ptr unsafe.Pointer, size C.size_t, n C.size_t) C.size_t {
 	me__ := (*ReadHandler)(self)
@@ -77,6 +81,7 @@ func (d *ReadHandler) Seek(offset int64, whence int32) int32 {
 	return lookupReadHandlerProxy(d.Base()).Seek(d, offset, whence)
 }
 
+//nolint:gocritic
 //export gocef_read_handler_seek
 func gocef_read_handler_seek(self *C.cef_read_handler_t, offset C.int64, whence C.int) C.int {
 	me__ := (*ReadHandler)(self)
@@ -90,6 +95,7 @@ func (d *ReadHandler) Tell() int64 {
 	return lookupReadHandlerProxy(d.Base()).Tell(d)
 }
 
+//nolint:gocritic
 //export gocef_read_handler_tell
 func gocef_read_handler_tell(self *C.cef_read_handler_t) C.int64 {
 	me__ := (*ReadHandler)(self)
@@ -103,6 +109,7 @@ func (d *ReadHandler) Eof() int32 {
 	return lookupReadHandlerProxy(d.Base()).Eof(d)
 }
 
+//nolint:gocritic
 //export gocef_read_handler_eof
 func gocef_read_handler_eof(self *C.cef_read_handler_t) C.int {
 	me__ := (*ReadHandler)(self)
@@ -118,6 +125,7 @@ func (d *ReadHandler) MayBlock() int32 {
 	return lookupReadHandlerProxy(d.Base()).MayBlock(d)
 }
 
+//nolint:gocritic
 //export gocef_read_handler_may_block
 func gocef_read_handler_may_block(self *C.cef_read_handler_t) C.int {
 	me__ := (*ReadHandler)(self)

@@ -1,11 +1,14 @@
-// Code generated - DO NOT EDIT.
+// Code created from "struct.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
+	"unsafe"
+)
+
+import (
 	// #include "capi_gen.h"
 	"C"
-	"unsafe"
 )
 
 // MenuButtonPressedLock (cef_menu_button_pressed_lock_t from include/capi/views/cef_menu_button_delegate_capi.h)

@@ -1,13 +1,16 @@
-// Code generated - DO NOT EDIT.
+// Code created from "struct.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "capi_gen.h"
-	"C"
 	"path/filepath"
 
 	"github.com/richardwilkes/toolbox/xio/fs/paths"
+)
+
+import (
+	// #include "capi_gen.h"
+	"C"
 )
 
 // Settings (cef_settings_t from include/internal/cef_types.h)

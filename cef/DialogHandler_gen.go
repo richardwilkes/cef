@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "DialogHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "DialogHandler_gen.h"
+	"C"
 )
 
 // DialogHandlerProxy defines methods required for using DialogHandler.
@@ -71,6 +74,7 @@ func (d *DialogHandler) OnFileDialog(browser *Browser, mode FileDialogMode, titl
 	return lookupDialogHandlerProxy(d.Base()).OnFileDialog(d, browser, mode, title, default_file_path, accept_filters, selected_accept_filter, callback)
 }
 
+//nolint:gocritic
 //export gocef_dialog_handler_on_file_dialog
 func gocef_dialog_handler_on_file_dialog(self *C.cef_dialog_handler_t, browser *C.cef_browser_t, mode C.cef_file_dialog_mode_t, title *C.cef_string_t, default_file_path *C.cef_string_t, accept_filters C.cef_string_list_t, selected_accept_filter C.int, callback *C.cef_file_dialog_callback_t) C.int {
 	me__ := (*DialogHandler)(self)

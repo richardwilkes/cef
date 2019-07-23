@@ -1,12 +1,15 @@
 package cef
 
 import (
-	// #include <stdlib.h>
-	// #include "include/internal/cef_types.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/xmath/geom"
+)
+
+import (
+	// #include <stdlib.h>
+	// #include "include/internal/cef_types.h"
+	"C"
 )
 
 // NewWindowInfo creates a new default WindowInfo instance.

@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "TextfieldDelegate_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "TextfieldDelegate_gen.h"
+	"C"
 )
 
 // TextfieldDelegateProxy defines methods required for using TextfieldDelegate.
@@ -63,6 +66,7 @@ func (d *TextfieldDelegate) OnKeyEvent(textfield *Textfield, event *KeyEvent) in
 	return lookupTextfieldDelegateProxy(d.Base().Base()).OnKeyEvent(d, textfield, event)
 }
 
+//nolint:gocritic
 //export gocef_textfield_delegate_on_key_event
 func gocef_textfield_delegate_on_key_event(self *C.cef_textfield_delegate_t, textfield *C.cef_textfield_t, event *C.cef_key_event_t) C.int {
 	me__ := (*TextfieldDelegate)(self)
@@ -77,6 +81,7 @@ func (d *TextfieldDelegate) OnAfterUserAction(textfield *Textfield) {
 	lookupTextfieldDelegateProxy(d.Base().Base()).OnAfterUserAction(d, textfield)
 }
 
+//nolint:gocritic
 //export gocef_textfield_delegate_on_after_user_action
 func gocef_textfield_delegate_on_after_user_action(self *C.cef_textfield_delegate_t, textfield *C.cef_textfield_t) {
 	me__ := (*TextfieldDelegate)(self)

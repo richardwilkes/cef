@@ -1,9 +1,10 @@
 package cef
 
+import "unsafe"
+
 import (
 	// #include "include/internal/cef_types.h"
 	"C"
-	"unsafe"
 )
 
 // WindowInfo (cef_window_info_t) - Linux-specific variant

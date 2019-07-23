@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "Task_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "Task_gen.h"
+	"C"
 )
 
 // TaskProxy defines methods required for using Task.
@@ -63,6 +66,7 @@ func (d *Task) Execute() {
 	lookupTaskProxy(d.Base()).Execute(d)
 }
 
+//nolint:gocritic
 //export gocef_task_execute
 func gocef_task_execute(self *C.cef_task_t) {
 	me__ := (*Task)(self)

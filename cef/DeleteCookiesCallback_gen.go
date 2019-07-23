@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "DeleteCookiesCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "DeleteCookiesCallback_gen.h"
+	"C"
 )
 
 // DeleteCookiesCallbackProxy defines methods required for using DeleteCookiesCallback.
@@ -60,6 +63,7 @@ func (d *DeleteCookiesCallback) OnComplete(num_deleted int32) {
 	lookupDeleteCookiesCallbackProxy(d.Base()).OnComplete(d, num_deleted)
 }
 
+//nolint:gocritic
 //export gocef_delete_cookies_callback_on_complete
 func gocef_delete_cookies_callback_on_complete(self *C.cef_delete_cookies_callback_t, num_deleted C.int) {
 	me__ := (*DeleteCookiesCallback)(self)

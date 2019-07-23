@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "ResourceBundleHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "ResourceBundleHandler_gen.h"
+	"C"
 )
 
 // ResourceBundleHandlerProxy defines methods required for using ResourceBundleHandler.
@@ -65,6 +68,7 @@ func (d *ResourceBundleHandler) GetLocalizedString(string_id int32, string_r *st
 	return lookupResourceBundleHandlerProxy(d.Base()).GetLocalizedString(d, string_id, string_r)
 }
 
+//nolint:gocritic
 //export gocef_resource_bundle_handler_get_localized_string
 func gocef_resource_bundle_handler_get_localized_string(self *C.cef_resource_bundle_handler_t, string_id C.int, string_r *C.cef_string_t) C.int {
 	me__ := (*ResourceBundleHandler)(self)
@@ -84,6 +88,7 @@ func (d *ResourceBundleHandler) GetDataResource(resource_id int32, data *unsafe.
 	return lookupResourceBundleHandlerProxy(d.Base()).GetDataResource(d, resource_id, data, data_size)
 }
 
+//nolint:gocritic
 //export gocef_resource_bundle_handler_get_data_resource
 func gocef_resource_bundle_handler_get_data_resource(self *C.cef_resource_bundle_handler_t, resource_id C.int, data *unsafe.Pointer, data_size *C.size_t) C.int {
 	me__ := (*ResourceBundleHandler)(self)
@@ -102,6 +107,7 @@ func (d *ResourceBundleHandler) GetDataResourceForScale(resource_id int32, scale
 	return lookupResourceBundleHandlerProxy(d.Base()).GetDataResourceForScale(d, resource_id, scale_factor, data, data_size)
 }
 
+//nolint:gocritic
 //export gocef_resource_bundle_handler_get_data_resource_for_scale
 func gocef_resource_bundle_handler_get_data_resource_for_scale(self *C.cef_resource_bundle_handler_t, resource_id C.int, scale_factor C.cef_scale_factor_t, data *unsafe.Pointer, data_size *C.size_t) C.int {
 	me__ := (*ResourceBundleHandler)(self)

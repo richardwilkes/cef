@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
+// Code created from "class.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "capi_gen.h"
@@ -18,7 +20,6 @@ import (
 	// cef_binary_value_t * gocef_image_get_as_png(cef_image_t * self, float scale_factor, int with_transparency, int * pixel_width, int * pixel_height, cef_binary_value_t * (CEF_CALLBACK *callback__)(cef_image_t *, float, int, int *, int *)) { return callback__(self, scale_factor, with_transparency, pixel_width, pixel_height); }
 	// cef_binary_value_t * gocef_image_get_as_jpeg(cef_image_t * self, float scale_factor, int quality, int * pixel_width, int * pixel_height, cef_binary_value_t * (CEF_CALLBACK *callback__)(cef_image_t *, float, int, int *, int *)) { return callback__(self, scale_factor, quality, pixel_width, pixel_height); }
 	"C"
-	"unsafe"
 )
 
 // Image (cef_image_t from include/capi/cef_image_capi.h)

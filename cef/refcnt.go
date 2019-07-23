@@ -1,9 +1,10 @@
 package cef
 
+import "sync"
+
 import (
 	// #include "refcnt.h"
 	"C"
-	"sync"
 )
 
 var (
@@ -29,6 +30,7 @@ func lookupProxy(base *BaseRefCounted) (proxy interface{}, exists bool) {
 	return proxy, exists
 }
 
+//nolint: gocritic
 //export freeObjByID
 func freeObjByID(cid C.uint32_t) {
 	refLock.Lock()

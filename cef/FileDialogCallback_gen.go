@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "FileDialogCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "FileDialogCallback_gen.h"
+	"C"
 )
 
 // FileDialogCallbackProxy defines methods required for using FileDialogCallback.
@@ -63,6 +66,7 @@ func (d *FileDialogCallback) Cont(selected_accept_filter int32, file_paths Strin
 	lookupFileDialogCallbackProxy(d.Base()).Cont(d, selected_accept_filter, file_paths)
 }
 
+//nolint:gocritic
 //export gocef_file_dialog_callback_cont
 func gocef_file_dialog_callback_cont(self *C.cef_file_dialog_callback_t, selected_accept_filter C.int, file_paths C.cef_string_list_t) {
 	me__ := (*FileDialogCallback)(self)
@@ -76,6 +80,7 @@ func (d *FileDialogCallback) Cancel() {
 	lookupFileDialogCallbackProxy(d.Base()).Cancel(d)
 }
 
+//nolint:gocritic
 //export gocef_file_dialog_callback_cancel
 func gocef_file_dialog_callback_cancel(self *C.cef_file_dialog_callback_t) {
 	me__ := (*FileDialogCallback)(self)

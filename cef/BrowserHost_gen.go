@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
+// Code created from "class.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "capi_gen.h"
@@ -64,7 +66,6 @@ import (
 	// void gocef_browser_host_set_audio_muted(cef_browser_host_t * self, int mute, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, mute); }
 	// int gocef_browser_host_is_audio_muted(cef_browser_host_t * self, int (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	"C"
-	"unsafe"
 )
 
 // BrowserHost (cef_browser_host_t from include/capi/cef_browser_capi.h)

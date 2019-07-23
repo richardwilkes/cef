@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "RenderProcessHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "RenderProcessHandler_gen.h"
+	"C"
 )
 
 // RenderProcessHandlerProxy defines methods required for using RenderProcessHandler.
@@ -72,6 +75,7 @@ func (d *RenderProcessHandler) OnRenderThreadCreated(extra_info *ListValue) {
 	lookupRenderProcessHandlerProxy(d.Base()).OnRenderThreadCreated(d, extra_info)
 }
 
+//nolint:gocritic
 //export gocef_render_process_handler_on_render_thread_created
 func gocef_render_process_handler_on_render_thread_created(self *C.cef_render_process_handler_t, extra_info *C.cef_list_value_t) {
 	me__ := (*RenderProcessHandler)(self)
@@ -85,6 +89,7 @@ func (d *RenderProcessHandler) OnWebKitInitialized() {
 	lookupRenderProcessHandlerProxy(d.Base()).OnWebKitInitialized(d)
 }
 
+//nolint:gocritic
 //export gocef_render_process_handler_on_web_kit_initialized
 func gocef_render_process_handler_on_web_kit_initialized(self *C.cef_render_process_handler_t) {
 	me__ := (*RenderProcessHandler)(self)
@@ -100,6 +105,7 @@ func (d *RenderProcessHandler) OnBrowserCreated(browser *Browser) {
 	lookupRenderProcessHandlerProxy(d.Base()).OnBrowserCreated(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_render_process_handler_on_browser_created
 func gocef_render_process_handler_on_browser_created(self *C.cef_render_process_handler_t, browser *C.cef_browser_t) {
 	me__ := (*RenderProcessHandler)(self)
@@ -113,6 +119,7 @@ func (d *RenderProcessHandler) OnBrowserDestroyed(browser *Browser) {
 	lookupRenderProcessHandlerProxy(d.Base()).OnBrowserDestroyed(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_render_process_handler_on_browser_destroyed
 func gocef_render_process_handler_on_browser_destroyed(self *C.cef_render_process_handler_t, browser *C.cef_browser_t) {
 	me__ := (*RenderProcessHandler)(self)
@@ -126,6 +133,7 @@ func (d *RenderProcessHandler) GetLoadHandler() *LoadHandler {
 	return lookupRenderProcessHandlerProxy(d.Base()).GetLoadHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_render_process_handler_get_load_handler
 func gocef_render_process_handler_get_load_handler(self *C.cef_render_process_handler_t) *C.cef_load_handler_t {
 	me__ := (*RenderProcessHandler)(self)
@@ -144,6 +152,7 @@ func (d *RenderProcessHandler) OnContextCreated(browser *Browser, frame *Frame, 
 	lookupRenderProcessHandlerProxy(d.Base()).OnContextCreated(d, browser, frame, context)
 }
 
+//nolint:gocritic
 //export gocef_render_process_handler_on_context_created
 func gocef_render_process_handler_on_context_created(self *C.cef_render_process_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, context *C.cef_v8context_t) {
 	me__ := (*RenderProcessHandler)(self)
@@ -158,6 +167,7 @@ func (d *RenderProcessHandler) OnContextReleased(browser *Browser, frame *Frame,
 	lookupRenderProcessHandlerProxy(d.Base()).OnContextReleased(d, browser, frame, context)
 }
 
+//nolint:gocritic
 //export gocef_render_process_handler_on_context_released
 func gocef_render_process_handler_on_context_released(self *C.cef_render_process_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, context *C.cef_v8context_t) {
 	me__ := (*RenderProcessHandler)(self)
@@ -173,6 +183,7 @@ func (d *RenderProcessHandler) OnUncaughtException(browser *Browser, frame *Fram
 	lookupRenderProcessHandlerProxy(d.Base()).OnUncaughtException(d, browser, frame, context, exception, stackTrace)
 }
 
+//nolint:gocritic
 //export gocef_render_process_handler_on_uncaught_exception
 func gocef_render_process_handler_on_uncaught_exception(self *C.cef_render_process_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, context *C.cef_v8context_t, exception *C.cef_v8exception_t, stackTrace *C.cef_v8stack_trace_t) {
 	me__ := (*RenderProcessHandler)(self)
@@ -191,6 +202,7 @@ func (d *RenderProcessHandler) OnFocusedNodeChanged(browser *Browser, frame *Fra
 	lookupRenderProcessHandlerProxy(d.Base()).OnFocusedNodeChanged(d, browser, frame, node)
 }
 
+//nolint:gocritic
 //export gocef_render_process_handler_on_focused_node_changed
 func gocef_render_process_handler_on_focused_node_changed(self *C.cef_render_process_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, node *C.cef_domnode_t) {
 	me__ := (*RenderProcessHandler)(self)
@@ -206,6 +218,7 @@ func (d *RenderProcessHandler) OnProcessMessageReceived(browser *Browser, source
 	return lookupRenderProcessHandlerProxy(d.Base()).OnProcessMessageReceived(d, browser, source_process, message)
 }
 
+//nolint:gocritic
 //export gocef_render_process_handler_on_process_message_received
 func gocef_render_process_handler_on_process_message_received(self *C.cef_render_process_handler_t, browser *C.cef_browser_t, source_process C.cef_process_id_t, message *C.cef_process_message_t) C.int {
 	me__ := (*RenderProcessHandler)(self)

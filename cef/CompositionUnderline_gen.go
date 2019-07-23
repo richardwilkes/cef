@@ -1,4 +1,4 @@
-// Code generated - DO NOT EDIT.
+// Code created from "struct.go.tmpl" - don't edit by hand
 
 package cef
 

@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "WebPluginInfoVisitor_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "WebPluginInfoVisitor_gen.h"
+	"C"
 )
 
 // WebPluginInfoVisitorProxy defines methods required for using WebPluginInfoVisitor.
@@ -62,6 +65,7 @@ func (d *WebPluginInfoVisitor) Visit(info *WebPluginInfo, count, total int32) in
 	return lookupWebPluginInfoVisitorProxy(d.Base()).Visit(d, info, count, total)
 }
 
+//nolint:gocritic
 //export gocef_web_plugin_info_visitor_visit
 func gocef_web_plugin_info_visitor_visit(self *C.cef_web_plugin_info_visitor_t, info *C.cef_web_plugin_info_t, count C.int, total C.int) C.int {
 	me__ := (*WebPluginInfoVisitor)(self)

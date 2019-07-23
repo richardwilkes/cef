@@ -1,11 +1,14 @@
-// Code generated - DO NOT EDIT.
+// Code created from "struct.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
+	"unsafe"
+)
+
+import (
 	// #include "capi_gen.h"
 	"C"
-	"unsafe"
 )
 
 // FillLayout (cef_fill_layout_t from include/capi/views/cef_fill_layout_capi.h)

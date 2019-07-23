@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "SelectClientCertificateCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "SelectClientCertificateCallback_gen.h"
+	"C"
 )
 
 // SelectClientCertificateCallbackProxy defines methods required for using SelectClientCertificateCallback.
@@ -59,6 +62,7 @@ func (d *SelectClientCertificateCallback) Select(cert *X509certificate) {
 	lookupSelectClientCertificateCallbackProxy(d.Base()).Select(d, cert)
 }
 
+//nolint:gocritic
 //export gocef_select_client_certificate_callback_select
 func gocef_select_client_certificate_callback_select(self *C.cef_select_client_certificate_callback_t, cert *C.cef_x509certificate_t) {
 	me__ := (*SelectClientCertificateCallback)(self)

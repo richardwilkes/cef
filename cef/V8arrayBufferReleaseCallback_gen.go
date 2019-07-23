@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "V8arrayBufferReleaseCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "V8arrayBufferReleaseCallback_gen.h"
+	"C"
 )
 
 // V8arrayBufferReleaseCallbackProxy defines methods required for using V8arrayBufferReleaseCallback.
@@ -60,6 +63,7 @@ func (d *V8arrayBufferReleaseCallback) ReleaseBuffer(buffer unsafe.Pointer) {
 	lookupV8arrayBufferReleaseCallbackProxy(d.Base()).ReleaseBuffer(d, buffer)
 }
 
+//nolint:gocritic
 //export gocef_v8array_buffer_release_callback_release_buffer
 func gocef_v8array_buffer_release_callback_release_buffer(self *C.cef_v8array_buffer_release_callback_t, buffer unsafe.Pointer) {
 	me__ := (*V8arrayBufferReleaseCallback)(self)

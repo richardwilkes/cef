@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "NavigationEntryVisitor_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "NavigationEntryVisitor_gen.h"
+	"C"
 )
 
 // NavigationEntryVisitorProxy defines methods required for using NavigationEntryVisitor.
@@ -63,6 +66,7 @@ func (d *NavigationEntryVisitor) Visit(entry *NavigationEntry, current, index, t
 	return lookupNavigationEntryVisitorProxy(d.Base()).Visit(d, entry, current, index, total)
 }
 
+//nolint:gocritic
 //export gocef_navigation_entry_visitor_visit
 func gocef_navigation_entry_visitor_visit(self *C.cef_navigation_entry_visitor_t, entry *C.cef_navigation_entry_t, current C.int, index C.int, total C.int) C.int {
 	me__ := (*NavigationEntryVisitor)(self)

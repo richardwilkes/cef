@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "BeforeDownloadCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "BeforeDownloadCallback_gen.h"
+	"C"
 )
 
 // BeforeDownloadCallbackProxy defines methods required for using BeforeDownloadCallback.
@@ -61,6 +64,7 @@ func (d *BeforeDownloadCallback) Cont(download_path string, show_dialog int32) {
 	lookupBeforeDownloadCallbackProxy(d.Base()).Cont(d, download_path, show_dialog)
 }
 
+//nolint:gocritic
 //export gocef_before_download_callback_cont
 func gocef_before_download_callback_cont(self *C.cef_before_download_callback_t, download_path *C.cef_string_t, show_dialog C.int) {
 	me__ := (*BeforeDownloadCallback)(self)

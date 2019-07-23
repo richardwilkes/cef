@@ -1,11 +1,14 @@
 package cef
 
 import (
+	"syscall"
+	"unsafe"
+)
+
+import (
 	// #include <stdlib.h>
 	// #include "include/internal/cef_types.h"
 	"C"
-	"syscall"
-	"unsafe"
 )
 
 func (d *MainArgs) platformInit() {

@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "RequestHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "RequestHandler_gen.h"
+	"C"
 )
 
 // RequestHandlerProxy defines methods required for using RequestHandler.
@@ -85,6 +88,7 @@ func (d *RequestHandler) OnBeforeBrowse(browser *Browser, frame *Frame, request 
 	return lookupRequestHandlerProxy(d.Base()).OnBeforeBrowse(d, browser, frame, request, user_gesture, is_redirect)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_before_browse
 func gocef_request_handler_on_before_browse(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, user_gesture C.int, is_redirect C.int) C.int {
 	me__ := (*RequestHandler)(self)
@@ -111,6 +115,7 @@ func (d *RequestHandler) OnOpenUrlfromTab(browser *Browser, frame *Frame, target
 	return lookupRequestHandlerProxy(d.Base()).OnOpenUrlfromTab(d, browser, frame, target_url, target_disposition, user_gesture)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_open_urlfrom_tab
 func gocef_request_handler_on_open_urlfrom_tab(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, target_url *C.cef_string_t, target_disposition C.cef_window_open_disposition_t, user_gesture C.int) C.int {
 	me__ := (*RequestHandler)(self)
@@ -130,6 +135,7 @@ func (d *RequestHandler) OnBeforeResourceLoad(browser *Browser, frame *Frame, re
 	return lookupRequestHandlerProxy(d.Base()).OnBeforeResourceLoad(d, browser, frame, request, callback)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_before_resource_load
 func gocef_request_handler_on_before_resource_load(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, callback *C.cef_request_callback_t) C.cef_return_value_t {
 	me__ := (*RequestHandler)(self)
@@ -146,6 +152,7 @@ func (d *RequestHandler) GetResourceHandler(browser *Browser, frame *Frame, requ
 	return lookupRequestHandlerProxy(d.Base()).GetResourceHandler(d, browser, frame, request)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_get_resource_handler
 func gocef_request_handler_get_resource_handler(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t) *C.cef_resource_handler_t {
 	me__ := (*RequestHandler)(self)
@@ -164,6 +171,7 @@ func (d *RequestHandler) OnResourceRedirect(browser *Browser, frame *Frame, requ
 	lookupRequestHandlerProxy(d.Base()).OnResourceRedirect(d, browser, frame, request, response, new_url)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_resource_redirect
 func gocef_request_handler_on_resource_redirect(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t, new_url *C.cef_string_t) {
 	me__ := (*RequestHandler)(self)
@@ -181,6 +189,7 @@ func (d *RequestHandler) OnResourceResponse(browser *Browser, frame *Frame, requ
 	return lookupRequestHandlerProxy(d.Base()).OnResourceResponse(d, browser, frame, request, response)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_resource_response
 func gocef_request_handler_on_resource_response(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t) C.int {
 	me__ := (*RequestHandler)(self)
@@ -196,6 +205,7 @@ func (d *RequestHandler) GetResourceResponseFilter(browser *Browser, frame *Fram
 	return lookupRequestHandlerProxy(d.Base()).GetResourceResponseFilter(d, browser, frame, request, response)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_get_resource_response_filter
 func gocef_request_handler_get_resource_response_filter(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t) *C.cef_response_filter_t {
 	me__ := (*RequestHandler)(self)
@@ -212,6 +222,7 @@ func (d *RequestHandler) OnResourceLoadComplete(browser *Browser, frame *Frame, 
 	lookupRequestHandlerProxy(d.Base()).OnResourceLoadComplete(d, browser, frame, request, response, status, received_content_length)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_resource_load_complete
 func gocef_request_handler_on_resource_load_complete(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t, status C.cef_urlrequest_status_t, received_content_length C.int64) {
 	me__ := (*RequestHandler)(self)
@@ -233,6 +244,7 @@ func (d *RequestHandler) GetAuthCredentials(browser *Browser, frame *Frame, isPr
 	return lookupRequestHandlerProxy(d.Base()).GetAuthCredentials(d, browser, frame, isProxy, host, port, realm, scheme, callback)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_get_auth_credentials
 func gocef_request_handler_get_auth_credentials(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, isProxy C.int, host *C.cef_string_t, port C.int, realm *C.cef_string_t, scheme *C.cef_string_t, callback *C.cef_auth_callback_t) C.int {
 	me__ := (*RequestHandler)(self)
@@ -252,6 +264,7 @@ func (d *RequestHandler) CanGetCookies(browser *Browser, frame *Frame, request *
 	return lookupRequestHandlerProxy(d.Base()).CanGetCookies(d, browser, frame, request)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_can_get_cookies
 func gocef_request_handler_can_get_cookies(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t) C.int {
 	me__ := (*RequestHandler)(self)
@@ -268,6 +281,7 @@ func (d *RequestHandler) CanSetCookie(browser *Browser, frame *Frame, request *R
 	return lookupRequestHandlerProxy(d.Base()).CanSetCookie(d, browser, frame, request, cookie)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_can_set_cookie
 func gocef_request_handler_can_set_cookie(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, cookie *C.cef_cookie_t) C.int {
 	me__ := (*RequestHandler)(self)
@@ -288,6 +302,7 @@ func (d *RequestHandler) OnQuotaRequest(browser *Browser, origin_url string, new
 	return lookupRequestHandlerProxy(d.Base()).OnQuotaRequest(d, browser, origin_url, new_size, callback)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_quota_request
 func gocef_request_handler_on_quota_request(self *C.cef_request_handler_t, browser *C.cef_browser_t, origin_url *C.cef_string_t, new_size C.int64, callback *C.cef_request_callback_t) C.int {
 	me__ := (*RequestHandler)(self)
@@ -306,6 +321,7 @@ func (d *RequestHandler) OnProtocolExecution(browser *Browser, url string, allow
 	lookupRequestHandlerProxy(d.Base()).OnProtocolExecution(d, browser, url, allow_os_execution)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_protocol_execution
 func gocef_request_handler_on_protocol_execution(self *C.cef_request_handler_t, browser *C.cef_browser_t, url *C.cef_string_t, allow_os_execution *C.int) {
 	me__ := (*RequestHandler)(self)
@@ -325,6 +341,7 @@ func (d *RequestHandler) OnCertificateError(browser *Browser, cert_error Errorco
 	return lookupRequestHandlerProxy(d.Base()).OnCertificateError(d, browser, cert_error, request_url, ssl_info, callback)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_certificate_error
 func gocef_request_handler_on_certificate_error(self *C.cef_request_handler_t, browser *C.cef_browser_t, cert_error C.cef_errorcode_t, request_url *C.cef_string_t, ssl_info *C.cef_sslinfo_t, callback *C.cef_request_callback_t) C.int {
 	me__ := (*RequestHandler)(self)
@@ -349,6 +366,7 @@ func (d *RequestHandler) OnSelectClientCertificate(browser *Browser, isProxy int
 	return lookupRequestHandlerProxy(d.Base()).OnSelectClientCertificate(d, browser, isProxy, host, port, certificatesCount, certificates, callback)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_select_client_certificate
 func gocef_request_handler_on_select_client_certificate(self *C.cef_request_handler_t, browser *C.cef_browser_t, isProxy C.int, host *C.cef_string_t, port C.int, certificatesCount C.size_t, certificates **C.cef_x509certificate_t, callback *C.cef_select_client_certificate_callback_t) C.int {
 	me__ := (*RequestHandler)(self)
@@ -366,6 +384,7 @@ func (d *RequestHandler) OnPluginCrashed(browser *Browser, plugin_path string) {
 	lookupRequestHandlerProxy(d.Base()).OnPluginCrashed(d, browser, plugin_path)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_plugin_crashed
 func gocef_request_handler_on_plugin_crashed(self *C.cef_request_handler_t, browser *C.cef_browser_t, plugin_path *C.cef_string_t) {
 	me__ := (*RequestHandler)(self)
@@ -382,6 +401,7 @@ func (d *RequestHandler) OnRenderViewReady(browser *Browser) {
 	lookupRequestHandlerProxy(d.Base()).OnRenderViewReady(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_render_view_ready
 func gocef_request_handler_on_render_view_ready(self *C.cef_request_handler_t, browser *C.cef_browser_t) {
 	me__ := (*RequestHandler)(self)
@@ -396,6 +416,7 @@ func (d *RequestHandler) OnRenderProcessTerminated(browser *Browser, status Term
 	lookupRequestHandlerProxy(d.Base()).OnRenderProcessTerminated(d, browser, status)
 }
 
+//nolint:gocritic
 //export gocef_request_handler_on_render_process_terminated
 func gocef_request_handler_on_render_process_terminated(self *C.cef_request_handler_t, browser *C.cef_browser_t, status C.cef_termination_status_t) {
 	me__ := (*RequestHandler)(self)

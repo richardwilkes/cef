@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "ButtonDelegate_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "ButtonDelegate_gen.h"
+	"C"
 )
 
 // ButtonDelegateProxy defines methods required for using ButtonDelegate.
@@ -61,6 +64,7 @@ func (d *ButtonDelegate) OnButtonPressed(button *Button) {
 	lookupButtonDelegateProxy(d.Base().Base()).OnButtonPressed(d, button)
 }
 
+//nolint:gocritic
 //export gocef_button_delegate_on_button_pressed
 func gocef_button_delegate_on_button_pressed(self *C.cef_button_delegate_t, button *C.cef_button_t) {
 	me__ := (*ButtonDelegate)(self)
@@ -74,6 +78,7 @@ func (d *ButtonDelegate) OnButtonStateChanged(button *Button) {
 	lookupButtonDelegateProxy(d.Base().Base()).OnButtonStateChanged(d, button)
 }
 
+//nolint:gocritic
 //export gocef_button_delegate_on_button_state_changed
 func gocef_button_delegate_on_button_state_changed(self *C.cef_button_delegate_t, button *C.cef_button_t) {
 	me__ := (*ButtonDelegate)(self)

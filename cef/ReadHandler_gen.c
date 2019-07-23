@@ -1,4 +1,4 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.c.tmpl" - don't edit by hand
 
 #include "ReadHandler_gen.h"
 #include "_cgo_export.h"

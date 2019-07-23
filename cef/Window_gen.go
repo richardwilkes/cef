@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
+// Code created from "class.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "capi_gen.h"
@@ -41,7 +43,6 @@ import (
 	// void gocef_window_remove_accelerator(cef_window_t * self, int command_id, void (CEF_CALLBACK *callback__)(cef_window_t *, int)) { return callback__(self, command_id); }
 	// void gocef_window_remove_all_accelerators(cef_window_t * self, void (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
 	"C"
-	"unsafe"
 )
 
 // Window (cef_window_t from include/capi/views/cef_window_capi.h)

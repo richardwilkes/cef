@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "RegisterCdmCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "RegisterCdmCallback_gen.h"
+	"C"
 )
 
 // RegisterCdmCallbackProxy defines methods required for using RegisterCdmCallback.
@@ -63,6 +66,7 @@ func (d *RegisterCdmCallback) OnCdmRegistrationComplete(result CdmRegistrationEr
 	lookupRegisterCdmCallbackProxy(d.Base()).OnCdmRegistrationComplete(d, result, error_message)
 }
 
+//nolint:gocritic
 //export gocef_register_cdm_callback_on_cdm_registration_complete
 func gocef_register_cdm_callback_on_cdm_registration_complete(self *C.cef_register_cdm_callback_t, result C.cef_cdm_registration_error_t, error_message *C.cef_string_t) {
 	me__ := (*RegisterCdmCallback)(self)

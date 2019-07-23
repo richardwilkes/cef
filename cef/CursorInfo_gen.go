@@ -1,11 +1,14 @@
-// Code generated - DO NOT EDIT.
+// Code created from "struct.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
+	"unsafe"
+)
+
+import (
 	// #include "capi_gen.h"
 	"C"
-	"unsafe"
 )
 
 // CursorInfo (cef_cursor_info_t from include/internal/cef_types.h)

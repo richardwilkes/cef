@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "FocusHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "FocusHandler_gen.h"
+	"C"
 )
 
 // FocusHandlerProxy defines methods required for using FocusHandler.
@@ -64,6 +67,7 @@ func (d *FocusHandler) OnTakeFocus(browser *Browser, next int32) {
 	lookupFocusHandlerProxy(d.Base()).OnTakeFocus(d, browser, next)
 }
 
+//nolint:gocritic
 //export gocef_focus_handler_on_take_focus
 func gocef_focus_handler_on_take_focus(self *C.cef_focus_handler_t, browser *C.cef_browser_t, next C.int) {
 	me__ := (*FocusHandler)(self)
@@ -79,6 +83,7 @@ func (d *FocusHandler) OnSetFocus(browser *Browser, source FocusSource) int32 {
 	return lookupFocusHandlerProxy(d.Base()).OnSetFocus(d, browser, source)
 }
 
+//nolint:gocritic
 //export gocef_focus_handler_on_set_focus
 func gocef_focus_handler_on_set_focus(self *C.cef_focus_handler_t, browser *C.cef_browser_t, source C.cef_focus_source_t) C.int {
 	me__ := (*FocusHandler)(self)
@@ -92,6 +97,7 @@ func (d *FocusHandler) OnGotFocus(browser *Browser) {
 	lookupFocusHandlerProxy(d.Base()).OnGotFocus(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_focus_handler_on_got_focus
 func gocef_focus_handler_on_got_focus(self *C.cef_focus_handler_t, browser *C.cef_browser_t) {
 	me__ := (*FocusHandler)(self)

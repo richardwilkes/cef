@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "CompletionCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "CompletionCallback_gen.h"
+	"C"
 )
 
 // CompletionCallbackProxy defines methods required for using CompletionCallback.
@@ -58,6 +61,7 @@ func (d *CompletionCallback) OnComplete() {
 	lookupCompletionCallbackProxy(d.Base()).OnComplete(d)
 }
 
+//nolint:gocritic
 //export gocef_completion_callback_on_complete
 func gocef_completion_callback_on_complete(self *C.cef_completion_callback_t) {
 	me__ := (*CompletionCallback)(self)

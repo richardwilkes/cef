@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "DownloadImageCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "DownloadImageCallback_gen.h"
+	"C"
 )
 
 // DownloadImageCallbackProxy defines methods required for using DownloadImageCallback.
@@ -62,6 +65,7 @@ func (d *DownloadImageCallback) OnDownloadImageFinished(image_url string, http_s
 	lookupDownloadImageCallbackProxy(d.Base()).OnDownloadImageFinished(d, image_url, http_status_code, image)
 }
 
+//nolint:gocritic
 //export gocef_download_image_callback_on_download_image_finished
 func gocef_download_image_callback_on_download_image_finished(self *C.cef_download_image_callback_t, image_url *C.cef_string_t, http_status_code C.int, image *C.cef_image_t) {
 	me__ := (*DownloadImageCallback)(self)

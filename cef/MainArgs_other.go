@@ -3,11 +3,14 @@
 package cef
 
 import (
+	"os"
+	"unsafe"
+)
+
+import (
 	// #include <stdlib.h>
 	// #include "include/internal/cef_types.h"
 	"C"
-	"os"
-	"unsafe"
 )
 
 func (d *MainArgs) platformInit() {

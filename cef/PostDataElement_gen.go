@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
+// Code created from "class.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "capi_gen.h"
@@ -13,7 +15,6 @@ import (
 	// size_t gocef_post_data_element_get_bytes_count(cef_post_data_element_t * self, size_t (CEF_CALLBACK *callback__)(cef_post_data_element_t *)) { return callback__(self); }
 	// size_t gocef_post_data_element_get_bytes(cef_post_data_element_t * self, size_t size, void * bytes, size_t (CEF_CALLBACK *callback__)(cef_post_data_element_t *, size_t, void *)) { return callback__(self, size, bytes); }
 	"C"
-	"unsafe"
 )
 
 // PostDataElement (cef_post_data_element_t from include/capi/cef_request_capi.h)

@@ -1,14 +1,15 @@
-// Code generated - DO NOT EDIT.
-
 package cef
 
 import (
-	// #include "{{.GoName}}_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "{{.GoName}}_gen.h"
+	"C"
 )
 
 // {{.GoName}}Proxy defines methods required for using {{.GoName}}.
@@ -67,6 +68,7 @@ func (d *{{.Owner.GoName}}) {{.Var.GoName}}({{.ParameterList}}) {{if .Var.GoType
 }
 {{- if .Var.FunctionPtr}}
 
+//nolint:gocritic
 //export {{.TrampolineName}}
 func {{.TrampolineName}}({{.CallbackParams}}) {{.CallbackReturnType}} {
 	me__ := (*{{.Owner.GoName}})(self)

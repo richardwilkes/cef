@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "JsdialogCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "JsdialogCallback_gen.h"
+	"C"
 )
 
 // JsdialogCallbackProxy defines methods required for using JsdialogCallback.
@@ -60,6 +63,7 @@ func (d *JsdialogCallback) Cont(success int32, user_input string) {
 	lookupJsdialogCallbackProxy(d.Base()).Cont(d, success, user_input)
 }
 
+//nolint:gocritic
 //export gocef_jsdialog_callback_cont
 func gocef_jsdialog_callback_cont(self *C.cef_jsdialog_callback_t, success C.int, user_input *C.cef_string_t) {
 	me__ := (*JsdialogCallback)(self)

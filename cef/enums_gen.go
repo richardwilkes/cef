@@ -1,4 +1,4 @@
-// Code generated - DO NOT EDIT.
+// Code created from "enum.go.tmpl" - don't edit by hand
 
 package cef
 

@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
+// Code created from "class.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "capi_gen.h"
@@ -18,7 +20,6 @@ import (
 	// void gocef_server_close_connection(cef_server_t * self, int connection_id, void (CEF_CALLBACK *callback__)(cef_server_t *, int)) { return callback__(self, connection_id); }
 	// void gocef_server_send_web_socket_message(cef_server_t * self, int connection_id, void * data, size_t data_size, void (CEF_CALLBACK *callback__)(cef_server_t *, int, void *, size_t)) { return callback__(self, connection_id, data, data_size); }
 	"C"
-	"unsafe"
 )
 
 // Server (cef_server_t from include/capi/cef_server_capi.h)

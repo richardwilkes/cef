@@ -81,3 +81,26 @@ issues:
     - "G304: Potential file inclusion via variable"
     - "G104: Errors unhandled"
     - "G204: Subprocess launched with variable"
+    - "dupImport: package is imported"
+  exclude-rules:
+    - path: _gen\.go
+      linters:
+        - maligned
+        - unused
+        - misspell
+    - path: _gen\.go
+      linters:
+        - govet
+      text: "stdmethods: method Seek"
+    - path: _gen\.go
+      linters:
+        - gocritic
+      text: "dupSubExpr: suspicious identical LHS and RHS for `==` operator"
+    - path: _gen\.go
+      linters:
+        - gocritic
+      text: "paramTypeCombine: "
+    - path: _gen\.go
+      linters:
+        - staticcheck
+      text: "SA4000: identical expressions on the left and right side of the '==' operator"

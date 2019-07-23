@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "AuthCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "AuthCallback_gen.h"
+	"C"
 )
 
 // AuthCallbackProxy defines methods required for using AuthCallback.
@@ -60,6 +63,7 @@ func (d *AuthCallback) Cont(username, password string) {
 	lookupAuthCallbackProxy(d.Base()).Cont(d, username, password)
 }
 
+//nolint:gocritic
 //export gocef_auth_callback_cont
 func gocef_auth_callback_cont(self *C.cef_auth_callback_t, username *C.cef_string_t, password *C.cef_string_t) {
 	me__ := (*AuthCallback)(self)
@@ -75,6 +79,7 @@ func (d *AuthCallback) Cancel() {
 	lookupAuthCallbackProxy(d.Base()).Cancel(d)
 }
 
+//nolint:gocritic
 //export gocef_auth_callback_cancel
 func gocef_auth_callback_cancel(self *C.cef_auth_callback_t) {
 	me__ := (*AuthCallback)(self)

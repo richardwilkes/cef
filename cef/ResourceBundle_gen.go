@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
+// Code created from "class.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "capi_gen.h"
@@ -8,7 +10,6 @@ import (
 	// int gocef_resource_bundle_get_data_resource(cef_resource_bundle_t * self, int resource_id, void ** data, size_t * data_size, int (CEF_CALLBACK *callback__)(cef_resource_bundle_t *, int, void **, size_t *)) { return callback__(self, resource_id, data, data_size); }
 	// int gocef_resource_bundle_get_data_resource_for_scale(cef_resource_bundle_t * self, int resource_id, cef_scale_factor_t scale_factor, void ** data, size_t * data_size, int (CEF_CALLBACK *callback__)(cef_resource_bundle_t *, int, cef_scale_factor_t, void **, size_t *)) { return callback__(self, resource_id, scale_factor, data, data_size); }
 	"C"
-	"unsafe"
 )
 
 // ResourceBundle (cef_resource_bundle_t from include/capi/cef_resource_bundle_capi.h)

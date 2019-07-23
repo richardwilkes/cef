@@ -1,13 +1,12 @@
-// Code generated - DO NOT EDIT.
-
 package cef
+
+import "unsafe"
 
 import (
 {{- range .Headers}}
 	// #include "{{.}}"
 {{- end}}
 	"C"
-	"unsafe"
 )
 {{- range .Types}}
 

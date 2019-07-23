@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "JsdialogHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "JsdialogHandler_gen.h"
+	"C"
 )
 
 // JsdialogHandlerProxy defines methods required for using JsdialogHandler.
@@ -76,6 +79,7 @@ func (d *JsdialogHandler) OnJsdialog(browser *Browser, origin_url string, dialog
 	return lookupJsdialogHandlerProxy(d.Base()).OnJsdialog(d, browser, origin_url, dialog_type, message_text, default_prompt_text, callback, suppress_message)
 }
 
+//nolint:gocritic
 //export gocef_jsdialog_handler_on_jsdialog
 func gocef_jsdialog_handler_on_jsdialog(self *C.cef_jsdialog_handler_t, browser *C.cef_browser_t, origin_url *C.cef_string_t, dialog_type C.cef_jsdialog_type_t, message_text *C.cef_string_t, default_prompt_text *C.cef_string_t, callback *C.cef_jsdialog_callback_t, suppress_message *C.int) C.int {
 	me__ := (*JsdialogHandler)(self)
@@ -97,6 +101,7 @@ func (d *JsdialogHandler) OnBeforeUnloadDialog(browser *Browser, message_text st
 	return lookupJsdialogHandlerProxy(d.Base()).OnBeforeUnloadDialog(d, browser, message_text, is_reload, callback)
 }
 
+//nolint:gocritic
 //export gocef_jsdialog_handler_on_before_unload_dialog
 func gocef_jsdialog_handler_on_before_unload_dialog(self *C.cef_jsdialog_handler_t, browser *C.cef_browser_t, message_text *C.cef_string_t, is_reload C.int, callback *C.cef_jsdialog_callback_t) C.int {
 	me__ := (*JsdialogHandler)(self)
@@ -113,6 +118,7 @@ func (d *JsdialogHandler) OnResetDialogState(browser *Browser) {
 	lookupJsdialogHandlerProxy(d.Base()).OnResetDialogState(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_jsdialog_handler_on_reset_dialog_state
 func gocef_jsdialog_handler_on_reset_dialog_state(self *C.cef_jsdialog_handler_t, browser *C.cef_browser_t) {
 	me__ := (*JsdialogHandler)(self)
@@ -126,6 +132,7 @@ func (d *JsdialogHandler) OnDialogClosed(browser *Browser) {
 	lookupJsdialogHandlerProxy(d.Base()).OnDialogClosed(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_jsdialog_handler_on_dialog_closed
 func gocef_jsdialog_handler_on_dialog_closed(self *C.cef_jsdialog_handler_t, browser *C.cef_browser_t) {
 	me__ := (*JsdialogHandler)(self)

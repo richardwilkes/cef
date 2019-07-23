@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "WindowDelegate_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "WindowDelegate_gen.h"
+	"C"
 )
 
 // WindowDelegateProxy defines methods required for using WindowDelegate.
@@ -69,6 +72,7 @@ func (d *WindowDelegate) OnWindowCreated(window *Window) {
 	lookupWindowDelegateProxy(d.Base().Base.Base()).OnWindowCreated(d, window)
 }
 
+//nolint:gocritic
 //export gocef_window_delegate_on_window_created
 func gocef_window_delegate_on_window_created(self *C.cef_window_delegate_t, window *C.cef_window_t) {
 	me__ := (*WindowDelegate)(self)
@@ -84,6 +88,7 @@ func (d *WindowDelegate) OnWindowDestroyed(window *Window) {
 	lookupWindowDelegateProxy(d.Base().Base.Base()).OnWindowDestroyed(d, window)
 }
 
+//nolint:gocritic
 //export gocef_window_delegate_on_window_destroyed
 func gocef_window_delegate_on_window_destroyed(self *C.cef_window_delegate_t, window *C.cef_window_t) {
 	me__ := (*WindowDelegate)(self)
@@ -102,6 +107,7 @@ func (d *WindowDelegate) GetParentWindow(window *Window, is_menu, can_activate_m
 	return lookupWindowDelegateProxy(d.Base().Base.Base()).GetParentWindow(d, window, is_menu, can_activate_menu)
 }
 
+//nolint:gocritic
 //export gocef_window_delegate_get_parent_window
 func gocef_window_delegate_get_parent_window(self *C.cef_window_delegate_t, window *C.cef_window_t, is_menu *C.int, can_activate_menu *C.int) *C.cef_window_t {
 	me__ := (*WindowDelegate)(self)
@@ -117,6 +123,7 @@ func (d *WindowDelegate) IsFrameless(window *Window) int32 {
 	return lookupWindowDelegateProxy(d.Base().Base.Base()).IsFrameless(d, window)
 }
 
+//nolint:gocritic
 //export gocef_window_delegate_is_frameless
 func gocef_window_delegate_is_frameless(self *C.cef_window_delegate_t, window *C.cef_window_t) C.int {
 	me__ := (*WindowDelegate)(self)
@@ -130,6 +137,7 @@ func (d *WindowDelegate) CanResize(window *Window) int32 {
 	return lookupWindowDelegateProxy(d.Base().Base.Base()).CanResize(d, window)
 }
 
+//nolint:gocritic
 //export gocef_window_delegate_can_resize
 func gocef_window_delegate_can_resize(self *C.cef_window_delegate_t, window *C.cef_window_t) C.int {
 	me__ := (*WindowDelegate)(self)
@@ -143,6 +151,7 @@ func (d *WindowDelegate) CanMaximize(window *Window) int32 {
 	return lookupWindowDelegateProxy(d.Base().Base.Base()).CanMaximize(d, window)
 }
 
+//nolint:gocritic
 //export gocef_window_delegate_can_maximize
 func gocef_window_delegate_can_maximize(self *C.cef_window_delegate_t, window *C.cef_window_t) C.int {
 	me__ := (*WindowDelegate)(self)
@@ -156,6 +165,7 @@ func (d *WindowDelegate) CanMinimize(window *Window) int32 {
 	return lookupWindowDelegateProxy(d.Base().Base.Base()).CanMinimize(d, window)
 }
 
+//nolint:gocritic
 //export gocef_window_delegate_can_minimize
 func gocef_window_delegate_can_minimize(self *C.cef_window_delegate_t, window *C.cef_window_t) C.int {
 	me__ := (*WindowDelegate)(self)
@@ -170,6 +180,7 @@ func (d *WindowDelegate) CanClose(window *Window) int32 {
 	return lookupWindowDelegateProxy(d.Base().Base.Base()).CanClose(d, window)
 }
 
+//nolint:gocritic
 //export gocef_window_delegate_can_close
 func gocef_window_delegate_can_close(self *C.cef_window_delegate_t, window *C.cef_window_t) C.int {
 	me__ := (*WindowDelegate)(self)
@@ -185,6 +196,7 @@ func (d *WindowDelegate) OnAccelerator(window *Window, command_id int32) int32 {
 	return lookupWindowDelegateProxy(d.Base().Base.Base()).OnAccelerator(d, window, command_id)
 }
 
+//nolint:gocritic
 //export gocef_window_delegate_on_accelerator
 func gocef_window_delegate_on_accelerator(self *C.cef_window_delegate_t, window *C.cef_window_t, command_id C.int) C.int {
 	me__ := (*WindowDelegate)(self)
@@ -200,6 +212,7 @@ func (d *WindowDelegate) OnKeyEvent(window *Window, event *KeyEvent) int32 {
 	return lookupWindowDelegateProxy(d.Base().Base.Base()).OnKeyEvent(d, window, event)
 }
 
+//nolint:gocritic
 //export gocef_window_delegate_on_key_event
 func gocef_window_delegate_on_key_event(self *C.cef_window_delegate_t, window *C.cef_window_t, event *C.cef_key_event_t) C.int {
 	me__ := (*WindowDelegate)(self)

@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "RequestContextHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "RequestContextHandler_gen.h"
+	"C"
 )
 
 // RequestContextHandlerProxy defines methods required for using RequestContextHandler.
@@ -63,6 +66,7 @@ func (d *RequestContextHandler) OnRequestContextInitialized(request_context *Req
 	lookupRequestContextHandlerProxy(d.Base()).OnRequestContextInitialized(d, request_context)
 }
 
+//nolint:gocritic
 //export gocef_request_context_handler_on_request_context_initialized
 func gocef_request_context_handler_on_request_context_initialized(self *C.cef_request_context_handler_t, request_context *C.cef_request_context_t) {
 	me__ := (*RequestContextHandler)(self)
@@ -78,6 +82,7 @@ func (d *RequestContextHandler) GetCookieManager() *CookieManager {
 	return lookupRequestContextHandlerProxy(d.Base()).GetCookieManager(d)
 }
 
+//nolint:gocritic
 //export gocef_request_context_handler_get_cookie_manager
 func gocef_request_context_handler_get_cookie_manager(self *C.cef_request_context_handler_t) *C.cef_cookie_manager_t {
 	me__ := (*RequestContextHandler)(self)
@@ -107,6 +112,7 @@ func (d *RequestContextHandler) OnBeforePluginLoad(mime_type, plugin_url string,
 	return lookupRequestContextHandlerProxy(d.Base()).OnBeforePluginLoad(d, mime_type, plugin_url, is_main_frame, top_origin_url, plugin_info, plugin_policy)
 }
 
+//nolint:gocritic
 //export gocef_request_context_handler_on_before_plugin_load
 func gocef_request_context_handler_on_before_plugin_load(self *C.cef_request_context_handler_t, mime_type *C.cef_string_t, plugin_url *C.cef_string_t, is_main_frame C.int, top_origin_url *C.cef_string_t, plugin_info *C.cef_web_plugin_info_t, plugin_policy *C.cef_plugin_policy_t) C.int {
 	me__ := (*RequestContextHandler)(self)

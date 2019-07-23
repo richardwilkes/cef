@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "MenuModelDelegate_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "MenuModelDelegate_gen.h"
+	"C"
 )
 
 // MenuModelDelegateProxy defines methods required for using MenuModelDelegate.
@@ -67,6 +70,7 @@ func (d *MenuModelDelegate) ExecuteCommand(menu_model *MenuModel, command_id int
 	lookupMenuModelDelegateProxy(d.Base()).ExecuteCommand(d, menu_model, command_id, event_flags)
 }
 
+//nolint:gocritic
 //export gocef_menu_model_delegate_execute_command
 func gocef_menu_model_delegate_execute_command(self *C.cef_menu_model_delegate_t, menu_model *C.cef_menu_model_t, command_id C.int, event_flags C.cef_event_flags_t) {
 	me__ := (*MenuModelDelegate)(self)
@@ -81,6 +85,7 @@ func (d *MenuModelDelegate) MouseOutsideMenu(menu_model *MenuModel, screen_point
 	lookupMenuModelDelegateProxy(d.Base()).MouseOutsideMenu(d, menu_model, screen_point)
 }
 
+//nolint:gocritic
 //export gocef_menu_model_delegate_mouse_outside_menu
 func gocef_menu_model_delegate_mouse_outside_menu(self *C.cef_menu_model_delegate_t, menu_model *C.cef_menu_model_t, screen_point *C.cef_point_t) {
 	me__ := (*MenuModelDelegate)(self)
@@ -96,6 +101,7 @@ func (d *MenuModelDelegate) UnhandledOpenSubmenu(menu_model *MenuModel, is_rtl i
 	lookupMenuModelDelegateProxy(d.Base()).UnhandledOpenSubmenu(d, menu_model, is_rtl)
 }
 
+//nolint:gocritic
 //export gocef_menu_model_delegate_unhandled_open_submenu
 func gocef_menu_model_delegate_unhandled_open_submenu(self *C.cef_menu_model_delegate_t, menu_model *C.cef_menu_model_t, is_rtl C.int) {
 	me__ := (*MenuModelDelegate)(self)
@@ -110,6 +116,7 @@ func (d *MenuModelDelegate) UnhandledCloseSubmenu(menu_model *MenuModel, is_rtl 
 	lookupMenuModelDelegateProxy(d.Base()).UnhandledCloseSubmenu(d, menu_model, is_rtl)
 }
 
+//nolint:gocritic
 //export gocef_menu_model_delegate_unhandled_close_submenu
 func gocef_menu_model_delegate_unhandled_close_submenu(self *C.cef_menu_model_delegate_t, menu_model *C.cef_menu_model_t, is_rtl C.int) {
 	me__ := (*MenuModelDelegate)(self)
@@ -123,6 +130,7 @@ func (d *MenuModelDelegate) MenuWillShow(menu_model *MenuModel) {
 	lookupMenuModelDelegateProxy(d.Base()).MenuWillShow(d, menu_model)
 }
 
+//nolint:gocritic
 //export gocef_menu_model_delegate_menu_will_show
 func gocef_menu_model_delegate_menu_will_show(self *C.cef_menu_model_delegate_t, menu_model *C.cef_menu_model_t) {
 	me__ := (*MenuModelDelegate)(self)
@@ -136,6 +144,7 @@ func (d *MenuModelDelegate) MenuClosed(menu_model *MenuModel) {
 	lookupMenuModelDelegateProxy(d.Base()).MenuClosed(d, menu_model)
 }
 
+//nolint:gocritic
 //export gocef_menu_model_delegate_menu_closed
 func gocef_menu_model_delegate_menu_closed(self *C.cef_menu_model_delegate_t, menu_model *C.cef_menu_model_t) {
 	me__ := (*MenuModelDelegate)(self)
@@ -150,6 +159,7 @@ func (d *MenuModelDelegate) FormatLabel(menu_model *MenuModel, label *string) in
 	return lookupMenuModelDelegateProxy(d.Base()).FormatLabel(d, menu_model, label)
 }
 
+//nolint:gocritic
 //export gocef_menu_model_delegate_format_label
 func gocef_menu_model_delegate_format_label(self *C.cef_menu_model_delegate_t, menu_model *C.cef_menu_model_t, label *C.cef_string_t) C.int {
 	me__ := (*MenuModelDelegate)(self)

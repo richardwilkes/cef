@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
-
 package cef
+
+{{- if .NeedsUnsafeImport}}
+import "unsafe"
+{{- end}}
 
 import (
 	// #include "capi_gen.h"
@@ -8,9 +10,6 @@ import (
 	// {{.}}
 {{- end}}
 	"C"
-{{- if .NeedsUnsafeImport}}
-	"unsafe"
-{{- end}}
 )
 
 // {{.GoName}} ({{.Name}} from {{.Position.Src}})

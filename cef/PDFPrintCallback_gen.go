@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "PDFPrintCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "PDFPrintCallback_gen.h"
+	"C"
 )
 
 // PDFPrintCallbackProxy defines methods required for using PDFPrintCallback.
@@ -61,6 +64,7 @@ func (d *PDFPrintCallback) OnPdfPrintFinished(path string, ok int32) {
 	lookupPDFPrintCallbackProxy(d.Base()).OnPdfPrintFinished(d, path, ok)
 }
 
+//nolint:gocritic
 //export gocef_pdf_print_callback_on_pdf_print_finished
 func gocef_pdf_print_callback_on_pdf_print_finished(self *C.cef_pdf_print_callback_t, path *C.cef_string_t, ok C.int) {
 	me__ := (*PDFPrintCallback)(self)

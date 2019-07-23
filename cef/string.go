@@ -1,11 +1,12 @@
 package cef
 
+import "unsafe"
+
 import (
 	// #include <stdlib.h>
 	// #include <string.h>
 	// #include "include/capi/cef_base_capi.h"
 	"C"
-	"unsafe"
 )
 
 func setCEFStr(str string, cefStr *C.cef_string_t) {

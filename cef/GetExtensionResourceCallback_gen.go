@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "GetExtensionResourceCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "GetExtensionResourceCallback_gen.h"
+	"C"
 )
 
 // GetExtensionResourceCallbackProxy defines methods required for using GetExtensionResourceCallback.
@@ -60,6 +63,7 @@ func (d *GetExtensionResourceCallback) Cont(stream *StreamReader) {
 	lookupGetExtensionResourceCallbackProxy(d.Base()).Cont(d, stream)
 }
 
+//nolint:gocritic
 //export gocef_get_extension_resource_callback_cont
 func gocef_get_extension_resource_callback_cont(self *C.cef_get_extension_resource_callback_t, stream *C.cef_stream_reader_t) {
 	me__ := (*GetExtensionResourceCallback)(self)
@@ -73,6 +77,7 @@ func (d *GetExtensionResourceCallback) Cancel() {
 	lookupGetExtensionResourceCallbackProxy(d.Base()).Cancel(d)
 }
 
+//nolint:gocritic
 //export gocef_get_extension_resource_callback_cancel
 func gocef_get_extension_resource_callback_cancel(self *C.cef_get_extension_resource_callback_t) {
 	me__ := (*GetExtensionResourceCallback)(self)

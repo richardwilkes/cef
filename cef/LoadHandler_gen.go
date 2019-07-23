@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "LoadHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "LoadHandler_gen.h"
+	"C"
 )
 
 // LoadHandlerProxy defines methods required for using LoadHandler.
@@ -67,6 +70,7 @@ func (d *LoadHandler) OnLoadingStateChange(browser *Browser, isLoading, canGoBac
 	lookupLoadHandlerProxy(d.Base()).OnLoadingStateChange(d, browser, isLoading, canGoBack, canGoForward)
 }
 
+//nolint:gocritic
 //export gocef_load_handler_on_loading_state_change
 func gocef_load_handler_on_loading_state_change(self *C.cef_load_handler_t, browser *C.cef_browser_t, isLoading C.int, canGoBack C.int, canGoForward C.int) {
 	me__ := (*LoadHandler)(self)
@@ -89,6 +93,7 @@ func (d *LoadHandler) OnLoadStart(browser *Browser, frame *Frame, transition_typ
 	lookupLoadHandlerProxy(d.Base()).OnLoadStart(d, browser, frame, transition_type)
 }
 
+//nolint:gocritic
 //export gocef_load_handler_on_load_start
 func gocef_load_handler_on_load_start(self *C.cef_load_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, transition_type C.cef_transition_type_t) {
 	me__ := (*LoadHandler)(self)
@@ -109,6 +114,7 @@ func (d *LoadHandler) OnLoadEnd(browser *Browser, frame *Frame, httpStatusCode i
 	lookupLoadHandlerProxy(d.Base()).OnLoadEnd(d, browser, frame, httpStatusCode)
 }
 
+//nolint:gocritic
 //export gocef_load_handler_on_load_end
 func gocef_load_handler_on_load_end(self *C.cef_load_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, httpStatusCode C.int) {
 	me__ := (*LoadHandler)(self)
@@ -126,6 +132,7 @@ func (d *LoadHandler) OnLoadError(browser *Browser, frame *Frame, errorCode Erro
 	lookupLoadHandlerProxy(d.Base()).OnLoadError(d, browser, frame, errorCode, errorText, failedUrl)
 }
 
+//nolint:gocritic
 //export gocef_load_handler_on_load_error
 func gocef_load_handler_on_load_error(self *C.cef_load_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, errorCode C.cef_errorcode_t, errorText *C.cef_string_t, failedUrl *C.cef_string_t) {
 	me__ := (*LoadHandler)(self)

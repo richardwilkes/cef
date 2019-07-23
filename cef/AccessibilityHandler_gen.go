@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "AccessibilityHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "AccessibilityHandler_gen.h"
+	"C"
 )
 
 // AccessibilityHandlerProxy defines methods required for using AccessibilityHandler.
@@ -62,6 +65,7 @@ func (d *AccessibilityHandler) OnAccessibilityTreeChange(value *Value) {
 	lookupAccessibilityHandlerProxy(d.Base()).OnAccessibilityTreeChange(d, value)
 }
 
+//nolint:gocritic
 //export gocef_accessibility_handler_on_accessibility_tree_change
 func gocef_accessibility_handler_on_accessibility_tree_change(self *C.cef_accessibility_handler_t, value *C.cef_value_t) {
 	me__ := (*AccessibilityHandler)(self)
@@ -76,6 +80,7 @@ func (d *AccessibilityHandler) OnAccessibilityLocationChange(value *Value) {
 	lookupAccessibilityHandlerProxy(d.Base()).OnAccessibilityLocationChange(d, value)
 }
 
+//nolint:gocritic
 //export gocef_accessibility_handler_on_accessibility_location_change
 func gocef_accessibility_handler_on_accessibility_location_change(self *C.cef_accessibility_handler_t, value *C.cef_value_t) {
 	me__ := (*AccessibilityHandler)(self)

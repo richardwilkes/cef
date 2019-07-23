@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "PrintHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "PrintHandler_gen.h"
+	"C"
 )
 
 // PrintHandlerProxy defines methods required for using PrintHandler.
@@ -68,6 +71,7 @@ func (d *PrintHandler) OnPrintStart(browser *Browser) {
 	lookupPrintHandlerProxy(d.Base()).OnPrintStart(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_print_handler_on_print_start
 func gocef_print_handler_on_print_start(self *C.cef_print_handler_t, browser *C.cef_browser_t) {
 	me__ := (*PrintHandler)(self)
@@ -83,6 +87,7 @@ func (d *PrintHandler) OnPrintSettings(browser *Browser, settings *PrintSettings
 	lookupPrintHandlerProxy(d.Base()).OnPrintSettings(d, browser, settings, get_defaults)
 }
 
+//nolint:gocritic
 //export gocef_print_handler_on_print_settings
 func gocef_print_handler_on_print_settings(self *C.cef_print_handler_t, browser *C.cef_browser_t, settings *C.cef_print_settings_t, get_defaults C.int) {
 	me__ := (*PrintHandler)(self)
@@ -98,6 +103,7 @@ func (d *PrintHandler) OnPrintDialog(browser *Browser, has_selection int32, call
 	return lookupPrintHandlerProxy(d.Base()).OnPrintDialog(d, browser, has_selection, callback)
 }
 
+//nolint:gocritic
 //export gocef_print_handler_on_print_dialog
 func gocef_print_handler_on_print_dialog(self *C.cef_print_handler_t, browser *C.cef_browser_t, has_selection C.int, callback *C.cef_print_dialog_callback_t) C.int {
 	me__ := (*PrintHandler)(self)
@@ -113,6 +119,7 @@ func (d *PrintHandler) OnPrintJob(browser *Browser, document_name, pdf_file_path
 	return lookupPrintHandlerProxy(d.Base()).OnPrintJob(d, browser, document_name, pdf_file_path, callback)
 }
 
+//nolint:gocritic
 //export gocef_print_handler_on_print_job
 func gocef_print_handler_on_print_job(self *C.cef_print_handler_t, browser *C.cef_browser_t, document_name *C.cef_string_t, pdf_file_path *C.cef_string_t, callback *C.cef_print_job_callback_t) C.int {
 	me__ := (*PrintHandler)(self)
@@ -128,6 +135,7 @@ func (d *PrintHandler) OnPrintReset(browser *Browser) {
 	lookupPrintHandlerProxy(d.Base()).OnPrintReset(d, browser)
 }
 
+//nolint:gocritic
 //export gocef_print_handler_on_print_reset
 func gocef_print_handler_on_print_reset(self *C.cef_print_handler_t, browser *C.cef_browser_t) {
 	me__ := (*PrintHandler)(self)
@@ -142,6 +150,7 @@ func (d *PrintHandler) GetPdfPaperSize(device_units_per_inch int32) Size {
 	return lookupPrintHandlerProxy(d.Base()).GetPdfPaperSize(d, device_units_per_inch)
 }
 
+//nolint:gocritic
 //export gocef_print_handler_get_pdf_paper_size
 func gocef_print_handler_get_pdf_paper_size(self *C.cef_print_handler_t, device_units_per_inch C.int) C.cef_size_t {
 	me__ := (*PrintHandler)(self)

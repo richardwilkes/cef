@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "FindHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "FindHandler_gen.h"
+	"C"
 )
 
 // FindHandlerProxy defines methods required for using FindHandler.
@@ -64,6 +67,7 @@ func (d *FindHandler) OnFindResult(browser *Browser, identifier, count int32, se
 	lookupFindHandlerProxy(d.Base()).OnFindResult(d, browser, identifier, count, selectionRect, activeMatchOrdinal, finalUpdate)
 }
 
+//nolint:gocritic
 //export gocef_find_handler_on_find_result
 func gocef_find_handler_on_find_result(self *C.cef_find_handler_t, browser *C.cef_browser_t, identifier C.int, count C.int, selectionRect *C.cef_rect_t, activeMatchOrdinal C.int, finalUpdate C.int) {
 	me__ := (*FindHandler)(self)

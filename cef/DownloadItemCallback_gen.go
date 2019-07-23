@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "DownloadItemCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "DownloadItemCallback_gen.h"
+	"C"
 )
 
 // DownloadItemCallbackProxy defines methods required for using DownloadItemCallback.
@@ -60,6 +63,7 @@ func (d *DownloadItemCallback) Cancel() {
 	lookupDownloadItemCallbackProxy(d.Base()).Cancel(d)
 }
 
+//nolint:gocritic
 //export gocef_download_item_callback_cancel
 func gocef_download_item_callback_cancel(self *C.cef_download_item_callback_t) {
 	me__ := (*DownloadItemCallback)(self)
@@ -73,6 +77,7 @@ func (d *DownloadItemCallback) Pause() {
 	lookupDownloadItemCallbackProxy(d.Base()).Pause(d)
 }
 
+//nolint:gocritic
 //export gocef_download_item_callback_pause
 func gocef_download_item_callback_pause(self *C.cef_download_item_callback_t) {
 	me__ := (*DownloadItemCallback)(self)
@@ -86,6 +91,7 @@ func (d *DownloadItemCallback) Resume() {
 	lookupDownloadItemCallbackProxy(d.Base()).Resume(d)
 }
 
+//nolint:gocritic
 //export gocef_download_item_callback_resume
 func gocef_download_item_callback_resume(self *C.cef_download_item_callback_t) {
 	me__ := (*DownloadItemCallback)(self)

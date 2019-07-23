@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "PrintDialogCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "PrintDialogCallback_gen.h"
+	"C"
 )
 
 // PrintDialogCallbackProxy defines methods required for using PrintDialogCallback.
@@ -59,6 +62,7 @@ func (d *PrintDialogCallback) Cont(settings *PrintSettings) {
 	lookupPrintDialogCallbackProxy(d.Base()).Cont(d, settings)
 }
 
+//nolint:gocritic
 //export gocef_print_dialog_callback_cont
 func gocef_print_dialog_callback_cont(self *C.cef_print_dialog_callback_t, settings *C.cef_print_settings_t) {
 	me__ := (*PrintDialogCallback)(self)
@@ -72,6 +76,7 @@ func (d *PrintDialogCallback) Cancel() {
 	lookupPrintDialogCallbackProxy(d.Base()).Cancel(d)
 }
 
+//nolint:gocritic
 //export gocef_print_dialog_callback_cancel
 func gocef_print_dialog_callback_cancel(self *C.cef_print_dialog_callback_t) {
 	me__ := (*PrintDialogCallback)(self)

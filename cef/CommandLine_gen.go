@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
+// Code created from "class.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "capi_gen.h"
@@ -25,7 +27,6 @@ import (
 	// void gocef_command_line_append_argument(cef_command_line_t * self, cef_string_t * argument, void (CEF_CALLBACK *callback__)(cef_command_line_t *, cef_string_t *)) { return callback__(self, argument); }
 	// void gocef_command_line_prepend_wrapper(cef_command_line_t * self, cef_string_t * wrapper, void (CEF_CALLBACK *callback__)(cef_command_line_t *, cef_string_t *)) { return callback__(self, wrapper); }
 	"C"
-	"unsafe"
 )
 
 // CommandLine (cef_command_line_t from include/capi/cef_command_line_capi.h)

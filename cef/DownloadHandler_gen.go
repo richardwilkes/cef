@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "DownloadHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "DownloadHandler_gen.h"
+	"C"
 )
 
 // DownloadHandlerProxy defines methods required for using DownloadHandler.
@@ -64,6 +67,7 @@ func (d *DownloadHandler) OnBeforeDownload(browser *Browser, download_item *Down
 	lookupDownloadHandlerProxy(d.Base()).OnBeforeDownload(d, browser, download_item, suggested_name, callback)
 }
 
+//nolint:gocritic
 //export gocef_download_handler_on_before_download
 func gocef_download_handler_on_before_download(self *C.cef_download_handler_t, browser *C.cef_browser_t, download_item *C.cef_download_item_t, suggested_name *C.cef_string_t, callback *C.cef_before_download_callback_t) {
 	me__ := (*DownloadHandler)(self)
@@ -82,6 +86,7 @@ func (d *DownloadHandler) OnDownloadUpdated(browser *Browser, download_item *Dow
 	lookupDownloadHandlerProxy(d.Base()).OnDownloadUpdated(d, browser, download_item, callback)
 }
 
+//nolint:gocritic
 //export gocef_download_handler_on_download_updated
 func gocef_download_handler_on_download_updated(self *C.cef_download_handler_t, browser *C.cef_browser_t, download_item *C.cef_download_item_t, callback *C.cef_download_item_callback_t) {
 	me__ := (*DownloadHandler)(self)

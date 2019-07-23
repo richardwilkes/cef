@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "AudioHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "AudioHandler_gen.h"
+	"C"
 )
 
 // AudioHandlerProxy defines methods required for using AudioHandler.
@@ -68,6 +71,7 @@ func (d *AudioHandler) OnAudioStreamStarted(browser *Browser, audio_stream_id, c
 	lookupAudioHandlerProxy(d.Base()).OnAudioStreamStarted(d, browser, audio_stream_id, channels, channel_layout, sample_rate, frames_per_buffer)
 }
 
+//nolint:gocritic
 //export gocef_audio_handler_on_audio_stream_started
 func gocef_audio_handler_on_audio_stream_started(self *C.cef_audio_handler_t, browser *C.cef_browser_t, audio_stream_id C.int, channels C.int, channel_layout C.cef_channel_layout_t, sample_rate C.int, frames_per_buffer C.int) {
 	me__ := (*AudioHandler)(self)
@@ -88,6 +92,7 @@ func (d *AudioHandler) OnAudioStreamPacket(browser *Browser, audio_stream_id int
 	lookupAudioHandlerProxy(d.Base()).OnAudioStreamPacket(d, browser, audio_stream_id, data, frames, pts)
 }
 
+//nolint:gocritic
 //export gocef_audio_handler_on_audio_stream_packet
 func gocef_audio_handler_on_audio_stream_packet(self *C.cef_audio_handler_t, browser *C.cef_browser_t, audio_stream_id C.int, data **C.float, frames C.int, pts C.int64) {
 	me__ := (*AudioHandler)(self)
@@ -103,6 +108,7 @@ func (d *AudioHandler) OnAudioStreamStopped(browser *Browser, audio_stream_id in
 	lookupAudioHandlerProxy(d.Base()).OnAudioStreamStopped(d, browser, audio_stream_id)
 }
 
+//nolint:gocritic
 //export gocef_audio_handler_on_audio_stream_stopped
 func gocef_audio_handler_on_audio_stream_stopped(self *C.cef_audio_handler_t, browser *C.cef_browser_t, audio_stream_id C.int) {
 	me__ := (*AudioHandler)(self)

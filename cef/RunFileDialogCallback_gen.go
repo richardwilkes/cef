@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "RunFileDialogCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "RunFileDialogCallback_gen.h"
+	"C"
 )
 
 // RunFileDialogCallbackProxy defines methods required for using RunFileDialogCallback.
@@ -63,6 +66,7 @@ func (d *RunFileDialogCallback) OnFileDialogDismissed(selected_accept_filter int
 	lookupRunFileDialogCallbackProxy(d.Base()).OnFileDialogDismissed(d, selected_accept_filter, file_paths)
 }
 
+//nolint:gocritic
 //export gocef_run_file_dialog_callback_on_file_dialog_dismissed
 func gocef_run_file_dialog_callback_on_file_dialog_dismissed(self *C.cef_run_file_dialog_callback_t, selected_accept_filter C.int, file_paths C.cef_string_list_t) {
 	me__ := (*RunFileDialogCallback)(self)

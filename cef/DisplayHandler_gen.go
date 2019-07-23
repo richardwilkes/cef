@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "DisplayHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "DisplayHandler_gen.h"
+	"C"
 )
 
 // DisplayHandlerProxy defines methods required for using DisplayHandler.
@@ -67,6 +70,7 @@ func (d *DisplayHandler) OnAddressChange(browser *Browser, frame *Frame, url str
 	lookupDisplayHandlerProxy(d.Base()).OnAddressChange(d, browser, frame, url)
 }
 
+//nolint:gocritic
 //export gocef_display_handler_on_address_change
 func gocef_display_handler_on_address_change(self *C.cef_display_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, url *C.cef_string_t) {
 	me__ := (*DisplayHandler)(self)
@@ -81,6 +85,7 @@ func (d *DisplayHandler) OnTitleChange(browser *Browser, title string) {
 	lookupDisplayHandlerProxy(d.Base()).OnTitleChange(d, browser, title)
 }
 
+//nolint:gocritic
 //export gocef_display_handler_on_title_change
 func gocef_display_handler_on_title_change(self *C.cef_display_handler_t, browser *C.cef_browser_t, title *C.cef_string_t) {
 	me__ := (*DisplayHandler)(self)
@@ -95,6 +100,7 @@ func (d *DisplayHandler) OnFaviconUrlchange(browser *Browser, icon_urls StringLi
 	lookupDisplayHandlerProxy(d.Base()).OnFaviconUrlchange(d, browser, icon_urls)
 }
 
+//nolint:gocritic
 //export gocef_display_handler_on_favicon_urlchange
 func gocef_display_handler_on_favicon_urlchange(self *C.cef_display_handler_t, browser *C.cef_browser_t, icon_urls C.cef_string_list_t) {
 	me__ := (*DisplayHandler)(self)
@@ -112,6 +118,7 @@ func (d *DisplayHandler) OnFullscreenModeChange(browser *Browser, fullscreen int
 	lookupDisplayHandlerProxy(d.Base()).OnFullscreenModeChange(d, browser, fullscreen)
 }
 
+//nolint:gocritic
 //export gocef_display_handler_on_fullscreen_mode_change
 func gocef_display_handler_on_fullscreen_mode_change(self *C.cef_display_handler_t, browser *C.cef_browser_t, fullscreen C.int) {
 	me__ := (*DisplayHandler)(self)
@@ -130,6 +137,7 @@ func (d *DisplayHandler) OnTooltip(browser *Browser, text *string) int32 {
 	return lookupDisplayHandlerProxy(d.Base()).OnTooltip(d, browser, text)
 }
 
+//nolint:gocritic
 //export gocef_display_handler_on_tooltip
 func gocef_display_handler_on_tooltip(self *C.cef_display_handler_t, browser *C.cef_browser_t, text *C.cef_string_t) C.int {
 	me__ := (*DisplayHandler)(self)
@@ -145,6 +153,7 @@ func (d *DisplayHandler) OnStatusMessage(browser *Browser, value string) {
 	lookupDisplayHandlerProxy(d.Base()).OnStatusMessage(d, browser, value)
 }
 
+//nolint:gocritic
 //export gocef_display_handler_on_status_message
 func gocef_display_handler_on_status_message(self *C.cef_display_handler_t, browser *C.cef_browser_t, value *C.cef_string_t) {
 	me__ := (*DisplayHandler)(self)
@@ -160,6 +169,7 @@ func (d *DisplayHandler) OnConsoleMessage(browser *Browser, level LogSeverity, m
 	return lookupDisplayHandlerProxy(d.Base()).OnConsoleMessage(d, browser, level, message, source, line)
 }
 
+//nolint:gocritic
 //export gocef_display_handler_on_console_message
 func gocef_display_handler_on_console_message(self *C.cef_display_handler_t, browser *C.cef_browser_t, level C.cef_log_severity_t, message *C.cef_string_t, source *C.cef_string_t, line C.int) C.int {
 	me__ := (*DisplayHandler)(self)
@@ -178,6 +188,7 @@ func (d *DisplayHandler) OnAutoResize(browser *Browser, new_size *Size) int32 {
 	return lookupDisplayHandlerProxy(d.Base()).OnAutoResize(d, browser, new_size)
 }
 
+//nolint:gocritic
 //export gocef_display_handler_on_auto_resize
 func gocef_display_handler_on_auto_resize(self *C.cef_display_handler_t, browser *C.cef_browser_t, new_size *C.cef_size_t) C.int {
 	me__ := (*DisplayHandler)(self)
@@ -193,6 +204,7 @@ func (d *DisplayHandler) OnLoadingProgressChange(browser *Browser, progress floa
 	lookupDisplayHandlerProxy(d.Base()).OnLoadingProgressChange(d, browser, progress)
 }
 
+//nolint:gocritic
 //export gocef_display_handler_on_loading_progress_change
 func gocef_display_handler_on_loading_progress_change(self *C.cef_display_handler_t, browser *C.cef_browser_t, progress C.double) {
 	me__ := (*DisplayHandler)(self)

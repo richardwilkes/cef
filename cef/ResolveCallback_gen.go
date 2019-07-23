@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "ResolveCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "ResolveCallback_gen.h"
+	"C"
 )
 
 // ResolveCallbackProxy defines methods required for using ResolveCallback.
@@ -60,6 +63,7 @@ func (d *ResolveCallback) OnResolveCompleted(result Errorcode, resolved_ips Stri
 	lookupResolveCallbackProxy(d.Base()).OnResolveCompleted(d, result, resolved_ips)
 }
 
+//nolint:gocritic
 //export gocef_resolve_callback_on_resolve_completed
 func gocef_resolve_callback_on_resolve_completed(self *C.cef_resolve_callback_t, result C.cef_errorcode_t, resolved_ips C.cef_string_list_t) {
 	me__ := (*ResolveCallback)(self)

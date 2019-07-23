@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "KeyboardHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "KeyboardHandler_gen.h"
+	"C"
 )
 
 // KeyboardHandlerProxy defines methods required for using KeyboardHandler.
@@ -64,6 +67,7 @@ func (d *KeyboardHandler) OnPreKeyEvent(browser *Browser, event *KeyEvent, os_ev
 	return lookupKeyboardHandlerProxy(d.Base()).OnPreKeyEvent(d, browser, event, os_event, is_keyboard_shortcut)
 }
 
+//nolint:gocritic
 //export gocef_keyboard_handler_on_pre_key_event
 func gocef_keyboard_handler_on_pre_key_event(self *C.cef_keyboard_handler_t, browser *C.cef_browser_t, event *C.cef_key_event_t, os_event unsafe.Pointer, is_keyboard_shortcut *C.int) C.int {
 	me__ := (*KeyboardHandler)(self)
@@ -81,6 +85,7 @@ func (d *KeyboardHandler) OnKeyEvent(browser *Browser, event *KeyEvent, os_event
 	return lookupKeyboardHandlerProxy(d.Base()).OnKeyEvent(d, browser, event, os_event)
 }
 
+//nolint:gocritic
 //export gocef_keyboard_handler_on_key_event
 func gocef_keyboard_handler_on_key_event(self *C.cef_keyboard_handler_t, browser *C.cef_browser_t, event *C.cef_key_event_t, os_event unsafe.Pointer) C.int {
 	me__ := (*KeyboardHandler)(self)

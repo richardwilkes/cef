@@ -120,6 +120,7 @@ func processBlock(curBlock, prevBlock []lineInfo) {
 
 func genSourceFile(tmpl *template.Template, tmplName, fileName string, data interface{}) {
 	var buffer bytes.Buffer
+	fmt.Fprintf(&buffer, "// Code created from %q - don't edit by hand\n\n", tmplName)
 	jot.FatalIfErr(tmpl.ExecuteTemplate(&buffer, tmplName, data))
 	path := filepath.Join(outputBaseDir, fileName)
 	var d []byte

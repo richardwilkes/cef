@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "BrowserProcessHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "BrowserProcessHandler_gen.h"
+	"C"
 )
 
 // BrowserProcessHandlerProxy defines methods required for using BrowserProcessHandler.
@@ -65,6 +68,7 @@ func (d *BrowserProcessHandler) OnContextInitialized() {
 	lookupBrowserProcessHandlerProxy(d.Base()).OnContextInitialized(d)
 }
 
+//nolint:gocritic
 //export gocef_browser_process_handler_on_context_initialized
 func gocef_browser_process_handler_on_context_initialized(self *C.cef_browser_process_handler_t) {
 	me__ := (*BrowserProcessHandler)(self)
@@ -82,6 +86,7 @@ func (d *BrowserProcessHandler) OnBeforeChildProcessLaunch(command_line *Command
 	lookupBrowserProcessHandlerProxy(d.Base()).OnBeforeChildProcessLaunch(d, command_line)
 }
 
+//nolint:gocritic
 //export gocef_browser_process_handler_on_before_child_process_launch
 func gocef_browser_process_handler_on_before_child_process_launch(self *C.cef_browser_process_handler_t, command_line *C.cef_command_line_t) {
 	me__ := (*BrowserProcessHandler)(self)
@@ -99,6 +104,7 @@ func (d *BrowserProcessHandler) OnRenderProcessThreadCreated(extra_info *ListVal
 	lookupBrowserProcessHandlerProxy(d.Base()).OnRenderProcessThreadCreated(d, extra_info)
 }
 
+//nolint:gocritic
 //export gocef_browser_process_handler_on_render_process_thread_created
 func gocef_browser_process_handler_on_render_process_thread_created(self *C.cef_browser_process_handler_t, extra_info *C.cef_list_value_t) {
 	me__ := (*BrowserProcessHandler)(self)
@@ -113,6 +119,7 @@ func (d *BrowserProcessHandler) GetPrintHandler() *PrintHandler {
 	return lookupBrowserProcessHandlerProxy(d.Base()).GetPrintHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_browser_process_handler_get_print_handler
 func gocef_browser_process_handler_get_print_handler(self *C.cef_browser_process_handler_t) *C.cef_print_handler_t {
 	me__ := (*BrowserProcessHandler)(self)
@@ -136,6 +143,7 @@ func (d *BrowserProcessHandler) OnScheduleMessagePumpWork(delay_ms int64) {
 	lookupBrowserProcessHandlerProxy(d.Base()).OnScheduleMessagePumpWork(d, delay_ms)
 }
 
+//nolint:gocritic
 //export gocef_browser_process_handler_on_schedule_message_pump_work
 func gocef_browser_process_handler_on_schedule_message_pump_work(self *C.cef_browser_process_handler_t, delay_ms C.int64) {
 	me__ := (*BrowserProcessHandler)(self)

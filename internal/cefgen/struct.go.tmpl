@@ -1,10 +1,7 @@
-// Code generated - DO NOT EDIT.
-
 package cef
 
+{{- if or .NeedsUnsafeImport (eq .GoName "Settings")}}
 import (
-	// #include "capi_gen.h"
-	"C"
 {{- if eq .GoName "Settings"}}
 	"path/filepath"
 {{- end}}
@@ -15,6 +12,12 @@ import (
 
 	"github.com/richardwilkes/toolbox/xio/fs/paths"
 {{- end}}
+)
+{{- end}}
+
+import (
+	// #include "capi_gen.h"
+	"C"
 )
 
 // {{.GoName}} ({{.Name}} from {{.Position.Src}})

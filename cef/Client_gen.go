@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "Client_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "Client_gen.h"
+	"C"
 )
 
 // ClientProxy defines methods required for using Client.
@@ -72,6 +75,7 @@ func (d *Client) GetAudioHandler() *AudioHandler {
 	return lookupClientProxy(d.Base()).GetAudioHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_audio_handler
 func gocef_client_get_audio_handler(self *C.cef_client_t) *C.cef_audio_handler_t {
 	me__ := (*Client)(self)
@@ -86,6 +90,7 @@ func (d *Client) GetContextMenuHandler() *ContextMenuHandler {
 	return lookupClientProxy(d.Base()).GetContextMenuHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_context_menu_handler
 func gocef_client_get_context_menu_handler(self *C.cef_client_t) *C.cef_context_menu_handler_t {
 	me__ := (*Client)(self)
@@ -100,6 +105,7 @@ func (d *Client) GetDialogHandler() *DialogHandler {
 	return lookupClientProxy(d.Base()).GetDialogHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_dialog_handler
 func gocef_client_get_dialog_handler(self *C.cef_client_t) *C.cef_dialog_handler_t {
 	me__ := (*Client)(self)
@@ -113,6 +119,7 @@ func (d *Client) GetDisplayHandler() *DisplayHandler {
 	return lookupClientProxy(d.Base()).GetDisplayHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_display_handler
 func gocef_client_get_display_handler(self *C.cef_client_t) *C.cef_display_handler_t {
 	me__ := (*Client)(self)
@@ -127,6 +134,7 @@ func (d *Client) GetDownloadHandler() *DownloadHandler {
 	return lookupClientProxy(d.Base()).GetDownloadHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_download_handler
 func gocef_client_get_download_handler(self *C.cef_client_t) *C.cef_download_handler_t {
 	me__ := (*Client)(self)
@@ -140,6 +148,7 @@ func (d *Client) GetDragHandler() *DragHandler {
 	return lookupClientProxy(d.Base()).GetDragHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_drag_handler
 func gocef_client_get_drag_handler(self *C.cef_client_t) *C.cef_drag_handler_t {
 	me__ := (*Client)(self)
@@ -153,6 +162,7 @@ func (d *Client) GetFindHandler() *FindHandler {
 	return lookupClientProxy(d.Base()).GetFindHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_find_handler
 func gocef_client_get_find_handler(self *C.cef_client_t) *C.cef_find_handler_t {
 	me__ := (*Client)(self)
@@ -166,6 +176,7 @@ func (d *Client) GetFocusHandler() *FocusHandler {
 	return lookupClientProxy(d.Base()).GetFocusHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_focus_handler
 func gocef_client_get_focus_handler(self *C.cef_client_t) *C.cef_focus_handler_t {
 	me__ := (*Client)(self)
@@ -180,6 +191,7 @@ func (d *Client) GetJsdialogHandler() *JsdialogHandler {
 	return lookupClientProxy(d.Base()).GetJsdialogHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_jsdialog_handler
 func gocef_client_get_jsdialog_handler(self *C.cef_client_t) *C.cef_jsdialog_handler_t {
 	me__ := (*Client)(self)
@@ -193,6 +205,7 @@ func (d *Client) GetKeyboardHandler() *KeyboardHandler {
 	return lookupClientProxy(d.Base()).GetKeyboardHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_keyboard_handler
 func gocef_client_get_keyboard_handler(self *C.cef_client_t) *C.cef_keyboard_handler_t {
 	me__ := (*Client)(self)
@@ -206,6 +219,7 @@ func (d *Client) GetLifeSpanHandler() *LifeSpanHandler {
 	return lookupClientProxy(d.Base()).GetLifeSpanHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_life_span_handler
 func gocef_client_get_life_span_handler(self *C.cef_client_t) *C.cef_life_span_handler_t {
 	me__ := (*Client)(self)
@@ -219,6 +233,7 @@ func (d *Client) GetLoadHandler() *LoadHandler {
 	return lookupClientProxy(d.Base()).GetLoadHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_load_handler
 func gocef_client_get_load_handler(self *C.cef_client_t) *C.cef_load_handler_t {
 	me__ := (*Client)(self)
@@ -232,6 +247,7 @@ func (d *Client) GetRenderHandler() *RenderHandler {
 	return lookupClientProxy(d.Base()).GetRenderHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_render_handler
 func gocef_client_get_render_handler(self *C.cef_client_t) *C.cef_render_handler_t {
 	me__ := (*Client)(self)
@@ -245,6 +261,7 @@ func (d *Client) GetRequestHandler() *RequestHandler {
 	return lookupClientProxy(d.Base()).GetRequestHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_client_get_request_handler
 func gocef_client_get_request_handler(self *C.cef_client_t) *C.cef_request_handler_t {
 	me__ := (*Client)(self)
@@ -260,6 +277,7 @@ func (d *Client) OnProcessMessageReceived(browser *Browser, source_process Proce
 	return lookupClientProxy(d.Base()).OnProcessMessageReceived(d, browser, source_process, message)
 }
 
+//nolint:gocritic
 //export gocef_client_on_process_message_received
 func gocef_client_on_process_message_received(self *C.cef_client_t, browser *C.cef_browser_t, source_process C.cef_process_id_t, message *C.cef_process_message_t) C.int {
 	me__ := (*Client)(self)

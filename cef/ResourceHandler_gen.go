@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "ResourceHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "ResourceHandler_gen.h"
+	"C"
 )
 
 // ResourceHandlerProxy defines methods required for using ResourceHandler.
@@ -68,6 +71,7 @@ func (d *ResourceHandler) ProcessRequest(request *Request, callback *Callback) i
 	return lookupResourceHandlerProxy(d.Base()).ProcessRequest(d, request, callback)
 }
 
+//nolint:gocritic
 //export gocef_resource_handler_process_request
 func gocef_resource_handler_process_request(self *C.cef_resource_handler_t, request *C.cef_request_t, callback *C.cef_callback_t) C.int {
 	me__ := (*ResourceHandler)(self)
@@ -93,6 +97,7 @@ func (d *ResourceHandler) GetResponseHeaders(response *Response, response_length
 	lookupResourceHandlerProxy(d.Base()).GetResponseHeaders(d, response, response_length, redirectUrl)
 }
 
+//nolint:gocritic
 //export gocef_resource_handler_get_response_headers
 func gocef_resource_handler_get_response_headers(self *C.cef_resource_handler_t, response *C.cef_response_t, response_length *C.int64, redirectUrl *C.cef_string_t) {
 	me__ := (*ResourceHandler)(self)
@@ -111,6 +116,7 @@ func (d *ResourceHandler) ReadResponse(data_out unsafe.Pointer, bytes_to_read in
 	return lookupResourceHandlerProxy(d.Base()).ReadResponse(d, data_out, bytes_to_read, bytes_read, callback)
 }
 
+//nolint:gocritic
 //export gocef_resource_handler_read_response
 func gocef_resource_handler_read_response(self *C.cef_resource_handler_t, data_out unsafe.Pointer, bytes_to_read C.int, bytes_read *C.int, callback *C.cef_callback_t) C.int {
 	me__ := (*ResourceHandler)(self)
@@ -126,6 +132,7 @@ func (d *ResourceHandler) CanGetCookie(cookie *Cookie) int32 {
 	return lookupResourceHandlerProxy(d.Base()).CanGetCookie(d, cookie)
 }
 
+//nolint:gocritic
 //export gocef_resource_handler_can_get_cookie
 func gocef_resource_handler_can_get_cookie(self *C.cef_resource_handler_t, cookie *C.cef_cookie_t) C.int {
 	me__ := (*ResourceHandler)(self)
@@ -141,6 +148,7 @@ func (d *ResourceHandler) CanSetCookie(cookie *Cookie) int32 {
 	return lookupResourceHandlerProxy(d.Base()).CanSetCookie(d, cookie)
 }
 
+//nolint:gocritic
 //export gocef_resource_handler_can_set_cookie
 func gocef_resource_handler_can_set_cookie(self *C.cef_resource_handler_t, cookie *C.cef_cookie_t) C.int {
 	me__ := (*ResourceHandler)(self)
@@ -155,6 +163,7 @@ func (d *ResourceHandler) Cancel() {
 	lookupResourceHandlerProxy(d.Base()).Cancel(d)
 }
 
+//nolint:gocritic
 //export gocef_resource_handler_cancel
 func gocef_resource_handler_cancel(self *C.cef_resource_handler_t) {
 	me__ := (*ResourceHandler)(self)

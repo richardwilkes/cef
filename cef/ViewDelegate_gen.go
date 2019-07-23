@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "ViewDelegate_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "ViewDelegate_gen.h"
+	"C"
 )
 
 // ViewDelegateProxy defines methods required for using ViewDelegate.
@@ -68,6 +71,7 @@ func (d *ViewDelegate) GetPreferredSize(view *View) Size {
 	return lookupViewDelegateProxy(d.Base()).GetPreferredSize(d, view)
 }
 
+//nolint:gocritic
 //export gocef_view_delegate_get_preferred_size
 func gocef_view_delegate_get_preferred_size(self *C.cef_view_delegate_t, view *C.cef_view_t) C.cef_size_t {
 	me__ := (*ViewDelegate)(self)
@@ -84,6 +88,7 @@ func (d *ViewDelegate) GetMinimumSize(view *View) Size {
 	return lookupViewDelegateProxy(d.Base()).GetMinimumSize(d, view)
 }
 
+//nolint:gocritic
 //export gocef_view_delegate_get_minimum_size
 func gocef_view_delegate_get_minimum_size(self *C.cef_view_delegate_t, view *C.cef_view_t) C.cef_size_t {
 	me__ := (*ViewDelegate)(self)
@@ -100,6 +105,7 @@ func (d *ViewDelegate) GetMaximumSize(view *View) Size {
 	return lookupViewDelegateProxy(d.Base()).GetMaximumSize(d, view)
 }
 
+//nolint:gocritic
 //export gocef_view_delegate_get_maximum_size
 func gocef_view_delegate_get_maximum_size(self *C.cef_view_delegate_t, view *C.cef_view_t) C.cef_size_t {
 	me__ := (*ViewDelegate)(self)
@@ -119,6 +125,7 @@ func (d *ViewDelegate) GetHeightForWidth(view *View, width int32) int32 {
 	return lookupViewDelegateProxy(d.Base()).GetHeightForWidth(d, view, width)
 }
 
+//nolint:gocritic
 //export gocef_view_delegate_get_height_for_width
 func gocef_view_delegate_get_height_for_width(self *C.cef_view_delegate_t, view *C.cef_view_t, width C.int) C.int {
 	me__ := (*ViewDelegate)(self)
@@ -136,6 +143,7 @@ func (d *ViewDelegate) OnParentViewChanged(view *View, added int32, parent *View
 	lookupViewDelegateProxy(d.Base()).OnParentViewChanged(d, view, added, parent)
 }
 
+//nolint:gocritic
 //export gocef_view_delegate_on_parent_view_changed
 func gocef_view_delegate_on_parent_view_changed(self *C.cef_view_delegate_t, view *C.cef_view_t, added C.int, parent *C.cef_view_t) {
 	me__ := (*ViewDelegate)(self)
@@ -154,6 +162,7 @@ func (d *ViewDelegate) OnChildViewChanged(view *View, added int32, child *View) 
 	lookupViewDelegateProxy(d.Base()).OnChildViewChanged(d, view, added, child)
 }
 
+//nolint:gocritic
 //export gocef_view_delegate_on_child_view_changed
 func gocef_view_delegate_on_child_view_changed(self *C.cef_view_delegate_t, view *C.cef_view_t, added C.int, child *C.cef_view_t) {
 	me__ := (*ViewDelegate)(self)
@@ -167,6 +176,7 @@ func (d *ViewDelegate) OnFocus(view *View) {
 	lookupViewDelegateProxy(d.Base()).OnFocus(d, view)
 }
 
+//nolint:gocritic
 //export gocef_view_delegate_on_focus
 func gocef_view_delegate_on_focus(self *C.cef_view_delegate_t, view *C.cef_view_t) {
 	me__ := (*ViewDelegate)(self)
@@ -180,6 +190,7 @@ func (d *ViewDelegate) OnBlur(view *View) {
 	lookupViewDelegateProxy(d.Base()).OnBlur(d, view)
 }
 
+//nolint:gocritic
 //export gocef_view_delegate_on_blur
 func gocef_view_delegate_on_blur(self *C.cef_view_delegate_t, view *C.cef_view_t) {
 	me__ := (*ViewDelegate)(self)

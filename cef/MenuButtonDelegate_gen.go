@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "MenuButtonDelegate_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "MenuButtonDelegate_gen.h"
+	"C"
 )
 
 // MenuButtonDelegateProxy defines methods required for using MenuButtonDelegate.
@@ -63,6 +66,7 @@ func (d *MenuButtonDelegate) OnMenuButtonPressed(menu_button *MenuButton, screen
 	lookupMenuButtonDelegateProxy(d.Base().Base().Base()).OnMenuButtonPressed(d, menu_button, screen_point, button_pressed_lock)
 }
 
+//nolint:gocritic
 //export gocef_menu_button_delegate_on_menu_button_pressed
 func gocef_menu_button_delegate_on_menu_button_pressed(self *C.cef_menu_button_delegate_t, menu_button *C.cef_menu_button_t, screen_point *C.cef_point_t, button_pressed_lock *C.cef_menu_button_pressed_lock_t) {
 	me__ := (*MenuButtonDelegate)(self)

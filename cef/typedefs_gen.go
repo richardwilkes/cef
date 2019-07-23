@@ -1,6 +1,8 @@
-// Code generated - DO NOT EDIT.
+// Code created from "typedef.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "include/internal/cef_string.h"
@@ -9,7 +11,6 @@ import (
 	// #include "include/internal/cef_string_multimap.h"
 	// #include "include/internal/cef_types.h"
 	"C"
-	"unsafe"
 )
 
 // Char (cef_char_t from include/internal/cef_string.h)

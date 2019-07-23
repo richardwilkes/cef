@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "StringVisitor_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "StringVisitor_gen.h"
+	"C"
 )
 
 // StringVisitorProxy defines methods required for using StringVisitor.
@@ -58,6 +61,7 @@ func (d *StringVisitor) Visit(string_r string) {
 	lookupStringVisitorProxy(d.Base()).Visit(d, string_r)
 }
 
+//nolint:gocritic
 //export gocef_string_visitor_visit
 func gocef_string_visitor_visit(self *C.cef_string_visitor_t, string_r *C.cef_string_t) {
 	me__ := (*StringVisitor)(self)

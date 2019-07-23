@@ -1,4 +1,4 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.h.tmpl" - don't edit by hand
 
 #ifndef GOCEF_ButtonDelegate_H_
 #define GOCEF_ButtonDelegate_H_

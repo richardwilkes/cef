@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "RenderHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "RenderHandler_gen.h"
+	"C"
 )
 
 // RenderHandlerProxy defines methods required for using RenderHandler.
@@ -75,6 +78,7 @@ func (d *RenderHandler) GetAccessibilityHandler() *AccessibilityHandler {
 	return lookupRenderHandlerProxy(d.Base()).GetAccessibilityHandler(d)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_get_accessibility_handler
 func gocef_render_handler_get_accessibility_handler(self *C.cef_render_handler_t) *C.cef_accessibility_handler_t {
 	me__ := (*RenderHandler)(self)
@@ -90,6 +94,7 @@ func (d *RenderHandler) GetRootScreenRect(browser *Browser, rect *Rect) int32 {
 	return lookupRenderHandlerProxy(d.Base()).GetRootScreenRect(d, browser, rect)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_get_root_screen_rect
 func gocef_render_handler_get_root_screen_rect(self *C.cef_render_handler_t, browser *C.cef_browser_t, rect *C.cef_rect_t) C.int {
 	me__ := (*RenderHandler)(self)
@@ -105,6 +110,7 @@ func (d *RenderHandler) GetViewRect(browser *Browser, rect *Rect) {
 	lookupRenderHandlerProxy(d.Base()).GetViewRect(d, browser, rect)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_get_view_rect
 func gocef_render_handler_get_view_rect(self *C.cef_render_handler_t, browser *C.cef_browser_t, rect *C.cef_rect_t) {
 	me__ := (*RenderHandler)(self)
@@ -120,6 +126,7 @@ func (d *RenderHandler) GetScreenPoint(browser *Browser, viewX, viewY int32, scr
 	return lookupRenderHandlerProxy(d.Base()).GetScreenPoint(d, browser, viewX, viewY, screenX, screenY)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_get_screen_point
 func gocef_render_handler_get_screen_point(self *C.cef_render_handler_t, browser *C.cef_browser_t, viewX C.int, viewY C.int, screenX *C.int, screenY *C.int) C.int {
 	me__ := (*RenderHandler)(self)
@@ -139,6 +146,7 @@ func (d *RenderHandler) GetScreenInfo(browser *Browser, screen_info *ScreenInfo)
 	return lookupRenderHandlerProxy(d.Base()).GetScreenInfo(d, browser, screen_info)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_get_screen_info
 func gocef_render_handler_get_screen_info(self *C.cef_render_handler_t, browser *C.cef_browser_t, screen_info *C.cef_screen_info_t) C.int {
 	me__ := (*RenderHandler)(self)
@@ -154,6 +162,7 @@ func (d *RenderHandler) OnPopupShow(browser *Browser, show int32) {
 	lookupRenderHandlerProxy(d.Base()).OnPopupShow(d, browser, show)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_on_popup_show
 func gocef_render_handler_on_popup_show(self *C.cef_render_handler_t, browser *C.cef_browser_t, show C.int) {
 	me__ := (*RenderHandler)(self)
@@ -168,6 +177,7 @@ func (d *RenderHandler) OnPopupSize(browser *Browser, rect *Rect) {
 	lookupRenderHandlerProxy(d.Base()).OnPopupSize(d, browser, rect)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_on_popup_size
 func gocef_render_handler_on_popup_size(self *C.cef_render_handler_t, browser *C.cef_browser_t, rect *C.cef_rect_t) {
 	me__ := (*RenderHandler)(self)
@@ -190,6 +200,7 @@ func (d *RenderHandler) OnPaint(browser *Browser, type_r PaintElementType, dirty
 	lookupRenderHandlerProxy(d.Base()).OnPaint(d, browser, type_r, dirtyRectsCount, dirtyRects, buffer, width, height)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_on_paint
 func gocef_render_handler_on_paint(self *C.cef_render_handler_t, browser *C.cef_browser_t, type_r C.cef_paint_element_type_t, dirtyRectsCount C.size_t, dirtyRects *C.cef_rect_t, buffer unsafe.Pointer, width C.int, height C.int) {
 	me__ := (*RenderHandler)(self)
@@ -210,6 +221,7 @@ func (d *RenderHandler) OnAcceleratedPaint(browser *Browser, type_r PaintElement
 	lookupRenderHandlerProxy(d.Base()).OnAcceleratedPaint(d, browser, type_r, dirtyRectsCount, dirtyRects, shared_handle)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_on_accelerated_paint
 func gocef_render_handler_on_accelerated_paint(self *C.cef_render_handler_t, browser *C.cef_browser_t, type_r C.cef_paint_element_type_t, dirtyRectsCount C.size_t, dirtyRects *C.cef_rect_t, shared_handle unsafe.Pointer) {
 	me__ := (*RenderHandler)(self)
@@ -225,6 +237,7 @@ func (d *RenderHandler) OnCursorChange(browser *Browser, cursor unsafe.Pointer, 
 	lookupRenderHandlerProxy(d.Base()).OnCursorChange(d, browser, cursor, type_r, custom_cursor_info)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_on_cursor_change
 func gocef_render_handler_on_cursor_change(self *C.cef_render_handler_t, browser *C.cef_browser_t, cursor unsafe.Pointer, type_r C.cef_cursor_type_t, custom_cursor_info *C.cef_cursor_info_t) {
 	me__ := (*RenderHandler)(self)
@@ -250,6 +263,7 @@ func (d *RenderHandler) StartDragging(browser *Browser, drag_data *DragData, all
 	return lookupRenderHandlerProxy(d.Base()).StartDragging(d, browser, drag_data, allowed_ops, x, y)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_start_dragging
 func gocef_render_handler_start_dragging(self *C.cef_render_handler_t, browser *C.cef_browser_t, drag_data *C.cef_drag_data_t, allowed_ops C.cef_drag_operations_mask_t, x C.int, y C.int) C.int {
 	me__ := (*RenderHandler)(self)
@@ -265,6 +279,7 @@ func (d *RenderHandler) UpdateDragCursor(browser *Browser, operation DragOperati
 	lookupRenderHandlerProxy(d.Base()).UpdateDragCursor(d, browser, operation)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_update_drag_cursor
 func gocef_render_handler_update_drag_cursor(self *C.cef_render_handler_t, browser *C.cef_browser_t, operation C.cef_drag_operations_mask_t) {
 	me__ := (*RenderHandler)(self)
@@ -278,6 +293,7 @@ func (d *RenderHandler) OnScrollOffsetChanged(browser *Browser, x, y float64) {
 	lookupRenderHandlerProxy(d.Base()).OnScrollOffsetChanged(d, browser, x, y)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_on_scroll_offset_changed
 func gocef_render_handler_on_scroll_offset_changed(self *C.cef_render_handler_t, browser *C.cef_browser_t, x C.double, y C.double) {
 	me__ := (*RenderHandler)(self)
@@ -293,6 +309,7 @@ func (d *RenderHandler) OnImeCompositionRangeChanged(browser *Browser, selected_
 	lookupRenderHandlerProxy(d.Base()).OnImeCompositionRangeChanged(d, browser, selected_range, character_boundsCount, character_bounds)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_on_ime_composition_range_changed
 func gocef_render_handler_on_ime_composition_range_changed(self *C.cef_render_handler_t, browser *C.cef_browser_t, selected_range *C.cef_range_t, character_boundsCount C.size_t, character_bounds *C.cef_rect_t) {
 	me__ := (*RenderHandler)(self)
@@ -310,6 +327,7 @@ func (d *RenderHandler) OnTextSelectionChanged(browser *Browser, selected_text s
 	lookupRenderHandlerProxy(d.Base()).OnTextSelectionChanged(d, browser, selected_text, selected_range)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_on_text_selection_changed
 func gocef_render_handler_on_text_selection_changed(self *C.cef_render_handler_t, browser *C.cef_browser_t, selected_text *C.cef_string_t, selected_range *C.cef_range_t) {
 	me__ := (*RenderHandler)(self)
@@ -328,6 +346,7 @@ func (d *RenderHandler) OnVirtualKeyboardRequested(browser *Browser, input_mode 
 	lookupRenderHandlerProxy(d.Base()).OnVirtualKeyboardRequested(d, browser, input_mode)
 }
 
+//nolint:gocritic
 //export gocef_render_handler_on_virtual_keyboard_requested
 func gocef_render_handler_on_virtual_keyboard_requested(self *C.cef_render_handler_t, browser *C.cef_browser_t, input_mode C.cef_text_input_mode_t) {
 	me__ := (*RenderHandler)(self)

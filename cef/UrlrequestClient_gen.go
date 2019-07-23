@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "UrlrequestClient_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "UrlrequestClient_gen.h"
+	"C"
 )
 
 // UrlrequestClientProxy defines methods required for using UrlrequestClient.
@@ -66,6 +69,7 @@ func (d *UrlrequestClient) OnRequestComplete(request *Urlrequest) {
 	lookupUrlrequestClientProxy(d.Base()).OnRequestComplete(d, request)
 }
 
+//nolint:gocritic
 //export gocef_urlrequest_client_on_request_complete
 func gocef_urlrequest_client_on_request_complete(self *C.cef_urlrequest_client_t, request *C.cef_urlrequest_t) {
 	me__ := (*UrlrequestClient)(self)
@@ -82,6 +86,7 @@ func (d *UrlrequestClient) OnUploadProgress(request *Urlrequest, current, total 
 	lookupUrlrequestClientProxy(d.Base()).OnUploadProgress(d, request, current, total)
 }
 
+//nolint:gocritic
 //export gocef_urlrequest_client_on_upload_progress
 func gocef_urlrequest_client_on_upload_progress(self *C.cef_urlrequest_client_t, request *C.cef_urlrequest_t, current C.int64, total C.int64) {
 	me__ := (*UrlrequestClient)(self)
@@ -97,6 +102,7 @@ func (d *UrlrequestClient) OnDownloadProgress(request *Urlrequest, current, tota
 	lookupUrlrequestClientProxy(d.Base()).OnDownloadProgress(d, request, current, total)
 }
 
+//nolint:gocritic
 //export gocef_urlrequest_client_on_download_progress
 func gocef_urlrequest_client_on_download_progress(self *C.cef_urlrequest_client_t, request *C.cef_urlrequest_t, current C.int64, total C.int64) {
 	me__ := (*UrlrequestClient)(self)
@@ -112,6 +118,7 @@ func (d *UrlrequestClient) OnDownloadData(request *Urlrequest, data unsafe.Point
 	lookupUrlrequestClientProxy(d.Base()).OnDownloadData(d, request, data, data_length)
 }
 
+//nolint:gocritic
 //export gocef_urlrequest_client_on_download_data
 func gocef_urlrequest_client_on_download_data(self *C.cef_urlrequest_client_t, request *C.cef_urlrequest_t, data unsafe.Pointer, data_length C.size_t) {
 	me__ := (*UrlrequestClient)(self)
@@ -131,6 +138,7 @@ func (d *UrlrequestClient) GetAuthCredentials(isProxy int32, host string, port i
 	return lookupUrlrequestClientProxy(d.Base()).GetAuthCredentials(d, isProxy, host, port, realm, scheme, callback)
 }
 
+//nolint:gocritic
 //export gocef_urlrequest_client_get_auth_credentials
 func gocef_urlrequest_client_get_auth_credentials(self *C.cef_urlrequest_client_t, isProxy C.int, host *C.cef_string_t, port C.int, realm *C.cef_string_t, scheme *C.cef_string_t, callback *C.cef_auth_callback_t) C.int {
 	me__ := (*UrlrequestClient)(self)

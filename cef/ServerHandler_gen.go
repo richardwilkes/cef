@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "ServerHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "ServerHandler_gen.h"
+	"C"
 )
 
 // ServerHandlerProxy defines methods required for using ServerHandler.
@@ -74,6 +77,7 @@ func (d *ServerHandler) OnServerCreated(server *Server) {
 	lookupServerHandlerProxy(d.Base()).OnServerCreated(d, server)
 }
 
+//nolint:gocritic
 //export gocef_server_handler_on_server_created
 func gocef_server_handler_on_server_created(self *C.cef_server_handler_t, server *C.cef_server_t) {
 	me__ := (*ServerHandler)(self)
@@ -90,6 +94,7 @@ func (d *ServerHandler) OnServerDestroyed(server *Server) {
 	lookupServerHandlerProxy(d.Base()).OnServerDestroyed(d, server)
 }
 
+//nolint:gocritic
 //export gocef_server_handler_on_server_destroyed
 func gocef_server_handler_on_server_destroyed(self *C.cef_server_handler_t, server *C.cef_server_t) {
 	me__ := (*ServerHandler)(self)
@@ -105,6 +110,7 @@ func (d *ServerHandler) OnClientConnected(server *Server, connection_id int32) {
 	lookupServerHandlerProxy(d.Base()).OnClientConnected(d, server, connection_id)
 }
 
+//nolint:gocritic
 //export gocef_server_handler_on_client_connected
 func gocef_server_handler_on_client_connected(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int) {
 	me__ := (*ServerHandler)(self)
@@ -124,6 +130,7 @@ func (d *ServerHandler) OnClientDisconnected(server *Server, connection_id int32
 	lookupServerHandlerProxy(d.Base()).OnClientDisconnected(d, server, connection_id)
 }
 
+//nolint:gocritic
 //export gocef_server_handler_on_client_disconnected
 func gocef_server_handler_on_client_disconnected(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int) {
 	me__ := (*ServerHandler)(self)
@@ -141,6 +148,7 @@ func (d *ServerHandler) OnHttpRequest(server *Server, connection_id int32, clien
 	lookupServerHandlerProxy(d.Base()).OnHttpRequest(d, server, connection_id, client_address, request)
 }
 
+//nolint:gocritic
 //export gocef_server_handler_on_http_request
 func gocef_server_handler_on_http_request(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int, client_address *C.cef_string_t, request *C.cef_request_t) {
 	me__ := (*ServerHandler)(self)
@@ -166,6 +174,7 @@ func (d *ServerHandler) OnWebSocketRequest(server *Server, connection_id int32, 
 	lookupServerHandlerProxy(d.Base()).OnWebSocketRequest(d, server, connection_id, client_address, request, callback)
 }
 
+//nolint:gocritic
 //export gocef_server_handler_on_web_socket_request
 func gocef_server_handler_on_web_socket_request(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int, client_address *C.cef_string_t, request *C.cef_request_t, callback *C.cef_callback_t) {
 	me__ := (*ServerHandler)(self)
@@ -182,6 +191,7 @@ func (d *ServerHandler) OnWebSocketConnected(server *Server, connection_id int32
 	lookupServerHandlerProxy(d.Base()).OnWebSocketConnected(d, server, connection_id)
 }
 
+//nolint:gocritic
 //export gocef_server_handler_on_web_socket_connected
 func gocef_server_handler_on_web_socket_connected(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int) {
 	me__ := (*ServerHandler)(self)
@@ -199,6 +209,7 @@ func (d *ServerHandler) OnWebSocketMessage(server *Server, connection_id int32, 
 	lookupServerHandlerProxy(d.Base()).OnWebSocketMessage(d, server, connection_id, data, data_size)
 }
 
+//nolint:gocritic
 //export gocef_server_handler_on_web_socket_message
 func gocef_server_handler_on_web_socket_message(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int, data unsafe.Pointer, data_size C.size_t) {
 	me__ := (*ServerHandler)(self)

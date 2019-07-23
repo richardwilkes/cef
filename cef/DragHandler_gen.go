@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "DragHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "DragHandler_gen.h"
+	"C"
 )
 
 // DragHandlerProxy defines methods required for using DragHandler.
@@ -63,6 +66,7 @@ func (d *DragHandler) OnDragEnter(browser *Browser, dragData *DragData, mask Dra
 	return lookupDragHandlerProxy(d.Base()).OnDragEnter(d, browser, dragData, mask)
 }
 
+//nolint:gocritic
 //export gocef_drag_handler_on_drag_enter
 func gocef_drag_handler_on_drag_enter(self *C.cef_drag_handler_t, browser *C.cef_browser_t, dragData *C.cef_drag_data_t, mask C.cef_drag_operations_mask_t) C.int {
 	me__ := (*DragHandler)(self)
@@ -80,6 +84,7 @@ func (d *DragHandler) OnDraggableRegionsChanged(browser *Browser, regionsCount u
 	lookupDragHandlerProxy(d.Base()).OnDraggableRegionsChanged(d, browser, regionsCount, regions)
 }
 
+//nolint:gocritic
 //export gocef_drag_handler_on_draggable_regions_changed
 func gocef_drag_handler_on_draggable_regions_changed(self *C.cef_drag_handler_t, browser *C.cef_browser_t, regionsCount C.size_t, regions *C.cef_draggable_region_t) {
 	me__ := (*DragHandler)(self)

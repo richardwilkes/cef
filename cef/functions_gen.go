@@ -1,11 +1,12 @@
-// Code generated - DO NOT EDIT.
+// Code created from "funcdef.go.tmpl" - don't edit by hand
 
 package cef
+
+import "unsafe"
 
 import (
 	// #include "capi_gen.h"
 	"C"
-	"unsafe"
 )
 
 // AddCrossOriginWhitelistEntry (cef_add_cross_origin_whitelist_entry from include/capi/cef_origin_whitelist_capi.h)

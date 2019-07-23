@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "SetCookieCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "SetCookieCallback_gen.h"
+	"C"
 )
 
 // SetCookieCallbackProxy defines methods required for using SetCookieCallback.
@@ -60,6 +63,7 @@ func (d *SetCookieCallback) OnComplete(success int32) {
 	lookupSetCookieCallbackProxy(d.Base()).OnComplete(d, success)
 }
 
+//nolint:gocritic
 //export gocef_set_cookie_callback_on_complete
 func gocef_set_cookie_callback_on_complete(self *C.cef_set_cookie_callback_t, success C.int) {
 	me__ := (*SetCookieCallback)(self)

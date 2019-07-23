@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "ExtensionHandler_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "ExtensionHandler_gen.h"
+	"C"
 )
 
 // ExtensionHandlerProxy defines methods required for using ExtensionHandler.
@@ -68,6 +71,7 @@ func (d *ExtensionHandler) OnExtensionLoadFailed(result Errorcode) {
 	lookupExtensionHandlerProxy(d.Base()).OnExtensionLoadFailed(d, result)
 }
 
+//nolint:gocritic
 //export gocef_extension_handler_on_extension_load_failed
 func gocef_extension_handler_on_extension_load_failed(self *C.cef_extension_handler_t, result C.cef_errorcode_t) {
 	me__ := (*ExtensionHandler)(self)
@@ -82,6 +86,7 @@ func (d *ExtensionHandler) OnExtensionLoaded(extension *Extension) {
 	lookupExtensionHandlerProxy(d.Base()).OnExtensionLoaded(d, extension)
 }
 
+//nolint:gocritic
 //export gocef_extension_handler_on_extension_loaded
 func gocef_extension_handler_on_extension_loaded(self *C.cef_extension_handler_t, extension *C.cef_extension_t) {
 	me__ := (*ExtensionHandler)(self)
@@ -95,6 +100,7 @@ func (d *ExtensionHandler) OnExtensionUnloaded(extension *Extension) {
 	lookupExtensionHandlerProxy(d.Base()).OnExtensionUnloaded(d, extension)
 }
 
+//nolint:gocritic
 //export gocef_extension_handler_on_extension_unloaded
 func gocef_extension_handler_on_extension_unloaded(self *C.cef_extension_handler_t, extension *C.cef_extension_t) {
 	me__ := (*ExtensionHandler)(self)
@@ -120,6 +126,7 @@ func (d *ExtensionHandler) OnBeforeBackgroundBrowser(extension *Extension, url s
 	return lookupExtensionHandlerProxy(d.Base()).OnBeforeBackgroundBrowser(d, extension, url, client, settings)
 }
 
+//nolint:gocritic
 //export gocef_extension_handler_on_before_background_browser
 func gocef_extension_handler_on_before_background_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, url *C.cef_string_t, client **C.cef_client_t, settings *C.cef_browser_settings_t) C.int {
 	me__ := (*ExtensionHandler)(self)
@@ -149,6 +156,7 @@ func (d *ExtensionHandler) OnBeforeBrowser(extension *Extension, browser, active
 	return lookupExtensionHandlerProxy(d.Base()).OnBeforeBrowser(d, extension, browser, active_browser, index, url, active, windowInfo, client, settings)
 }
 
+//nolint:gocritic
 //export gocef_extension_handler_on_before_browser
 func gocef_extension_handler_on_before_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, active_browser *C.cef_browser_t, index C.int, url *C.cef_string_t, active C.int, windowInfo *C.cef_window_info_t, client **C.cef_client_t, settings *C.cef_browser_settings_t) C.int {
 	me__ := (*ExtensionHandler)(self)
@@ -173,6 +181,7 @@ func (d *ExtensionHandler) GetActiveBrowser(extension *Extension, browser *Brows
 	return lookupExtensionHandlerProxy(d.Base()).GetActiveBrowser(d, extension, browser, include_incognito)
 }
 
+//nolint:gocritic
 //export gocef_extension_handler_get_active_browser
 func gocef_extension_handler_get_active_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, include_incognito C.int) *C.cef_browser_t {
 	me__ := (*ExtensionHandler)(self)
@@ -191,6 +200,7 @@ func (d *ExtensionHandler) CanAccessBrowser(extension *Extension, browser *Brows
 	return lookupExtensionHandlerProxy(d.Base()).CanAccessBrowser(d, extension, browser, include_incognito, target_browser)
 }
 
+//nolint:gocritic
 //export gocef_extension_handler_can_access_browser
 func gocef_extension_handler_can_access_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, include_incognito C.int, target_browser *C.cef_browser_t) C.int {
 	me__ := (*ExtensionHandler)(self)
@@ -211,6 +221,7 @@ func (d *ExtensionHandler) GetExtensionResource(extension *Extension, browser *B
 	return lookupExtensionHandlerProxy(d.Base()).GetExtensionResource(d, extension, browser, file, callback)
 }
 
+//nolint:gocritic
 //export gocef_extension_handler_get_extension_resource
 func gocef_extension_handler_get_extension_resource(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, file *C.cef_string_t, callback *C.cef_get_extension_resource_callback_t) C.int {
 	me__ := (*ExtensionHandler)(self)

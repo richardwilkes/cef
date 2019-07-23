@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "WebPluginUnstableCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "WebPluginUnstableCallback_gen.h"
+	"C"
 )
 
 // WebPluginUnstableCallbackProxy defines methods required for using WebPluginUnstableCallback.
@@ -61,6 +64,7 @@ func (d *WebPluginUnstableCallback) IsUnstable(path string, unstable int32) {
 	lookupWebPluginUnstableCallbackProxy(d.Base()).IsUnstable(d, path, unstable)
 }
 
+//nolint:gocritic
 //export gocef_web_plugin_unstable_callback_is_unstable
 func gocef_web_plugin_unstable_callback_is_unstable(self *C.cef_web_plugin_unstable_callback_t, path *C.cef_string_t, unstable C.int) {
 	me__ := (*WebPluginUnstableCallback)(self)

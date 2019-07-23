@@ -1,14 +1,17 @@
-// Code generated - DO NOT EDIT.
+// Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
 
 import (
-	// #include "PrintJobCallback_gen.h"
-	"C"
 	"unsafe"
 
 	"github.com/richardwilkes/toolbox/errs"
 	"github.com/richardwilkes/toolbox/log/jot"
+)
+
+import (
+	// #include "PrintJobCallback_gen.h"
+	"C"
 )
 
 // PrintJobCallbackProxy defines methods required for using PrintJobCallback.
@@ -58,6 +61,7 @@ func (d *PrintJobCallback) Cont() {
 	lookupPrintJobCallbackProxy(d.Base()).Cont(d)
 }
 
+//nolint:gocritic
 //export gocef_print_job_callback_cont
 func gocef_print_job_callback_cont(self *C.cef_print_job_callback_t) {
 	me__ := (*PrintJobCallback)(self)
