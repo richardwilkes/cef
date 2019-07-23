@@ -165,6 +165,17 @@ func (c *install) untar(in io.Reader) {
 			case tar.TypeReg:
 				buffer, err := ioutil.ReadAll(r)
 				checkFileError(err, "read archive data for", name)
+				if name == path.Join(installPrefix, "include/capi/cef_resource_request_handler_capi.h") {
+					const includeToRemove = `#include "include/internal/cef_types_wrappers.h"`
+					if i := bytes.Index(buffer, []byte(includeToRemove)); i != -1 {
+						fmt.Printf("    Fixing up %s...\n", name)
+						b := make([]byte, len(buffer)+2)
+						copy(b, buffer[:i])
+						copy(b[i:], []byte{'/', '/'})
+						copy(b[i+2:], buffer[i:])
+						buffer = b
+					}
+				}
 				checkFileError(ioutil.WriteFile(name, buffer, os.FileMode(h.Mode|0444)), "write", name)
 			default:
 				fmt.Printf("Unexpected type flag: %d\n", h.Typeflag)
