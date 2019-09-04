@@ -318,12 +318,8 @@ func IsWebPluginUnstable(path string, callback *WebPluginUnstableCallback) {
 // LabelButtonCreate (cef_label_button_create from include/capi/views/cef_label_button_capi.h)
 // Create a new LabelButton. A |delegate| must be provided to handle the button
 // click. |text| will be shown on the LabelButton and used as the default
-// accessible name. If |with_frame| is true (1) the button will have a visible
-// frame at all times, center alignment, additional padding and a default
-// minimum size of 70x33 DIP. If |with_frame| is false (0) the button will only
-// have a visible frame on hover/press, left alignment, less padding and no
-// default minimum size.
-func LabelButtonCreate(delegate *ButtonDelegate, text string, with_frame int32) *LabelButton {
+// accessible name.
+func LabelButtonCreate(delegate *ButtonDelegate, text string) *LabelButton {
 	var delegate_ *C.cef_button_delegate_t
 	if delegate != nil {
 		delegate_ = delegate.toNative()
@@ -333,7 +329,7 @@ func LabelButtonCreate(delegate *ButtonDelegate, text string, with_frame int32) 
 	defer func() {
 		C.cef_string_userfree_free(text_)
 	}()
-	return (*LabelButton)(C.cef_label_button_create(delegate_, (*C.cef_string_t)(text_), C.int(with_frame)))
+	return (*LabelButton)(C.cef_label_button_create(delegate_, (*C.cef_string_t)(text_)))
 }
 
 // ListValueCreate (cef_list_value_create from include/capi/cef_values_capi.h)
@@ -350,7 +346,7 @@ func ListValueCreate() *ListValue {
 // default minimum size of 70x33 DIP. If |with_frame| is false (0) the button
 // will only have a visible frame on hover/press, left alignment, less padding
 // and no default minimum size.
-func MenuButtonCreate(delegate *MenuButtonDelegate, text string, with_frame int32) *MenuButton {
+func MenuButtonCreate(delegate *MenuButtonDelegate, text string) *MenuButton {
 	var delegate_ *C.cef_menu_button_delegate_t
 	if delegate != nil {
 		delegate_ = delegate.toNative()
@@ -360,7 +356,7 @@ func MenuButtonCreate(delegate *MenuButtonDelegate, text string, with_frame int3
 	defer func() {
 		C.cef_string_userfree_free(text_)
 	}()
-	return (*MenuButton)(C.cef_menu_button_create(delegate_, (*C.cef_string_t)(text_), C.int(with_frame)))
+	return (*MenuButton)(C.cef_menu_button_create(delegate_, (*C.cef_string_t)(text_)))
 }
 
 // MenuModelCreate (cef_menu_model_create from include/capi/cef_menu_model_capi.h)

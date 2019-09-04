@@ -41,6 +41,11 @@ type Settings struct {
 	// Framework.framework" in the top-level app bundle. Also configurable using
 	// the "framework-dir-path" command-line switch.
 	FrameworkDirPath string
+	// MainBundlePath (main_bundle_path)
+	// The path to the main bundle on macOS. If this value is empty then it
+	// defaults to the top-level app bundle. Also configurable using
+	// the "main-bundle-path" command-line switch.
+	MainBundlePath string
 	// MultiThreadedMessageLoop (multi_threaded_message_loop)
 	// Set to true (1) to have the browser process message loop run in a separate
 	// thread. If false (0) than the CefDoMessageLoopWork() function must be
@@ -70,7 +75,7 @@ type Settings struct {
 	CommandLineArgsDisabled int32
 	// CachePath (cache_path)
 	// The location where data for the global browser cache will be stored on
-	// disk. In non-empty this must be either equal to or a child directory of
+	// disk. If non-empty this must be either equal to or a child directory of
 	// CefSettings.root_cache_path. If empty then browsers will be created in
 	// "incognito mode" where in-memory caches are used for storage and no data is
 	// persisted to disk. HTML5 databases such as localStorage will only persist
@@ -252,6 +257,7 @@ func (d *Settings) toNative(native *C.cef_settings_t) *C.cef_settings_t {
 	native.no_sandbox = C.int(d.NoSandbox)
 	setCEFStr(d.BrowserSubprocessPath, &native.browser_subprocess_path)
 	setCEFStr(d.FrameworkDirPath, &native.framework_dir_path)
+	setCEFStr(d.MainBundlePath, &native.main_bundle_path)
 	native.multi_threaded_message_loop = C.int(d.MultiThreadedMessageLoop)
 	native.external_message_pump = C.int(d.ExternalMessagePump)
 	native.windowless_rendering_enabled = C.int(d.WindowlessRenderingEnabled)
@@ -294,6 +300,7 @@ func (n *C.cef_settings_t) intoGo(d *Settings) {
 	d.NoSandbox = int32(n.no_sandbox)
 	d.BrowserSubprocessPath = cefstrToString(&n.browser_subprocess_path)
 	d.FrameworkDirPath = cefstrToString(&n.framework_dir_path)
+	d.MainBundlePath = cefstrToString(&n.main_bundle_path)
 	d.MultiThreadedMessageLoop = int32(n.multi_threaded_message_loop)
 	d.ExternalMessagePump = int32(n.external_message_pump)
 	d.WindowlessRenderingEnabled = int32(n.windowless_rendering_enabled)

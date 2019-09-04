@@ -1,3 +1,5 @@
 module github.com/richardwilkes/cef
 
-require github.com/richardwilkes/toolbox v1.9.3
+go 1.13
+
+require github.com/richardwilkes/toolbox v1.12.0
