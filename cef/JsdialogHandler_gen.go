@@ -16,8 +16,8 @@ import (
 
 // JsdialogHandlerProxy defines methods required for using JsdialogHandler.
 type JsdialogHandlerProxy interface {
-	OnJsdialog(self *JsdialogHandler, browser *Browser, origin_url string, dialog_type JsdialogType, message_text, default_prompt_text string, callback *JsdialogCallback, suppress_message *int32) int32
-	OnBeforeUnloadDialog(self *JsdialogHandler, browser *Browser, message_text string, is_reload int32, callback *JsdialogCallback) int32
+	OnJsdialog(self *JsdialogHandler, browser *Browser, originURL string, dialogType JsdialogType, messageText, defaultPromptText string, callback *JsdialogCallback, suppressMessage *int32) int32
+	OnBeforeUnloadDialog(self *JsdialogHandler, browser *Browser, messageText string, isReload int32, callback *JsdialogCallback) int32
 	OnResetDialogState(self *JsdialogHandler, browser *Browser)
 	OnDialogClosed(self *JsdialogHandler, browser *Browser)
 }
@@ -75,19 +75,19 @@ func (d *JsdialogHandler) Base() *BaseRefCounted {
 // Custom dialogs may be either modal or modeless. If a custom dialog is used
 // the application must execute |callback| once the custom dialog is
 // dismissed.
-func (d *JsdialogHandler) OnJsdialog(browser *Browser, origin_url string, dialog_type JsdialogType, message_text, default_prompt_text string, callback *JsdialogCallback, suppress_message *int32) int32 {
-	return lookupJsdialogHandlerProxy(d.Base()).OnJsdialog(d, browser, origin_url, dialog_type, message_text, default_prompt_text, callback, suppress_message)
+func (d *JsdialogHandler) OnJsdialog(browser *Browser, originURL string, dialogType JsdialogType, messageText, defaultPromptText string, callback *JsdialogCallback, suppressMessage *int32) int32 {
+	return lookupJsdialogHandlerProxy(d.Base()).OnJsdialog(d, browser, originURL, dialogType, messageText, defaultPromptText, callback, suppressMessage)
 }
 
 //nolint:gocritic
 //export gocef_jsdialog_handler_on_jsdialog
-func gocef_jsdialog_handler_on_jsdialog(self *C.cef_jsdialog_handler_t, browser *C.cef_browser_t, origin_url *C.cef_string_t, dialog_type C.cef_jsdialog_type_t, message_text *C.cef_string_t, default_prompt_text *C.cef_string_t, callback *C.cef_jsdialog_callback_t, suppress_message *C.int) C.int {
+func gocef_jsdialog_handler_on_jsdialog(self *C.cef_jsdialog_handler_t, browser *C.cef_browser_t, originURL *C.cef_string_t, dialogType C.cef_jsdialog_type_t, messageText *C.cef_string_t, defaultPromptText *C.cef_string_t, callback *C.cef_jsdialog_callback_t, suppressMessage *C.int) C.int {
 	me__ := (*JsdialogHandler)(self)
 	proxy__ := lookupJsdialogHandlerProxy(me__.Base())
-	origin_url_ := cefstrToString(origin_url)
-	message_text_ := cefstrToString(message_text)
-	default_prompt_text_ := cefstrToString(default_prompt_text)
-	return C.int(proxy__.OnJsdialog(me__, (*Browser)(browser), origin_url_, JsdialogType(dialog_type), message_text_, default_prompt_text_, (*JsdialogCallback)(callback), (*int32)(suppress_message)))
+	originURL_ := cefstrToString(originURL)
+	messageText_ := cefstrToString(messageText)
+	defaultPromptText_ := cefstrToString(defaultPromptText)
+	return C.int(proxy__.OnJsdialog(me__, (*Browser)(browser), originURL_, JsdialogType(dialogType), messageText_, defaultPromptText_, (*JsdialogCallback)(callback), (*int32)(suppressMessage)))
 }
 
 // OnBeforeUnloadDialog (on_before_unload_dialog)
@@ -97,17 +97,17 @@ func gocef_jsdialog_handler_on_jsdialog(self *C.cef_jsdialog_handler_t, browser 
 // immediately. Custom dialogs may be either modal or modeless. If a custom
 // dialog is used the application must execute |callback| once the custom
 // dialog is dismissed.
-func (d *JsdialogHandler) OnBeforeUnloadDialog(browser *Browser, message_text string, is_reload int32, callback *JsdialogCallback) int32 {
-	return lookupJsdialogHandlerProxy(d.Base()).OnBeforeUnloadDialog(d, browser, message_text, is_reload, callback)
+func (d *JsdialogHandler) OnBeforeUnloadDialog(browser *Browser, messageText string, isReload int32, callback *JsdialogCallback) int32 {
+	return lookupJsdialogHandlerProxy(d.Base()).OnBeforeUnloadDialog(d, browser, messageText, isReload, callback)
 }
 
 //nolint:gocritic
 //export gocef_jsdialog_handler_on_before_unload_dialog
-func gocef_jsdialog_handler_on_before_unload_dialog(self *C.cef_jsdialog_handler_t, browser *C.cef_browser_t, message_text *C.cef_string_t, is_reload C.int, callback *C.cef_jsdialog_callback_t) C.int {
+func gocef_jsdialog_handler_on_before_unload_dialog(self *C.cef_jsdialog_handler_t, browser *C.cef_browser_t, messageText *C.cef_string_t, isReload C.int, callback *C.cef_jsdialog_callback_t) C.int {
 	me__ := (*JsdialogHandler)(self)
 	proxy__ := lookupJsdialogHandlerProxy(me__.Base())
-	message_text_ := cefstrToString(message_text)
-	return C.int(proxy__.OnBeforeUnloadDialog(me__, (*Browser)(browser), message_text_, int32(is_reload), (*JsdialogCallback)(callback)))
+	messageText_ := cefstrToString(messageText)
+	return C.int(proxy__.OnBeforeUnloadDialog(me__, (*Browser)(browser), messageText_, int32(isReload), (*JsdialogCallback)(callback)))
 }
 
 // OnResetDialogState (on_reset_dialog_state)

@@ -16,7 +16,7 @@ import (
 
 // DeleteCookiesCallbackProxy defines methods required for using DeleteCookiesCallback.
 type DeleteCookiesCallbackProxy interface {
-	OnComplete(self *DeleteCookiesCallback, num_deleted int32)
+	OnComplete(self *DeleteCookiesCallback, numDeleted int32)
 }
 
 // DeleteCookiesCallback (cef_delete_cookies_callback_t from include/capi/cef_cookie_capi.h)
@@ -59,14 +59,14 @@ func (d *DeleteCookiesCallback) Base() *BaseRefCounted {
 // OnComplete (on_complete)
 // Method that will be called upon completion. |num_deleted| will be the
 // number of cookies that were deleted.
-func (d *DeleteCookiesCallback) OnComplete(num_deleted int32) {
-	lookupDeleteCookiesCallbackProxy(d.Base()).OnComplete(d, num_deleted)
+func (d *DeleteCookiesCallback) OnComplete(numDeleted int32) {
+	lookupDeleteCookiesCallbackProxy(d.Base()).OnComplete(d, numDeleted)
 }
 
 //nolint:gocritic
 //export gocef_delete_cookies_callback_on_complete
-func gocef_delete_cookies_callback_on_complete(self *C.cef_delete_cookies_callback_t, num_deleted C.int) {
+func gocef_delete_cookies_callback_on_complete(self *C.cef_delete_cookies_callback_t, numDeleted C.int) {
 	me__ := (*DeleteCookiesCallback)(self)
 	proxy__ := lookupDeleteCookiesCallbackProxy(me__.Base())
-	proxy__.OnComplete(me__, int32(num_deleted))
+	proxy__.OnComplete(me__, int32(numDeleted))
 }

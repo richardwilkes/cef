@@ -40,10 +40,10 @@ import (
 	// int gocef_v8value_set_value_byindex(cef_v8value_t * self, int index, cef_v8value_t * value, int (CEF_CALLBACK *callback__)(cef_v8value_t *, int, cef_v8value_t *)) { return callback__(self, index, value); }
 	// int gocef_v8value_set_value_byaccessor(cef_v8value_t * self, cef_string_t * key, cef_v8_accesscontrol_t settings, cef_v8_propertyattribute_t attribute, int (CEF_CALLBACK *callback__)(cef_v8value_t *, cef_string_t *, cef_v8_accesscontrol_t, cef_v8_propertyattribute_t)) { return callback__(self, key, settings, attribute); }
 	// int gocef_v8value_get_keys(cef_v8value_t * self, cef_string_list_t keys, int (CEF_CALLBACK *callback__)(cef_v8value_t *, cef_string_list_t)) { return callback__(self, keys); }
-	// int gocef_v8value_set_user_data(cef_v8value_t * self, cef_base_ref_counted_t * user_data, int (CEF_CALLBACK *callback__)(cef_v8value_t *, cef_base_ref_counted_t *)) { return callback__(self, user_data); }
+	// int gocef_v8value_set_user_data(cef_v8value_t * self, cef_base_ref_counted_t * userData, int (CEF_CALLBACK *callback__)(cef_v8value_t *, cef_base_ref_counted_t *)) { return callback__(self, userData); }
 	// cef_base_ref_counted_t * gocef_v8value_get_user_data(cef_v8value_t * self, cef_base_ref_counted_t * (CEF_CALLBACK *callback__)(cef_v8value_t *)) { return callback__(self); }
 	// int gocef_v8value_get_externally_allocated_memory(cef_v8value_t * self, int (CEF_CALLBACK *callback__)(cef_v8value_t *)) { return callback__(self); }
-	// int gocef_v8value_adjust_externally_allocated_memory(cef_v8value_t * self, int change_in_bytes, int (CEF_CALLBACK *callback__)(cef_v8value_t *, int)) { return callback__(self, change_in_bytes); }
+	// int gocef_v8value_adjust_externally_allocated_memory(cef_v8value_t * self, int changeInBytes, int (CEF_CALLBACK *callback__)(cef_v8value_t *, int)) { return callback__(self, changeInBytes); }
 	// int gocef_v8value_get_array_length(cef_v8value_t * self, int (CEF_CALLBACK *callback__)(cef_v8value_t *)) { return callback__(self); }
 	// cef_v8array_buffer_release_callback_t * gocef_v8value_get_array_buffer_release_callback(cef_v8value_t * self, cef_v8array_buffer_release_callback_t * (CEF_CALLBACK *callback__)(cef_v8value_t *)) { return callback__(self); }
 	// int gocef_v8value_neuter_array_buffer(cef_v8value_t * self, int (CEF_CALLBACK *callback__)(cef_v8value_t *)) { return callback__(self); }
@@ -350,8 +350,8 @@ func (d *V8value) GetKeys(keys StringList) int32 {
 // Sets the user data for this object and returns true (1) on success. Returns
 // false (0) if this function is called incorrectly. This function can only be
 // called on user created objects.
-func (d *V8value) SetUserData(user_data *BaseRefCounted) int32 {
-	return int32(C.gocef_v8value_set_user_data(d.toNative(), user_data.toNative(), d.set_user_data))
+func (d *V8value) SetUserData(userData *BaseRefCounted) int32 {
+	return int32(C.gocef_v8value_set_user_data(d.toNative(), userData.toNative(), d.set_user_data))
 }
 
 // GetUserData (get_user_data)
@@ -377,8 +377,8 @@ func (d *V8value) GetExternallyAllocatedMemory() int32 {
 // |change_in_bytes| specifies the number of bytes to adjust by. This function
 // returns the number of bytes associated with the object after the
 // adjustment. This function can only be called on user created objects.
-func (d *V8value) AdjustExternallyAllocatedMemory(change_in_bytes int32) int32 {
-	return int32(C.gocef_v8value_adjust_externally_allocated_memory(d.toNative(), C.int(change_in_bytes), d.adjust_externally_allocated_memory))
+func (d *V8value) AdjustExternallyAllocatedMemory(changeInBytes int32) int32 {
+	return int32(C.gocef_v8value_adjust_externally_allocated_memory(d.toNative(), C.int(changeInBytes), d.adjust_externally_allocated_memory))
 }
 
 // GetArrayLength (get_array_length)

@@ -79,7 +79,7 @@ func (s *structDef) Trampolines() []string {
 
 func translateStructTypeName(name string) string {
 	if strings.HasPrefix(name, "cef_") && strings.HasSuffix(name, "_t") {
-		name = translateConstantName(name[4 : len(name)-2])
+		name = translateName(name[4 : len(name)-2])
 	}
 	return name
 }

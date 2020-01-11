@@ -20,18 +20,18 @@ type RenderHandlerProxy interface {
 	GetRootScreenRect(self *RenderHandler, browser *Browser, rect *Rect) int32
 	GetViewRect(self *RenderHandler, browser *Browser, rect *Rect)
 	GetScreenPoint(self *RenderHandler, browser *Browser, viewX, viewY int32, screenX, screenY *int32) int32
-	GetScreenInfo(self *RenderHandler, browser *Browser, screen_info *ScreenInfo) int32
+	GetScreenInfo(self *RenderHandler, browser *Browser, screenInfo *ScreenInfo) int32
 	OnPopupShow(self *RenderHandler, browser *Browser, show int32)
 	OnPopupSize(self *RenderHandler, browser *Browser, rect *Rect)
 	OnPaint(self *RenderHandler, browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, buffer unsafe.Pointer, width, height int32)
-	OnAcceleratedPaint(self *RenderHandler, browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, shared_handle unsafe.Pointer)
-	OnCursorChange(self *RenderHandler, browser *Browser, cursor unsafe.Pointer, type_r CursorType, custom_cursor_info *CursorInfo)
-	StartDragging(self *RenderHandler, browser *Browser, drag_data *DragData, allowed_ops DragOperationsMask, x, y int32) int32
+	OnAcceleratedPaint(self *RenderHandler, browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, sharedHandle unsafe.Pointer)
+	OnCursorChange(self *RenderHandler, browser *Browser, cursor unsafe.Pointer, type_r CursorType, customCursorInfo *CursorInfo)
+	StartDragging(self *RenderHandler, browser *Browser, dragData *DragData, allowedOps DragOperationsMask, x, y int32) int32
 	UpdateDragCursor(self *RenderHandler, browser *Browser, operation DragOperationsMask)
 	OnScrollOffsetChanged(self *RenderHandler, browser *Browser, x, y float64)
-	OnImeCompositionRangeChanged(self *RenderHandler, browser *Browser, selected_range *Range, character_boundsCount uint64, character_bounds *Rect)
-	OnTextSelectionChanged(self *RenderHandler, browser *Browser, selected_text string, selected_range *Range)
-	OnVirtualKeyboardRequested(self *RenderHandler, browser *Browser, input_mode TextInputMode)
+	OnImeCompositionRangeChanged(self *RenderHandler, browser *Browser, selectedRange *Range, characterBoundsCount uint64, characterBounds *Rect)
+	OnTextSelectionChanged(self *RenderHandler, browser *Browser, selectedText string, selectedRange *Range)
+	OnVirtualKeyboardRequested(self *RenderHandler, browser *Browser, inputMode TextInputMode)
 }
 
 // RenderHandler (cef_render_handler_t from include/capi/cef_render_handler_capi.h)
@@ -142,17 +142,17 @@ func gocef_render_handler_get_screen_point(self *C.cef_render_handler_t, browser
 // If the screen info rectangle is left NULL the rectangle from GetViewRect
 // will be used. If the rectangle is still NULL or invalid popups may not be
 // drawn correctly.
-func (d *RenderHandler) GetScreenInfo(browser *Browser, screen_info *ScreenInfo) int32 {
-	return lookupRenderHandlerProxy(d.Base()).GetScreenInfo(d, browser, screen_info)
+func (d *RenderHandler) GetScreenInfo(browser *Browser, screenInfo *ScreenInfo) int32 {
+	return lookupRenderHandlerProxy(d.Base()).GetScreenInfo(d, browser, screenInfo)
 }
 
 //nolint:gocritic
 //export gocef_render_handler_get_screen_info
-func gocef_render_handler_get_screen_info(self *C.cef_render_handler_t, browser *C.cef_browser_t, screen_info *C.cef_screen_info_t) C.int {
+func gocef_render_handler_get_screen_info(self *C.cef_render_handler_t, browser *C.cef_browser_t, screenInfo *C.cef_screen_info_t) C.int {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	screen_info_ := screen_info.toGo()
-	return C.int(proxy__.GetScreenInfo(me__, (*Browser)(browser), screen_info_))
+	screenInfo_ := screenInfo.toGo()
+	return C.int(proxy__.GetScreenInfo(me__, (*Browser)(browser), screenInfo_))
 }
 
 // OnPopupShow (on_popup_show)
@@ -217,33 +217,33 @@ func gocef_render_handler_on_paint(self *C.cef_render_handler_t, browser *C.cef_
 // can be accessed via ID3D11Device using the OpenSharedResource function.
 // This function is only called when cef_window_tInfo::shared_texture_enabled
 // is set to true (1), and is currently only supported on Windows.
-func (d *RenderHandler) OnAcceleratedPaint(browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, shared_handle unsafe.Pointer) {
-	lookupRenderHandlerProxy(d.Base()).OnAcceleratedPaint(d, browser, type_r, dirtyRectsCount, dirtyRects, shared_handle)
+func (d *RenderHandler) OnAcceleratedPaint(browser *Browser, type_r PaintElementType, dirtyRectsCount uint64, dirtyRects *Rect, sharedHandle unsafe.Pointer) {
+	lookupRenderHandlerProxy(d.Base()).OnAcceleratedPaint(d, browser, type_r, dirtyRectsCount, dirtyRects, sharedHandle)
 }
 
 //nolint:gocritic
 //export gocef_render_handler_on_accelerated_paint
-func gocef_render_handler_on_accelerated_paint(self *C.cef_render_handler_t, browser *C.cef_browser_t, type_r C.cef_paint_element_type_t, dirtyRectsCount C.size_t, dirtyRects *C.cef_rect_t, shared_handle unsafe.Pointer) {
+func gocef_render_handler_on_accelerated_paint(self *C.cef_render_handler_t, browser *C.cef_browser_t, type_r C.cef_paint_element_type_t, dirtyRectsCount C.size_t, dirtyRects *C.cef_rect_t, sharedHandle unsafe.Pointer) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
 	dirtyRects_ := dirtyRects.toGo()
-	proxy__.OnAcceleratedPaint(me__, (*Browser)(browser), PaintElementType(type_r), uint64(dirtyRectsCount), dirtyRects_, shared_handle)
+	proxy__.OnAcceleratedPaint(me__, (*Browser)(browser), PaintElementType(type_r), uint64(dirtyRectsCount), dirtyRects_, sharedHandle)
 }
 
 // OnCursorChange (on_cursor_change)
 // Called when the browser's cursor has changed. If |type| is CT_CUSTOM then
 // |custom_cursor_info| will be populated with the custom cursor information.
-func (d *RenderHandler) OnCursorChange(browser *Browser, cursor unsafe.Pointer, type_r CursorType, custom_cursor_info *CursorInfo) {
-	lookupRenderHandlerProxy(d.Base()).OnCursorChange(d, browser, cursor, type_r, custom_cursor_info)
+func (d *RenderHandler) OnCursorChange(browser *Browser, cursor unsafe.Pointer, type_r CursorType, customCursorInfo *CursorInfo) {
+	lookupRenderHandlerProxy(d.Base()).OnCursorChange(d, browser, cursor, type_r, customCursorInfo)
 }
 
 //nolint:gocritic
 //export gocef_render_handler_on_cursor_change
-func gocef_render_handler_on_cursor_change(self *C.cef_render_handler_t, browser *C.cef_browser_t, cursor unsafe.Pointer, type_r C.cef_cursor_type_t, custom_cursor_info *C.cef_cursor_info_t) {
+func gocef_render_handler_on_cursor_change(self *C.cef_render_handler_t, browser *C.cef_browser_t, cursor unsafe.Pointer, type_r C.cef_cursor_type_t, customCursorInfo *C.cef_cursor_info_t) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	custom_cursor_info_ := custom_cursor_info.toGo()
-	proxy__.OnCursorChange(me__, (*Browser)(browser), cursor, CursorType(type_r), custom_cursor_info_)
+	customCursorInfo_ := customCursorInfo.toGo()
+	proxy__.OnCursorChange(me__, (*Browser)(browser), cursor, CursorType(type_r), customCursorInfo_)
 }
 
 // StartDragging (start_dragging)
@@ -259,16 +259,16 @@ func gocef_render_handler_on_cursor_change(self *C.cef_render_handler_t, browser
 // cef_browser_host_t::DragSourceEndedAt and DragSourceSystemDragEnded either
 // synchronously or asynchronously to inform the web view that the drag
 // operation has ended.
-func (d *RenderHandler) StartDragging(browser *Browser, drag_data *DragData, allowed_ops DragOperationsMask, x, y int32) int32 {
-	return lookupRenderHandlerProxy(d.Base()).StartDragging(d, browser, drag_data, allowed_ops, x, y)
+func (d *RenderHandler) StartDragging(browser *Browser, dragData *DragData, allowedOps DragOperationsMask, x, y int32) int32 {
+	return lookupRenderHandlerProxy(d.Base()).StartDragging(d, browser, dragData, allowedOps, x, y)
 }
 
 //nolint:gocritic
 //export gocef_render_handler_start_dragging
-func gocef_render_handler_start_dragging(self *C.cef_render_handler_t, browser *C.cef_browser_t, drag_data *C.cef_drag_data_t, allowed_ops C.cef_drag_operations_mask_t, x C.int, y C.int) C.int {
+func gocef_render_handler_start_dragging(self *C.cef_render_handler_t, browser *C.cef_browser_t, dragData *C.cef_drag_data_t, allowedOps C.cef_drag_operations_mask_t, x C.int, y C.int) C.int {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	return C.int(proxy__.StartDragging(me__, (*Browser)(browser), (*DragData)(drag_data), DragOperationsMask(allowed_ops), int32(x), int32(y)))
+	return C.int(proxy__.StartDragging(me__, (*Browser)(browser), (*DragData)(dragData), DragOperationsMask(allowedOps), int32(x), int32(y)))
 }
 
 // UpdateDragCursor (update_drag_cursor)
@@ -305,36 +305,36 @@ func gocef_render_handler_on_scroll_offset_changed(self *C.cef_render_handler_t,
 // Called when the IME composition range has changed. |selected_range| is the
 // range of characters that have been selected. |character_bounds| is the
 // bounds of each character in view coordinates.
-func (d *RenderHandler) OnImeCompositionRangeChanged(browser *Browser, selected_range *Range, character_boundsCount uint64, character_bounds *Rect) {
-	lookupRenderHandlerProxy(d.Base()).OnImeCompositionRangeChanged(d, browser, selected_range, character_boundsCount, character_bounds)
+func (d *RenderHandler) OnImeCompositionRangeChanged(browser *Browser, selectedRange *Range, characterBoundsCount uint64, characterBounds *Rect) {
+	lookupRenderHandlerProxy(d.Base()).OnImeCompositionRangeChanged(d, browser, selectedRange, characterBoundsCount, characterBounds)
 }
 
 //nolint:gocritic
 //export gocef_render_handler_on_ime_composition_range_changed
-func gocef_render_handler_on_ime_composition_range_changed(self *C.cef_render_handler_t, browser *C.cef_browser_t, selected_range *C.cef_range_t, character_boundsCount C.size_t, character_bounds *C.cef_rect_t) {
+func gocef_render_handler_on_ime_composition_range_changed(self *C.cef_render_handler_t, browser *C.cef_browser_t, selectedRange *C.cef_range_t, characterBoundsCount C.size_t, characterBounds *C.cef_rect_t) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	selected_range_ := selected_range.toGo()
-	character_bounds_ := character_bounds.toGo()
-	proxy__.OnImeCompositionRangeChanged(me__, (*Browser)(browser), selected_range_, uint64(character_boundsCount), character_bounds_)
+	selectedRange_ := selectedRange.toGo()
+	characterBounds_ := characterBounds.toGo()
+	proxy__.OnImeCompositionRangeChanged(me__, (*Browser)(browser), selectedRange_, uint64(characterBoundsCount), characterBounds_)
 }
 
 // OnTextSelectionChanged (on_text_selection_changed)
 // Called when text selection has changed for the specified |browser|.
 // |selected_text| is the currently selected text and |selected_range| is the
 // character range.
-func (d *RenderHandler) OnTextSelectionChanged(browser *Browser, selected_text string, selected_range *Range) {
-	lookupRenderHandlerProxy(d.Base()).OnTextSelectionChanged(d, browser, selected_text, selected_range)
+func (d *RenderHandler) OnTextSelectionChanged(browser *Browser, selectedText string, selectedRange *Range) {
+	lookupRenderHandlerProxy(d.Base()).OnTextSelectionChanged(d, browser, selectedText, selectedRange)
 }
 
 //nolint:gocritic
 //export gocef_render_handler_on_text_selection_changed
-func gocef_render_handler_on_text_selection_changed(self *C.cef_render_handler_t, browser *C.cef_browser_t, selected_text *C.cef_string_t, selected_range *C.cef_range_t) {
+func gocef_render_handler_on_text_selection_changed(self *C.cef_render_handler_t, browser *C.cef_browser_t, selectedText *C.cef_string_t, selectedRange *C.cef_range_t) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	selected_text_ := cefstrToString(selected_text)
-	selected_range_ := selected_range.toGo()
-	proxy__.OnTextSelectionChanged(me__, (*Browser)(browser), selected_text_, selected_range_)
+	selectedText_ := cefstrToString(selectedText)
+	selectedRange_ := selectedRange.toGo()
+	proxy__.OnTextSelectionChanged(me__, (*Browser)(browser), selectedText_, selectedRange_)
 }
 
 // OnVirtualKeyboardRequested (on_virtual_keyboard_requested)
@@ -342,14 +342,14 @@ func gocef_render_handler_on_text_selection_changed(self *C.cef_render_handler_t
 // specified |browser|. |input_mode| specifies what kind of keyboard should be
 // opened. If |input_mode| is CEF_TEXT_INPUT_MODE_NONE, any existing keyboard
 // for this browser should be hidden.
-func (d *RenderHandler) OnVirtualKeyboardRequested(browser *Browser, input_mode TextInputMode) {
-	lookupRenderHandlerProxy(d.Base()).OnVirtualKeyboardRequested(d, browser, input_mode)
+func (d *RenderHandler) OnVirtualKeyboardRequested(browser *Browser, inputMode TextInputMode) {
+	lookupRenderHandlerProxy(d.Base()).OnVirtualKeyboardRequested(d, browser, inputMode)
 }
 
 //nolint:gocritic
 //export gocef_render_handler_on_virtual_keyboard_requested
-func gocef_render_handler_on_virtual_keyboard_requested(self *C.cef_render_handler_t, browser *C.cef_browser_t, input_mode C.cef_text_input_mode_t) {
+func gocef_render_handler_on_virtual_keyboard_requested(self *C.cef_render_handler_t, browser *C.cef_browser_t, inputMode C.cef_text_input_mode_t) {
 	me__ := (*RenderHandler)(self)
 	proxy__ := lookupRenderHandlerProxy(me__.Base())
-	proxy__.OnVirtualKeyboardRequested(me__, (*Browser)(browser), TextInputMode(input_mode))
+	proxy__.OnVirtualKeyboardRequested(me__, (*Browser)(browser), TextInputMode(inputMode))
 }

@@ -16,7 +16,7 @@ import (
 
 // ResolveCallbackProxy defines methods required for using ResolveCallback.
 type ResolveCallbackProxy interface {
-	OnResolveCompleted(self *ResolveCallback, result Errorcode, resolved_ips StringList)
+	OnResolveCompleted(self *ResolveCallback, result Errorcode, resolvedIps StringList)
 }
 
 // ResolveCallback (cef_resolve_callback_t from include/capi/cef_request_context_capi.h)
@@ -59,14 +59,14 @@ func (d *ResolveCallback) Base() *BaseRefCounted {
 // Called on the UI thread after the ResolveHost request has completed.
 // |result| will be the result code. |resolved_ips| will be the list of
 // resolved IP addresses or NULL if the resolution failed.
-func (d *ResolveCallback) OnResolveCompleted(result Errorcode, resolved_ips StringList) {
-	lookupResolveCallbackProxy(d.Base()).OnResolveCompleted(d, result, resolved_ips)
+func (d *ResolveCallback) OnResolveCompleted(result Errorcode, resolvedIps StringList) {
+	lookupResolveCallbackProxy(d.Base()).OnResolveCompleted(d, result, resolvedIps)
 }
 
 //nolint:gocritic
 //export gocef_resolve_callback_on_resolve_completed
-func gocef_resolve_callback_on_resolve_completed(self *C.cef_resolve_callback_t, result C.cef_errorcode_t, resolved_ips C.cef_string_list_t) {
+func gocef_resolve_callback_on_resolve_completed(self *C.cef_resolve_callback_t, result C.cef_errorcode_t, resolvedIps C.cef_string_list_t) {
 	me__ := (*ResolveCallback)(self)
 	proxy__ := lookupResolveCallbackProxy(me__.Base())
-	proxy__.OnResolveCompleted(me__, Errorcode(result), StringList(resolved_ips))
+	proxy__.OnResolveCompleted(me__, Errorcode(result), StringList(resolvedIps))
 }

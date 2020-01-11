@@ -19,7 +19,7 @@ import (
 	// void gocef_response_get_header_map(cef_response_t * self, cef_string_multimap_t headerMap, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_string_multimap_t)) { return callback__(self, headerMap); }
 	// void gocef_response_set_header_map(cef_response_t * self, cef_string_multimap_t headerMap, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_string_multimap_t)) { return callback__(self, headerMap); }
 	// cef_string_userfree_t gocef_response_get_url(cef_response_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_response_t *)) { return callback__(self); }
-	// void gocef_response_set_url(cef_response_t * self, cef_string_t * url, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_string_t *)) { return callback__(self, url); }
+	// void gocef_response_set_url(cef_response_t * self, cef_string_t * uRL, void (CEF_CALLBACK *callback__)(cef_response_t *, cef_string_t *)) { return callback__(self, uRL); }
 	"C"
 )
 
@@ -147,20 +147,20 @@ func (d *Response) SetHeaderMap(headerMap StringMultimap) {
 	C.gocef_response_set_header_map(d.toNative(), C.cef_string_multimap_t(headerMap), d.set_header_map)
 }
 
-// GetUrl (get_url)
+// GetURL (get_url)
 // Get the resolved URL after redirects or changed as a result of HSTS.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *Response) GetUrl() string {
+func (d *Response) GetURL() string {
 	return cefuserfreestrToString(C.gocef_response_get_url(d.toNative(), d.get_url))
 }
 
-// SetUrl (set_url)
+// SetURL (set_url)
 // Set the resolved URL after redirects or changed as a result of HSTS.
-func (d *Response) SetUrl(url string) {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func (d *Response) SetURL(uRL string) {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	C.gocef_response_set_url(d.toNative(), (*C.cef_string_t)(url_), d.set_url)
+	C.gocef_response_set_url(d.toNative(), (*C.cef_string_t)(uRL_), d.set_url)
 }

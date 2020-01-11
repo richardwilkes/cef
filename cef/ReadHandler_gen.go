@@ -19,7 +19,7 @@ type ReadHandlerProxy interface {
 	Read(self *ReadHandler, ptr unsafe.Pointer, size, n uint64) uint64
 	Seek(self *ReadHandler, offset int64, whence int32) int32
 	Tell(self *ReadHandler) int64
-	Eof(self *ReadHandler) int32
+	EOF(self *ReadHandler) int32
 	MayBlock(self *ReadHandler) int32
 }
 
@@ -103,10 +103,10 @@ func gocef_read_handler_tell(self *C.cef_read_handler_t) C.int64 {
 	return C.int64(proxy__.Tell(me__))
 }
 
-// Eof (eof)
+// EOF (eof)
 // Return non-zero if at end of file.
-func (d *ReadHandler) Eof() int32 {
-	return lookupReadHandlerProxy(d.Base()).Eof(d)
+func (d *ReadHandler) EOF() int32 {
+	return lookupReadHandlerProxy(d.Base()).EOF(d)
 }
 
 //nolint:gocritic
@@ -114,7 +114,7 @@ func (d *ReadHandler) Eof() int32 {
 func gocef_read_handler_eof(self *C.cef_read_handler_t) C.int {
 	me__ := (*ReadHandler)(self)
 	proxy__ := lookupReadHandlerProxy(me__.Base())
-	return C.int(proxy__.Eof(me__))
+	return C.int(proxy__.EOF(me__))
 }
 
 // MayBlock (may_block)

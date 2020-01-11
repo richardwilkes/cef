@@ -19,7 +19,7 @@ type UrlrequestClientProxy interface {
 	OnRequestComplete(self *UrlrequestClient, request *Urlrequest)
 	OnUploadProgress(self *UrlrequestClient, request *Urlrequest, current, total int64)
 	OnDownloadProgress(self *UrlrequestClient, request *Urlrequest, current, total int64)
-	OnDownloadData(self *UrlrequestClient, request *Urlrequest, data unsafe.Pointer, data_length uint64)
+	OnDownloadData(self *UrlrequestClient, request *Urlrequest, data unsafe.Pointer, dataLength uint64)
 	GetAuthCredentials(self *UrlrequestClient, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32
 }
 
@@ -114,16 +114,16 @@ func gocef_urlrequest_client_on_download_progress(self *C.cef_urlrequest_client_
 // Called when some part of the response is read. |data| contains the current
 // bytes received since the last call. This function will not be called if the
 // UR_FLAG_NO_DOWNLOAD_DATA flag is set on the request.
-func (d *UrlrequestClient) OnDownloadData(request *Urlrequest, data unsafe.Pointer, data_length uint64) {
-	lookupUrlrequestClientProxy(d.Base()).OnDownloadData(d, request, data, data_length)
+func (d *UrlrequestClient) OnDownloadData(request *Urlrequest, data unsafe.Pointer, dataLength uint64) {
+	lookupUrlrequestClientProxy(d.Base()).OnDownloadData(d, request, data, dataLength)
 }
 
 //nolint:gocritic
 //export gocef_urlrequest_client_on_download_data
-func gocef_urlrequest_client_on_download_data(self *C.cef_urlrequest_client_t, request *C.cef_urlrequest_t, data unsafe.Pointer, data_length C.size_t) {
+func gocef_urlrequest_client_on_download_data(self *C.cef_urlrequest_client_t, request *C.cef_urlrequest_t, data unsafe.Pointer, dataLength C.size_t) {
 	me__ := (*UrlrequestClient)(self)
 	proxy__ := lookupUrlrequestClientProxy(me__.Base())
-	proxy__.OnDownloadData(me__, (*Urlrequest)(request), data, uint64(data_length))
+	proxy__.OnDownloadData(me__, (*Urlrequest)(request), data, uint64(dataLength))
 }
 
 // GetAuthCredentials (get_auth_credentials)

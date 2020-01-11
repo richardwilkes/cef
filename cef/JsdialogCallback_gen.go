@@ -16,7 +16,7 @@ import (
 
 // JsdialogCallbackProxy defines methods required for using JsdialogCallback.
 type JsdialogCallbackProxy interface {
-	Cont(self *JsdialogCallback, success int32, user_input string)
+	Cont(self *JsdialogCallback, success int32, userInput string)
 }
 
 // JsdialogCallback (cef_jsdialog_callback_t from include/capi/cef_jsdialog_handler_capi.h)
@@ -59,15 +59,15 @@ func (d *JsdialogCallback) Base() *BaseRefCounted {
 // Cont (cont)
 // Continue the JS dialog request. Set |success| to true (1) if the OK button
 // was pressed. The |user_input| value should be specified for prompt dialogs.
-func (d *JsdialogCallback) Cont(success int32, user_input string) {
-	lookupJsdialogCallbackProxy(d.Base()).Cont(d, success, user_input)
+func (d *JsdialogCallback) Cont(success int32, userInput string) {
+	lookupJsdialogCallbackProxy(d.Base()).Cont(d, success, userInput)
 }
 
 //nolint:gocritic
 //export gocef_jsdialog_callback_cont
-func gocef_jsdialog_callback_cont(self *C.cef_jsdialog_callback_t, success C.int, user_input *C.cef_string_t) {
+func gocef_jsdialog_callback_cont(self *C.cef_jsdialog_callback_t, success C.int, userInput *C.cef_string_t) {
 	me__ := (*JsdialogCallback)(self)
 	proxy__ := lookupJsdialogCallbackProxy(me__.Base())
-	user_input_ := cefstrToString(user_input)
-	proxy__.Cont(me__, int32(success), user_input_)
+	userInput_ := cefstrToString(userInput)
+	proxy__.Cont(me__, int32(success), userInput_)
 }

@@ -16,7 +16,7 @@ import (
 
 // ResourceSkipCallbackProxy defines methods required for using ResourceSkipCallback.
 type ResourceSkipCallbackProxy interface {
-	Cont(self *ResourceSkipCallback, bytes_skipped int64)
+	Cont(self *ResourceSkipCallback, bytesSkipped int64)
 }
 
 // ResourceSkipCallback (cef_resource_skip_callback_t from include/capi/cef_resource_handler_capi.h)
@@ -60,14 +60,14 @@ func (d *ResourceSkipCallback) Base() *BaseRefCounted {
 // then either skip() will be called again until the requested number of bytes
 // have been skipped or the request will proceed. If |bytes_skipped| <= 0 the
 // request will fail with ERR_REQUEST_RANGE_NOT_SATISFIABLE.
-func (d *ResourceSkipCallback) Cont(bytes_skipped int64) {
-	lookupResourceSkipCallbackProxy(d.Base()).Cont(d, bytes_skipped)
+func (d *ResourceSkipCallback) Cont(bytesSkipped int64) {
+	lookupResourceSkipCallbackProxy(d.Base()).Cont(d, bytesSkipped)
 }
 
 //nolint:gocritic
 //export gocef_resource_skip_callback_cont
-func gocef_resource_skip_callback_cont(self *C.cef_resource_skip_callback_t, bytes_skipped C.int64) {
+func gocef_resource_skip_callback_cont(self *C.cef_resource_skip_callback_t, bytesSkipped C.int64) {
 	me__ := (*ResourceSkipCallback)(self)
 	proxy__ := lookupResourceSkipCallbackProxy(me__.Base())
-	proxy__.Cont(me__, int64(bytes_skipped))
+	proxy__.Cont(me__, int64(bytesSkipped))
 }

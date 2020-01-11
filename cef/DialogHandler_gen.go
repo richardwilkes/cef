@@ -16,7 +16,7 @@ import (
 
 // DialogHandlerProxy defines methods required for using DialogHandler.
 type DialogHandlerProxy interface {
-	OnFileDialog(self *DialogHandler, browser *Browser, mode FileDialogMode, title, default_file_path string, accept_filters StringList, selected_accept_filter int32, callback *FileDialogCallback) int32
+	OnFileDialog(self *DialogHandler, browser *Browser, mode FileDialogMode, title, defaultFilePath string, acceptFilters StringList, selectedAcceptFilter int32, callback *FileDialogCallback) int32
 }
 
 // DialogHandler (cef_dialog_handler_t from include/capi/cef_dialog_handler_capi.h)
@@ -70,16 +70,16 @@ func (d *DialogHandler) Base() *BaseRefCounted {
 // the filter that should be selected by default. To display a custom dialog
 // return true (1) and execute |callback| either inline or at a later time. To
 // display the default dialog return false (0).
-func (d *DialogHandler) OnFileDialog(browser *Browser, mode FileDialogMode, title, default_file_path string, accept_filters StringList, selected_accept_filter int32, callback *FileDialogCallback) int32 {
-	return lookupDialogHandlerProxy(d.Base()).OnFileDialog(d, browser, mode, title, default_file_path, accept_filters, selected_accept_filter, callback)
+func (d *DialogHandler) OnFileDialog(browser *Browser, mode FileDialogMode, title, defaultFilePath string, acceptFilters StringList, selectedAcceptFilter int32, callback *FileDialogCallback) int32 {
+	return lookupDialogHandlerProxy(d.Base()).OnFileDialog(d, browser, mode, title, defaultFilePath, acceptFilters, selectedAcceptFilter, callback)
 }
 
 //nolint:gocritic
 //export gocef_dialog_handler_on_file_dialog
-func gocef_dialog_handler_on_file_dialog(self *C.cef_dialog_handler_t, browser *C.cef_browser_t, mode C.cef_file_dialog_mode_t, title *C.cef_string_t, default_file_path *C.cef_string_t, accept_filters C.cef_string_list_t, selected_accept_filter C.int, callback *C.cef_file_dialog_callback_t) C.int {
+func gocef_dialog_handler_on_file_dialog(self *C.cef_dialog_handler_t, browser *C.cef_browser_t, mode C.cef_file_dialog_mode_t, title *C.cef_string_t, defaultFilePath *C.cef_string_t, acceptFilters C.cef_string_list_t, selectedAcceptFilter C.int, callback *C.cef_file_dialog_callback_t) C.int {
 	me__ := (*DialogHandler)(self)
 	proxy__ := lookupDialogHandlerProxy(me__.Base())
 	title_ := cefstrToString(title)
-	default_file_path_ := cefstrToString(default_file_path)
-	return C.int(proxy__.OnFileDialog(me__, (*Browser)(browser), FileDialogMode(mode), title_, default_file_path_, StringList(accept_filters), int32(selected_accept_filter), (*FileDialogCallback)(callback)))
+	defaultFilePath_ := cefstrToString(defaultFilePath)
+	return C.int(proxy__.OnFileDialog(me__, (*Browser)(browser), FileDialogMode(mode), title_, defaultFilePath_, StringList(acceptFilters), int32(selectedAcceptFilter), (*FileDialogCallback)(callback)))
 }

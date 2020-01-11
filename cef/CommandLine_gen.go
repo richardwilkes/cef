@@ -10,7 +10,7 @@ import (
 	// int gocef_command_line_is_read_only(cef_command_line_t * self, int (CEF_CALLBACK *callback__)(cef_command_line_t *)) { return callback__(self); }
 	// cef_command_line_t * gocef_command_line_copy(cef_command_line_t * self, cef_command_line_t * (CEF_CALLBACK *callback__)(cef_command_line_t *)) { return callback__(self); }
 	// void gocef_command_line_init_from_argv(cef_command_line_t * self, int argc, char ** argv, void (CEF_CALLBACK *callback__)(cef_command_line_t *, int, char **)) { return callback__(self, argc, argv); }
-	// void gocef_command_line_init_from_string(cef_command_line_t * self, cef_string_t * command_line, void (CEF_CALLBACK *callback__)(cef_command_line_t *, cef_string_t *)) { return callback__(self, command_line); }
+	// void gocef_command_line_init_from_string(cef_command_line_t * self, cef_string_t * commandLine, void (CEF_CALLBACK *callback__)(cef_command_line_t *, cef_string_t *)) { return callback__(self, commandLine); }
 	// void gocef_command_line_reset(cef_command_line_t * self, void (CEF_CALLBACK *callback__)(cef_command_line_t *)) { return callback__(self); }
 	// void gocef_command_line_get_argv(cef_command_line_t * self, cef_string_list_t argv, void (CEF_CALLBACK *callback__)(cef_command_line_t *, cef_string_list_t)) { return callback__(self, argv); }
 	// cef_string_userfree_t gocef_command_line_get_command_line_string(cef_command_line_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_command_line_t *)) { return callback__(self); }
@@ -86,13 +86,13 @@ func (d *CommandLine) InitFromArgv(argc int32, argv []string) {
 // InitFromString (init_from_string)
 // Initialize the command line with the string returned by calling
 // GetCommandLineW(). This function is only supported on Windows.
-func (d *CommandLine) InitFromString(command_line string) {
-	command_line_ := C.cef_string_userfree_alloc()
-	setCEFStr(command_line, command_line_)
+func (d *CommandLine) InitFromString(commandLine string) {
+	commandLine_ := C.cef_string_userfree_alloc()
+	setCEFStr(commandLine, commandLine_)
 	defer func() {
-		C.cef_string_userfree_free(command_line_)
+		C.cef_string_userfree_free(commandLine_)
 	}()
-	C.gocef_command_line_init_from_string(d.toNative(), (*C.cef_string_t)(command_line_), d.init_from_string)
+	C.gocef_command_line_init_from_string(d.toNative(), (*C.cef_string_t)(commandLine_), d.init_from_string)
 }
 
 // Reset (reset)

@@ -82,7 +82,7 @@ func (d *dist) Run(cl *cmdline.CmdLine, args []string) error {
 	case toolbox.LinuxOS, toolbox.WindowsOS:
 		d.distNotMacOS()
 	default:
-		return fmt.Errorf("Unhandled OS: %s", runtime.GOOS)
+		return fmt.Errorf("unhandled OS: %s", runtime.GOOS)
 	}
 	return nil
 }
@@ -98,7 +98,7 @@ func (d *dist) distMacOS() {
 	createDir(helperAppBundleMacOSDir, 0755)                             //nolint:gocritic
 	createDir(path.Join(helperAppBundleContentsDir, "Frameworks"), 0755) //nolint:gocritic
 	releaseDir := path.Join(installPrefix, "Release")
-	cc := exec.Command("cc", "-I", installPrefix, path.Join(installPrefix, "helper", "helper.c"), "-F", releaseDir, "-framework", "Chromium Embedded Framework", "-o", path.Join(helperAppBundleMacOSDir, d.exeName+" Helper"))
+	cc := exec.Command("cc", "-I", installPrefix, path.Join(installPrefix, "helper", "helper.c"), "-F", releaseDir, "-framework", "Chromium Embedded Framework", "-o", path.Join(helperAppBundleMacOSDir, d.exeName+" Helper")) //nolint:gosec
 	if result, err := cc.CombinedOutput(); err != nil {
 		fmt.Println("Failed to compile the helper.")
 		fmt.Println(err)
@@ -204,7 +204,7 @@ func copyDirContents(srcdir, dstdir string) {
 	}
 	for _, one := range list {
 		name := one.Name()
-		if err := fs.Copy(path.Join(srcdir, name), path.Join(dstdir, name)); err != nil {
+		if err = fs.Copy(path.Join(srcdir, name), path.Join(dstdir, name)); err != nil {
 			fmt.Println(err)
 			atexit.Exit(1)
 		}

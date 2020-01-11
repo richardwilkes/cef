@@ -4,11 +4,11 @@ package cef
 
 import (
 	// #include "capi_gen.h"
-	// void gocef_cookie_manager_set_supported_schemes(cef_cookie_manager_t * self, cef_string_list_t schemes, int include_defaults, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_cookie_manager_t *, cef_string_list_t, int, cef_completion_callback_t *)) { return callback__(self, schemes, include_defaults, callback); }
+	// void gocef_cookie_manager_set_supported_schemes(cef_cookie_manager_t * self, cef_string_list_t schemes, int includeDefaults, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_cookie_manager_t *, cef_string_list_t, int, cef_completion_callback_t *)) { return callback__(self, schemes, includeDefaults, callback); }
 	// int gocef_cookie_manager_visit_all_cookies(cef_cookie_manager_t * self, cef_cookie_visitor_t * visitor, int (CEF_CALLBACK *callback__)(cef_cookie_manager_t *, cef_cookie_visitor_t *)) { return callback__(self, visitor); }
-	// int gocef_cookie_manager_visit_url_cookies(cef_cookie_manager_t * self, cef_string_t * url, int includeHttpOnly, cef_cookie_visitor_t * visitor, int (CEF_CALLBACK *callback__)(cef_cookie_manager_t *, cef_string_t *, int, cef_cookie_visitor_t *)) { return callback__(self, url, includeHttpOnly, visitor); }
-	// int gocef_cookie_manager_set_cookie(cef_cookie_manager_t * self, cef_string_t * url, cef_cookie_t * cookie, cef_set_cookie_callback_t * callback, int (CEF_CALLBACK *callback__)(cef_cookie_manager_t *, cef_string_t *, cef_cookie_t *, cef_set_cookie_callback_t *)) { return callback__(self, url, cookie, callback); }
-	// int gocef_cookie_manager_delete_cookies(cef_cookie_manager_t * self, cef_string_t * url, cef_string_t * cookie_name, cef_delete_cookies_callback_t * callback, int (CEF_CALLBACK *callback__)(cef_cookie_manager_t *, cef_string_t *, cef_string_t *, cef_delete_cookies_callback_t *)) { return callback__(self, url, cookie_name, callback); }
+	// int gocef_cookie_manager_visit_url_cookies(cef_cookie_manager_t * self, cef_string_t * uRL, int includeHTTPOnly, cef_cookie_visitor_t * visitor, int (CEF_CALLBACK *callback__)(cef_cookie_manager_t *, cef_string_t *, int, cef_cookie_visitor_t *)) { return callback__(self, uRL, includeHTTPOnly, visitor); }
+	// int gocef_cookie_manager_set_cookie(cef_cookie_manager_t * self, cef_string_t * uRL, cef_cookie_t * cookie, cef_set_cookie_callback_t * callback, int (CEF_CALLBACK *callback__)(cef_cookie_manager_t *, cef_string_t *, cef_cookie_t *, cef_set_cookie_callback_t *)) { return callback__(self, uRL, cookie, callback); }
+	// int gocef_cookie_manager_delete_cookies(cef_cookie_manager_t * self, cef_string_t * uRL, cef_string_t * cookieName, cef_delete_cookies_callback_t * callback, int (CEF_CALLBACK *callback__)(cef_cookie_manager_t *, cef_string_t *, cef_string_t *, cef_delete_cookies_callback_t *)) { return callback__(self, uRL, cookieName, callback); }
 	// int gocef_cookie_manager_flush_store(cef_cookie_manager_t * self, cef_completion_callback_t * callback, int (CEF_CALLBACK *callback__)(cef_cookie_manager_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	"C"
 )
@@ -36,8 +36,8 @@ func (d *CookieManager) Base() *BaseRefCounted {
 // cookies for this manager. If |callback| is non-NULL it will be executed
 // asnychronously on the UI thread after the change has been applied. Must be
 // called before any cookies are accessed.
-func (d *CookieManager) SetSupportedSchemes(schemes StringList, include_defaults int32, callback *CompletionCallback) {
-	C.gocef_cookie_manager_set_supported_schemes(d.toNative(), C.cef_string_list_t(schemes), C.int(include_defaults), callback.toNative(), d.set_supported_schemes)
+func (d *CookieManager) SetSupportedSchemes(schemes StringList, includeDefaults int32, callback *CompletionCallback) {
+	C.gocef_cookie_manager_set_supported_schemes(d.toNative(), C.cef_string_list_t(schemes), C.int(includeDefaults), callback.toNative(), d.set_supported_schemes)
 }
 
 // VisitAllCookies (visit_all_cookies)
@@ -48,19 +48,19 @@ func (d *CookieManager) VisitAllCookies(visitor *CookieVisitor) int32 {
 	return int32(C.gocef_cookie_manager_visit_all_cookies(d.toNative(), visitor.toNative(), d.visit_all_cookies))
 }
 
-// VisitUrlCookies (visit_url_cookies)
+// VisitURLCookies (visit_url_cookies)
 // Visit a subset of cookies on the UI thread. The results are filtered by the
 // given url scheme, host, domain and path. If |includeHttpOnly| is true (1)
 // HTTP-only cookies will also be included in the results. The returned
 // cookies are ordered by longest path, then by earliest creation date.
 // Returns false (0) if cookies cannot be accessed.
-func (d *CookieManager) VisitUrlCookies(url string, includeHttpOnly int32, visitor *CookieVisitor) int32 {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func (d *CookieManager) VisitURLCookies(uRL string, includeHTTPOnly int32, visitor *CookieVisitor) int32 {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	return int32(C.gocef_cookie_manager_visit_url_cookies(d.toNative(), (*C.cef_string_t)(url_), C.int(includeHttpOnly), visitor.toNative(), d.visit_url_cookies))
+	return int32(C.gocef_cookie_manager_visit_url_cookies(d.toNative(), (*C.cef_string_t)(uRL_), C.int(includeHTTPOnly), visitor.toNative(), d.visit_url_cookies))
 }
 
 // SetCookie (set_cookie)
@@ -71,13 +71,13 @@ func (d *CookieManager) VisitUrlCookies(url string, includeHttpOnly int32, visit
 // such characters are found. If |callback| is non-NULL it will be executed
 // asnychronously on the UI thread after the cookie has been set. Returns
 // false (0) if an invalid URL is specified or if cookies cannot be accessed.
-func (d *CookieManager) SetCookie(url string, cookie *Cookie, callback *SetCookieCallback) int32 {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func (d *CookieManager) SetCookie(uRL string, cookie *Cookie, callback *SetCookieCallback) int32 {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	return int32(C.gocef_cookie_manager_set_cookie(d.toNative(), (*C.cef_string_t)(url_), cookie.toNative(&C.cef_cookie_t{}), callback.toNative(), d.set_cookie))
+	return int32(C.gocef_cookie_manager_set_cookie(d.toNative(), (*C.cef_string_t)(uRL_), cookie.toNative(&C.cef_cookie_t{}), callback.toNative(), d.set_cookie))
 }
 
 // DeleteCookies (delete_cookies)
@@ -90,18 +90,18 @@ func (d *CookieManager) SetCookie(url string, cookie *Cookie, callback *SetCooki
 // have been deleted. Returns false (0) if a non-NULL invalid URL is specified
 // or if cookies cannot be accessed. Cookies can alternately be deleted using
 // the Visit*Cookies() functions.
-func (d *CookieManager) DeleteCookies(url, cookie_name string, callback *DeleteCookiesCallback) int32 {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func (d *CookieManager) DeleteCookies(uRL, cookieName string, callback *DeleteCookiesCallback) int32 {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	cookie_name_ := C.cef_string_userfree_alloc()
-	setCEFStr(cookie_name, cookie_name_)
+	cookieName_ := C.cef_string_userfree_alloc()
+	setCEFStr(cookieName, cookieName_)
 	defer func() {
-		C.cef_string_userfree_free(cookie_name_)
+		C.cef_string_userfree_free(cookieName_)
 	}()
-	return int32(C.gocef_cookie_manager_delete_cookies(d.toNative(), (*C.cef_string_t)(url_), (*C.cef_string_t)(cookie_name_), callback.toNative(), d.delete_cookies))
+	return int32(C.gocef_cookie_manager_delete_cookies(d.toNative(), (*C.cef_string_t)(uRL_), (*C.cef_string_t)(cookieName_), callback.toNative(), d.delete_cookies))
 }
 
 // FlushStore (flush_store)

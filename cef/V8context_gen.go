@@ -12,7 +12,7 @@ import (
 	// int gocef_v8context_enter(cef_v8context_t * self, int (CEF_CALLBACK *callback__)(cef_v8context_t *)) { return callback__(self); }
 	// int gocef_v8context_exit(cef_v8context_t * self, int (CEF_CALLBACK *callback__)(cef_v8context_t *)) { return callback__(self); }
 	// int gocef_v8context_is_same(cef_v8context_t * self, cef_v8context_t * that, int (CEF_CALLBACK *callback__)(cef_v8context_t *, cef_v8context_t *)) { return callback__(self, that); }
-	// int gocef_v8context_eval(cef_v8context_t * self, cef_string_t * code, cef_string_t * script_url, int start_line, cef_v8value_t ** retval, cef_v8exception_t ** exception, int (CEF_CALLBACK *callback__)(cef_v8context_t *, cef_string_t *, cef_string_t *, int, cef_v8value_t **, cef_v8exception_t **)) { return callback__(self, code, script_url, start_line, retval, exception); }
+	// int gocef_v8context_eval(cef_v8context_t * self, cef_string_t * code, cef_string_t * scriptURL, int startLine, cef_v8value_t ** retval, cef_v8exception_t ** exception, int (CEF_CALLBACK *callback__)(cef_v8context_t *, cef_string_t *, cef_string_t *, int, cef_v8value_t **, cef_v8exception_t **)) { return callback__(self, code, scriptURL, startLine, retval, exception); }
 	"C"
 )
 
@@ -102,18 +102,18 @@ func (d *V8context) IsSame(that *V8context) int32 {
 // On success |retval| will be set to the return value, if any, and the
 // function will return true (1). On failure |exception| will be set to the
 // exception, if any, and the function will return false (0).
-func (d *V8context) Eval(code, script_url string, start_line int32, retval **V8value, exception **V8exception) int32 {
+func (d *V8context) Eval(code, scriptURL string, startLine int32, retval **V8value, exception **V8exception) int32 {
 	code_ := C.cef_string_userfree_alloc()
 	setCEFStr(code, code_)
 	defer func() {
 		C.cef_string_userfree_free(code_)
 	}()
-	script_url_ := C.cef_string_userfree_alloc()
-	setCEFStr(script_url, script_url_)
+	scriptURL_ := C.cef_string_userfree_alloc()
+	setCEFStr(scriptURL, scriptURL_)
 	defer func() {
-		C.cef_string_userfree_free(script_url_)
+		C.cef_string_userfree_free(scriptURL_)
 	}()
 	retval_ := (*retval).toNative()
 	exception_ := (*exception).toNative()
-	return int32(C.gocef_v8context_eval(d.toNative(), (*C.cef_string_t)(code_), (*C.cef_string_t)(script_url_), C.int(start_line), &retval_, &exception_, d.eval))
+	return int32(C.gocef_v8context_eval(d.toNative(), (*C.cef_string_t)(code_), (*C.cef_string_t)(scriptURL_), C.int(startLine), &retval_, &exception_, d.eval))
 }

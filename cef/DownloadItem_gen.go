@@ -113,23 +113,23 @@ func (d *DownloadItem) GetFullPath() string {
 	return cefuserfreestrToString(C.gocef_download_item_get_full_path(d.toNative(), d.get_full_path))
 }
 
-// GetId (get_id)
+// GetID (get_id)
 // Returns the unique identifier for this download.
-func (d *DownloadItem) GetId() uint32 {
+func (d *DownloadItem) GetID() uint32 {
 	return uint32(C.gocef_download_item_get_id(d.toNative(), d.get_id))
 }
 
-// GetUrl (get_url)
+// GetURL (get_url)
 // Returns the URL.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *DownloadItem) GetUrl() string {
+func (d *DownloadItem) GetURL() string {
 	return cefuserfreestrToString(C.gocef_download_item_get_url(d.toNative(), d.get_url))
 }
 
-// GetOriginalUrl (get_original_url)
+// GetOriginalURL (get_original_url)
 // Returns the original URL before any redirections.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *DownloadItem) GetOriginalUrl() string {
+func (d *DownloadItem) GetOriginalURL() string {
 	return cefuserfreestrToString(C.gocef_download_item_get_original_url(d.toNative(), d.get_original_url))
 }
 

@@ -17,11 +17,11 @@ import (
 // PrintHandlerProxy defines methods required for using PrintHandler.
 type PrintHandlerProxy interface {
 	OnPrintStart(self *PrintHandler, browser *Browser)
-	OnPrintSettings(self *PrintHandler, browser *Browser, settings *PrintSettings, get_defaults int32)
-	OnPrintDialog(self *PrintHandler, browser *Browser, has_selection int32, callback *PrintDialogCallback) int32
-	OnPrintJob(self *PrintHandler, browser *Browser, document_name, pdf_file_path string, callback *PrintJobCallback) int32
+	OnPrintSettings(self *PrintHandler, browser *Browser, settings *PrintSettings, getDefaults int32)
+	OnPrintDialog(self *PrintHandler, browser *Browser, hasSelection int32, callback *PrintDialogCallback) int32
+	OnPrintJob(self *PrintHandler, browser *Browser, documentName, pDFFilePath string, callback *PrintJobCallback) int32
 	OnPrintReset(self *PrintHandler, browser *Browser)
-	GetPdfPaperSize(self *PrintHandler, device_units_per_inch int32) Size
+	GetPDFPaperSize(self *PrintHandler, deviceUnitsPerInch int32) Size
 }
 
 // PrintHandler (cef_print_handler_t from include/capi/cef_print_handler_capi.h)
@@ -83,50 +83,50 @@ func gocef_print_handler_on_print_start(self *C.cef_print_handler_t, browser *C.
 // Synchronize |settings| with client state. If |get_defaults| is true (1)
 // then populate |settings| with the default print settings. Do not keep a
 // reference to |settings| outside of this callback.
-func (d *PrintHandler) OnPrintSettings(browser *Browser, settings *PrintSettings, get_defaults int32) {
-	lookupPrintHandlerProxy(d.Base()).OnPrintSettings(d, browser, settings, get_defaults)
+func (d *PrintHandler) OnPrintSettings(browser *Browser, settings *PrintSettings, getDefaults int32) {
+	lookupPrintHandlerProxy(d.Base()).OnPrintSettings(d, browser, settings, getDefaults)
 }
 
 //nolint:gocritic
 //export gocef_print_handler_on_print_settings
-func gocef_print_handler_on_print_settings(self *C.cef_print_handler_t, browser *C.cef_browser_t, settings *C.cef_print_settings_t, get_defaults C.int) {
+func gocef_print_handler_on_print_settings(self *C.cef_print_handler_t, browser *C.cef_browser_t, settings *C.cef_print_settings_t, getDefaults C.int) {
 	me__ := (*PrintHandler)(self)
 	proxy__ := lookupPrintHandlerProxy(me__.Base())
-	proxy__.OnPrintSettings(me__, (*Browser)(browser), (*PrintSettings)(settings), int32(get_defaults))
+	proxy__.OnPrintSettings(me__, (*Browser)(browser), (*PrintSettings)(settings), int32(getDefaults))
 }
 
 // OnPrintDialog (on_print_dialog)
 // Show the print dialog. Execute |callback| once the dialog is dismissed.
 // Return true (1) if the dialog will be displayed or false (0) to cancel the
 // printing immediately.
-func (d *PrintHandler) OnPrintDialog(browser *Browser, has_selection int32, callback *PrintDialogCallback) int32 {
-	return lookupPrintHandlerProxy(d.Base()).OnPrintDialog(d, browser, has_selection, callback)
+func (d *PrintHandler) OnPrintDialog(browser *Browser, hasSelection int32, callback *PrintDialogCallback) int32 {
+	return lookupPrintHandlerProxy(d.Base()).OnPrintDialog(d, browser, hasSelection, callback)
 }
 
 //nolint:gocritic
 //export gocef_print_handler_on_print_dialog
-func gocef_print_handler_on_print_dialog(self *C.cef_print_handler_t, browser *C.cef_browser_t, has_selection C.int, callback *C.cef_print_dialog_callback_t) C.int {
+func gocef_print_handler_on_print_dialog(self *C.cef_print_handler_t, browser *C.cef_browser_t, hasSelection C.int, callback *C.cef_print_dialog_callback_t) C.int {
 	me__ := (*PrintHandler)(self)
 	proxy__ := lookupPrintHandlerProxy(me__.Base())
-	return C.int(proxy__.OnPrintDialog(me__, (*Browser)(browser), int32(has_selection), (*PrintDialogCallback)(callback)))
+	return C.int(proxy__.OnPrintDialog(me__, (*Browser)(browser), int32(hasSelection), (*PrintDialogCallback)(callback)))
 }
 
 // OnPrintJob (on_print_job)
 // Send the print job to the printer. Execute |callback| once the job is
 // completed. Return true (1) if the job will proceed or false (0) to cancel
 // the job immediately.
-func (d *PrintHandler) OnPrintJob(browser *Browser, document_name, pdf_file_path string, callback *PrintJobCallback) int32 {
-	return lookupPrintHandlerProxy(d.Base()).OnPrintJob(d, browser, document_name, pdf_file_path, callback)
+func (d *PrintHandler) OnPrintJob(browser *Browser, documentName, pDFFilePath string, callback *PrintJobCallback) int32 {
+	return lookupPrintHandlerProxy(d.Base()).OnPrintJob(d, browser, documentName, pDFFilePath, callback)
 }
 
 //nolint:gocritic
 //export gocef_print_handler_on_print_job
-func gocef_print_handler_on_print_job(self *C.cef_print_handler_t, browser *C.cef_browser_t, document_name *C.cef_string_t, pdf_file_path *C.cef_string_t, callback *C.cef_print_job_callback_t) C.int {
+func gocef_print_handler_on_print_job(self *C.cef_print_handler_t, browser *C.cef_browser_t, documentName *C.cef_string_t, pDFFilePath *C.cef_string_t, callback *C.cef_print_job_callback_t) C.int {
 	me__ := (*PrintHandler)(self)
 	proxy__ := lookupPrintHandlerProxy(me__.Base())
-	document_name_ := cefstrToString(document_name)
-	pdf_file_path_ := cefstrToString(pdf_file_path)
-	return C.int(proxy__.OnPrintJob(me__, (*Browser)(browser), document_name_, pdf_file_path_, (*PrintJobCallback)(callback)))
+	documentName_ := cefstrToString(documentName)
+	pDFFilePath_ := cefstrToString(pDFFilePath)
+	return C.int(proxy__.OnPrintJob(me__, (*Browser)(browser), documentName_, pDFFilePath_, (*PrintJobCallback)(callback)))
 }
 
 // OnPrintReset (on_print_reset)
@@ -143,19 +143,19 @@ func gocef_print_handler_on_print_reset(self *C.cef_print_handler_t, browser *C.
 	proxy__.OnPrintReset(me__, (*Browser)(browser))
 }
 
-// GetPdfPaperSize (get_pdf_paper_size)
+// GetPDFPaperSize (get_pdf_paper_size)
 // Return the PDF paper size in device units. Used in combination with
 // cef_browser_host_t::print_to_pdf().
-func (d *PrintHandler) GetPdfPaperSize(device_units_per_inch int32) Size {
-	return lookupPrintHandlerProxy(d.Base()).GetPdfPaperSize(d, device_units_per_inch)
+func (d *PrintHandler) GetPDFPaperSize(deviceUnitsPerInch int32) Size {
+	return lookupPrintHandlerProxy(d.Base()).GetPDFPaperSize(d, deviceUnitsPerInch)
 }
 
 //nolint:gocritic
 //export gocef_print_handler_get_pdf_paper_size
-func gocef_print_handler_get_pdf_paper_size(self *C.cef_print_handler_t, device_units_per_inch C.int) C.cef_size_t {
+func gocef_print_handler_get_pdf_paper_size(self *C.cef_print_handler_t, deviceUnitsPerInch C.int) C.cef_size_t {
 	me__ := (*PrintHandler)(self)
 	proxy__ := lookupPrintHandlerProxy(me__.Base())
-	call__ := proxy__.GetPdfPaperSize(me__, int32(device_units_per_inch))
+	call__ := proxy__.GetPDFPaperSize(me__, int32(deviceUnitsPerInch))
 	var result__ C.cef_size_t
 	call__.toNative(&result__)
 	return result__

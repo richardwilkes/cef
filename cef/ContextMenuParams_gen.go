@@ -64,27 +64,27 @@ func (d *ContextMenuParams) GetTypeFlags() ContextMenuTypeFlags {
 	return ContextMenuTypeFlags(C.gocef_context_menu_params_get_type_flags(d.toNative(), d.get_type_flags))
 }
 
-// GetLinkUrl (get_link_url)
+// GetLinkURL (get_link_url)
 // Returns the URL of the link, if any, that encloses the node that the
 // context menu was invoked on.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *ContextMenuParams) GetLinkUrl() string {
+func (d *ContextMenuParams) GetLinkURL() string {
 	return cefuserfreestrToString(C.gocef_context_menu_params_get_link_url(d.toNative(), d.get_link_url))
 }
 
-// GetUnfilteredLinkUrl (get_unfiltered_link_url)
+// GetUnfilteredLinkURL (get_unfiltered_link_url)
 // Returns the link URL, if any, to be used ONLY for "copy link address". We
 // don't validate this field in the frontend process.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *ContextMenuParams) GetUnfilteredLinkUrl() string {
+func (d *ContextMenuParams) GetUnfilteredLinkURL() string {
 	return cefuserfreestrToString(C.gocef_context_menu_params_get_unfiltered_link_url(d.toNative(), d.get_unfiltered_link_url))
 }
 
-// GetSourceUrl (get_source_url)
+// GetSourceURL (get_source_url)
 // Returns the source URL, if any, for the element that the context menu was
 // invoked on. Example of elements with source URLs are img, audio, and video.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *ContextMenuParams) GetSourceUrl() string {
+func (d *ContextMenuParams) GetSourceURL() string {
 	return cefuserfreestrToString(C.gocef_context_menu_params_get_source_url(d.toNative(), d.get_source_url))
 }
 
@@ -103,17 +103,17 @@ func (d *ContextMenuParams) GetTitleText() string {
 	return cefuserfreestrToString(C.gocef_context_menu_params_get_title_text(d.toNative(), d.get_title_text))
 }
 
-// GetPageUrl (get_page_url)
+// GetPageURL (get_page_url)
 // Returns the URL of the top level page that the context menu was invoked on.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *ContextMenuParams) GetPageUrl() string {
+func (d *ContextMenuParams) GetPageURL() string {
 	return cefuserfreestrToString(C.gocef_context_menu_params_get_page_url(d.toNative(), d.get_page_url))
 }
 
-// GetFrameUrl (get_frame_url)
+// GetFrameURL (get_frame_url)
 // Returns the URL of the subframe that the context menu was invoked on.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *ContextMenuParams) GetFrameUrl() string {
+func (d *ContextMenuParams) GetFrameURL() string {
 	return cefuserfreestrToString(C.gocef_context_menu_params_get_frame_url(d.toNative(), d.get_frame_url))
 }
 

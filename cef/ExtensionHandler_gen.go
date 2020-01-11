@@ -19,10 +19,10 @@ type ExtensionHandlerProxy interface {
 	OnExtensionLoadFailed(self *ExtensionHandler, result Errorcode)
 	OnExtensionLoaded(self *ExtensionHandler, extension *Extension)
 	OnExtensionUnloaded(self *ExtensionHandler, extension *Extension)
-	OnBeforeBackgroundBrowser(self *ExtensionHandler, extension *Extension, url string, client **Client, settings *BrowserSettings) int32
-	OnBeforeBrowser(self *ExtensionHandler, extension *Extension, browser, active_browser *Browser, index int32, url string, active int32, windowInfo *WindowInfo, client **Client, settings *BrowserSettings) int32
-	GetActiveBrowser(self *ExtensionHandler, extension *Extension, browser *Browser, include_incognito int32) *Browser
-	CanAccessBrowser(self *ExtensionHandler, extension *Extension, browser *Browser, include_incognito int32, target_browser *Browser) int32
+	OnBeforeBackgroundBrowser(self *ExtensionHandler, extension *Extension, uRL string, client **Client, settings *BrowserSettings) int32
+	OnBeforeBrowser(self *ExtensionHandler, extension *Extension, browser, activeBrowser *Browser, index int32, uRL string, active int32, windowInfo *WindowInfo, client **Client, settings *BrowserSettings) int32
+	GetActiveBrowser(self *ExtensionHandler, extension *Extension, browser *Browser, includeIncognito int32) *Browser
+	CanAccessBrowser(self *ExtensionHandler, extension *Extension, browser *Browser, includeIncognito int32, targetBrowser *Browser) int32
 	GetExtensionResource(self *ExtensionHandler, extension *Extension, browser *Browser, file string, callback *GetExtensionResourceCallback) int32
 }
 
@@ -122,20 +122,20 @@ func gocef_extension_handler_on_extension_unloaded(self *C.cef_extension_handler
 // cef_browser_host_t::IsBackgroundHost will return true (1) for the resulting
 // browser. See https://developer.chrome.com/extensions/event_pages for more
 // information about extension background script usage.
-func (d *ExtensionHandler) OnBeforeBackgroundBrowser(extension *Extension, url string, client **Client, settings *BrowserSettings) int32 {
-	return lookupExtensionHandlerProxy(d.Base()).OnBeforeBackgroundBrowser(d, extension, url, client, settings)
+func (d *ExtensionHandler) OnBeforeBackgroundBrowser(extension *Extension, uRL string, client **Client, settings *BrowserSettings) int32 {
+	return lookupExtensionHandlerProxy(d.Base()).OnBeforeBackgroundBrowser(d, extension, uRL, client, settings)
 }
 
 //nolint:gocritic
 //export gocef_extension_handler_on_before_background_browser
-func gocef_extension_handler_on_before_background_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, url *C.cef_string_t, client **C.cef_client_t, settings *C.cef_browser_settings_t) C.int {
+func gocef_extension_handler_on_before_background_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, uRL *C.cef_string_t, client **C.cef_client_t, settings *C.cef_browser_settings_t) C.int {
 	me__ := (*ExtensionHandler)(self)
 	proxy__ := lookupExtensionHandlerProxy(me__.Base())
-	url_ := cefstrToString(url)
+	uRL_ := cefstrToString(uRL)
 	client_ := (*Client)(*client)
 	client__p := &client_
 	settings_ := settings.toGo()
-	return C.int(proxy__.OnBeforeBackgroundBrowser(me__, (*Extension)(extension), url_, client__p, settings_))
+	return C.int(proxy__.OnBeforeBackgroundBrowser(me__, (*Extension)(extension), uRL_, client__p, settings_))
 }
 
 // OnBeforeBrowser (on_before_browser)
@@ -152,21 +152,21 @@ func gocef_extension_handler_on_before_background_browser(self *C.cef_extension_
 // indicated by a call to cef_life_span_handler_t::OnAfterCreated. Any
 // modifications to |windowInfo| will be ignored if |active_browser| is
 // wrapped in a cef_browser_view_t.
-func (d *ExtensionHandler) OnBeforeBrowser(extension *Extension, browser, active_browser *Browser, index int32, url string, active int32, windowInfo *WindowInfo, client **Client, settings *BrowserSettings) int32 {
-	return lookupExtensionHandlerProxy(d.Base()).OnBeforeBrowser(d, extension, browser, active_browser, index, url, active, windowInfo, client, settings)
+func (d *ExtensionHandler) OnBeforeBrowser(extension *Extension, browser, activeBrowser *Browser, index int32, uRL string, active int32, windowInfo *WindowInfo, client **Client, settings *BrowserSettings) int32 {
+	return lookupExtensionHandlerProxy(d.Base()).OnBeforeBrowser(d, extension, browser, activeBrowser, index, uRL, active, windowInfo, client, settings)
 }
 
 //nolint:gocritic
 //export gocef_extension_handler_on_before_browser
-func gocef_extension_handler_on_before_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, active_browser *C.cef_browser_t, index C.int, url *C.cef_string_t, active C.int, windowInfo *C.cef_window_info_t, client **C.cef_client_t, settings *C.cef_browser_settings_t) C.int {
+func gocef_extension_handler_on_before_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, activeBrowser *C.cef_browser_t, index C.int, uRL *C.cef_string_t, active C.int, windowInfo *C.cef_window_info_t, client **C.cef_client_t, settings *C.cef_browser_settings_t) C.int {
 	me__ := (*ExtensionHandler)(self)
 	proxy__ := lookupExtensionHandlerProxy(me__.Base())
-	url_ := cefstrToString(url)
+	uRL_ := cefstrToString(uRL)
 	windowInfo_ := windowInfo.toGo()
 	client_ := (*Client)(*client)
 	client__p := &client_
 	settings_ := settings.toGo()
-	return C.int(proxy__.OnBeforeBrowser(me__, (*Extension)(extension), (*Browser)(browser), (*Browser)(active_browser), int32(index), url_, int32(active), windowInfo_, client__p, settings_))
+	return C.int(proxy__.OnBeforeBrowser(me__, (*Extension)(extension), (*Browser)(browser), (*Browser)(activeBrowser), int32(index), uRL_, int32(active), windowInfo_, client__p, settings_))
 }
 
 // GetActiveBrowser (get_active_browser)
@@ -177,16 +177,16 @@ func gocef_extension_handler_on_before_browser(self *C.cef_extension_handler_t, 
 // the same cef_request_tContext as |browser|. Incognito browsers should not
 // be considered unless the source extension has incognito access enabled, in
 // which case |include_incognito| will be true (1).
-func (d *ExtensionHandler) GetActiveBrowser(extension *Extension, browser *Browser, include_incognito int32) *Browser {
-	return lookupExtensionHandlerProxy(d.Base()).GetActiveBrowser(d, extension, browser, include_incognito)
+func (d *ExtensionHandler) GetActiveBrowser(extension *Extension, browser *Browser, includeIncognito int32) *Browser {
+	return lookupExtensionHandlerProxy(d.Base()).GetActiveBrowser(d, extension, browser, includeIncognito)
 }
 
 //nolint:gocritic
 //export gocef_extension_handler_get_active_browser
-func gocef_extension_handler_get_active_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, include_incognito C.int) *C.cef_browser_t {
+func gocef_extension_handler_get_active_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, includeIncognito C.int) *C.cef_browser_t {
 	me__ := (*ExtensionHandler)(self)
 	proxy__ := lookupExtensionHandlerProxy(me__.Base())
-	return (proxy__.GetActiveBrowser(me__, (*Extension)(extension), (*Browser)(browser), int32(include_incognito))).toNative()
+	return (proxy__.GetActiveBrowser(me__, (*Extension)(extension), (*Browser)(browser), int32(includeIncognito))).toNative()
 }
 
 // CanAccessBrowser (can_access_browser)
@@ -196,16 +196,16 @@ func gocef_extension_handler_get_active_browser(self *C.cef_extension_handler_t,
 // to allow access of false (0) to deny access. Access to incognito browsers
 // should not be allowed unless the source extension has incognito access
 // enabled, in which case |include_incognito| will be true (1).
-func (d *ExtensionHandler) CanAccessBrowser(extension *Extension, browser *Browser, include_incognito int32, target_browser *Browser) int32 {
-	return lookupExtensionHandlerProxy(d.Base()).CanAccessBrowser(d, extension, browser, include_incognito, target_browser)
+func (d *ExtensionHandler) CanAccessBrowser(extension *Extension, browser *Browser, includeIncognito int32, targetBrowser *Browser) int32 {
+	return lookupExtensionHandlerProxy(d.Base()).CanAccessBrowser(d, extension, browser, includeIncognito, targetBrowser)
 }
 
 //nolint:gocritic
 //export gocef_extension_handler_can_access_browser
-func gocef_extension_handler_can_access_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, include_incognito C.int, target_browser *C.cef_browser_t) C.int {
+func gocef_extension_handler_can_access_browser(self *C.cef_extension_handler_t, extension *C.cef_extension_t, browser *C.cef_browser_t, includeIncognito C.int, targetBrowser *C.cef_browser_t) C.int {
 	me__ := (*ExtensionHandler)(self)
 	proxy__ := lookupExtensionHandlerProxy(me__.Base())
-	return C.int(proxy__.CanAccessBrowser(me__, (*Extension)(extension), (*Browser)(browser), int32(include_incognito), (*Browser)(target_browser)))
+	return C.int(proxy__.CanAccessBrowser(me__, (*Extension)(extension), (*Browser)(browser), int32(includeIncognito), (*Browser)(targetBrowser)))
 }
 
 // GetExtensionResource (get_extension_resource)

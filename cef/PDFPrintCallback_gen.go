@@ -16,7 +16,7 @@ import (
 
 // PDFPrintCallbackProxy defines methods required for using PDFPrintCallback.
 type PDFPrintCallbackProxy interface {
-	OnPdfPrintFinished(self *PDFPrintCallback, path string, ok int32)
+	OnPDFPrintFinished(self *PDFPrintCallback, path string, ok int32)
 }
 
 // PDFPrintCallback (cef_pdf_print_callback_t from include/capi/cef_browser_capi.h)
@@ -56,12 +56,12 @@ func (d *PDFPrintCallback) Base() *BaseRefCounted {
 	return (*BaseRefCounted)(&d.base)
 }
 
-// OnPdfPrintFinished (on_pdf_print_finished)
+// OnPDFPrintFinished (on_pdf_print_finished)
 // Method that will be executed when the PDF printing has completed. |path| is
 // the output path. |ok| will be true (1) if the printing completed
 // successfully or false (0) otherwise.
-func (d *PDFPrintCallback) OnPdfPrintFinished(path string, ok int32) {
-	lookupPDFPrintCallbackProxy(d.Base()).OnPdfPrintFinished(d, path, ok)
+func (d *PDFPrintCallback) OnPDFPrintFinished(path string, ok int32) {
+	lookupPDFPrintCallbackProxy(d.Base()).OnPDFPrintFinished(d, path, ok)
 }
 
 //nolint:gocritic
@@ -70,5 +70,5 @@ func gocef_pdf_print_callback_on_pdf_print_finished(self *C.cef_pdf_print_callba
 	me__ := (*PDFPrintCallback)(self)
 	proxy__ := lookupPDFPrintCallbackProxy(me__.Base())
 	path_ := cefstrToString(path)
-	proxy__.OnPdfPrintFinished(me__, path_, int32(ok))
+	proxy__.OnPDFPrintFinished(me__, path_, int32(ok))
 }

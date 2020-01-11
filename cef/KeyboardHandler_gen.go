@@ -16,8 +16,8 @@ import (
 
 // KeyboardHandlerProxy defines methods required for using KeyboardHandler.
 type KeyboardHandlerProxy interface {
-	OnPreKeyEvent(self *KeyboardHandler, browser *Browser, event *KeyEvent, os_event unsafe.Pointer, is_keyboard_shortcut *int32) int32
-	OnKeyEvent(self *KeyboardHandler, browser *Browser, event *KeyEvent, os_event unsafe.Pointer) int32
+	OnPreKeyEvent(self *KeyboardHandler, browser *Browser, event *KeyEvent, osEvent unsafe.Pointer, isKeyboardShortcut *int32) int32
+	OnKeyEvent(self *KeyboardHandler, browser *Browser, event *KeyEvent, osEvent unsafe.Pointer) int32
 }
 
 // KeyboardHandler (cef_keyboard_handler_t from include/capi/cef_keyboard_handler_capi.h)
@@ -63,17 +63,17 @@ func (d *KeyboardHandler) Base() *BaseRefCounted {
 // event message, if any. Return true (1) if the event was handled or false
 // (0) otherwise. If the event will be handled in on_key_event() as a keyboard
 // shortcut set |is_keyboard_shortcut| to true (1) and return false (0).
-func (d *KeyboardHandler) OnPreKeyEvent(browser *Browser, event *KeyEvent, os_event unsafe.Pointer, is_keyboard_shortcut *int32) int32 {
-	return lookupKeyboardHandlerProxy(d.Base()).OnPreKeyEvent(d, browser, event, os_event, is_keyboard_shortcut)
+func (d *KeyboardHandler) OnPreKeyEvent(browser *Browser, event *KeyEvent, osEvent unsafe.Pointer, isKeyboardShortcut *int32) int32 {
+	return lookupKeyboardHandlerProxy(d.Base()).OnPreKeyEvent(d, browser, event, osEvent, isKeyboardShortcut)
 }
 
 //nolint:gocritic
 //export gocef_keyboard_handler_on_pre_key_event
-func gocef_keyboard_handler_on_pre_key_event(self *C.cef_keyboard_handler_t, browser *C.cef_browser_t, event *C.cef_key_event_t, os_event unsafe.Pointer, is_keyboard_shortcut *C.int) C.int {
+func gocef_keyboard_handler_on_pre_key_event(self *C.cef_keyboard_handler_t, browser *C.cef_browser_t, event *C.cef_key_event_t, osEvent unsafe.Pointer, isKeyboardShortcut *C.int) C.int {
 	me__ := (*KeyboardHandler)(self)
 	proxy__ := lookupKeyboardHandlerProxy(me__.Base())
 	event_ := event.toGo()
-	return C.int(proxy__.OnPreKeyEvent(me__, (*Browser)(browser), event_, os_event, (*int32)(is_keyboard_shortcut)))
+	return C.int(proxy__.OnPreKeyEvent(me__, (*Browser)(browser), event_, osEvent, (*int32)(isKeyboardShortcut)))
 }
 
 // OnKeyEvent (on_key_event)
@@ -81,15 +81,15 @@ func gocef_keyboard_handler_on_pre_key_event(self *C.cef_keyboard_handler_t, bro
 // handle the event. |event| contains information about the keyboard event.
 // |os_event| is the operating system event message, if any. Return true (1)
 // if the keyboard event was handled or false (0) otherwise.
-func (d *KeyboardHandler) OnKeyEvent(browser *Browser, event *KeyEvent, os_event unsafe.Pointer) int32 {
-	return lookupKeyboardHandlerProxy(d.Base()).OnKeyEvent(d, browser, event, os_event)
+func (d *KeyboardHandler) OnKeyEvent(browser *Browser, event *KeyEvent, osEvent unsafe.Pointer) int32 {
+	return lookupKeyboardHandlerProxy(d.Base()).OnKeyEvent(d, browser, event, osEvent)
 }
 
 //nolint:gocritic
 //export gocef_keyboard_handler_on_key_event
-func gocef_keyboard_handler_on_key_event(self *C.cef_keyboard_handler_t, browser *C.cef_browser_t, event *C.cef_key_event_t, os_event unsafe.Pointer) C.int {
+func gocef_keyboard_handler_on_key_event(self *C.cef_keyboard_handler_t, browser *C.cef_browser_t, event *C.cef_key_event_t, osEvent unsafe.Pointer) C.int {
 	me__ := (*KeyboardHandler)(self)
 	proxy__ := lookupKeyboardHandlerProxy(me__.Base())
 	event_ := event.toGo()
-	return C.int(proxy__.OnKeyEvent(me__, (*Browser)(browser), event_, os_event))
+	return C.int(proxy__.OnKeyEvent(me__, (*Browser)(browser), event_, osEvent))
 }

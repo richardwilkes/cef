@@ -10,11 +10,11 @@ import (
 // TouchEvent (cef_touch_event_t from include/internal/cef_types.h)
 // Structure representing touch event information.
 type TouchEvent struct {
-	// Id (id)
+	// ID (id)
 	// Id of a touch point. Must be unique per touch, can be any number except -1.
 	// Note that a maximum of 16 concurrent touches will be tracked; touches
 	// beyond that will be ignored.
-	Id int32
+	ID int32
 	// X (x)
 	// X coordinate relative to the left side of the view.
 	X float32
@@ -58,7 +58,7 @@ func (d *TouchEvent) toNative(native *C.cef_touch_event_t) *C.cef_touch_event_t 
 	if d == nil {
 		return nil
 	}
-	native.id = C.int(d.Id)
+	native.id = C.int(d.ID)
 	native.x = C.float(d.X)
 	native.y = C.float(d.Y)
 	native.radius_x = C.float(d.RadiusX)
@@ -81,7 +81,7 @@ func (n *C.cef_touch_event_t) toGo() *TouchEvent {
 }
 
 func (n *C.cef_touch_event_t) intoGo(d *TouchEvent) {
-	d.Id = int32(n.id)
+	d.ID = int32(n.id)
 	d.X = float32(n.x)
 	d.Y = float32(n.y)
 	d.RadiusX = float32(n.radius_x)

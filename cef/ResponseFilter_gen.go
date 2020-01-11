@@ -17,7 +17,7 @@ import (
 // ResponseFilterProxy defines methods required for using ResponseFilter.
 type ResponseFilterProxy interface {
 	InitFilter(self *ResponseFilter) int32
-	Filter(self *ResponseFilter, data_in unsafe.Pointer, data_in_size uint64, data_in_read *uint64, data_out unsafe.Pointer, data_out_size uint64, data_out_written *uint64) ResponseFilterStatus
+	Filter(self *ResponseFilter, dataIn unsafe.Pointer, dataInSize uint64, dataInRead *uint64, dataOut unsafe.Pointer, dataOutSize uint64, dataOutWritten *uint64) ResponseFilterStatus
 }
 
 // ResponseFilter (cef_response_filter_t from include/capi/cef_response_filter_capi.h)
@@ -102,14 +102,14 @@ func gocef_response_filter_init_filter(self *C.cef_response_filter_t) C.int {
 //  B. The user returns RESPONSE_FILTER_ERROR to indicate an error.
 //
 // Do not keep a reference to the buffers passed to this function.
-func (d *ResponseFilter) Filter(data_in unsafe.Pointer, data_in_size uint64, data_in_read *uint64, data_out unsafe.Pointer, data_out_size uint64, data_out_written *uint64) ResponseFilterStatus {
-	return lookupResponseFilterProxy(d.Base()).Filter(d, data_in, data_in_size, data_in_read, data_out, data_out_size, data_out_written)
+func (d *ResponseFilter) Filter(dataIn unsafe.Pointer, dataInSize uint64, dataInRead *uint64, dataOut unsafe.Pointer, dataOutSize uint64, dataOutWritten *uint64) ResponseFilterStatus {
+	return lookupResponseFilterProxy(d.Base()).Filter(d, dataIn, dataInSize, dataInRead, dataOut, dataOutSize, dataOutWritten)
 }
 
 //nolint:gocritic
 //export gocef_response_filter_filter
-func gocef_response_filter_filter(self *C.cef_response_filter_t, data_in unsafe.Pointer, data_in_size C.size_t, data_in_read *C.size_t, data_out unsafe.Pointer, data_out_size C.size_t, data_out_written *C.size_t) C.cef_response_filter_status_t {
+func gocef_response_filter_filter(self *C.cef_response_filter_t, dataIn unsafe.Pointer, dataInSize C.size_t, dataInRead *C.size_t, dataOut unsafe.Pointer, dataOutSize C.size_t, dataOutWritten *C.size_t) C.cef_response_filter_status_t {
 	me__ := (*ResponseFilter)(self)
 	proxy__ := lookupResponseFilterProxy(me__.Base())
-	return C.cef_response_filter_status_t(proxy__.Filter(me__, data_in, uint64(data_in_size), (*uint64)(data_in_read), data_out, uint64(data_out_size), (*uint64)(data_out_written)))
+	return C.cef_response_filter_status_t(proxy__.Filter(me__, dataIn, uint64(dataInSize), (*uint64)(dataInRead), dataOut, uint64(dataOutSize), (*uint64)(dataOutWritten)))
 }

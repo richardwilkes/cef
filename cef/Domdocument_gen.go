@@ -9,7 +9,7 @@ import (
 	// cef_domnode_t * gocef_domdocument_get_body(cef_domdocument_t * self, cef_domnode_t * (CEF_CALLBACK *callback__)(cef_domdocument_t *)) { return callback__(self); }
 	// cef_domnode_t * gocef_domdocument_get_head(cef_domdocument_t * self, cef_domnode_t * (CEF_CALLBACK *callback__)(cef_domdocument_t *)) { return callback__(self); }
 	// cef_string_userfree_t gocef_domdocument_get_title(cef_domdocument_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_domdocument_t *)) { return callback__(self); }
-	// cef_domnode_t * gocef_domdocument_get_element_by_id(cef_domdocument_t * self, cef_string_t * id, cef_domnode_t * (CEF_CALLBACK *callback__)(cef_domdocument_t *, cef_string_t *)) { return callback__(self, id); }
+	// cef_domnode_t * gocef_domdocument_get_element_by_id(cef_domdocument_t * self, cef_string_t * iD, cef_domnode_t * (CEF_CALLBACK *callback__)(cef_domdocument_t *, cef_string_t *)) { return callback__(self, iD); }
 	// cef_domnode_t * gocef_domdocument_get_focused_node(cef_domdocument_t * self, cef_domnode_t * (CEF_CALLBACK *callback__)(cef_domdocument_t *)) { return callback__(self); }
 	// int gocef_domdocument_has_selection(cef_domdocument_t * self, int (CEF_CALLBACK *callback__)(cef_domdocument_t *)) { return callback__(self); }
 	// int gocef_domdocument_get_selection_start_offset(cef_domdocument_t * self, int (CEF_CALLBACK *callback__)(cef_domdocument_t *)) { return callback__(self); }
@@ -67,15 +67,15 @@ func (d *Domdocument) GetTitle() string {
 	return cefuserfreestrToString(C.gocef_domdocument_get_title(d.toNative(), d.get_title))
 }
 
-// GetElementById (get_element_by_id)
+// GetElementByID (get_element_by_id)
 // Returns the document element with the specified ID value.
-func (d *Domdocument) GetElementById(id string) *Domnode {
-	id_ := C.cef_string_userfree_alloc()
-	setCEFStr(id, id_)
+func (d *Domdocument) GetElementByID(iD string) *Domnode {
+	iD_ := C.cef_string_userfree_alloc()
+	setCEFStr(iD, iD_)
 	defer func() {
-		C.cef_string_userfree_free(id_)
+		C.cef_string_userfree_free(iD_)
 	}()
-	return (*Domnode)(C.gocef_domdocument_get_element_by_id(d.toNative(), (*C.cef_string_t)(id_), d.get_element_by_id))
+	return (*Domnode)(C.gocef_domdocument_get_element_by_id(d.toNative(), (*C.cef_string_t)(iD_), d.get_element_by_id))
 }
 
 // GetFocusedNode (get_focused_node)
@@ -116,18 +116,18 @@ func (d *Domdocument) GetSelectionAsText() string {
 	return cefuserfreestrToString(C.gocef_domdocument_get_selection_as_text(d.toNative(), d.get_selection_as_text))
 }
 
-// GetBaseUrl (get_base_url)
+// GetBaseURL (get_base_url)
 // Returns the base URL for the document.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *Domdocument) GetBaseUrl() string {
+func (d *Domdocument) GetBaseURL() string {
 	return cefuserfreestrToString(C.gocef_domdocument_get_base_url(d.toNative(), d.get_base_url))
 }
 
-// GetCompleteUrl (get_complete_url)
+// GetCompleteURL (get_complete_url)
 // Returns a complete URL based on the document base URL and the specified
 // partial URL.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *Domdocument) GetCompleteUrl(partialURL string) string {
+func (d *Domdocument) GetCompleteURL(partialURL string) string {
 	partialURL_ := C.cef_string_userfree_alloc()
 	setCEFStr(partialURL, partialURL_)
 	defer func() {

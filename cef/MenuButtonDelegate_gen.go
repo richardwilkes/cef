@@ -16,7 +16,7 @@ import (
 
 // MenuButtonDelegateProxy defines methods required for using MenuButtonDelegate.
 type MenuButtonDelegateProxy interface {
-	OnMenuButtonPressed(self *MenuButtonDelegate, menu_button *MenuButton, screen_point *Point, button_pressed_lock *MenuButtonPressedLock)
+	OnMenuButtonPressed(self *MenuButtonDelegate, menuButton *MenuButton, screenPoint *Point, buttonPressedLock *MenuButtonPressedLock)
 }
 
 // MenuButtonDelegate (cef_menu_button_delegate_t from include/capi/views/cef_menu_button_delegate_capi.h)
@@ -62,16 +62,16 @@ func (d *MenuButtonDelegate) Base() *ButtonDelegate {
 // show a popup menu at |screen_point|. When showing a custom popup such as a
 // window keep a reference to |button_pressed_lock| until the popup is hidden
 // to maintain the pressed button state.
-func (d *MenuButtonDelegate) OnMenuButtonPressed(menu_button *MenuButton, screen_point *Point, button_pressed_lock *MenuButtonPressedLock) {
-	lookupMenuButtonDelegateProxy(d.Base().Base().Base()).OnMenuButtonPressed(d, menu_button, screen_point, button_pressed_lock)
+func (d *MenuButtonDelegate) OnMenuButtonPressed(menuButton *MenuButton, screenPoint *Point, buttonPressedLock *MenuButtonPressedLock) {
+	lookupMenuButtonDelegateProxy(d.Base().Base().Base()).OnMenuButtonPressed(d, menuButton, screenPoint, buttonPressedLock)
 }
 
 //nolint:gocritic
 //export gocef_menu_button_delegate_on_menu_button_pressed
-func gocef_menu_button_delegate_on_menu_button_pressed(self *C.cef_menu_button_delegate_t, menu_button *C.cef_menu_button_t, screen_point *C.cef_point_t, button_pressed_lock *C.cef_menu_button_pressed_lock_t) {
+func gocef_menu_button_delegate_on_menu_button_pressed(self *C.cef_menu_button_delegate_t, menuButton *C.cef_menu_button_t, screenPoint *C.cef_point_t, buttonPressedLock *C.cef_menu_button_pressed_lock_t) {
 	me__ := (*MenuButtonDelegate)(self)
 	proxy__ := lookupMenuButtonDelegateProxy(me__.Base().Base().Base())
-	screen_point_ := screen_point.toGo()
-	button_pressed_lock_ := button_pressed_lock.toGo()
-	proxy__.OnMenuButtonPressed(me__, (*MenuButton)(menu_button), screen_point_, button_pressed_lock_)
+	screenPoint_ := screenPoint.toGo()
+	buttonPressedLock_ := buttonPressedLock.toGo()
+	proxy__.OnMenuButtonPressed(me__, (*MenuButton)(menuButton), screenPoint_, buttonPressedLock_)
 }

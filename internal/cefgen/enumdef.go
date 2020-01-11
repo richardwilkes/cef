@@ -38,35 +38,6 @@ func (e *enumDef) Type() string {
 	return "int"
 }
 
-var nameExceptions = []string{
-	"ascii", "com", "ct", "dom", "html", "http", "id", "io", "json", "js",
-	"pdf", "ssl", "ssl2", "ssl3", "st", "tid", "tls", "tls1", "tp", "ts",
-	"tt", "ui", "uri", "url", "v8", "x509", "xml",
-}
-
-func translateConstantName(in string) string {
-	in = strings.TrimPrefix(strings.TrimSpace(in), "CEF_")
-	in = strings.ToLower(in)
-	for _, s := range nameExceptions {
-		upper := strings.ToUpper(s)
-		if strings.HasPrefix(in, s+"_") {
-			in = upper + "_" + in[len(s)+1:]
-		}
-		if strings.HasSuffix(in, "_"+s) {
-			in = in[:len(in)-(1+len(s))] + "_" + upper
-		}
-		for {
-			if i := strings.Index(in, "_"+s+"_"); i == -1 {
-				break
-			} else {
-				in = in[:i+1] + upper + in[i+1+len(s):]
-			}
-		}
-	}
-	in = txt.ToCamelCase(in)
-	return in
-}
-
 func processTypedefDeclEnumDecl(curBlock, prevBlock []lineInfo) {
 	if i := strings.Index(curBlock[0].Line, "'enum cef_"); i != -1 {
 		name := curBlock[0].Line[i+5:]
@@ -124,8 +95,8 @@ func processTypedefDeclEnumDecl(curBlock, prevBlock []lineInfo) {
 						if comma := strings.IndexAny(v[ecol-scol:], ", "); comma != -1 {
 							v = v[:comma+ecol-scol]
 						}
-						if strings.Contains(line, "-DeclRefExpr ") {
-							v = translateConstantName(v)
+						if strings.Contains(line, "-DeclRefExpr ") || (v[0] < '0' || v[0] > '9') {
+							v = translateName(v)
 						}
 						edef.Values[len(edef.Values)-1].setValue(v)
 					}

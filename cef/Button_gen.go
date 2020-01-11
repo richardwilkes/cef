@@ -8,7 +8,7 @@ import (
 	// void gocef_button_set_state(cef_button_t * self, cef_button_state_t state, void (CEF_CALLBACK *callback__)(cef_button_t *, cef_button_state_t)) { return callback__(self, state); }
 	// cef_button_state_t gocef_button_get_state(cef_button_t * self, cef_button_state_t (CEF_CALLBACK *callback__)(cef_button_t *)) { return callback__(self); }
 	// void gocef_button_set_ink_drop_enabled(cef_button_t * self, int enabled, void (CEF_CALLBACK *callback__)(cef_button_t *, int)) { return callback__(self, enabled); }
-	// void gocef_button_set_tooltip_text(cef_button_t * self, cef_string_t * tooltip_text, void (CEF_CALLBACK *callback__)(cef_button_t *, cef_string_t *)) { return callback__(self, tooltip_text); }
+	// void gocef_button_set_tooltip_text(cef_button_t * self, cef_string_t * tooltipText, void (CEF_CALLBACK *callback__)(cef_button_t *, cef_string_t *)) { return callback__(self, tooltipText); }
 	// void gocef_button_set_accessible_name(cef_button_t * self, cef_string_t * name, void (CEF_CALLBACK *callback__)(cef_button_t *, cef_string_t *)) { return callback__(self, name); }
 	"C"
 )
@@ -56,13 +56,13 @@ func (d *Button) SetInkDropEnabled(enabled int32) {
 // SetTooltipText (set_tooltip_text)
 // Sets the tooltip text that will be displayed when the user hovers the mouse
 // cursor over the Button.
-func (d *Button) SetTooltipText(tooltip_text string) {
-	tooltip_text_ := C.cef_string_userfree_alloc()
-	setCEFStr(tooltip_text, tooltip_text_)
+func (d *Button) SetTooltipText(tooltipText string) {
+	tooltipText_ := C.cef_string_userfree_alloc()
+	setCEFStr(tooltipText, tooltipText_)
 	defer func() {
-		C.cef_string_userfree_free(tooltip_text_)
+		C.cef_string_userfree_free(tooltipText_)
 	}()
-	C.gocef_button_set_tooltip_text(d.toNative(), (*C.cef_string_t)(tooltip_text_), d.set_tooltip_text)
+	C.gocef_button_set_tooltip_text(d.toNative(), (*C.cef_string_t)(tooltipText_), d.set_tooltip_text)
 }
 
 // SetAccessibleName (set_accessible_name)

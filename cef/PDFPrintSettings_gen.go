@@ -14,10 +14,10 @@ type PDFPrintSettings struct {
 	// Page title to display in the header. Only used if |header_footer_enabled|
 	// is set to true (1).
 	HeaderFooterTitle string
-	// HeaderFooterUrl (header_footer_url)
+	// HeaderFooterURL (header_footer_url)
 	// URL to display in the footer. Only used if |header_footer_enabled| is set
 	// to true (1).
-	HeaderFooterUrl string
+	HeaderFooterURL string
 	// PageWidth (page_width)
 	// Output page size in microns. If either of these values is less than or
 	// equal to zero then the default paper size (A4) will be used.
@@ -68,7 +68,7 @@ func (d *PDFPrintSettings) toNative(native *C.cef_pdf_print_settings_t) *C.cef_p
 		return nil
 	}
 	setCEFStr(d.HeaderFooterTitle, &native.header_footer_title)
-	setCEFStr(d.HeaderFooterUrl, &native.header_footer_url)
+	setCEFStr(d.HeaderFooterURL, &native.header_footer_url)
 	native.page_width = C.int(d.PageWidth)
 	native.page_height = C.int(d.PageHeight)
 	native.scale_factor = C.int(d.ScaleFactor)
@@ -95,7 +95,7 @@ func (n *C.cef_pdf_print_settings_t) toGo() *PDFPrintSettings {
 
 func (n *C.cef_pdf_print_settings_t) intoGo(d *PDFPrintSettings) {
 	d.HeaderFooterTitle = cefstrToString(&n.header_footer_title)
-	d.HeaderFooterUrl = cefstrToString(&n.header_footer_url)
+	d.HeaderFooterURL = cefstrToString(&n.header_footer_url)
 	d.PageWidth = int32(n.page_width)
 	d.PageHeight = int32(n.page_height)
 	d.ScaleFactor = int32(n.scale_factor)

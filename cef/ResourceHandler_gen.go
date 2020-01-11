@@ -16,12 +16,12 @@ import (
 
 // ResourceHandlerProxy defines methods required for using ResourceHandler.
 type ResourceHandlerProxy interface {
-	Open(self *ResourceHandler, request *Request, handle_request *int32, callback *Callback) int32
+	Open(self *ResourceHandler, request *Request, handleRequest *int32, callback *Callback) int32
 	ProcessRequest(self *ResourceHandler, request *Request, callback *Callback) int32
-	GetResponseHeaders(self *ResourceHandler, response *Response, response_length *int64, redirectUrl *string)
-	Skip(self *ResourceHandler, bytes_to_skip int64, bytes_skipped *int64, callback *ResourceSkipCallback) int32
-	Read(self *ResourceHandler, data_out unsafe.Pointer, bytes_to_read int32, bytes_read *int32, callback *ResourceReadCallback) int32
-	ReadResponse(self *ResourceHandler, data_out unsafe.Pointer, bytes_to_read int32, bytes_read *int32, callback *Callback) int32
+	GetResponseHeaders(self *ResourceHandler, response *Response, responseLength *int64, redirectURL *string)
+	Skip(self *ResourceHandler, bytesToSkip int64, bytesSkipped *int64, callback *ResourceSkipCallback) int32
+	Read(self *ResourceHandler, dataOut unsafe.Pointer, bytesToRead int32, bytesRead *int32, callback *ResourceReadCallback) int32
+	ReadResponse(self *ResourceHandler, dataOut unsafe.Pointer, bytesToRead int32, bytesRead *int32, callback *Callback) int32
 	Cancel(self *ResourceHandler)
 }
 
@@ -71,16 +71,16 @@ func (d *ResourceHandler) Base() *BaseRefCounted {
 // called in sequence but not from a dedicated thread. For backwards
 // compatibility set |handle_request| to false (0) and return false (0) and
 // the ProcessRequest function will be called.
-func (d *ResourceHandler) Open(request *Request, handle_request *int32, callback *Callback) int32 {
-	return lookupResourceHandlerProxy(d.Base()).Open(d, request, handle_request, callback)
+func (d *ResourceHandler) Open(request *Request, handleRequest *int32, callback *Callback) int32 {
+	return lookupResourceHandlerProxy(d.Base()).Open(d, request, handleRequest, callback)
 }
 
 //nolint:gocritic
 //export gocef_resource_handler_open
-func gocef_resource_handler_open(self *C.cef_resource_handler_t, request *C.cef_request_t, handle_request *C.int, callback *C.cef_callback_t) C.int {
+func gocef_resource_handler_open(self *C.cef_resource_handler_t, request *C.cef_request_t, handleRequest *C.int, callback *C.cef_callback_t) C.int {
 	me__ := (*ResourceHandler)(self)
 	proxy__ := lookupResourceHandlerProxy(me__.Base())
-	return C.int(proxy__.Open(me__, (*Request)(request), (*int32)(handle_request), (*Callback)(callback)))
+	return C.int(proxy__.Open(me__, (*Request)(request), (*int32)(handleRequest), (*Callback)(callback)))
 }
 
 // ProcessRequest (process_request)
@@ -117,17 +117,17 @@ func gocef_resource_handler_process_request(self *C.cef_resource_handler_t, requ
 // set a relative or fully qualified URL as the Location header value. If an
 // error occured while setting up the request you can call set_error() on
 // |response| to indicate the error condition.
-func (d *ResourceHandler) GetResponseHeaders(response *Response, response_length *int64, redirectUrl *string) {
-	lookupResourceHandlerProxy(d.Base()).GetResponseHeaders(d, response, response_length, redirectUrl)
+func (d *ResourceHandler) GetResponseHeaders(response *Response, responseLength *int64, redirectURL *string) {
+	lookupResourceHandlerProxy(d.Base()).GetResponseHeaders(d, response, responseLength, redirectURL)
 }
 
 //nolint:gocritic
 //export gocef_resource_handler_get_response_headers
-func gocef_resource_handler_get_response_headers(self *C.cef_resource_handler_t, response *C.cef_response_t, response_length *C.int64, redirectUrl *C.cef_string_t) {
+func gocef_resource_handler_get_response_headers(self *C.cef_resource_handler_t, response *C.cef_response_t, responseLength *C.int64, redirectURL *C.cef_string_t) {
 	me__ := (*ResourceHandler)(self)
 	proxy__ := lookupResourceHandlerProxy(me__.Base())
-	redirectUrl_ := cefstrToString(redirectUrl)
-	proxy__.GetResponseHeaders(me__, (*Response)(response), (*int64)(response_length), &redirectUrl_)
+	redirectURL_ := cefstrToString(redirectURL)
+	proxy__.GetResponseHeaders(me__, (*Response)(response), (*int64)(responseLength), &redirectURL_)
 }
 
 // Skip (skip)
@@ -138,16 +138,16 @@ func gocef_resource_handler_get_response_headers(self *C.cef_resource_handler_t,
 // execute |callback| when the data is available. To indicate failure set
 // |bytes_skipped| to < 0 (e.g. -2 for ERR_FAILED) and return false (0). This
 // function will be called in sequence but not from a dedicated thread.
-func (d *ResourceHandler) Skip(bytes_to_skip int64, bytes_skipped *int64, callback *ResourceSkipCallback) int32 {
-	return lookupResourceHandlerProxy(d.Base()).Skip(d, bytes_to_skip, bytes_skipped, callback)
+func (d *ResourceHandler) Skip(bytesToSkip int64, bytesSkipped *int64, callback *ResourceSkipCallback) int32 {
+	return lookupResourceHandlerProxy(d.Base()).Skip(d, bytesToSkip, bytesSkipped, callback)
 }
 
 //nolint:gocritic
 //export gocef_resource_handler_skip
-func gocef_resource_handler_skip(self *C.cef_resource_handler_t, bytes_to_skip C.int64, bytes_skipped *C.int64, callback *C.cef_resource_skip_callback_t) C.int {
+func gocef_resource_handler_skip(self *C.cef_resource_handler_t, bytesToSkip C.int64, bytesSkipped *C.int64, callback *C.cef_resource_skip_callback_t) C.int {
 	me__ := (*ResourceHandler)(self)
 	proxy__ := lookupResourceHandlerProxy(me__.Base())
-	return C.int(proxy__.Skip(me__, int64(bytes_to_skip), (*int64)(bytes_skipped), (*ResourceSkipCallback)(callback)))
+	return C.int(proxy__.Skip(me__, int64(bytesToSkip), (*int64)(bytesSkipped), (*ResourceSkipCallback)(callback)))
 }
 
 // Read (read)
@@ -162,16 +162,16 @@ func gocef_resource_handler_skip(self *C.cef_resource_handler_t, bytes_to_skip C
 // in sequence but not from a dedicated thread. For backwards compatibility
 // set |bytes_read| to -1 and return false (0) and the ReadResponse function
 // will be called.
-func (d *ResourceHandler) Read(data_out unsafe.Pointer, bytes_to_read int32, bytes_read *int32, callback *ResourceReadCallback) int32 {
-	return lookupResourceHandlerProxy(d.Base()).Read(d, data_out, bytes_to_read, bytes_read, callback)
+func (d *ResourceHandler) Read(dataOut unsafe.Pointer, bytesToRead int32, bytesRead *int32, callback *ResourceReadCallback) int32 {
+	return lookupResourceHandlerProxy(d.Base()).Read(d, dataOut, bytesToRead, bytesRead, callback)
 }
 
 //nolint:gocritic
 //export gocef_resource_handler_read
-func gocef_resource_handler_read(self *C.cef_resource_handler_t, data_out unsafe.Pointer, bytes_to_read C.int, bytes_read *C.int, callback *C.cef_resource_read_callback_t) C.int {
+func gocef_resource_handler_read(self *C.cef_resource_handler_t, dataOut unsafe.Pointer, bytesToRead C.int, bytesRead *C.int, callback *C.cef_resource_read_callback_t) C.int {
 	me__ := (*ResourceHandler)(self)
 	proxy__ := lookupResourceHandlerProxy(me__.Base())
-	return C.int(proxy__.Read(me__, data_out, int32(bytes_to_read), (*int32)(bytes_read), (*ResourceReadCallback)(callback)))
+	return C.int(proxy__.Read(me__, dataOut, int32(bytesToRead), (*int32)(bytesRead), (*ResourceReadCallback)(callback)))
 }
 
 // ReadResponse (read_response)
@@ -182,16 +182,16 @@ func gocef_resource_handler_read(self *C.cef_resource_handler_t, data_out unsafe
 // data is available. To indicate response completion return false (0).
 //
 // WARNING: This function is deprecated. Use Skip and Read instead.
-func (d *ResourceHandler) ReadResponse(data_out unsafe.Pointer, bytes_to_read int32, bytes_read *int32, callback *Callback) int32 {
-	return lookupResourceHandlerProxy(d.Base()).ReadResponse(d, data_out, bytes_to_read, bytes_read, callback)
+func (d *ResourceHandler) ReadResponse(dataOut unsafe.Pointer, bytesToRead int32, bytesRead *int32, callback *Callback) int32 {
+	return lookupResourceHandlerProxy(d.Base()).ReadResponse(d, dataOut, bytesToRead, bytesRead, callback)
 }
 
 //nolint:gocritic
 //export gocef_resource_handler_read_response
-func gocef_resource_handler_read_response(self *C.cef_resource_handler_t, data_out unsafe.Pointer, bytes_to_read C.int, bytes_read *C.int, callback *C.cef_callback_t) C.int {
+func gocef_resource_handler_read_response(self *C.cef_resource_handler_t, dataOut unsafe.Pointer, bytesToRead C.int, bytesRead *C.int, callback *C.cef_callback_t) C.int {
 	me__ := (*ResourceHandler)(self)
 	proxy__ := lookupResourceHandlerProxy(me__.Base())
-	return C.int(proxy__.ReadResponse(me__, data_out, int32(bytes_to_read), (*int32)(bytes_read), (*Callback)(callback)))
+	return C.int(proxy__.ReadResponse(me__, dataOut, int32(bytesToRead), (*int32)(bytesRead), (*Callback)(callback)))
 }
 
 // Cancel (cancel)

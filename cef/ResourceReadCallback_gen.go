@@ -16,7 +16,7 @@ import (
 
 // ResourceReadCallbackProxy defines methods required for using ResourceReadCallback.
 type ResourceReadCallbackProxy interface {
-	Cont(self *ResourceReadCallback, bytes_read int32)
+	Cont(self *ResourceReadCallback, bytesRead int32)
 }
 
 // ResourceReadCallback (cef_resource_read_callback_t from include/capi/cef_resource_handler_capi.h)
@@ -61,14 +61,14 @@ func (d *ResourceReadCallback) Base() *BaseRefCounted {
 // be called again until the request is complete (based on either the result
 // or the expected content length). If |bytes_read| < 0 then the request will
 // fail and the |bytes_read| value will be treated as the error code.
-func (d *ResourceReadCallback) Cont(bytes_read int32) {
-	lookupResourceReadCallbackProxy(d.Base()).Cont(d, bytes_read)
+func (d *ResourceReadCallback) Cont(bytesRead int32) {
+	lookupResourceReadCallbackProxy(d.Base()).Cont(d, bytesRead)
 }
 
 //nolint:gocritic
 //export gocef_resource_read_callback_cont
-func gocef_resource_read_callback_cont(self *C.cef_resource_read_callback_t, bytes_read C.int) {
+func gocef_resource_read_callback_cont(self *C.cef_resource_read_callback_t, bytesRead C.int) {
 	me__ := (*ResourceReadCallback)(self)
 	proxy__ := lookupResourceReadCallbackProxy(me__.Base())
-	proxy__.Cont(me__, int32(bytes_read))
+	proxy__.Cont(me__, int32(bytesRead))
 }

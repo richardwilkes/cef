@@ -17,10 +17,10 @@ import (
 // BrowserProcessHandlerProxy defines methods required for using BrowserProcessHandler.
 type BrowserProcessHandlerProxy interface {
 	OnContextInitialized(self *BrowserProcessHandler)
-	OnBeforeChildProcessLaunch(self *BrowserProcessHandler, command_line *CommandLine)
-	OnRenderProcessThreadCreated(self *BrowserProcessHandler, extra_info *ListValue)
+	OnBeforeChildProcessLaunch(self *BrowserProcessHandler, commandLine *CommandLine)
+	OnRenderProcessThreadCreated(self *BrowserProcessHandler, extraInfo *ListValue)
 	GetPrintHandler(self *BrowserProcessHandler) *PrintHandler
-	OnScheduleMessagePumpWork(self *BrowserProcessHandler, delay_ms int64)
+	OnScheduleMessagePumpWork(self *BrowserProcessHandler, delayMs int64)
 }
 
 // BrowserProcessHandler (cef_browser_process_handler_t from include/capi/cef_browser_process_handler_capi.h)
@@ -82,16 +82,16 @@ func gocef_browser_process_handler_on_context_initialized(self *C.cef_browser_pr
 // process IO thread when launching a GPU or plugin process. Provides an
 // opportunity to modify the child process command line. Do not keep a
 // reference to |command_line| outside of this function.
-func (d *BrowserProcessHandler) OnBeforeChildProcessLaunch(command_line *CommandLine) {
-	lookupBrowserProcessHandlerProxy(d.Base()).OnBeforeChildProcessLaunch(d, command_line)
+func (d *BrowserProcessHandler) OnBeforeChildProcessLaunch(commandLine *CommandLine) {
+	lookupBrowserProcessHandlerProxy(d.Base()).OnBeforeChildProcessLaunch(d, commandLine)
 }
 
 //nolint:gocritic
 //export gocef_browser_process_handler_on_before_child_process_launch
-func gocef_browser_process_handler_on_before_child_process_launch(self *C.cef_browser_process_handler_t, command_line *C.cef_command_line_t) {
+func gocef_browser_process_handler_on_before_child_process_launch(self *C.cef_browser_process_handler_t, commandLine *C.cef_command_line_t) {
 	me__ := (*BrowserProcessHandler)(self)
 	proxy__ := lookupBrowserProcessHandlerProxy(me__.Base())
-	proxy__.OnBeforeChildProcessLaunch(me__, (*CommandLine)(command_line))
+	proxy__.OnBeforeChildProcessLaunch(me__, (*CommandLine)(commandLine))
 }
 
 // OnRenderProcessThreadCreated (on_render_process_thread_created)
@@ -100,16 +100,16 @@ func gocef_browser_process_handler_on_before_child_process_launch(self *C.cef_br
 // information that will be passed to
 // cef_render_process_handler_t::on_render_thread_created() in the render
 // process. Do not keep a reference to |extra_info| outside of this function.
-func (d *BrowserProcessHandler) OnRenderProcessThreadCreated(extra_info *ListValue) {
-	lookupBrowserProcessHandlerProxy(d.Base()).OnRenderProcessThreadCreated(d, extra_info)
+func (d *BrowserProcessHandler) OnRenderProcessThreadCreated(extraInfo *ListValue) {
+	lookupBrowserProcessHandlerProxy(d.Base()).OnRenderProcessThreadCreated(d, extraInfo)
 }
 
 //nolint:gocritic
 //export gocef_browser_process_handler_on_render_process_thread_created
-func gocef_browser_process_handler_on_render_process_thread_created(self *C.cef_browser_process_handler_t, extra_info *C.cef_list_value_t) {
+func gocef_browser_process_handler_on_render_process_thread_created(self *C.cef_browser_process_handler_t, extraInfo *C.cef_list_value_t) {
 	me__ := (*BrowserProcessHandler)(self)
 	proxy__ := lookupBrowserProcessHandlerProxy(me__.Base())
-	proxy__.OnRenderProcessThreadCreated(me__, (*ListValue)(extra_info))
+	proxy__.OnRenderProcessThreadCreated(me__, (*ListValue)(extraInfo))
 }
 
 // GetPrintHandler (get_print_handler)
@@ -139,14 +139,14 @@ func gocef_browser_process_handler_get_print_handler(self *C.cef_browser_process
 // |delay_ms| is > 0 then the call should be scheduled to happen after the
 // specified delay and any currently pending scheduled call should be
 // cancelled.
-func (d *BrowserProcessHandler) OnScheduleMessagePumpWork(delay_ms int64) {
-	lookupBrowserProcessHandlerProxy(d.Base()).OnScheduleMessagePumpWork(d, delay_ms)
+func (d *BrowserProcessHandler) OnScheduleMessagePumpWork(delayMs int64) {
+	lookupBrowserProcessHandlerProxy(d.Base()).OnScheduleMessagePumpWork(d, delayMs)
 }
 
 //nolint:gocritic
 //export gocef_browser_process_handler_on_schedule_message_pump_work
-func gocef_browser_process_handler_on_schedule_message_pump_work(self *C.cef_browser_process_handler_t, delay_ms C.int64) {
+func gocef_browser_process_handler_on_schedule_message_pump_work(self *C.cef_browser_process_handler_t, delayMs C.int64) {
 	me__ := (*BrowserProcessHandler)(self)
 	proxy__ := lookupBrowserProcessHandlerProxy(me__.Base())
-	proxy__.OnScheduleMessagePumpWork(me__, int64(delay_ms))
+	proxy__.OnScheduleMessagePumpWork(me__, int64(delayMs))
 }

@@ -38,25 +38,25 @@ func (d *NavigationEntry) IsValid() int32 {
 	return int32(C.gocef_navigation_entry_is_valid(d.toNative(), d.is_valid))
 }
 
-// GetUrl (get_url)
+// GetURL (get_url)
 // Returns the actual URL of the page. For some pages this may be data: URL or
 // similar. Use get_display_url() to return a display-friendly version.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *NavigationEntry) GetUrl() string {
+func (d *NavigationEntry) GetURL() string {
 	return cefuserfreestrToString(C.gocef_navigation_entry_get_url(d.toNative(), d.get_url))
 }
 
-// GetDisplayUrl (get_display_url)
+// GetDisplayURL (get_display_url)
 // Returns a display-friendly version of the URL.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *NavigationEntry) GetDisplayUrl() string {
+func (d *NavigationEntry) GetDisplayURL() string {
 	return cefuserfreestrToString(C.gocef_navigation_entry_get_display_url(d.toNative(), d.get_display_url))
 }
 
-// GetOriginalUrl (get_original_url)
+// GetOriginalURL (get_original_url)
 // Returns the original URL that was entered by the user before any redirects.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *NavigationEntry) GetOriginalUrl() string {
+func (d *NavigationEntry) GetOriginalURL() string {
 	return cefuserfreestrToString(C.gocef_navigation_entry_get_original_url(d.toNative(), d.get_original_url))
 }
 
@@ -91,11 +91,11 @@ func (d *NavigationEntry) GetCompletionTime() Time {
 	return result__
 }
 
-// GetHttpStatusCode (get_http_status_code)
+// GetHTTPStatusCode (get_http_status_code)
 // Returns the HTTP status code for the last known successful navigation
 // response. May be 0 if the response has not yet been received or if the
 // navigation has not yet completed.
-func (d *NavigationEntry) GetHttpStatusCode() int32 {
+func (d *NavigationEntry) GetHTTPStatusCode() int32 {
 	return int32(C.gocef_navigation_entry_get_http_status_code(d.toNative(), d.get_http_status_code))
 }
 

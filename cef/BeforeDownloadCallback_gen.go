@@ -16,7 +16,7 @@ import (
 
 // BeforeDownloadCallbackProxy defines methods required for using BeforeDownloadCallback.
 type BeforeDownloadCallbackProxy interface {
-	Cont(self *BeforeDownloadCallback, download_path string, show_dialog int32)
+	Cont(self *BeforeDownloadCallback, downloadPath string, showDialog int32)
 }
 
 // BeforeDownloadCallback (cef_before_download_callback_t from include/capi/cef_download_handler_capi.h)
@@ -60,15 +60,15 @@ func (d *BeforeDownloadCallback) Base() *BaseRefCounted {
 // for the download including the file name or leave blank to use the
 // suggested name and the default temp directory. Set |show_dialog| to true
 // (1) if you do wish to show the default "Save As" dialog.
-func (d *BeforeDownloadCallback) Cont(download_path string, show_dialog int32) {
-	lookupBeforeDownloadCallbackProxy(d.Base()).Cont(d, download_path, show_dialog)
+func (d *BeforeDownloadCallback) Cont(downloadPath string, showDialog int32) {
+	lookupBeforeDownloadCallbackProxy(d.Base()).Cont(d, downloadPath, showDialog)
 }
 
 //nolint:gocritic
 //export gocef_before_download_callback_cont
-func gocef_before_download_callback_cont(self *C.cef_before_download_callback_t, download_path *C.cef_string_t, show_dialog C.int) {
+func gocef_before_download_callback_cont(self *C.cef_before_download_callback_t, downloadPath *C.cef_string_t, showDialog C.int) {
 	me__ := (*BeforeDownloadCallback)(self)
 	proxy__ := lookupBeforeDownloadCallbackProxy(me__.Base())
-	download_path_ := cefstrToString(download_path)
-	proxy__.Cont(me__, download_path_, int32(show_dialog))
+	downloadPath_ := cefstrToString(downloadPath)
+	proxy__.Cont(me__, downloadPath_, int32(showDialog))
 }

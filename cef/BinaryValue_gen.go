@@ -12,7 +12,7 @@ import (
 	// int gocef_binary_value_is_equal(cef_binary_value_t * self, cef_binary_value_t * that, int (CEF_CALLBACK *callback__)(cef_binary_value_t *, cef_binary_value_t *)) { return callback__(self, that); }
 	// cef_binary_value_t * gocef_binary_value_copy(cef_binary_value_t * self, cef_binary_value_t * (CEF_CALLBACK *callback__)(cef_binary_value_t *)) { return callback__(self); }
 	// size_t gocef_binary_value_get_size(cef_binary_value_t * self, size_t (CEF_CALLBACK *callback__)(cef_binary_value_t *)) { return callback__(self); }
-	// size_t gocef_binary_value_get_data(cef_binary_value_t * self, void * buffer, size_t buffer_size, size_t data_offset, size_t (CEF_CALLBACK *callback__)(cef_binary_value_t *, void *, size_t, size_t)) { return callback__(self, buffer, buffer_size, data_offset); }
+	// size_t gocef_binary_value_get_data(cef_binary_value_t * self, void * buffer, size_t bufferSize, size_t dataOffset, size_t (CEF_CALLBACK *callback__)(cef_binary_value_t *, void *, size_t, size_t)) { return callback__(self, buffer, bufferSize, dataOffset); }
 	"C"
 )
 
@@ -74,6 +74,6 @@ func (d *BinaryValue) GetSize() uint64 {
 // GetData (get_data)
 // Read up to |buffer_size| number of bytes into |buffer|. Reading begins at
 // the specified byte |data_offset|. Returns the number of bytes read.
-func (d *BinaryValue) GetData(buffer unsafe.Pointer, buffer_size, data_offset uint64) uint64 {
-	return uint64(C.gocef_binary_value_get_data(d.toNative(), buffer, C.size_t(buffer_size), C.size_t(data_offset), d.get_data))
+func (d *BinaryValue) GetData(buffer unsafe.Pointer, bufferSize, dataOffset uint64) uint64 {
+	return uint64(C.gocef_binary_value_get_data(d.toNative(), buffer, C.size_t(bufferSize), C.size_t(dataOffset), d.get_data))
 }

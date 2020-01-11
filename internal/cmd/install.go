@@ -163,7 +163,8 @@ func (c *install) untar(in io.Reader) {
 			case tar.TypeDir:
 				createDir(name, os.FileMode(h.Mode|0555))
 			case tar.TypeReg:
-				buffer, err := ioutil.ReadAll(r)
+				var buffer []byte
+				buffer, err = ioutil.ReadAll(r)
 				checkFileError(err, "read archive data for", name)
 				if name == path.Join(installPrefix, "include/capi/cef_resource_request_handler_capi.h") {
 					const includeToRemove = `#include "include/internal/cef_types_wrappers.h"`

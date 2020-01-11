@@ -16,7 +16,7 @@ import (
 
 // RunContextMenuCallbackProxy defines methods required for using RunContextMenuCallback.
 type RunContextMenuCallbackProxy interface {
-	Cont(self *RunContextMenuCallback, command_id int32, event_flags EventFlags)
+	Cont(self *RunContextMenuCallback, commandID int32, eventFlags EventFlags)
 	Cancel(self *RunContextMenuCallback)
 }
 
@@ -59,16 +59,16 @@ func (d *RunContextMenuCallback) Base() *BaseRefCounted {
 // Cont (cont)
 // Complete context menu display by selecting the specified |command_id| and
 // |event_flags|.
-func (d *RunContextMenuCallback) Cont(command_id int32, event_flags EventFlags) {
-	lookupRunContextMenuCallbackProxy(d.Base()).Cont(d, command_id, event_flags)
+func (d *RunContextMenuCallback) Cont(commandID int32, eventFlags EventFlags) {
+	lookupRunContextMenuCallbackProxy(d.Base()).Cont(d, commandID, eventFlags)
 }
 
 //nolint:gocritic
 //export gocef_run_context_menu_callback_cont
-func gocef_run_context_menu_callback_cont(self *C.cef_run_context_menu_callback_t, command_id C.int, event_flags C.cef_event_flags_t) {
+func gocef_run_context_menu_callback_cont(self *C.cef_run_context_menu_callback_t, commandID C.int, eventFlags C.cef_event_flags_t) {
 	me__ := (*RunContextMenuCallback)(self)
 	proxy__ := lookupRunContextMenuCallbackProxy(me__.Base())
-	proxy__.Cont(me__, int32(command_id), EventFlags(event_flags))
+	proxy__.Cont(me__, int32(commandID), EventFlags(eventFlags))
 }
 
 // Cancel (cancel)

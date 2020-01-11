@@ -7,11 +7,11 @@ import (
 	// cef_menu_button_t * gocef_label_button_as_menu_button(cef_label_button_t * self, cef_menu_button_t * (CEF_CALLBACK *callback__)(cef_label_button_t *)) { return callback__(self); }
 	// void gocef_label_button_set_text(cef_label_button_t * self, cef_string_t * text, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_string_t *)) { return callback__(self, text); }
 	// cef_string_userfree_t gocef_label_button_get_text(cef_label_button_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_label_button_t *)) { return callback__(self); }
-	// void gocef_label_button_set_image(cef_label_button_t * self, cef_button_state_t button_state, cef_image_t * image, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_button_state_t, cef_image_t *)) { return callback__(self, button_state, image); }
-	// cef_image_t * gocef_label_button_get_image(cef_label_button_t * self, cef_button_state_t button_state, cef_image_t * (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_button_state_t)) { return callback__(self, button_state); }
-	// void gocef_label_button_set_text_color(cef_label_button_t * self, cef_button_state_t for_state, cef_color_t color, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_button_state_t, cef_color_t)) { return callback__(self, for_state, color); }
+	// void gocef_label_button_set_image(cef_label_button_t * self, cef_button_state_t buttonState, cef_image_t * image, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_button_state_t, cef_image_t *)) { return callback__(self, buttonState, image); }
+	// cef_image_t * gocef_label_button_get_image(cef_label_button_t * self, cef_button_state_t buttonState, cef_image_t * (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_button_state_t)) { return callback__(self, buttonState); }
+	// void gocef_label_button_set_text_color(cef_label_button_t * self, cef_button_state_t forState, cef_color_t color, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_button_state_t, cef_color_t)) { return callback__(self, forState, color); }
 	// void gocef_label_button_set_enabled_text_colors(cef_label_button_t * self, cef_color_t color, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_color_t)) { return callback__(self, color); }
-	// void gocef_label_button_set_font_list(cef_label_button_t * self, cef_string_t * font_list, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_string_t *)) { return callback__(self, font_list); }
+	// void gocef_label_button_set_font_list(cef_label_button_t * self, cef_string_t * fontList, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_string_t *)) { return callback__(self, fontList); }
 	// void gocef_label_button_set_horizontal_alignment(cef_label_button_t * self, cef_horizontal_alignment_t alignment, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_horizontal_alignment_t)) { return callback__(self, alignment); }
 	// void gocef_label_button_set_minimum_size(cef_label_button_t * self, cef_size_t * size, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_size_t *)) { return callback__(self, size); }
 	// void gocef_label_button_set_maximum_size(cef_label_button_t * self, cef_size_t * size, void (CEF_CALLBACK *callback__)(cef_label_button_t *, cef_size_t *)) { return callback__(self, size); }
@@ -63,21 +63,21 @@ func (d *LabelButton) GetText() string {
 // Sets the image shown for |button_state|. When this Button is drawn if no
 // image exists for the current state then the image for
 // CEF_BUTTON_STATE_NORMAL, if any, will be shown.
-func (d *LabelButton) SetImage(button_state ButtonState, image *Image) {
-	C.gocef_label_button_set_image(d.toNative(), C.cef_button_state_t(button_state), image.toNative(), d.set_image)
+func (d *LabelButton) SetImage(buttonState ButtonState, image *Image) {
+	C.gocef_label_button_set_image(d.toNative(), C.cef_button_state_t(buttonState), image.toNative(), d.set_image)
 }
 
 // GetImage (get_image)
 // Returns the image shown for |button_state|. If no image exists for that
 // state then the image for CEF_BUTTON_STATE_NORMAL will be returned.
-func (d *LabelButton) GetImage(button_state ButtonState) *Image {
-	return (*Image)(C.gocef_label_button_get_image(d.toNative(), C.cef_button_state_t(button_state), d.get_image))
+func (d *LabelButton) GetImage(buttonState ButtonState) *Image {
+	return (*Image)(C.gocef_label_button_get_image(d.toNative(), C.cef_button_state_t(buttonState), d.get_image))
 }
 
 // SetTextColor (set_text_color)
 // Sets the text color shown for the specified button |for_state| to |color|.
-func (d *LabelButton) SetTextColor(for_state ButtonState, color Color) {
-	C.gocef_label_button_set_text_color(d.toNative(), C.cef_button_state_t(for_state), C.cef_color_t(color), d.set_text_color)
+func (d *LabelButton) SetTextColor(forState ButtonState, color Color) {
+	C.gocef_label_button_set_text_color(d.toNative(), C.cef_button_state_t(forState), C.cef_color_t(color), d.set_text_color)
 }
 
 // SetEnabledTextColors (set_enabled_text_colors)
@@ -95,13 +95,13 @@ func (d *LabelButton) SetEnabledTextColors(color Color) {
 //
 // Here are examples of valid font description strings: - "Arial, Helvetica,
 // Bold Italic 14px" - "Arial, 14px"
-func (d *LabelButton) SetFontList(font_list string) {
-	font_list_ := C.cef_string_userfree_alloc()
-	setCEFStr(font_list, font_list_)
+func (d *LabelButton) SetFontList(fontList string) {
+	fontList_ := C.cef_string_userfree_alloc()
+	setCEFStr(fontList, fontList_)
 	defer func() {
-		C.cef_string_userfree_free(font_list_)
+		C.cef_string_userfree_free(fontList_)
 	}()
-	C.gocef_label_button_set_font_list(d.toNative(), (*C.cef_string_t)(font_list_), d.set_font_list)
+	C.gocef_label_button_set_font_list(d.toNative(), (*C.cef_string_t)(fontList_), d.set_font_list)
 }
 
 // SetHorizontalAlignment (set_horizontal_alignment)

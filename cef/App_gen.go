@@ -16,7 +16,7 @@ import (
 
 // AppProxy defines methods required for using App.
 type AppProxy interface {
-	OnBeforeCommandLineProcessing(self *App, process_type string, command_line *CommandLine)
+	OnBeforeCommandLineProcessing(self *App, processType string, commandLine *CommandLine)
 	OnRegisterCustomSchemes(self *App, registrar *SchemeRegistrar)
 	GetResourceBundleHandler(self *App) *ResourceBundleHandler
 	GetBrowserProcessHandler(self *App) *BrowserProcessHandler
@@ -70,17 +70,17 @@ func (d *App) Base() *BaseRefCounted {
 // before this function is called. Be cautious when using this function to
 // modify command-line arguments for non-browser processes as this may result
 // in undefined behavior including crashes.
-func (d *App) OnBeforeCommandLineProcessing(process_type string, command_line *CommandLine) {
-	lookupAppProxy(d.Base()).OnBeforeCommandLineProcessing(d, process_type, command_line)
+func (d *App) OnBeforeCommandLineProcessing(processType string, commandLine *CommandLine) {
+	lookupAppProxy(d.Base()).OnBeforeCommandLineProcessing(d, processType, commandLine)
 }
 
 //nolint:gocritic
 //export gocef_app_on_before_command_line_processing
-func gocef_app_on_before_command_line_processing(self *C.cef_app_t, process_type *C.cef_string_t, command_line *C.cef_command_line_t) {
+func gocef_app_on_before_command_line_processing(self *C.cef_app_t, processType *C.cef_string_t, commandLine *C.cef_command_line_t) {
 	me__ := (*App)(self)
 	proxy__ := lookupAppProxy(me__.Base())
-	process_type_ := cefstrToString(process_type)
-	proxy__.OnBeforeCommandLineProcessing(me__, process_type_, (*CommandLine)(command_line))
+	processType_ := cefstrToString(processType)
+	proxy__.OnBeforeCommandLineProcessing(me__, processType_, (*CommandLine)(commandLine))
 }
 
 // OnRegisterCustomSchemes (on_register_custom_schemes)

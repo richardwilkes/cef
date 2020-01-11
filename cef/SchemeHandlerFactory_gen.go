@@ -4,7 +4,7 @@ package cef
 
 import (
 	// #include "capi_gen.h"
-	// cef_resource_handler_t * gocef_scheme_handler_factory_create(cef_scheme_handler_factory_t * self, cef_browser_t * browser, cef_frame_t * frame, cef_string_t * scheme_name, cef_request_t * request, cef_resource_handler_t * (CEF_CALLBACK *callback__)(cef_scheme_handler_factory_t *, cef_browser_t *, cef_frame_t *, cef_string_t *, cef_request_t *)) { return callback__(self, browser, frame, scheme_name, request); }
+	// cef_resource_handler_t * gocef_scheme_handler_factory_create(cef_scheme_handler_factory_t * self, cef_browser_t * browser, cef_frame_t * frame, cef_string_t * schemeName, cef_request_t * request, cef_resource_handler_t * (CEF_CALLBACK *callback__)(cef_scheme_handler_factory_t *, cef_browser_t *, cef_frame_t *, cef_string_t *, cef_request_t *)) { return callback__(self, browser, frame, schemeName, request); }
 	"C"
 )
 
@@ -31,11 +31,11 @@ func (d *SchemeHandlerFactory) Base() *BaseRefCounted {
 // request or NULL if the request did not originate from a browser window (for
 // example, if the request came from cef_urlrequest_t). The |request| object
 // passed to this function cannot be modified.
-func (d *SchemeHandlerFactory) Create(browser *Browser, frame *Frame, scheme_name string, request *Request) *ResourceHandler {
-	scheme_name_ := C.cef_string_userfree_alloc()
-	setCEFStr(scheme_name, scheme_name_)
+func (d *SchemeHandlerFactory) Create(browser *Browser, frame *Frame, schemeName string, request *Request) *ResourceHandler {
+	schemeName_ := C.cef_string_userfree_alloc()
+	setCEFStr(schemeName, schemeName_)
 	defer func() {
-		C.cef_string_userfree_free(scheme_name_)
+		C.cef_string_userfree_free(schemeName_)
 	}()
-	return (*ResourceHandler)(C.gocef_scheme_handler_factory_create(d.toNative(), browser.toNative(), frame.toNative(), (*C.cef_string_t)(scheme_name_), request.toNative(), d.create))
+	return (*ResourceHandler)(C.gocef_scheme_handler_factory_create(d.toNative(), browser.toNative(), frame.toNative(), (*C.cef_string_t)(schemeName_), request.toNative(), d.create))
 }

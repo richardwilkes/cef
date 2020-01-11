@@ -11,14 +11,14 @@ import (
 	// int gocef_server_is_running(cef_server_t * self, int (CEF_CALLBACK *callback__)(cef_server_t *)) { return callback__(self); }
 	// cef_string_userfree_t gocef_server_get_address(cef_server_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_server_t *)) { return callback__(self); }
 	// int gocef_server_has_connection(cef_server_t * self, int (CEF_CALLBACK *callback__)(cef_server_t *)) { return callback__(self); }
-	// int gocef_server_is_valid_connection(cef_server_t * self, int connection_id, int (CEF_CALLBACK *callback__)(cef_server_t *, int)) { return callback__(self, connection_id); }
-	// void gocef_server_send_http200response(cef_server_t * self, int connection_id, cef_string_t * content_type, void * data, size_t data_size, void (CEF_CALLBACK *callback__)(cef_server_t *, int, cef_string_t *, void *, size_t)) { return callback__(self, connection_id, content_type, data, data_size); }
-	// void gocef_server_send_http404response(cef_server_t * self, int connection_id, void (CEF_CALLBACK *callback__)(cef_server_t *, int)) { return callback__(self, connection_id); }
-	// void gocef_server_send_http500response(cef_server_t * self, int connection_id, cef_string_t * error_message, void (CEF_CALLBACK *callback__)(cef_server_t *, int, cef_string_t *)) { return callback__(self, connection_id, error_message); }
-	// void gocef_server_send_http_response(cef_server_t * self, int connection_id, int response_code, cef_string_t * content_type, int64 content_length, cef_string_multimap_t extra_headers, void (CEF_CALLBACK *callback__)(cef_server_t *, int, int, cef_string_t *, int64, cef_string_multimap_t)) { return callback__(self, connection_id, response_code, content_type, content_length, extra_headers); }
-	// void gocef_server_send_raw_data(cef_server_t * self, int connection_id, void * data, size_t data_size, void (CEF_CALLBACK *callback__)(cef_server_t *, int, void *, size_t)) { return callback__(self, connection_id, data, data_size); }
-	// void gocef_server_close_connection(cef_server_t * self, int connection_id, void (CEF_CALLBACK *callback__)(cef_server_t *, int)) { return callback__(self, connection_id); }
-	// void gocef_server_send_web_socket_message(cef_server_t * self, int connection_id, void * data, size_t data_size, void (CEF_CALLBACK *callback__)(cef_server_t *, int, void *, size_t)) { return callback__(self, connection_id, data, data_size); }
+	// int gocef_server_is_valid_connection(cef_server_t * self, int connectionID, int (CEF_CALLBACK *callback__)(cef_server_t *, int)) { return callback__(self, connectionID); }
+	// void gocef_server_send_http200response(cef_server_t * self, int connectionID, cef_string_t * contentType, void * data, size_t dataSize, void (CEF_CALLBACK *callback__)(cef_server_t *, int, cef_string_t *, void *, size_t)) { return callback__(self, connectionID, contentType, data, dataSize); }
+	// void gocef_server_send_http404response(cef_server_t * self, int connectionID, void (CEF_CALLBACK *callback__)(cef_server_t *, int)) { return callback__(self, connectionID); }
+	// void gocef_server_send_http500response(cef_server_t * self, int connectionID, cef_string_t * errorMessage, void (CEF_CALLBACK *callback__)(cef_server_t *, int, cef_string_t *)) { return callback__(self, connectionID, errorMessage); }
+	// void gocef_server_send_http_response(cef_server_t * self, int connectionID, int responseCode, cef_string_t * contentType, int64 contentLength, cef_string_multimap_t extraHeaders, void (CEF_CALLBACK *callback__)(cef_server_t *, int, int, cef_string_t *, int64, cef_string_multimap_t)) { return callback__(self, connectionID, responseCode, contentType, contentLength, extraHeaders); }
+	// void gocef_server_send_raw_data(cef_server_t * self, int connectionID, void * data, size_t dataSize, void (CEF_CALLBACK *callback__)(cef_server_t *, int, void *, size_t)) { return callback__(self, connectionID, data, dataSize); }
+	// void gocef_server_close_connection(cef_server_t * self, int connectionID, void (CEF_CALLBACK *callback__)(cef_server_t *, int)) { return callback__(self, connectionID); }
+	// void gocef_server_send_web_socket_message(cef_server_t * self, int connectionID, void * data, size_t dataSize, void (CEF_CALLBACK *callback__)(cef_server_t *, int, void *, size_t)) { return callback__(self, connectionID, data, dataSize); }
 	"C"
 )
 
@@ -80,48 +80,48 @@ func (d *Server) HasConnection() int32 {
 // IsValidConnection (is_valid_connection)
 // Returns true (1) if |connection_id| represents a valid connection. This
 // function must be called on the dedicated server thread.
-func (d *Server) IsValidConnection(connection_id int32) int32 {
-	return int32(C.gocef_server_is_valid_connection(d.toNative(), C.int(connection_id), d.is_valid_connection))
+func (d *Server) IsValidConnection(connectionID int32) int32 {
+	return int32(C.gocef_server_is_valid_connection(d.toNative(), C.int(connectionID), d.is_valid_connection))
 }
 
-// SendHttp200response (send_http200response)
+// SendHTTP200Response (send_http200response)
 // Send an HTTP 200 "OK" response to the connection identified by
 // |connection_id|. |content_type| is the response content type (e.g.
 // "text/html"), |data| is the response content, and |data_size| is the size
 // of |data| in bytes. The contents of |data| will be copied. The connection
 // will be closed automatically after the response is sent.
-func (d *Server) SendHttp200response(connection_id int32, content_type string, data unsafe.Pointer, data_size uint64) {
-	content_type_ := C.cef_string_userfree_alloc()
-	setCEFStr(content_type, content_type_)
+func (d *Server) SendHTTP200Response(connectionID int32, contentType string, data unsafe.Pointer, dataSize uint64) {
+	contentType_ := C.cef_string_userfree_alloc()
+	setCEFStr(contentType, contentType_)
 	defer func() {
-		C.cef_string_userfree_free(content_type_)
+		C.cef_string_userfree_free(contentType_)
 	}()
-	C.gocef_server_send_http200response(d.toNative(), C.int(connection_id), (*C.cef_string_t)(content_type_), data, C.size_t(data_size), d.send_http200response)
+	C.gocef_server_send_http200response(d.toNative(), C.int(connectionID), (*C.cef_string_t)(contentType_), data, C.size_t(dataSize), d.send_http200response)
 }
 
-// SendHttp404response (send_http404response)
+// SendHTTP404Response (send_http404response)
 // Send an HTTP 404 "Not Found" response to the connection identified by
 // |connection_id|. The connection will be closed automatically after the
 // response is sent.
-func (d *Server) SendHttp404response(connection_id int32) {
-	C.gocef_server_send_http404response(d.toNative(), C.int(connection_id), d.send_http404response)
+func (d *Server) SendHTTP404Response(connectionID int32) {
+	C.gocef_server_send_http404response(d.toNative(), C.int(connectionID), d.send_http404response)
 }
 
-// SendHttp500response (send_http500response)
+// SendHTTP500Response (send_http500response)
 // Send an HTTP 500 "Internal Server Error" response to the connection
 // identified by |connection_id|. |error_message| is the associated error
 // message. The connection will be closed automatically after the response is
 // sent.
-func (d *Server) SendHttp500response(connection_id int32, error_message string) {
-	error_message_ := C.cef_string_userfree_alloc()
-	setCEFStr(error_message, error_message_)
+func (d *Server) SendHTTP500Response(connectionID int32, errorMessage string) {
+	errorMessage_ := C.cef_string_userfree_alloc()
+	setCEFStr(errorMessage, errorMessage_)
 	defer func() {
-		C.cef_string_userfree_free(error_message_)
+		C.cef_string_userfree_free(errorMessage_)
 	}()
-	C.gocef_server_send_http500response(d.toNative(), C.int(connection_id), (*C.cef_string_t)(error_message_), d.send_http500response)
+	C.gocef_server_send_http500response(d.toNative(), C.int(connectionID), (*C.cef_string_t)(errorMessage_), d.send_http500response)
 }
 
-// SendHttpResponse (send_http_response)
+// SendHTTPResponse (send_http_response)
 // Send a custom HTTP response to the connection identified by
 // |connection_id|. |response_code| is the HTTP response code sent in the
 // status line (e.g. 200), |content_type| is the response content type sent as
@@ -134,13 +134,13 @@ func (d *Server) SendHttp500response(connection_id int32, error_message string) 
 // the client will continue reading until the connection is closed. Use the
 // SendRawData function to send the content, if applicable, and call
 // CloseConnection after all content has been sent.
-func (d *Server) SendHttpResponse(connection_id, response_code int32, content_type string, content_length int64, extra_headers StringMultimap) {
-	content_type_ := C.cef_string_userfree_alloc()
-	setCEFStr(content_type, content_type_)
+func (d *Server) SendHTTPResponse(connectionID, responseCode int32, contentType string, contentLength int64, extraHeaders StringMultimap) {
+	contentType_ := C.cef_string_userfree_alloc()
+	setCEFStr(contentType, contentType_)
 	defer func() {
-		C.cef_string_userfree_free(content_type_)
+		C.cef_string_userfree_free(contentType_)
 	}()
-	C.gocef_server_send_http_response(d.toNative(), C.int(connection_id), C.int(response_code), (*C.cef_string_t)(content_type_), C.int64(content_length), C.cef_string_multimap_t(extra_headers), d.send_http_response)
+	C.gocef_server_send_http_response(d.toNative(), C.int(connectionID), C.int(responseCode), (*C.cef_string_t)(contentType_), C.int64(contentLength), C.cef_string_multimap_t(extraHeaders), d.send_http_response)
 }
 
 // SendRawData (send_raw_data)
@@ -150,15 +150,15 @@ func (d *Server) SendHttpResponse(connection_id, response_code int32, content_ty
 // internally so the client should be careful to send the amount indicated by
 // the "Content-Length" header, if specified. See SendHttpResponse
 // documentation for intended usage.
-func (d *Server) SendRawData(connection_id int32, data unsafe.Pointer, data_size uint64) {
-	C.gocef_server_send_raw_data(d.toNative(), C.int(connection_id), data, C.size_t(data_size), d.send_raw_data)
+func (d *Server) SendRawData(connectionID int32, data unsafe.Pointer, dataSize uint64) {
+	C.gocef_server_send_raw_data(d.toNative(), C.int(connectionID), data, C.size_t(dataSize), d.send_raw_data)
 }
 
 // CloseConnection (close_connection)
 // Close the connection identified by |connection_id|. See SendHttpResponse
 // documentation for intended usage.
-func (d *Server) CloseConnection(connection_id int32) {
-	C.gocef_server_close_connection(d.toNative(), C.int(connection_id), d.close_connection)
+func (d *Server) CloseConnection(connectionID int32) {
+	C.gocef_server_close_connection(d.toNative(), C.int(connectionID), d.close_connection)
 }
 
 // SendWebSocketMessage (send_web_socket_message)
@@ -166,6 +166,6 @@ func (d *Server) CloseConnection(connection_id int32) {
 // |data| is the response content and |data_size| is the size of |data| in
 // bytes. The contents of |data| will be copied. See
 // cef_server_handler_t::OnWebSocketRequest documentation for intended usage.
-func (d *Server) SendWebSocketMessage(connection_id int32, data unsafe.Pointer, data_size uint64) {
-	C.gocef_server_send_web_socket_message(d.toNative(), C.int(connection_id), data, C.size_t(data_size), d.send_web_socket_message)
+func (d *Server) SendWebSocketMessage(connectionID int32, data unsafe.Pointer, dataSize uint64) {
+	C.gocef_server_send_web_socket_message(d.toNative(), C.int(connectionID), data, C.size_t(dataSize), d.send_web_socket_message)
 }

@@ -48,12 +48,12 @@ func (d *V8stackFrame) GetScriptName() string {
 	return cefuserfreestrToString(C.gocef_v8stack_frame_get_script_name(d.toNative(), d.get_script_name))
 }
 
-// GetScriptNameOrSourceUrl (get_script_name_or_source_url)
+// GetScriptNameOrSourceURL (get_script_name_or_source_url)
 // Returns the name of the resource script that contains the function or the
 // sourceURL value if the script name is undefined and its source ends with a
 // "//@ sourceURL=..." string.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *V8stackFrame) GetScriptNameOrSourceUrl() string {
+func (d *V8stackFrame) GetScriptNameOrSourceURL() string {
 	return cefuserfreestrToString(C.gocef_v8stack_frame_get_script_name_or_source_url(d.toNative(), d.get_script_name_or_source_url))
 }
 

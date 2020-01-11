@@ -15,7 +15,7 @@ import (
 	// void gocef_window_deactivate(cef_window_t * self, void (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
 	// int gocef_window_is_active(cef_window_t * self, int (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
 	// void gocef_window_bring_to_top(cef_window_t * self, void (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
-	// void gocef_window_set_always_on_top(cef_window_t * self, int on_top, void (CEF_CALLBACK *callback__)(cef_window_t *, int)) { return callback__(self, on_top); }
+	// void gocef_window_set_always_on_top(cef_window_t * self, int onTop, void (CEF_CALLBACK *callback__)(cef_window_t *, int)) { return callback__(self, onTop); }
 	// int gocef_window_is_always_on_top(cef_window_t * self, int (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
 	// void gocef_window_maximize(cef_window_t * self, void (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
 	// void gocef_window_minimize(cef_window_t * self, void (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
@@ -30,17 +30,17 @@ import (
 	// cef_image_t * gocef_window_get_window_icon(cef_window_t * self, cef_image_t * (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
 	// void gocef_window_set_window_app_icon(cef_window_t * self, cef_image_t * image, void (CEF_CALLBACK *callback__)(cef_window_t *, cef_image_t *)) { return callback__(self, image); }
 	// cef_image_t * gocef_window_get_window_app_icon(cef_window_t * self, cef_image_t * (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
-	// void gocef_window_show_menu(cef_window_t * self, cef_menu_model_t * menu_model, cef_point_t * screen_point, cef_menu_anchor_position_t anchor_position, void (CEF_CALLBACK *callback__)(cef_window_t *, cef_menu_model_t *, cef_point_t *, cef_menu_anchor_position_t)) { return callback__(self, menu_model, screen_point, anchor_position); }
+	// void gocef_window_show_menu(cef_window_t * self, cef_menu_model_t * menuModel, cef_point_t * screenPoint, cef_menu_anchor_position_t anchorPosition, void (CEF_CALLBACK *callback__)(cef_window_t *, cef_menu_model_t *, cef_point_t *, cef_menu_anchor_position_t)) { return callback__(self, menuModel, screenPoint, anchorPosition); }
 	// void gocef_window_cancel_menu(cef_window_t * self, void (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
 	// cef_display_t * gocef_window_get_display(cef_window_t * self, cef_display_t * (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
 	// cef_rect_t gocef_window_get_client_area_bounds_in_screen(cef_window_t * self, cef_rect_t (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
 	// void gocef_window_set_draggable_regions(cef_window_t * self, size_t regionsCount, cef_draggable_region_t * regions, void (CEF_CALLBACK *callback__)(cef_window_t *, size_t, cef_draggable_region_t *)) { return callback__(self, regionsCount, regions); }
 	// void * gocef_window_get_window_handle(cef_window_t * self, void * (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
-	// void gocef_window_send_key_press(cef_window_t * self, int key_code, uint32 event_flags, void (CEF_CALLBACK *callback__)(cef_window_t *, int, uint32)) { return callback__(self, key_code, event_flags); }
-	// void gocef_window_send_mouse_move(cef_window_t * self, int screen_x, int screen_y, void (CEF_CALLBACK *callback__)(cef_window_t *, int, int)) { return callback__(self, screen_x, screen_y); }
-	// void gocef_window_send_mouse_events(cef_window_t * self, cef_mouse_button_type_t button, int mouse_down, int mouse_up, void (CEF_CALLBACK *callback__)(cef_window_t *, cef_mouse_button_type_t, int, int)) { return callback__(self, button, mouse_down, mouse_up); }
-	// void gocef_window_set_accelerator(cef_window_t * self, int command_id, int key_code, int shift_pressed, int ctrl_pressed, int alt_pressed, void (CEF_CALLBACK *callback__)(cef_window_t *, int, int, int, int, int)) { return callback__(self, command_id, key_code, shift_pressed, ctrl_pressed, alt_pressed); }
-	// void gocef_window_remove_accelerator(cef_window_t * self, int command_id, void (CEF_CALLBACK *callback__)(cef_window_t *, int)) { return callback__(self, command_id); }
+	// void gocef_window_send_key_press(cef_window_t * self, int keyCode, uint32 eventFlags, void (CEF_CALLBACK *callback__)(cef_window_t *, int, uint32)) { return callback__(self, keyCode, eventFlags); }
+	// void gocef_window_send_mouse_move(cef_window_t * self, int screenX, int screenY, void (CEF_CALLBACK *callback__)(cef_window_t *, int, int)) { return callback__(self, screenX, screenY); }
+	// void gocef_window_send_mouse_events(cef_window_t * self, cef_mouse_button_type_t button, int mouseDown, int mouseUp, void (CEF_CALLBACK *callback__)(cef_window_t *, cef_mouse_button_type_t, int, int)) { return callback__(self, button, mouseDown, mouseUp); }
+	// void gocef_window_set_accelerator(cef_window_t * self, int commandID, int keyCode, int shiftPressed, int ctrlPressed, int altPressed, void (CEF_CALLBACK *callback__)(cef_window_t *, int, int, int, int, int)) { return callback__(self, commandID, keyCode, shiftPressed, ctrlPressed, altPressed); }
+	// void gocef_window_remove_accelerator(cef_window_t * self, int commandID, void (CEF_CALLBACK *callback__)(cef_window_t *, int)) { return callback__(self, commandID); }
 	// void gocef_window_remove_all_accelerators(cef_window_t * self, void (CEF_CALLBACK *callback__)(cef_window_t *)) { return callback__(self); }
 	"C"
 )
@@ -120,8 +120,8 @@ func (d *Window) BringToTop() {
 
 // SetAlwaysOnTop (set_always_on_top)
 // Set the Window to be on top of other Windows in the Windowing system.
-func (d *Window) SetAlwaysOnTop(on_top int32) {
-	C.gocef_window_set_always_on_top(d.toNative(), C.int(on_top), d.set_always_on_top)
+func (d *Window) SetAlwaysOnTop(onTop int32) {
+	C.gocef_window_set_always_on_top(d.toNative(), C.int(onTop), d.set_always_on_top)
 }
 
 // IsAlwaysOnTop (is_always_on_top)
@@ -223,8 +223,8 @@ func (d *Window) GetWindowAppIcon() *Image {
 // Show a menu with contents |menu_model|. |screen_point| specifies the menu
 // position in screen coordinates. |anchor_position| specifies how the menu
 // will be anchored relative to |screen_point|.
-func (d *Window) ShowMenu(menu_model *MenuModel, screen_point *Point, anchor_position MenuAnchorPosition) {
-	C.gocef_window_show_menu(d.toNative(), menu_model.toNative(), screen_point.toNative(&C.cef_point_t{}), C.cef_menu_anchor_position_t(anchor_position), d.show_menu)
+func (d *Window) ShowMenu(menuModel *MenuModel, screenPoint *Point, anchorPosition MenuAnchorPosition) {
+	C.gocef_window_show_menu(d.toNative(), menuModel.toNative(), screenPoint.toNative(&C.cef_point_t{}), C.cef_menu_anchor_position_t(anchorPosition), d.show_menu)
 }
 
 // CancelMenu (cancel_menu)
@@ -271,16 +271,16 @@ func (d *Window) GetWindowHandle() unsafe.Pointer {
 // |event_flags| is some combination of EVENTFLAG_SHIFT_DOWN,
 // EVENTFLAG_CONTROL_DOWN and/or EVENTFLAG_ALT_DOWN. This function is exposed
 // primarily for testing purposes.
-func (d *Window) SendKeyPress(key_code int32, event_flags uint32) {
-	C.gocef_window_send_key_press(d.toNative(), C.int(key_code), C.uint32(event_flags), d.send_key_press)
+func (d *Window) SendKeyPress(keyCode int32, eventFlags uint32) {
+	C.gocef_window_send_key_press(d.toNative(), C.int(keyCode), C.uint32(eventFlags), d.send_key_press)
 }
 
 // SendMouseMove (send_mouse_move)
 // Simulate a mouse move. The mouse cursor will be moved to the specified
 // (screen_x, screen_y) position. This function is exposed primarily for
 // testing purposes.
-func (d *Window) SendMouseMove(screen_x, screen_y int32) {
-	C.gocef_window_send_mouse_move(d.toNative(), C.int(screen_x), C.int(screen_y), d.send_mouse_move)
+func (d *Window) SendMouseMove(screenX, screenY int32) {
+	C.gocef_window_send_mouse_move(d.toNative(), C.int(screenX), C.int(screenY), d.send_mouse_move)
 }
 
 // SendMouseEvents (send_mouse_events)
@@ -291,8 +291,8 @@ func (d *Window) SendMouseMove(screen_x, screen_y int32) {
 // clicking the mouse button). The events will be sent using the current
 // cursor position so make sure to call send_mouse_move() first to position
 // the mouse. This function is exposed primarily for testing purposes.
-func (d *Window) SendMouseEvents(button MouseButtonType, mouse_down, mouse_up int32) {
-	C.gocef_window_send_mouse_events(d.toNative(), C.cef_mouse_button_type_t(button), C.int(mouse_down), C.int(mouse_up), d.send_mouse_events)
+func (d *Window) SendMouseEvents(button MouseButtonType, mouseDown, mouseUp int32) {
+	C.gocef_window_send_mouse_events(d.toNative(), C.cef_mouse_button_type_t(button), C.int(mouseDown), C.int(mouseUp), d.send_mouse_events)
 }
 
 // SetAccelerator (set_accelerator)
@@ -300,14 +300,14 @@ func (d *Window) SendMouseEvents(button MouseButtonType, mouse_down, mouse_up in
 // be any virtual key or character value. cef_window_delegate_t::OnAccelerator
 // will be called if the keyboard combination is triggered while this window
 // has focus.
-func (d *Window) SetAccelerator(command_id, key_code, shift_pressed, ctrl_pressed, alt_pressed int32) {
-	C.gocef_window_set_accelerator(d.toNative(), C.int(command_id), C.int(key_code), C.int(shift_pressed), C.int(ctrl_pressed), C.int(alt_pressed), d.set_accelerator)
+func (d *Window) SetAccelerator(commandID, keyCode, shiftPressed, ctrlPressed, altPressed int32) {
+	C.gocef_window_set_accelerator(d.toNative(), C.int(commandID), C.int(keyCode), C.int(shiftPressed), C.int(ctrlPressed), C.int(altPressed), d.set_accelerator)
 }
 
 // RemoveAccelerator (remove_accelerator)
 // Remove the keyboard accelerator for the specified |command_id|.
-func (d *Window) RemoveAccelerator(command_id int32) {
-	C.gocef_window_remove_accelerator(d.toNative(), C.int(command_id), d.remove_accelerator)
+func (d *Window) RemoveAccelerator(commandID int32) {
+	C.gocef_window_remove_accelerator(d.toNative(), C.int(commandID), d.remove_accelerator)
 }
 
 // RemoveAllAccelerators (remove_all_accelerators)

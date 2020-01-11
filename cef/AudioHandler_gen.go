@@ -16,9 +16,9 @@ import (
 
 // AudioHandlerProxy defines methods required for using AudioHandler.
 type AudioHandlerProxy interface {
-	OnAudioStreamStarted(self *AudioHandler, browser *Browser, audio_stream_id, channels int32, channel_layout ChannelLayout, sample_rate, frames_per_buffer int32)
-	OnAudioStreamPacket(self *AudioHandler, browser *Browser, audio_stream_id int32, data **float32, frames int32, pts int64)
-	OnAudioStreamStopped(self *AudioHandler, browser *Browser, audio_stream_id int32)
+	OnAudioStreamStarted(self *AudioHandler, browser *Browser, audioStreamID, channels int32, channelLayout ChannelLayout, sampleRate, framesPerBuffer int32)
+	OnAudioStreamPacket(self *AudioHandler, browser *Browser, audioStreamID int32, data **float32, frames int32, pts int64)
+	OnAudioStreamStopped(self *AudioHandler, browser *Browser, audioStreamID int32)
 }
 
 // AudioHandler (cef_audio_handler_t from include/capi/cef_audio_handler_capi.h)
@@ -67,16 +67,16 @@ func (d *AudioHandler) Base() *BaseRefCounted {
 // the layout of the channels and |sample_rate| is the stream sample rate.
 // |frames_per_buffer| is the maximum number of frames that will occur in the
 // PCM packet passed to OnAudioStreamPacket.
-func (d *AudioHandler) OnAudioStreamStarted(browser *Browser, audio_stream_id, channels int32, channel_layout ChannelLayout, sample_rate, frames_per_buffer int32) {
-	lookupAudioHandlerProxy(d.Base()).OnAudioStreamStarted(d, browser, audio_stream_id, channels, channel_layout, sample_rate, frames_per_buffer)
+func (d *AudioHandler) OnAudioStreamStarted(browser *Browser, audioStreamID, channels int32, channelLayout ChannelLayout, sampleRate, framesPerBuffer int32) {
+	lookupAudioHandlerProxy(d.Base()).OnAudioStreamStarted(d, browser, audioStreamID, channels, channelLayout, sampleRate, framesPerBuffer)
 }
 
 //nolint:gocritic
 //export gocef_audio_handler_on_audio_stream_started
-func gocef_audio_handler_on_audio_stream_started(self *C.cef_audio_handler_t, browser *C.cef_browser_t, audio_stream_id C.int, channels C.int, channel_layout C.cef_channel_layout_t, sample_rate C.int, frames_per_buffer C.int) {
+func gocef_audio_handler_on_audio_stream_started(self *C.cef_audio_handler_t, browser *C.cef_browser_t, audioStreamID C.int, channels C.int, channelLayout C.cef_channel_layout_t, sampleRate C.int, framesPerBuffer C.int) {
 	me__ := (*AudioHandler)(self)
 	proxy__ := lookupAudioHandlerProxy(me__.Base())
-	proxy__.OnAudioStreamStarted(me__, (*Browser)(browser), int32(audio_stream_id), int32(channels), ChannelLayout(channel_layout), int32(sample_rate), int32(frames_per_buffer))
+	proxy__.OnAudioStreamStarted(me__, (*Browser)(browser), int32(audioStreamID), int32(channels), ChannelLayout(channelLayout), int32(sampleRate), int32(framesPerBuffer))
 }
 
 // OnAudioStreamPacket (on_audio_stream_packet)
@@ -88,30 +88,30 @@ func gocef_audio_handler_on_audio_stream_started(self *C.cef_audio_handler_t, br
 // packet should be presented to the user. Based on |frames| and the
 // |channel_layout| value passed to OnAudioStreamStarted you can calculate the
 // size of the |data| array in bytes.
-func (d *AudioHandler) OnAudioStreamPacket(browser *Browser, audio_stream_id int32, data **float32, frames int32, pts int64) {
-	lookupAudioHandlerProxy(d.Base()).OnAudioStreamPacket(d, browser, audio_stream_id, data, frames, pts)
+func (d *AudioHandler) OnAudioStreamPacket(browser *Browser, audioStreamID int32, data **float32, frames int32, pts int64) {
+	lookupAudioHandlerProxy(d.Base()).OnAudioStreamPacket(d, browser, audioStreamID, data, frames, pts)
 }
 
 //nolint:gocritic
 //export gocef_audio_handler_on_audio_stream_packet
-func gocef_audio_handler_on_audio_stream_packet(self *C.cef_audio_handler_t, browser *C.cef_browser_t, audio_stream_id C.int, data **C.float, frames C.int, pts C.int64) {
+func gocef_audio_handler_on_audio_stream_packet(self *C.cef_audio_handler_t, browser *C.cef_browser_t, audioStreamID C.int, data **C.float, frames C.int, pts C.int64) {
 	me__ := (*AudioHandler)(self)
 	proxy__ := lookupAudioHandlerProxy(me__.Base())
-	proxy__.OnAudioStreamPacket(me__, (*Browser)(browser), int32(audio_stream_id), (**float32)(unsafe.Pointer(data)), int32(frames), int64(pts))
+	proxy__.OnAudioStreamPacket(me__, (*Browser)(browser), int32(audioStreamID), (**float32)(unsafe.Pointer(data)), int32(frames), int64(pts))
 }
 
 // OnAudioStreamStopped (on_audio_stream_stopped)
 // Called when the stream identified by |audio_stream_id| has stopped.
 // OnAudioSteamStopped will always be called after OnAudioStreamStarted; both
 // functions may be called multiple times for the same stream.
-func (d *AudioHandler) OnAudioStreamStopped(browser *Browser, audio_stream_id int32) {
-	lookupAudioHandlerProxy(d.Base()).OnAudioStreamStopped(d, browser, audio_stream_id)
+func (d *AudioHandler) OnAudioStreamStopped(browser *Browser, audioStreamID int32) {
+	lookupAudioHandlerProxy(d.Base()).OnAudioStreamStopped(d, browser, audioStreamID)
 }
 
 //nolint:gocritic
 //export gocef_audio_handler_on_audio_stream_stopped
-func gocef_audio_handler_on_audio_stream_stopped(self *C.cef_audio_handler_t, browser *C.cef_browser_t, audio_stream_id C.int) {
+func gocef_audio_handler_on_audio_stream_stopped(self *C.cef_audio_handler_t, browser *C.cef_browser_t, audioStreamID C.int) {
 	me__ := (*AudioHandler)(self)
 	proxy__ := lookupAudioHandlerProxy(me__.Base())
-	proxy__.OnAudioStreamStopped(me__, (*Browser)(browser), int32(audio_stream_id))
+	proxy__.OnAudioStreamStopped(me__, (*Browser)(browser), int32(audioStreamID))
 }

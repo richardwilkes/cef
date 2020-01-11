@@ -10,23 +10,23 @@ import (
 	// cef_request_context_handler_t * gocef_request_context_get_handler(cef_request_context_t * self, cef_request_context_handler_t * (CEF_CALLBACK *callback__)(cef_request_context_t *)) { return callback__(self); }
 	// cef_string_userfree_t gocef_request_context_get_cache_path(cef_request_context_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_request_context_t *)) { return callback__(self); }
 	// cef_cookie_manager_t * gocef_request_context_get_cookie_manager(cef_request_context_t * self, cef_completion_callback_t * callback, cef_cookie_manager_t * (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
-	// int gocef_request_context_register_scheme_handler_factory(cef_request_context_t * self, cef_string_t * scheme_name, cef_string_t * domain_name, cef_scheme_handler_factory_t * factory, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_string_t *, cef_scheme_handler_factory_t *)) { return callback__(self, scheme_name, domain_name, factory); }
+	// int gocef_request_context_register_scheme_handler_factory(cef_request_context_t * self, cef_string_t * schemeName, cef_string_t * domainName, cef_scheme_handler_factory_t * factory, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_string_t *, cef_scheme_handler_factory_t *)) { return callback__(self, schemeName, domainName, factory); }
 	// int gocef_request_context_clear_scheme_handler_factories(cef_request_context_t * self, int (CEF_CALLBACK *callback__)(cef_request_context_t *)) { return callback__(self); }
-	// void gocef_request_context_purge_plugin_list_cache(cef_request_context_t * self, int reload_pages, void (CEF_CALLBACK *callback__)(cef_request_context_t *, int)) { return callback__(self, reload_pages); }
+	// void gocef_request_context_purge_plugin_list_cache(cef_request_context_t * self, int reloadPages, void (CEF_CALLBACK *callback__)(cef_request_context_t *, int)) { return callback__(self, reloadPages); }
 	// int gocef_request_context_has_preference(cef_request_context_t * self, cef_string_t * name, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, name); }
 	// cef_value_t * gocef_request_context_get_preference(cef_request_context_t * self, cef_string_t * name, cef_value_t * (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, name); }
-	// cef_dictionary_value_t * gocef_request_context_get_all_preferences(cef_request_context_t * self, int include_defaults, cef_dictionary_value_t * (CEF_CALLBACK *callback__)(cef_request_context_t *, int)) { return callback__(self, include_defaults); }
+	// cef_dictionary_value_t * gocef_request_context_get_all_preferences(cef_request_context_t * self, int includeDefaults, cef_dictionary_value_t * (CEF_CALLBACK *callback__)(cef_request_context_t *, int)) { return callback__(self, includeDefaults); }
 	// int gocef_request_context_can_set_preference(cef_request_context_t * self, cef_string_t * name, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, name); }
 	// int gocef_request_context_set_preference(cef_request_context_t * self, cef_string_t * name, cef_value_t * value, cef_string_t * error_r, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_value_t *, cef_string_t *)) { return callback__(self, name, value, error_r); }
 	// void gocef_request_context_clear_certificate_exceptions(cef_request_context_t * self, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	// void gocef_request_context_clear_http_auth_credentials(cef_request_context_t * self, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	// void gocef_request_context_close_all_connections(cef_request_context_t * self, cef_completion_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_completion_callback_t *)) { return callback__(self, callback); }
 	// void gocef_request_context_resolve_host(cef_request_context_t * self, cef_string_t * origin, cef_resolve_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_resolve_callback_t *)) { return callback__(self, origin, callback); }
-	// void gocef_request_context_load_extension(cef_request_context_t * self, cef_string_t * root_directory, cef_dictionary_value_t * manifest, cef_extension_handler_t * handler, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_dictionary_value_t *, cef_extension_handler_t *)) { return callback__(self, root_directory, manifest, handler); }
-	// int gocef_request_context_did_load_extension(cef_request_context_t * self, cef_string_t * extension_id, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, extension_id); }
-	// int gocef_request_context_has_extension(cef_request_context_t * self, cef_string_t * extension_id, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, extension_id); }
-	// int gocef_request_context_get_extensions(cef_request_context_t * self, cef_string_list_t extension_ids, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_list_t)) { return callback__(self, extension_ids); }
-	// cef_extension_t * gocef_request_context_get_extension(cef_request_context_t * self, cef_string_t * extension_id, cef_extension_t * (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, extension_id); }
+	// void gocef_request_context_load_extension(cef_request_context_t * self, cef_string_t * rootDirectory, cef_dictionary_value_t * manifest, cef_extension_handler_t * handler, void (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *, cef_dictionary_value_t *, cef_extension_handler_t *)) { return callback__(self, rootDirectory, manifest, handler); }
+	// int gocef_request_context_did_load_extension(cef_request_context_t * self, cef_string_t * extensionID, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, extensionID); }
+	// int gocef_request_context_has_extension(cef_request_context_t * self, cef_string_t * extensionID, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, extensionID); }
+	// int gocef_request_context_get_extensions(cef_request_context_t * self, cef_string_list_t extensionIds, int (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_list_t)) { return callback__(self, extensionIds); }
+	// cef_extension_t * gocef_request_context_get_extension(cef_request_context_t * self, cef_string_t * extensionID, cef_extension_t * (CEF_CALLBACK *callback__)(cef_request_context_t *, cef_string_t *)) { return callback__(self, extensionID); }
 	"C"
 )
 
@@ -113,18 +113,18 @@ func (d *RequestContext) GetCookieManager(callback *CompletionCallback) *CookieM
 // change or remove the factory that matches the specified |scheme_name| and
 // optional |domain_name|. Returns false (0) if an error occurs. This function
 // may be called on any thread in the browser process.
-func (d *RequestContext) RegisterSchemeHandlerFactory(scheme_name, domain_name string, factory *SchemeHandlerFactory) int32 {
-	scheme_name_ := C.cef_string_userfree_alloc()
-	setCEFStr(scheme_name, scheme_name_)
+func (d *RequestContext) RegisterSchemeHandlerFactory(schemeName, domainName string, factory *SchemeHandlerFactory) int32 {
+	schemeName_ := C.cef_string_userfree_alloc()
+	setCEFStr(schemeName, schemeName_)
 	defer func() {
-		C.cef_string_userfree_free(scheme_name_)
+		C.cef_string_userfree_free(schemeName_)
 	}()
-	domain_name_ := C.cef_string_userfree_alloc()
-	setCEFStr(domain_name, domain_name_)
+	domainName_ := C.cef_string_userfree_alloc()
+	setCEFStr(domainName, domainName_)
 	defer func() {
-		C.cef_string_userfree_free(domain_name_)
+		C.cef_string_userfree_free(domainName_)
 	}()
-	return int32(C.gocef_request_context_register_scheme_handler_factory(d.toNative(), (*C.cef_string_t)(scheme_name_), (*C.cef_string_t)(domain_name_), factory.toNative(), d.register_scheme_handler_factory))
+	return int32(C.gocef_request_context_register_scheme_handler_factory(d.toNative(), (*C.cef_string_t)(schemeName_), (*C.cef_string_t)(domainName_), factory.toNative(), d.register_scheme_handler_factory))
 }
 
 // ClearSchemeHandlerFactories (clear_scheme_handler_factories)
@@ -140,8 +140,8 @@ func (d *RequestContext) ClearSchemeHandlerFactories() int32 {
 // reload all pages with plugins.
 // cef_request_tContextHandler::OnBeforePluginLoad may be called to rebuild
 // the plugin list cache.
-func (d *RequestContext) PurgePluginListCache(reload_pages int32) {
-	C.gocef_request_context_purge_plugin_list_cache(d.toNative(), C.int(reload_pages), d.purge_plugin_list_cache)
+func (d *RequestContext) PurgePluginListCache(reloadPages int32) {
+	C.gocef_request_context_purge_plugin_list_cache(d.toNative(), C.int(reloadPages), d.purge_plugin_list_cache)
 }
 
 // HasPreference (has_preference)
@@ -178,8 +178,8 @@ func (d *RequestContext) GetPreference(name string) *Value {
 // modifications to the returned object will not modify the underlying
 // preference values. This function must be called on the browser process UI
 // thread.
-func (d *RequestContext) GetAllPreferences(include_defaults int32) *DictionaryValue {
-	return (*DictionaryValue)(C.gocef_request_context_get_all_preferences(d.toNative(), C.int(include_defaults), d.get_all_preferences))
+func (d *RequestContext) GetAllPreferences(includeDefaults int32) *DictionaryValue {
+	return (*DictionaryValue)(C.gocef_request_context_get_all_preferences(d.toNative(), C.int(includeDefaults), d.get_all_preferences))
 }
 
 // CanSetPreference (can_set_preference)
@@ -228,11 +228,11 @@ func (d *RequestContext) ClearCertificateExceptions(callback *CompletionCallback
 	C.gocef_request_context_clear_certificate_exceptions(d.toNative(), callback.toNative(), d.clear_certificate_exceptions)
 }
 
-// ClearHttpAuthCredentials (clear_http_auth_credentials)
+// ClearHTTPAuthCredentials (clear_http_auth_credentials)
 // Clears all HTTP authentication credentials that were added as part of
 // handling GetAuthCredentials. If |callback| is non-NULL it will be executed
 // on the UI thread after completion.
-func (d *RequestContext) ClearHttpAuthCredentials(callback *CompletionCallback) {
+func (d *RequestContext) ClearHTTPAuthCredentials(callback *CompletionCallback) {
 	C.gocef_request_context_clear_http_auth_credentials(d.toNative(), callback.toNative(), d.clear_http_auth_credentials)
 }
 
@@ -304,13 +304,13 @@ func (d *RequestContext) ResolveHost(origin string, callback *ResolveCallback) {
 //
 // See https://developer.chrome.com/extensions for extension implementation
 // and usage documentation.
-func (d *RequestContext) LoadExtension(root_directory string, manifest *DictionaryValue, handler *ExtensionHandler) {
-	root_directory_ := C.cef_string_userfree_alloc()
-	setCEFStr(root_directory, root_directory_)
+func (d *RequestContext) LoadExtension(rootDirectory string, manifest *DictionaryValue, handler *ExtensionHandler) {
+	rootDirectory_ := C.cef_string_userfree_alloc()
+	setCEFStr(rootDirectory, rootDirectory_)
 	defer func() {
-		C.cef_string_userfree_free(root_directory_)
+		C.cef_string_userfree_free(rootDirectory_)
 	}()
-	C.gocef_request_context_load_extension(d.toNative(), (*C.cef_string_t)(root_directory_), manifest.toNative(), handler.toNative(), d.load_extension)
+	C.gocef_request_context_load_extension(d.toNative(), (*C.cef_string_t)(rootDirectory_), manifest.toNative(), handler.toNative(), d.load_extension)
 }
 
 // DidLoadExtension (did_load_extension)
@@ -318,13 +318,13 @@ func (d *RequestContext) LoadExtension(root_directory string, manifest *Dictiona
 // by |extension_id|. Other contexts sharing the same storage will also have
 // access to the extension (see HasExtension). This function must be called on
 // the browser process UI thread.
-func (d *RequestContext) DidLoadExtension(extension_id string) int32 {
-	extension_id_ := C.cef_string_userfree_alloc()
-	setCEFStr(extension_id, extension_id_)
+func (d *RequestContext) DidLoadExtension(extensionID string) int32 {
+	extensionID_ := C.cef_string_userfree_alloc()
+	setCEFStr(extensionID, extensionID_)
 	defer func() {
-		C.cef_string_userfree_free(extension_id_)
+		C.cef_string_userfree_free(extensionID_)
 	}()
-	return int32(C.gocef_request_context_did_load_extension(d.toNative(), (*C.cef_string_t)(extension_id_), d.did_load_extension))
+	return int32(C.gocef_request_context_did_load_extension(d.toNative(), (*C.cef_string_t)(extensionID_), d.did_load_extension))
 }
 
 // HasExtension (has_extension)
@@ -332,13 +332,13 @@ func (d *RequestContext) DidLoadExtension(extension_id string) int32 {
 // |extension_id|. This may not be the context that was used to load the
 // extension (see DidLoadExtension). This function must be called on the
 // browser process UI thread.
-func (d *RequestContext) HasExtension(extension_id string) int32 {
-	extension_id_ := C.cef_string_userfree_alloc()
-	setCEFStr(extension_id, extension_id_)
+func (d *RequestContext) HasExtension(extensionID string) int32 {
+	extensionID_ := C.cef_string_userfree_alloc()
+	setCEFStr(extensionID, extensionID_)
 	defer func() {
-		C.cef_string_userfree_free(extension_id_)
+		C.cef_string_userfree_free(extensionID_)
 	}()
-	return int32(C.gocef_request_context_has_extension(d.toNative(), (*C.cef_string_t)(extension_id_), d.has_extension))
+	return int32(C.gocef_request_context_has_extension(d.toNative(), (*C.cef_string_t)(extensionID_), d.has_extension))
 }
 
 // GetExtensions (get_extensions)
@@ -346,19 +346,19 @@ func (d *RequestContext) HasExtension(extension_id string) int32 {
 // HasExtension). |extension_ids| will be populated with the list of extension
 // ID values. Returns true (1) on success. This function must be called on the
 // browser process UI thread.
-func (d *RequestContext) GetExtensions(extension_ids StringList) int32 {
-	return int32(C.gocef_request_context_get_extensions(d.toNative(), C.cef_string_list_t(extension_ids), d.get_extensions))
+func (d *RequestContext) GetExtensions(extensionIds StringList) int32 {
+	return int32(C.gocef_request_context_get_extensions(d.toNative(), C.cef_string_list_t(extensionIds), d.get_extensions))
 }
 
 // GetExtension (get_extension)
 // Returns the extension matching |extension_id| or NULL if no matching
 // extension is accessible in this context (see HasExtension). This function
 // must be called on the browser process UI thread.
-func (d *RequestContext) GetExtension(extension_id string) *Extension {
-	extension_id_ := C.cef_string_userfree_alloc()
-	setCEFStr(extension_id, extension_id_)
+func (d *RequestContext) GetExtension(extensionID string) *Extension {
+	extensionID_ := C.cef_string_userfree_alloc()
+	setCEFStr(extensionID, extensionID_)
 	defer func() {
-		C.cef_string_userfree_free(extension_id_)
+		C.cef_string_userfree_free(extensionID_)
 	}()
-	return (*Extension)(C.gocef_request_context_get_extension(d.toNative(), (*C.cef_string_t)(extension_id_), d.get_extension))
+	return (*Extension)(C.gocef_request_context_get_extension(d.toNative(), (*C.cef_string_t)(extensionID_), d.get_extension))
 }

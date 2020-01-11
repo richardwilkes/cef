@@ -18,12 +18,12 @@ import (
 type ServerHandlerProxy interface {
 	OnServerCreated(self *ServerHandler, server *Server)
 	OnServerDestroyed(self *ServerHandler, server *Server)
-	OnClientConnected(self *ServerHandler, server *Server, connection_id int32)
-	OnClientDisconnected(self *ServerHandler, server *Server, connection_id int32)
-	OnHttpRequest(self *ServerHandler, server *Server, connection_id int32, client_address string, request *Request)
-	OnWebSocketRequest(self *ServerHandler, server *Server, connection_id int32, client_address string, request *Request, callback *Callback)
-	OnWebSocketConnected(self *ServerHandler, server *Server, connection_id int32)
-	OnWebSocketMessage(self *ServerHandler, server *Server, connection_id int32, data unsafe.Pointer, data_size uint64)
+	OnClientConnected(self *ServerHandler, server *Server, connectionID int32)
+	OnClientDisconnected(self *ServerHandler, server *Server, connectionID int32)
+	OnHTTPRequest(self *ServerHandler, server *Server, connectionID int32, clientAddress string, request *Request)
+	OnWebSocketRequest(self *ServerHandler, server *Server, connectionID int32, clientAddress string, request *Request, callback *Callback)
+	OnWebSocketConnected(self *ServerHandler, server *Server, connectionID int32)
+	OnWebSocketMessage(self *ServerHandler, server *Server, connectionID int32, data unsafe.Pointer, dataSize uint64)
 }
 
 // ServerHandler (cef_server_handler_t from include/capi/cef_server_capi.h)
@@ -106,16 +106,16 @@ func gocef_server_handler_on_server_destroyed(self *C.cef_server_handler_t, serv
 // Called when a client connects to |server|. |connection_id| uniquely
 // identifies the connection. Each call to this function will have a matching
 // call to OnClientDisconnected.
-func (d *ServerHandler) OnClientConnected(server *Server, connection_id int32) {
-	lookupServerHandlerProxy(d.Base()).OnClientConnected(d, server, connection_id)
+func (d *ServerHandler) OnClientConnected(server *Server, connectionID int32) {
+	lookupServerHandlerProxy(d.Base()).OnClientConnected(d, server, connectionID)
 }
 
 //nolint:gocritic
 //export gocef_server_handler_on_client_connected
-func gocef_server_handler_on_client_connected(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int) {
+func gocef_server_handler_on_client_connected(self *C.cef_server_handler_t, server *C.cef_server_t, connectionID C.int) {
 	me__ := (*ServerHandler)(self)
 	proxy__ := lookupServerHandlerProxy(me__.Base())
-	proxy__.OnClientConnected(me__, (*Server)(server), int32(connection_id))
+	proxy__.OnClientConnected(me__, (*Server)(server), int32(connectionID))
 }
 
 // OnClientDisconnected (on_client_disconnected)
@@ -126,35 +126,35 @@ func gocef_server_handler_on_client_connected(self *C.cef_server_handler_t, serv
 // originate from either the client or the server. For example, the server
 // will disconnect automatically after a cef_server_t::SendHttpXXXResponse
 // function is called.
-func (d *ServerHandler) OnClientDisconnected(server *Server, connection_id int32) {
-	lookupServerHandlerProxy(d.Base()).OnClientDisconnected(d, server, connection_id)
+func (d *ServerHandler) OnClientDisconnected(server *Server, connectionID int32) {
+	lookupServerHandlerProxy(d.Base()).OnClientDisconnected(d, server, connectionID)
 }
 
 //nolint:gocritic
 //export gocef_server_handler_on_client_disconnected
-func gocef_server_handler_on_client_disconnected(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int) {
+func gocef_server_handler_on_client_disconnected(self *C.cef_server_handler_t, server *C.cef_server_t, connectionID C.int) {
 	me__ := (*ServerHandler)(self)
 	proxy__ := lookupServerHandlerProxy(me__.Base())
-	proxy__.OnClientDisconnected(me__, (*Server)(server), int32(connection_id))
+	proxy__.OnClientDisconnected(me__, (*Server)(server), int32(connectionID))
 }
 
-// OnHttpRequest (on_http_request)
+// OnHTTPRequest (on_http_request)
 // Called when |server| receives an HTTP request. |connection_id| uniquely
 // identifies the connection, |client_address| is the requesting IPv4 or IPv6
 // client address including port number, and |request| contains the request
 // contents (URL, function, headers and optional POST data). Call cef_server_t
 // functions either synchronously or asynchronusly to send a response.
-func (d *ServerHandler) OnHttpRequest(server *Server, connection_id int32, client_address string, request *Request) {
-	lookupServerHandlerProxy(d.Base()).OnHttpRequest(d, server, connection_id, client_address, request)
+func (d *ServerHandler) OnHTTPRequest(server *Server, connectionID int32, clientAddress string, request *Request) {
+	lookupServerHandlerProxy(d.Base()).OnHTTPRequest(d, server, connectionID, clientAddress, request)
 }
 
 //nolint:gocritic
 //export gocef_server_handler_on_http_request
-func gocef_server_handler_on_http_request(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int, client_address *C.cef_string_t, request *C.cef_request_t) {
+func gocef_server_handler_on_http_request(self *C.cef_server_handler_t, server *C.cef_server_t, connectionID C.int, clientAddress *C.cef_string_t, request *C.cef_request_t) {
 	me__ := (*ServerHandler)(self)
 	proxy__ := lookupServerHandlerProxy(me__.Base())
-	client_address_ := cefstrToString(client_address)
-	proxy__.OnHttpRequest(me__, (*Server)(server), int32(connection_id), client_address_, (*Request)(request))
+	clientAddress_ := cefstrToString(clientAddress)
+	proxy__.OnHTTPRequest(me__, (*Server)(server), int32(connectionID), clientAddress_, (*Request)(request))
 }
 
 // OnWebSocketRequest (on_web_socket_request)
@@ -170,33 +170,33 @@ func gocef_server_handler_on_http_request(self *C.cef_server_handler_t, server *
 // called. Call the cef_server_t::SendWebSocketMessage function after
 // receiving the OnWebSocketConnected callback to respond with WebSocket
 // messages.
-func (d *ServerHandler) OnWebSocketRequest(server *Server, connection_id int32, client_address string, request *Request, callback *Callback) {
-	lookupServerHandlerProxy(d.Base()).OnWebSocketRequest(d, server, connection_id, client_address, request, callback)
+func (d *ServerHandler) OnWebSocketRequest(server *Server, connectionID int32, clientAddress string, request *Request, callback *Callback) {
+	lookupServerHandlerProxy(d.Base()).OnWebSocketRequest(d, server, connectionID, clientAddress, request, callback)
 }
 
 //nolint:gocritic
 //export gocef_server_handler_on_web_socket_request
-func gocef_server_handler_on_web_socket_request(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int, client_address *C.cef_string_t, request *C.cef_request_t, callback *C.cef_callback_t) {
+func gocef_server_handler_on_web_socket_request(self *C.cef_server_handler_t, server *C.cef_server_t, connectionID C.int, clientAddress *C.cef_string_t, request *C.cef_request_t, callback *C.cef_callback_t) {
 	me__ := (*ServerHandler)(self)
 	proxy__ := lookupServerHandlerProxy(me__.Base())
-	client_address_ := cefstrToString(client_address)
-	proxy__.OnWebSocketRequest(me__, (*Server)(server), int32(connection_id), client_address_, (*Request)(request), (*Callback)(callback))
+	clientAddress_ := cefstrToString(clientAddress)
+	proxy__.OnWebSocketRequest(me__, (*Server)(server), int32(connectionID), clientAddress_, (*Request)(request), (*Callback)(callback))
 }
 
 // OnWebSocketConnected (on_web_socket_connected)
 // Called after the client has accepted the WebSocket connection for |server|
 // and |connection_id| via the OnWebSocketRequest callback. See
 // OnWebSocketRequest documentation for intended usage.
-func (d *ServerHandler) OnWebSocketConnected(server *Server, connection_id int32) {
-	lookupServerHandlerProxy(d.Base()).OnWebSocketConnected(d, server, connection_id)
+func (d *ServerHandler) OnWebSocketConnected(server *Server, connectionID int32) {
+	lookupServerHandlerProxy(d.Base()).OnWebSocketConnected(d, server, connectionID)
 }
 
 //nolint:gocritic
 //export gocef_server_handler_on_web_socket_connected
-func gocef_server_handler_on_web_socket_connected(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int) {
+func gocef_server_handler_on_web_socket_connected(self *C.cef_server_handler_t, server *C.cef_server_t, connectionID C.int) {
 	me__ := (*ServerHandler)(self)
 	proxy__ := lookupServerHandlerProxy(me__.Base())
-	proxy__.OnWebSocketConnected(me__, (*Server)(server), int32(connection_id))
+	proxy__.OnWebSocketConnected(me__, (*Server)(server), int32(connectionID))
 }
 
 // OnWebSocketMessage (on_web_socket_message)
@@ -205,14 +205,14 @@ func gocef_server_handler_on_web_socket_connected(self *C.cef_server_handler_t, 
 // |data_size| is the size of |data| in bytes. Do not keep a reference to
 // |data| outside of this function. See OnWebSocketRequest documentation for
 // intended usage.
-func (d *ServerHandler) OnWebSocketMessage(server *Server, connection_id int32, data unsafe.Pointer, data_size uint64) {
-	lookupServerHandlerProxy(d.Base()).OnWebSocketMessage(d, server, connection_id, data, data_size)
+func (d *ServerHandler) OnWebSocketMessage(server *Server, connectionID int32, data unsafe.Pointer, dataSize uint64) {
+	lookupServerHandlerProxy(d.Base()).OnWebSocketMessage(d, server, connectionID, data, dataSize)
 }
 
 //nolint:gocritic
 //export gocef_server_handler_on_web_socket_message
-func gocef_server_handler_on_web_socket_message(self *C.cef_server_handler_t, server *C.cef_server_t, connection_id C.int, data unsafe.Pointer, data_size C.size_t) {
+func gocef_server_handler_on_web_socket_message(self *C.cef_server_handler_t, server *C.cef_server_t, connectionID C.int, data unsafe.Pointer, dataSize C.size_t) {
 	me__ := (*ServerHandler)(self)
 	proxy__ := lookupServerHandlerProxy(me__.Base())
-	proxy__.OnWebSocketMessage(me__, (*Server)(server), int32(connection_id), data, uint64(data_size))
+	proxy__.OnWebSocketMessage(me__, (*Server)(server), int32(connectionID), data, uint64(dataSize))
 }

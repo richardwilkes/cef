@@ -6,10 +6,10 @@ import (
 	// #include "capi_gen.h"
 	// int gocef_request_is_read_only(cef_request_t * self, int (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
 	// cef_string_userfree_t gocef_request_get_url(cef_request_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
-	// void gocef_request_set_url(cef_request_t * self, cef_string_t * url, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *)) { return callback__(self, url); }
+	// void gocef_request_set_url(cef_request_t * self, cef_string_t * uRL, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *)) { return callback__(self, uRL); }
 	// cef_string_userfree_t gocef_request_get_method(cef_request_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
 	// void gocef_request_set_method(cef_request_t * self, cef_string_t * method, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *)) { return callback__(self, method); }
-	// void gocef_request_set_referrer(cef_request_t * self, cef_string_t * referrer_url, cef_referrer_policy_t policy, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *, cef_referrer_policy_t)) { return callback__(self, referrer_url, policy); }
+	// void gocef_request_set_referrer(cef_request_t * self, cef_string_t * referrerURL, cef_referrer_policy_t policy, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *, cef_referrer_policy_t)) { return callback__(self, referrerURL, policy); }
 	// cef_string_userfree_t gocef_request_get_referrer_url(cef_request_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
 	// cef_referrer_policy_t gocef_request_get_referrer_policy(cef_request_t * self, cef_referrer_policy_t (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
 	// cef_post_data_t * gocef_request_get_post_data(cef_request_t * self, cef_post_data_t * (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
@@ -18,11 +18,11 @@ import (
 	// void gocef_request_set_header_map(cef_request_t * self, cef_string_multimap_t headerMap, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_multimap_t)) { return callback__(self, headerMap); }
 	// cef_string_userfree_t gocef_request_get_header_by_name(cef_request_t * self, cef_string_t * name, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *)) { return callback__(self, name); }
 	// void gocef_request_set_header_by_name(cef_request_t * self, cef_string_t * name, cef_string_t * value, int overwrite, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *, cef_string_t *, int)) { return callback__(self, name, value, overwrite); }
-	// void gocef_request_set(cef_request_t * self, cef_string_t * url, cef_string_t * method, cef_post_data_t * postData, cef_string_multimap_t headerMap, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *, cef_string_t *, cef_post_data_t *, cef_string_multimap_t)) { return callback__(self, url, method, postData, headerMap); }
+	// void gocef_request_set(cef_request_t * self, cef_string_t * uRL, cef_string_t * method, cef_post_data_t * postData, cef_string_multimap_t headerMap, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *, cef_string_t *, cef_post_data_t *, cef_string_multimap_t)) { return callback__(self, uRL, method, postData, headerMap); }
 	// int gocef_request_get_flags(cef_request_t * self, int (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
 	// void gocef_request_set_flags(cef_request_t * self, int flags, void (CEF_CALLBACK *callback__)(cef_request_t *, int)) { return callback__(self, flags); }
 	// cef_string_userfree_t gocef_request_get_first_party_for_cookies(cef_request_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
-	// void gocef_request_set_first_party_for_cookies(cef_request_t * self, cef_string_t * url, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *)) { return callback__(self, url); }
+	// void gocef_request_set_first_party_for_cookies(cef_request_t * self, cef_string_t * uRL, void (CEF_CALLBACK *callback__)(cef_request_t *, cef_string_t *)) { return callback__(self, uRL); }
 	// cef_resource_type_t gocef_request_get_resource_type(cef_request_t * self, cef_resource_type_t (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
 	// cef_transition_type_t gocef_request_get_transition_type(cef_request_t * self, cef_transition_type_t (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
 	// uint64 gocef_request_get_identifier(cef_request_t * self, uint64 (CEF_CALLBACK *callback__)(cef_request_t *)) { return callback__(self); }
@@ -50,22 +50,22 @@ func (d *Request) IsReadOnly() int32 {
 	return int32(C.gocef_request_is_read_only(d.toNative(), d.is_read_only))
 }
 
-// GetUrl (get_url)
+// GetURL (get_url)
 // Get the fully qualified URL.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *Request) GetUrl() string {
+func (d *Request) GetURL() string {
 	return cefuserfreestrToString(C.gocef_request_get_url(d.toNative(), d.get_url))
 }
 
-// SetUrl (set_url)
+// SetURL (set_url)
 // Set the fully qualified URL.
-func (d *Request) SetUrl(url string) {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func (d *Request) SetURL(uRL string) {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	C.gocef_request_set_url(d.toNative(), (*C.cef_string_t)(url_), d.set_url)
+	C.gocef_request_set_url(d.toNative(), (*C.cef_string_t)(uRL_), d.set_url)
 }
 
 // GetMethod (get_method)
@@ -91,19 +91,19 @@ func (d *Request) SetMethod(method string) {
 // Set the referrer URL and policy. If non-NULL the referrer URL must be fully
 // qualified with an HTTP or HTTPS scheme component. Any username, password or
 // ref component will be removed.
-func (d *Request) SetReferrer(referrer_url string, policy ReferrerPolicy) {
-	referrer_url_ := C.cef_string_userfree_alloc()
-	setCEFStr(referrer_url, referrer_url_)
+func (d *Request) SetReferrer(referrerURL string, policy ReferrerPolicy) {
+	referrerURL_ := C.cef_string_userfree_alloc()
+	setCEFStr(referrerURL, referrerURL_)
 	defer func() {
-		C.cef_string_userfree_free(referrer_url_)
+		C.cef_string_userfree_free(referrerURL_)
 	}()
-	C.gocef_request_set_referrer(d.toNative(), (*C.cef_string_t)(referrer_url_), C.cef_referrer_policy_t(policy), d.set_referrer)
+	C.gocef_request_set_referrer(d.toNative(), (*C.cef_string_t)(referrerURL_), C.cef_referrer_policy_t(policy), d.set_referrer)
 }
 
-// GetReferrerUrl (get_referrer_url)
+// GetReferrerURL (get_referrer_url)
 // Get the referrer URL.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *Request) GetReferrerUrl() string {
+func (d *Request) GetReferrerURL() string {
 	return cefuserfreestrToString(C.gocef_request_get_referrer_url(d.toNative(), d.get_referrer_url))
 }
 
@@ -173,18 +173,18 @@ func (d *Request) SetHeaderByName(name, value string, overwrite int32) {
 
 // Set (set)
 // Set all values at one time.
-func (d *Request) Set(url, method string, postData *PostData, headerMap StringMultimap) {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func (d *Request) Set(uRL, method string, postData *PostData, headerMap StringMultimap) {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
 	method_ := C.cef_string_userfree_alloc()
 	setCEFStr(method, method_)
 	defer func() {
 		C.cef_string_userfree_free(method_)
 	}()
-	C.gocef_request_set(d.toNative(), (*C.cef_string_t)(url_), (*C.cef_string_t)(method_), postData.toNative(), C.cef_string_multimap_t(headerMap), d.set)
+	C.gocef_request_set(d.toNative(), (*C.cef_string_t)(uRL_), (*C.cef_string_t)(method_), postData.toNative(), C.cef_string_multimap_t(headerMap), d.set)
 }
 
 // GetFlags (get_flags)
@@ -212,13 +212,13 @@ func (d *Request) GetFirstPartyForCookies() string {
 // SetFirstPartyForCookies (set_first_party_for_cookies)
 // Set the URL to the first party for cookies used in combination with
 // cef_urlrequest_t.
-func (d *Request) SetFirstPartyForCookies(url string) {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func (d *Request) SetFirstPartyForCookies(uRL string) {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	C.gocef_request_set_first_party_for_cookies(d.toNative(), (*C.cef_string_t)(url_), d.set_first_party_for_cookies)
+	C.gocef_request_set_first_party_for_cookies(d.toNative(), (*C.cef_string_t)(uRL_), d.set_first_party_for_cookies)
 }
 
 // GetResourceType (get_resource_type)

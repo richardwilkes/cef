@@ -4,9 +4,9 @@ package cef
 
 import (
 	// #include "capi_gen.h"
-	// void gocef_textfield_set_password_input(cef_textfield_t * self, int password_input, void (CEF_CALLBACK *callback__)(cef_textfield_t *, int)) { return callback__(self, password_input); }
+	// void gocef_textfield_set_password_input(cef_textfield_t * self, int passwordInput, void (CEF_CALLBACK *callback__)(cef_textfield_t *, int)) { return callback__(self, passwordInput); }
 	// int gocef_textfield_is_password_input(cef_textfield_t * self, int (CEF_CALLBACK *callback__)(cef_textfield_t *)) { return callback__(self); }
-	// void gocef_textfield_set_read_only(cef_textfield_t * self, int read_only, void (CEF_CALLBACK *callback__)(cef_textfield_t *, int)) { return callback__(self, read_only); }
+	// void gocef_textfield_set_read_only(cef_textfield_t * self, int readOnly, void (CEF_CALLBACK *callback__)(cef_textfield_t *, int)) { return callback__(self, readOnly); }
 	// int gocef_textfield_is_read_only(cef_textfield_t * self, int (CEF_CALLBACK *callback__)(cef_textfield_t *)) { return callback__(self); }
 	// cef_string_userfree_t gocef_textfield_get_text(cef_textfield_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_textfield_t *)) { return callback__(self); }
 	// void gocef_textfield_set_text(cef_textfield_t * self, cef_string_t * text, void (CEF_CALLBACK *callback__)(cef_textfield_t *, cef_string_t *)) { return callback__(self, text); }
@@ -25,11 +25,11 @@ import (
 	// cef_color_t gocef_textfield_get_selection_text_color(cef_textfield_t * self, cef_color_t (CEF_CALLBACK *callback__)(cef_textfield_t *)) { return callback__(self); }
 	// void gocef_textfield_set_selection_background_color(cef_textfield_t * self, cef_color_t color, void (CEF_CALLBACK *callback__)(cef_textfield_t *, cef_color_t)) { return callback__(self, color); }
 	// cef_color_t gocef_textfield_get_selection_background_color(cef_textfield_t * self, cef_color_t (CEF_CALLBACK *callback__)(cef_textfield_t *)) { return callback__(self); }
-	// void gocef_textfield_set_font_list(cef_textfield_t * self, cef_string_t * font_list, void (CEF_CALLBACK *callback__)(cef_textfield_t *, cef_string_t *)) { return callback__(self, font_list); }
+	// void gocef_textfield_set_font_list(cef_textfield_t * self, cef_string_t * fontList, void (CEF_CALLBACK *callback__)(cef_textfield_t *, cef_string_t *)) { return callback__(self, fontList); }
 	// void gocef_textfield_apply_text_color(cef_textfield_t * self, cef_color_t color, cef_range_t * range_r, void (CEF_CALLBACK *callback__)(cef_textfield_t *, cef_color_t, cef_range_t *)) { return callback__(self, color, range_r); }
 	// void gocef_textfield_apply_text_style(cef_textfield_t * self, cef_text_style_t style, int add, cef_range_t * range_r, void (CEF_CALLBACK *callback__)(cef_textfield_t *, cef_text_style_t, int, cef_range_t *)) { return callback__(self, style, add, range_r); }
-	// int gocef_textfield_is_command_enabled(cef_textfield_t * self, int command_id, int (CEF_CALLBACK *callback__)(cef_textfield_t *, int)) { return callback__(self, command_id); }
-	// void gocef_textfield_execute_command(cef_textfield_t * self, int command_id, void (CEF_CALLBACK *callback__)(cef_textfield_t *, int)) { return callback__(self, command_id); }
+	// int gocef_textfield_is_command_enabled(cef_textfield_t * self, int commandID, int (CEF_CALLBACK *callback__)(cef_textfield_t *, int)) { return callback__(self, commandID); }
+	// void gocef_textfield_execute_command(cef_textfield_t * self, int commandID, void (CEF_CALLBACK *callback__)(cef_textfield_t *, int)) { return callback__(self, commandID); }
 	// void gocef_textfield_clear_edit_history(cef_textfield_t * self, void (CEF_CALLBACK *callback__)(cef_textfield_t *)) { return callback__(self); }
 	// void gocef_textfield_set_placeholder_text(cef_textfield_t * self, cef_string_t * text, void (CEF_CALLBACK *callback__)(cef_textfield_t *, cef_string_t *)) { return callback__(self, text); }
 	// cef_string_userfree_t gocef_textfield_get_placeholder_text(cef_textfield_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_textfield_t *)) { return callback__(self); }
@@ -56,8 +56,8 @@ func (d *Textfield) Base() *View {
 
 // SetPasswordInput (set_password_input)
 // Sets whether the text will be displayed as asterisks.
-func (d *Textfield) SetPasswordInput(password_input int32) {
-	C.gocef_textfield_set_password_input(d.toNative(), C.int(password_input), d.set_password_input)
+func (d *Textfield) SetPasswordInput(passwordInput int32) {
+	C.gocef_textfield_set_password_input(d.toNative(), C.int(passwordInput), d.set_password_input)
 }
 
 // IsPasswordInput (is_password_input)
@@ -68,8 +68,8 @@ func (d *Textfield) IsPasswordInput() int32 {
 
 // SetReadOnly (set_read_only)
 // Sets whether the text will read-only.
-func (d *Textfield) SetReadOnly(read_only int32) {
-	C.gocef_textfield_set_read_only(d.toNative(), C.int(read_only), d.set_read_only)
+func (d *Textfield) SetReadOnly(readOnly int32) {
+	C.gocef_textfield_set_read_only(d.toNative(), C.int(readOnly), d.set_read_only)
 }
 
 // IsReadOnly (is_read_only)
@@ -212,13 +212,13 @@ func (d *Textfield) GetSelectionBackgroundColor() Color {
 //
 // Here are examples of valid font description strings: - "Arial, Helvetica,
 // Bold Italic 14px" - "Arial, 14px"
-func (d *Textfield) SetFontList(font_list string) {
-	font_list_ := C.cef_string_userfree_alloc()
-	setCEFStr(font_list, font_list_)
+func (d *Textfield) SetFontList(fontList string) {
+	fontList_ := C.cef_string_userfree_alloc()
+	setCEFStr(fontList, fontList_)
 	defer func() {
-		C.cef_string_userfree_free(font_list_)
+		C.cef_string_userfree_free(fontList_)
 	}()
-	C.gocef_textfield_set_font_list(d.toNative(), (*C.cef_string_t)(font_list_), d.set_font_list)
+	C.gocef_textfield_set_font_list(d.toNative(), (*C.cef_string_t)(fontList_), d.set_font_list)
 }
 
 // ApplyTextColor (apply_text_color)
@@ -241,8 +241,8 @@ func (d *Textfield) ApplyTextStyle(style TextStyle, add int32, range_r *Range) {
 // IsCommandEnabled (is_command_enabled)
 // Returns true (1) if the action associated with the specified command id is
 // enabled. See additional comments on execute_command().
-func (d *Textfield) IsCommandEnabled(command_id int32) int32 {
-	return int32(C.gocef_textfield_is_command_enabled(d.toNative(), C.int(command_id), d.is_command_enabled))
+func (d *Textfield) IsCommandEnabled(commandID int32) int32 {
+	return int32(C.gocef_textfield_is_command_enabled(d.toNative(), C.int(commandID), d.is_command_enabled))
 }
 
 // ExecuteCommand (execute_command)
@@ -250,8 +250,8 @@ func (d *Textfield) IsCommandEnabled(command_id int32) int32 {
 // include IDS_APP_UNDO, IDS_APP_REDO, IDS_APP_CUT, IDS_APP_COPY,
 // IDS_APP_PASTE, IDS_APP_DELETE, IDS_APP_SELECT_ALL, IDS_DELETE_* and
 // IDS_MOVE_*. See include/cef_pack_strings.h for definitions.
-func (d *Textfield) ExecuteCommand(command_id int32) {
-	C.gocef_textfield_execute_command(d.toNative(), C.int(command_id), d.execute_command)
+func (d *Textfield) ExecuteCommand(commandID int32) {
+	C.gocef_textfield_execute_command(d.toNative(), C.int(commandID), d.execute_command)
 }
 
 // ClearEditHistory (clear_edit_history)

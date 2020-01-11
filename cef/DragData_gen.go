@@ -18,14 +18,14 @@ import (
 	// cef_string_userfree_t gocef_drag_data_get_file_name(cef_drag_data_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_drag_data_t *)) { return callback__(self); }
 	// size_t gocef_drag_data_get_file_contents(cef_drag_data_t * self, cef_stream_writer_t * writer, size_t (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_stream_writer_t *)) { return callback__(self, writer); }
 	// int gocef_drag_data_get_file_names(cef_drag_data_t * self, cef_string_list_t names, int (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_list_t)) { return callback__(self, names); }
-	// void gocef_drag_data_set_link_url(cef_drag_data_t * self, cef_string_t * url, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *)) { return callback__(self, url); }
+	// void gocef_drag_data_set_link_url(cef_drag_data_t * self, cef_string_t * uRL, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *)) { return callback__(self, uRL); }
 	// void gocef_drag_data_set_link_title(cef_drag_data_t * self, cef_string_t * title, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *)) { return callback__(self, title); }
 	// void gocef_drag_data_set_link_metadata(cef_drag_data_t * self, cef_string_t * data, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *)) { return callback__(self, data); }
 	// void gocef_drag_data_set_fragment_text(cef_drag_data_t * self, cef_string_t * text, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *)) { return callback__(self, text); }
-	// void gocef_drag_data_set_fragment_html(cef_drag_data_t * self, cef_string_t * html, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *)) { return callback__(self, html); }
-	// void gocef_drag_data_set_fragment_base_url(cef_drag_data_t * self, cef_string_t * base_url, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *)) { return callback__(self, base_url); }
+	// void gocef_drag_data_set_fragment_html(cef_drag_data_t * self, cef_string_t * hTML, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *)) { return callback__(self, hTML); }
+	// void gocef_drag_data_set_fragment_base_url(cef_drag_data_t * self, cef_string_t * baseURL, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *)) { return callback__(self, baseURL); }
 	// void gocef_drag_data_reset_file_contents(cef_drag_data_t * self, void (CEF_CALLBACK *callback__)(cef_drag_data_t *)) { return callback__(self); }
-	// void gocef_drag_data_add_file(cef_drag_data_t * self, cef_string_t * path, cef_string_t * display_name, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *, cef_string_t *)) { return callback__(self, path, display_name); }
+	// void gocef_drag_data_add_file(cef_drag_data_t * self, cef_string_t * path, cef_string_t * displayName, void (CEF_CALLBACK *callback__)(cef_drag_data_t *, cef_string_t *, cef_string_t *)) { return callback__(self, path, displayName); }
 	// cef_image_t * gocef_drag_data_get_image(cef_drag_data_t * self, cef_image_t * (CEF_CALLBACK *callback__)(cef_drag_data_t *)) { return callback__(self); }
 	// cef_point_t gocef_drag_data_get_image_hotspot(cef_drag_data_t * self, cef_point_t (CEF_CALLBACK *callback__)(cef_drag_data_t *)) { return callback__(self); }
 	// int gocef_drag_data_has_image(cef_drag_data_t * self, int (CEF_CALLBACK *callback__)(cef_drag_data_t *)) { return callback__(self); }
@@ -77,10 +77,10 @@ func (d *DragData) IsFile() int32 {
 	return int32(C.gocef_drag_data_is_file(d.toNative(), d.is_file))
 }
 
-// GetLinkUrl (get_link_url)
+// GetLinkURL (get_link_url)
 // Return the link URL that is being dragged.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *DragData) GetLinkUrl() string {
+func (d *DragData) GetLinkURL() string {
 	return cefuserfreestrToString(C.gocef_drag_data_get_link_url(d.toNative(), d.get_link_url))
 }
 
@@ -105,18 +105,18 @@ func (d *DragData) GetFragmentText() string {
 	return cefuserfreestrToString(C.gocef_drag_data_get_fragment_text(d.toNative(), d.get_fragment_text))
 }
 
-// GetFragmentHtml (get_fragment_html)
+// GetFragmentHTML (get_fragment_html)
 // Return the text/html fragment that is being dragged.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *DragData) GetFragmentHtml() string {
+func (d *DragData) GetFragmentHTML() string {
 	return cefuserfreestrToString(C.gocef_drag_data_get_fragment_html(d.toNative(), d.get_fragment_html))
 }
 
-// GetFragmentBaseUrl (get_fragment_base_url)
+// GetFragmentBaseURL (get_fragment_base_url)
 // Return the base URL that the fragment came from. This value is used for
 // resolving relative URLs and may be NULL.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *DragData) GetFragmentBaseUrl() string {
+func (d *DragData) GetFragmentBaseURL() string {
 	return cefuserfreestrToString(C.gocef_drag_data_get_fragment_base_url(d.toNative(), d.get_fragment_base_url))
 }
 
@@ -143,15 +143,15 @@ func (d *DragData) GetFileNames(names StringList) int32 {
 	return int32(C.gocef_drag_data_get_file_names(d.toNative(), C.cef_string_list_t(names), d.get_file_names))
 }
 
-// SetLinkUrl (set_link_url)
+// SetLinkURL (set_link_url)
 // Set the link URL that is being dragged.
-func (d *DragData) SetLinkUrl(url string) {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func (d *DragData) SetLinkURL(uRL string) {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	C.gocef_drag_data_set_link_url(d.toNative(), (*C.cef_string_t)(url_), d.set_link_url)
+	C.gocef_drag_data_set_link_url(d.toNative(), (*C.cef_string_t)(uRL_), d.set_link_url)
 }
 
 // SetLinkTitle (set_link_title)
@@ -187,26 +187,26 @@ func (d *DragData) SetFragmentText(text string) {
 	C.gocef_drag_data_set_fragment_text(d.toNative(), (*C.cef_string_t)(text_), d.set_fragment_text)
 }
 
-// SetFragmentHtml (set_fragment_html)
+// SetFragmentHTML (set_fragment_html)
 // Set the text/html fragment that is being dragged.
-func (d *DragData) SetFragmentHtml(html string) {
-	html_ := C.cef_string_userfree_alloc()
-	setCEFStr(html, html_)
+func (d *DragData) SetFragmentHTML(hTML string) {
+	hTML_ := C.cef_string_userfree_alloc()
+	setCEFStr(hTML, hTML_)
 	defer func() {
-		C.cef_string_userfree_free(html_)
+		C.cef_string_userfree_free(hTML_)
 	}()
-	C.gocef_drag_data_set_fragment_html(d.toNative(), (*C.cef_string_t)(html_), d.set_fragment_html)
+	C.gocef_drag_data_set_fragment_html(d.toNative(), (*C.cef_string_t)(hTML_), d.set_fragment_html)
 }
 
-// SetFragmentBaseUrl (set_fragment_base_url)
+// SetFragmentBaseURL (set_fragment_base_url)
 // Set the base URL that the fragment came from.
-func (d *DragData) SetFragmentBaseUrl(base_url string) {
-	base_url_ := C.cef_string_userfree_alloc()
-	setCEFStr(base_url, base_url_)
+func (d *DragData) SetFragmentBaseURL(baseURL string) {
+	baseURL_ := C.cef_string_userfree_alloc()
+	setCEFStr(baseURL, baseURL_)
 	defer func() {
-		C.cef_string_userfree_free(base_url_)
+		C.cef_string_userfree_free(baseURL_)
 	}()
-	C.gocef_drag_data_set_fragment_base_url(d.toNative(), (*C.cef_string_t)(base_url_), d.set_fragment_base_url)
+	C.gocef_drag_data_set_fragment_base_url(d.toNative(), (*C.cef_string_t)(baseURL_), d.set_fragment_base_url)
 }
 
 // ResetFileContents (reset_file_contents)
@@ -219,18 +219,18 @@ func (d *DragData) ResetFileContents() {
 
 // AddFile (add_file)
 // Add a file that is being dragged into the webview.
-func (d *DragData) AddFile(path, display_name string) {
+func (d *DragData) AddFile(path, displayName string) {
 	path_ := C.cef_string_userfree_alloc()
 	setCEFStr(path, path_)
 	defer func() {
 		C.cef_string_userfree_free(path_)
 	}()
-	display_name_ := C.cef_string_userfree_alloc()
-	setCEFStr(display_name, display_name_)
+	displayName_ := C.cef_string_userfree_alloc()
+	setCEFStr(displayName, displayName_)
 	defer func() {
-		C.cef_string_userfree_free(display_name_)
+		C.cef_string_userfree_free(displayName_)
 	}()
-	C.gocef_drag_data_add_file(d.toNative(), (*C.cef_string_t)(path_), (*C.cef_string_t)(display_name_), d.add_file)
+	C.gocef_drag_data_add_file(d.toNative(), (*C.cef_string_t)(path_), (*C.cef_string_t)(displayName_), d.add_file)
 }
 
 // GetImage (get_image)

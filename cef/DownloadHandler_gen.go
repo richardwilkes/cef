@@ -16,8 +16,8 @@ import (
 
 // DownloadHandlerProxy defines methods required for using DownloadHandler.
 type DownloadHandlerProxy interface {
-	OnBeforeDownload(self *DownloadHandler, browser *Browser, download_item *DownloadItem, suggested_name string, callback *BeforeDownloadCallback)
-	OnDownloadUpdated(self *DownloadHandler, browser *Browser, download_item *DownloadItem, callback *DownloadItemCallback)
+	OnBeforeDownload(self *DownloadHandler, browser *Browser, downloadItem *DownloadItem, suggestedName string, callback *BeforeDownloadCallback)
+	OnDownloadUpdated(self *DownloadHandler, browser *Browser, downloadItem *DownloadItem, callback *DownloadItemCallback)
 }
 
 // DownloadHandler (cef_download_handler_t from include/capi/cef_download_handler_capi.h)
@@ -63,17 +63,17 @@ func (d *DownloadHandler) Base() *BaseRefCounted {
 // |callback| either asynchronously or in this function to continue the
 // download if desired. Do not keep a reference to |download_item| outside of
 // this function.
-func (d *DownloadHandler) OnBeforeDownload(browser *Browser, download_item *DownloadItem, suggested_name string, callback *BeforeDownloadCallback) {
-	lookupDownloadHandlerProxy(d.Base()).OnBeforeDownload(d, browser, download_item, suggested_name, callback)
+func (d *DownloadHandler) OnBeforeDownload(browser *Browser, downloadItem *DownloadItem, suggestedName string, callback *BeforeDownloadCallback) {
+	lookupDownloadHandlerProxy(d.Base()).OnBeforeDownload(d, browser, downloadItem, suggestedName, callback)
 }
 
 //nolint:gocritic
 //export gocef_download_handler_on_before_download
-func gocef_download_handler_on_before_download(self *C.cef_download_handler_t, browser *C.cef_browser_t, download_item *C.cef_download_item_t, suggested_name *C.cef_string_t, callback *C.cef_before_download_callback_t) {
+func gocef_download_handler_on_before_download(self *C.cef_download_handler_t, browser *C.cef_browser_t, downloadItem *C.cef_download_item_t, suggestedName *C.cef_string_t, callback *C.cef_before_download_callback_t) {
 	me__ := (*DownloadHandler)(self)
 	proxy__ := lookupDownloadHandlerProxy(me__.Base())
-	suggested_name_ := cefstrToString(suggested_name)
-	proxy__.OnBeforeDownload(me__, (*Browser)(browser), (*DownloadItem)(download_item), suggested_name_, (*BeforeDownloadCallback)(callback))
+	suggestedName_ := cefstrToString(suggestedName)
+	proxy__.OnBeforeDownload(me__, (*Browser)(browser), (*DownloadItem)(downloadItem), suggestedName_, (*BeforeDownloadCallback)(callback))
 }
 
 // OnDownloadUpdated (on_download_updated)
@@ -82,14 +82,14 @@ func gocef_download_handler_on_before_download(self *C.cef_download_handler_t, b
 // Execute |callback| either asynchronously or in this function to cancel the
 // download if desired. Do not keep a reference to |download_item| outside of
 // this function.
-func (d *DownloadHandler) OnDownloadUpdated(browser *Browser, download_item *DownloadItem, callback *DownloadItemCallback) {
-	lookupDownloadHandlerProxy(d.Base()).OnDownloadUpdated(d, browser, download_item, callback)
+func (d *DownloadHandler) OnDownloadUpdated(browser *Browser, downloadItem *DownloadItem, callback *DownloadItemCallback) {
+	lookupDownloadHandlerProxy(d.Base()).OnDownloadUpdated(d, browser, downloadItem, callback)
 }
 
 //nolint:gocritic
 //export gocef_download_handler_on_download_updated
-func gocef_download_handler_on_download_updated(self *C.cef_download_handler_t, browser *C.cef_browser_t, download_item *C.cef_download_item_t, callback *C.cef_download_item_callback_t) {
+func gocef_download_handler_on_download_updated(self *C.cef_download_handler_t, browser *C.cef_browser_t, downloadItem *C.cef_download_item_t, callback *C.cef_download_item_callback_t) {
 	me__ := (*DownloadHandler)(self)
 	proxy__ := lookupDownloadHandlerProxy(me__.Base())
-	proxy__.OnDownloadUpdated(me__, (*Browser)(browser), (*DownloadItem)(download_item), (*DownloadItemCallback)(callback))
+	proxy__.OnDownloadUpdated(me__, (*Browser)(browser), (*DownloadItem)(downloadItem), (*DownloadItemCallback)(callback))
 }

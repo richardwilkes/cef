@@ -6,9 +6,9 @@ import "unsafe"
 
 import (
 	// #include "capi_gen.h"
-	// cef_string_userfree_t gocef_resource_bundle_get_localized_string(cef_resource_bundle_t * self, int string_id, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_resource_bundle_t *, int)) { return callback__(self, string_id); }
-	// int gocef_resource_bundle_get_data_resource(cef_resource_bundle_t * self, int resource_id, void ** data, size_t * data_size, int (CEF_CALLBACK *callback__)(cef_resource_bundle_t *, int, void **, size_t *)) { return callback__(self, resource_id, data, data_size); }
-	// int gocef_resource_bundle_get_data_resource_for_scale(cef_resource_bundle_t * self, int resource_id, cef_scale_factor_t scale_factor, void ** data, size_t * data_size, int (CEF_CALLBACK *callback__)(cef_resource_bundle_t *, int, cef_scale_factor_t, void **, size_t *)) { return callback__(self, resource_id, scale_factor, data, data_size); }
+	// cef_string_userfree_t gocef_resource_bundle_get_localized_string(cef_resource_bundle_t * self, int stringID, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_resource_bundle_t *, int)) { return callback__(self, stringID); }
+	// int gocef_resource_bundle_get_data_resource(cef_resource_bundle_t * self, int resourceID, void ** data, size_t * dataSize, int (CEF_CALLBACK *callback__)(cef_resource_bundle_t *, int, void **, size_t *)) { return callback__(self, resourceID, data, dataSize); }
+	// int gocef_resource_bundle_get_data_resource_for_scale(cef_resource_bundle_t * self, int resourceID, cef_scale_factor_t scaleFactor, void ** data, size_t * dataSize, int (CEF_CALLBACK *callback__)(cef_resource_bundle_t *, int, cef_scale_factor_t, void **, size_t *)) { return callback__(self, resourceID, scaleFactor, data, dataSize); }
 	"C"
 )
 
@@ -35,8 +35,8 @@ func (d *ResourceBundle) Base() *BaseRefCounted {
 // string if the value is not found. Include cef_pack_strings.h for a listing
 // of valid string ID values.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *ResourceBundle) GetLocalizedString(string_id int32) string {
-	return cefuserfreestrToString(C.gocef_resource_bundle_get_localized_string(d.toNative(), C.int(string_id), d.get_localized_string))
+func (d *ResourceBundle) GetLocalizedString(stringID int32) string {
+	return cefuserfreestrToString(C.gocef_resource_bundle_get_localized_string(d.toNative(), C.int(stringID), d.get_localized_string))
 }
 
 // GetDataResource (get_data_resource)
@@ -46,8 +46,8 @@ func (d *ResourceBundle) GetLocalizedString(string_id int32) string {
 // will return false (0). The returned |data| pointer will remain resident in
 // memory and should not be freed. Include cef_pack_resources.h for a listing
 // of valid resource ID values.
-func (d *ResourceBundle) GetDataResource(resource_id int32, data *unsafe.Pointer, data_size *uint64) int32 {
-	return int32(C.gocef_resource_bundle_get_data_resource(d.toNative(), C.int(resource_id), data, (*C.size_t)(data_size), d.get_data_resource))
+func (d *ResourceBundle) GetDataResource(resourceID int32, data *unsafe.Pointer, dataSize *uint64) int32 {
+	return int32(C.gocef_resource_bundle_get_data_resource(d.toNative(), C.int(resourceID), data, (*C.size_t)(dataSize), d.get_data_resource))
 }
 
 // GetDataResourceForScale (get_data_resource_for_scale)
@@ -59,6 +59,6 @@ func (d *ResourceBundle) GetDataResource(resource_id int32, data *unsafe.Pointer
 // return false (0). The returned |data| pointer will remain resident in
 // memory and should not be freed. Include cef_pack_resources.h for a listing
 // of valid resource ID values.
-func (d *ResourceBundle) GetDataResourceForScale(resource_id int32, scale_factor ScaleFactor, data *unsafe.Pointer, data_size *uint64) int32 {
-	return int32(C.gocef_resource_bundle_get_data_resource_for_scale(d.toNative(), C.int(resource_id), C.cef_scale_factor_t(scale_factor), data, (*C.size_t)(data_size), d.get_data_resource_for_scale))
+func (d *ResourceBundle) GetDataResourceForScale(resourceID int32, scaleFactor ScaleFactor, data *unsafe.Pointer, dataSize *uint64) int32 {
+	return int32(C.gocef_resource_bundle_get_data_resource_for_scale(d.toNative(), C.int(resourceID), C.cef_scale_factor_t(scaleFactor), data, (*C.size_t)(dataSize), d.get_data_resource_for_scale))
 }

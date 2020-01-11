@@ -16,7 +16,7 @@ import (
 
 // DownloadImageCallbackProxy defines methods required for using DownloadImageCallback.
 type DownloadImageCallbackProxy interface {
-	OnDownloadImageFinished(self *DownloadImageCallback, image_url string, http_status_code int32, image *Image)
+	OnDownloadImageFinished(self *DownloadImageCallback, imageURL string, hTTPStatusCode int32, image *Image)
 }
 
 // DownloadImageCallback (cef_download_image_callback_t from include/capi/cef_browser_capi.h)
@@ -61,15 +61,15 @@ func (d *DownloadImageCallback) Base() *BaseRefCounted {
 // |image_url| is the URL that was downloaded and |http_status_code| is the
 // resulting HTTP status code. |image| is the resulting image, possibly at
 // multiple scale factors, or NULL if the download failed.
-func (d *DownloadImageCallback) OnDownloadImageFinished(image_url string, http_status_code int32, image *Image) {
-	lookupDownloadImageCallbackProxy(d.Base()).OnDownloadImageFinished(d, image_url, http_status_code, image)
+func (d *DownloadImageCallback) OnDownloadImageFinished(imageURL string, hTTPStatusCode int32, image *Image) {
+	lookupDownloadImageCallbackProxy(d.Base()).OnDownloadImageFinished(d, imageURL, hTTPStatusCode, image)
 }
 
 //nolint:gocritic
 //export gocef_download_image_callback_on_download_image_finished
-func gocef_download_image_callback_on_download_image_finished(self *C.cef_download_image_callback_t, image_url *C.cef_string_t, http_status_code C.int, image *C.cef_image_t) {
+func gocef_download_image_callback_on_download_image_finished(self *C.cef_download_image_callback_t, imageURL *C.cef_string_t, hTTPStatusCode C.int, image *C.cef_image_t) {
 	me__ := (*DownloadImageCallback)(self)
 	proxy__ := lookupDownloadImageCallbackProxy(me__.Base())
-	image_url_ := cefstrToString(image_url)
-	proxy__.OnDownloadImageFinished(me__, image_url_, int32(http_status_code), (*Image)(image))
+	imageURL_ := cefstrToString(imageURL)
+	proxy__.OnDownloadImageFinished(me__, imageURL_, int32(hTTPStatusCode), (*Image)(image))
 }

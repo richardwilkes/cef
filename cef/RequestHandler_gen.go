@@ -16,14 +16,14 @@ import (
 
 // RequestHandlerProxy defines methods required for using RequestHandler.
 type RequestHandlerProxy interface {
-	OnBeforeBrowse(self *RequestHandler, browser *Browser, frame *Frame, request *Request, user_gesture, is_redirect int32) int32
-	OnOpenUrlfromTab(self *RequestHandler, browser *Browser, frame *Frame, target_url string, target_disposition WindowOpenDisposition, user_gesture int32) int32
-	GetResourceRequestHandler(self *RequestHandler, browser *Browser, frame *Frame, request *Request, is_navigation, is_download int32, request_initiator string, disable_default_handling *int32) *ResourceRequestHandler
-	GetAuthCredentials(self *RequestHandler, browser *Browser, origin_url string, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32
-	OnQuotaRequest(self *RequestHandler, browser *Browser, origin_url string, new_size int64, callback *RequestCallback) int32
-	OnCertificateError(self *RequestHandler, browser *Browser, cert_error Errorcode, request_url string, ssl_info *Sslinfo, callback *RequestCallback) int32
+	OnBeforeBrowse(self *RequestHandler, browser *Browser, frame *Frame, request *Request, userGesture, isRedirect int32) int32
+	OnOpenUrlfromTab(self *RequestHandler, browser *Browser, frame *Frame, targetURL string, targetDisposition WindowOpenDisposition, userGesture int32) int32
+	GetResourceRequestHandler(self *RequestHandler, browser *Browser, frame *Frame, request *Request, isNavigation, isDownload int32, requestInitiator string, disableDefaultHandling *int32) *ResourceRequestHandler
+	GetAuthCredentials(self *RequestHandler, browser *Browser, originURL string, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32
+	OnQuotaRequest(self *RequestHandler, browser *Browser, originURL string, newSize int64, callback *RequestCallback) int32
+	OnCertificateError(self *RequestHandler, browser *Browser, certError Errorcode, requestURL string, sSLInfo *Sslinfo, callback *RequestCallback) int32
 	OnSelectClientCertificate(self *RequestHandler, browser *Browser, isProxy int32, host string, port int32, certificatesCount uint64, certificates **X509certificate, callback *SelectClientCertificateCallback) int32
-	OnPluginCrashed(self *RequestHandler, browser *Browser, plugin_path string)
+	OnPluginCrashed(self *RequestHandler, browser *Browser, pluginPath string)
 	OnRenderViewReady(self *RequestHandler, browser *Browser)
 	OnRenderProcessTerminated(self *RequestHandler, browser *Browser, status TerminationStatus)
 }
@@ -76,16 +76,16 @@ func (d *RequestHandler) Base() *BaseRefCounted {
 // ERR_ABORTED. The |user_gesture| value will be true (1) if the browser
 // navigated via explicit user gesture (e.g. clicking a link) or false (0) if
 // it navigated automatically (e.g. via the DomContentLoaded event).
-func (d *RequestHandler) OnBeforeBrowse(browser *Browser, frame *Frame, request *Request, user_gesture, is_redirect int32) int32 {
-	return lookupRequestHandlerProxy(d.Base()).OnBeforeBrowse(d, browser, frame, request, user_gesture, is_redirect)
+func (d *RequestHandler) OnBeforeBrowse(browser *Browser, frame *Frame, request *Request, userGesture, isRedirect int32) int32 {
+	return lookupRequestHandlerProxy(d.Base()).OnBeforeBrowse(d, browser, frame, request, userGesture, isRedirect)
 }
 
 //nolint:gocritic
 //export gocef_request_handler_on_before_browse
-func gocef_request_handler_on_before_browse(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, user_gesture C.int, is_redirect C.int) C.int {
+func gocef_request_handler_on_before_browse(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, userGesture C.int, isRedirect C.int) C.int {
 	me__ := (*RequestHandler)(self)
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	return C.int(proxy__.OnBeforeBrowse(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), int32(user_gesture), int32(is_redirect)))
+	return C.int(proxy__.OnBeforeBrowse(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), int32(userGesture), int32(isRedirect)))
 }
 
 // OnOpenUrlfromTab (on_open_urlfrom_tab)
@@ -103,17 +103,17 @@ func gocef_request_handler_on_before_browse(self *C.cef_request_handler_t, brows
 // it navigated automatically (e.g. via the DomContentLoaded event). Return
 // true (1) to cancel the navigation or false (0) to allow the navigation to
 // proceed in the source browser's top-level frame.
-func (d *RequestHandler) OnOpenUrlfromTab(browser *Browser, frame *Frame, target_url string, target_disposition WindowOpenDisposition, user_gesture int32) int32 {
-	return lookupRequestHandlerProxy(d.Base()).OnOpenUrlfromTab(d, browser, frame, target_url, target_disposition, user_gesture)
+func (d *RequestHandler) OnOpenUrlfromTab(browser *Browser, frame *Frame, targetURL string, targetDisposition WindowOpenDisposition, userGesture int32) int32 {
+	return lookupRequestHandlerProxy(d.Base()).OnOpenUrlfromTab(d, browser, frame, targetURL, targetDisposition, userGesture)
 }
 
 //nolint:gocritic
 //export gocef_request_handler_on_open_urlfrom_tab
-func gocef_request_handler_on_open_urlfrom_tab(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, target_url *C.cef_string_t, target_disposition C.cef_window_open_disposition_t, user_gesture C.int) C.int {
+func gocef_request_handler_on_open_urlfrom_tab(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, targetURL *C.cef_string_t, targetDisposition C.cef_window_open_disposition_t, userGesture C.int) C.int {
 	me__ := (*RequestHandler)(self)
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	target_url_ := cefstrToString(target_url)
-	return C.int(proxy__.OnOpenUrlfromTab(me__, (*Browser)(browser), (*Frame)(frame), target_url_, WindowOpenDisposition(target_disposition), int32(user_gesture)))
+	targetURL_ := cefstrToString(targetURL)
+	return C.int(proxy__.OnOpenUrlfromTab(me__, (*Browser)(browser), (*Frame)(frame), targetURL_, WindowOpenDisposition(targetDisposition), int32(userGesture)))
 }
 
 // GetResourceRequestHandler (get_resource_request_handler)
@@ -131,17 +131,17 @@ func gocef_request_handler_on_open_urlfrom_tab(self *C.cef_request_handler_t, br
 // cef_resource_request_handler_t object. If this callback returns NULL the
 // same function will be called on the associated cef_request_tContextHandler,
 // if any.
-func (d *RequestHandler) GetResourceRequestHandler(browser *Browser, frame *Frame, request *Request, is_navigation, is_download int32, request_initiator string, disable_default_handling *int32) *ResourceRequestHandler {
-	return lookupRequestHandlerProxy(d.Base()).GetResourceRequestHandler(d, browser, frame, request, is_navigation, is_download, request_initiator, disable_default_handling)
+func (d *RequestHandler) GetResourceRequestHandler(browser *Browser, frame *Frame, request *Request, isNavigation, isDownload int32, requestInitiator string, disableDefaultHandling *int32) *ResourceRequestHandler {
+	return lookupRequestHandlerProxy(d.Base()).GetResourceRequestHandler(d, browser, frame, request, isNavigation, isDownload, requestInitiator, disableDefaultHandling)
 }
 
 //nolint:gocritic
 //export gocef_request_handler_get_resource_request_handler
-func gocef_request_handler_get_resource_request_handler(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, is_navigation C.int, is_download C.int, request_initiator *C.cef_string_t, disable_default_handling *C.int) *C.cef_resource_request_handler_t {
+func gocef_request_handler_get_resource_request_handler(self *C.cef_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, isNavigation C.int, isDownload C.int, requestInitiator *C.cef_string_t, disableDefaultHandling *C.int) *C.cef_resource_request_handler_t {
 	me__ := (*RequestHandler)(self)
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	request_initiator_ := cefstrToString(request_initiator)
-	return (proxy__.GetResourceRequestHandler(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), int32(is_navigation), int32(is_download), request_initiator_, (*int32)(disable_default_handling))).toNative()
+	requestInitiator_ := cefstrToString(requestInitiator)
+	return (proxy__.GetResourceRequestHandler(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), int32(isNavigation), int32(isDownload), requestInitiator_, (*int32)(disableDefaultHandling))).toNative()
 }
 
 // GetAuthCredentials (get_auth_credentials)
@@ -155,20 +155,20 @@ func gocef_request_handler_get_resource_request_handler(self *C.cef_request_hand
 // cef_auth_callback_t::cont() either in this function or at a later time when
 // the authentication information is available. Return false (0) to cancel the
 // request immediately.
-func (d *RequestHandler) GetAuthCredentials(browser *Browser, origin_url string, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32 {
-	return lookupRequestHandlerProxy(d.Base()).GetAuthCredentials(d, browser, origin_url, isProxy, host, port, realm, scheme, callback)
+func (d *RequestHandler) GetAuthCredentials(browser *Browser, originURL string, isProxy int32, host string, port int32, realm, scheme string, callback *AuthCallback) int32 {
+	return lookupRequestHandlerProxy(d.Base()).GetAuthCredentials(d, browser, originURL, isProxy, host, port, realm, scheme, callback)
 }
 
 //nolint:gocritic
 //export gocef_request_handler_get_auth_credentials
-func gocef_request_handler_get_auth_credentials(self *C.cef_request_handler_t, browser *C.cef_browser_t, origin_url *C.cef_string_t, isProxy C.int, host *C.cef_string_t, port C.int, realm *C.cef_string_t, scheme *C.cef_string_t, callback *C.cef_auth_callback_t) C.int {
+func gocef_request_handler_get_auth_credentials(self *C.cef_request_handler_t, browser *C.cef_browser_t, originURL *C.cef_string_t, isProxy C.int, host *C.cef_string_t, port C.int, realm *C.cef_string_t, scheme *C.cef_string_t, callback *C.cef_auth_callback_t) C.int {
 	me__ := (*RequestHandler)(self)
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	origin_url_ := cefstrToString(origin_url)
+	originURL_ := cefstrToString(originURL)
 	host_ := cefstrToString(host)
 	realm_ := cefstrToString(realm)
 	scheme_ := cefstrToString(scheme)
-	return C.int(proxy__.GetAuthCredentials(me__, (*Browser)(browser), origin_url_, int32(isProxy), host_, int32(port), realm_, scheme_, (*AuthCallback)(callback)))
+	return C.int(proxy__.GetAuthCredentials(me__, (*Browser)(browser), originURL_, int32(isProxy), host_, int32(port), realm_, scheme_, (*AuthCallback)(callback)))
 }
 
 // OnQuotaRequest (on_quota_request)
@@ -179,17 +179,17 @@ func gocef_request_handler_get_auth_credentials(self *C.cef_request_handler_t, b
 // cef_request_tCallback::cont() either in this function or at a later time to
 // grant or deny the request. Return false (0) to cancel the request
 // immediately.
-func (d *RequestHandler) OnQuotaRequest(browser *Browser, origin_url string, new_size int64, callback *RequestCallback) int32 {
-	return lookupRequestHandlerProxy(d.Base()).OnQuotaRequest(d, browser, origin_url, new_size, callback)
+func (d *RequestHandler) OnQuotaRequest(browser *Browser, originURL string, newSize int64, callback *RequestCallback) int32 {
+	return lookupRequestHandlerProxy(d.Base()).OnQuotaRequest(d, browser, originURL, newSize, callback)
 }
 
 //nolint:gocritic
 //export gocef_request_handler_on_quota_request
-func gocef_request_handler_on_quota_request(self *C.cef_request_handler_t, browser *C.cef_browser_t, origin_url *C.cef_string_t, new_size C.int64, callback *C.cef_request_callback_t) C.int {
+func gocef_request_handler_on_quota_request(self *C.cef_request_handler_t, browser *C.cef_browser_t, originURL *C.cef_string_t, newSize C.int64, callback *C.cef_request_callback_t) C.int {
 	me__ := (*RequestHandler)(self)
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	origin_url_ := cefstrToString(origin_url)
-	return C.int(proxy__.OnQuotaRequest(me__, (*Browser)(browser), origin_url_, int64(new_size), (*RequestCallback)(callback)))
+	originURL_ := cefstrToString(originURL)
+	return C.int(proxy__.OnQuotaRequest(me__, (*Browser)(browser), originURL_, int64(newSize), (*RequestCallback)(callback)))
 }
 
 // OnCertificateError (on_certificate_error)
@@ -199,17 +199,17 @@ func gocef_request_handler_on_quota_request(self *C.cef_request_handler_t, brows
 // Return false (0) to cancel the request immediately. If
 // CefSettings.ignore_certificate_errors is set all invalid certificates will
 // be accepted without calling this function.
-func (d *RequestHandler) OnCertificateError(browser *Browser, cert_error Errorcode, request_url string, ssl_info *Sslinfo, callback *RequestCallback) int32 {
-	return lookupRequestHandlerProxy(d.Base()).OnCertificateError(d, browser, cert_error, request_url, ssl_info, callback)
+func (d *RequestHandler) OnCertificateError(browser *Browser, certError Errorcode, requestURL string, sSLInfo *Sslinfo, callback *RequestCallback) int32 {
+	return lookupRequestHandlerProxy(d.Base()).OnCertificateError(d, browser, certError, requestURL, sSLInfo, callback)
 }
 
 //nolint:gocritic
 //export gocef_request_handler_on_certificate_error
-func gocef_request_handler_on_certificate_error(self *C.cef_request_handler_t, browser *C.cef_browser_t, cert_error C.cef_errorcode_t, request_url *C.cef_string_t, ssl_info *C.cef_sslinfo_t, callback *C.cef_request_callback_t) C.int {
+func gocef_request_handler_on_certificate_error(self *C.cef_request_handler_t, browser *C.cef_browser_t, certError C.cef_errorcode_t, requestURL *C.cef_string_t, sSLInfo *C.cef_sslinfo_t, callback *C.cef_request_callback_t) C.int {
 	me__ := (*RequestHandler)(self)
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	request_url_ := cefstrToString(request_url)
-	return C.int(proxy__.OnCertificateError(me__, (*Browser)(browser), Errorcode(cert_error), request_url_, (*Sslinfo)(ssl_info), (*RequestCallback)(callback)))
+	requestURL_ := cefstrToString(requestURL)
+	return C.int(proxy__.OnCertificateError(me__, (*Browser)(browser), Errorcode(certError), requestURL_, (*Sslinfo)(sSLInfo), (*RequestCallback)(callback)))
 }
 
 // OnSelectClientCertificate (on_select_client_certificate)
@@ -242,17 +242,17 @@ func gocef_request_handler_on_select_client_certificate(self *C.cef_request_hand
 // OnPluginCrashed (on_plugin_crashed)
 // Called on the browser process UI thread when a plugin has crashed.
 // |plugin_path| is the path of the plugin that crashed.
-func (d *RequestHandler) OnPluginCrashed(browser *Browser, plugin_path string) {
-	lookupRequestHandlerProxy(d.Base()).OnPluginCrashed(d, browser, plugin_path)
+func (d *RequestHandler) OnPluginCrashed(browser *Browser, pluginPath string) {
+	lookupRequestHandlerProxy(d.Base()).OnPluginCrashed(d, browser, pluginPath)
 }
 
 //nolint:gocritic
 //export gocef_request_handler_on_plugin_crashed
-func gocef_request_handler_on_plugin_crashed(self *C.cef_request_handler_t, browser *C.cef_browser_t, plugin_path *C.cef_string_t) {
+func gocef_request_handler_on_plugin_crashed(self *C.cef_request_handler_t, browser *C.cef_browser_t, pluginPath *C.cef_string_t) {
 	me__ := (*RequestHandler)(self)
 	proxy__ := lookupRequestHandlerProxy(me__.Base())
-	plugin_path_ := cefstrToString(plugin_path)
-	proxy__.OnPluginCrashed(me__, (*Browser)(browser), plugin_path_)
+	pluginPath_ := cefstrToString(pluginPath)
+	proxy__.OnPluginCrashed(me__, (*Browser)(browser), pluginPath_)
 }
 
 // OnRenderViewReady (on_render_view_ready)

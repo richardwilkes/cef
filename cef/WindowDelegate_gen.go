@@ -18,13 +18,13 @@ import (
 type WindowDelegateProxy interface {
 	OnWindowCreated(self *WindowDelegate, window *Window)
 	OnWindowDestroyed(self *WindowDelegate, window *Window)
-	GetParentWindow(self *WindowDelegate, window *Window, is_menu, can_activate_menu *int32) *Window
+	GetParentWindow(self *WindowDelegate, window *Window, isMenu, canActivateMenu *int32) *Window
 	IsFrameless(self *WindowDelegate, window *Window) int32
 	CanResize(self *WindowDelegate, window *Window) int32
 	CanMaximize(self *WindowDelegate, window *Window) int32
 	CanMinimize(self *WindowDelegate, window *Window) int32
 	CanClose(self *WindowDelegate, window *Window) int32
-	OnAccelerator(self *WindowDelegate, window *Window, command_id int32) int32
+	OnAccelerator(self *WindowDelegate, window *Window, commandID int32) int32
 	OnKeyEvent(self *WindowDelegate, window *Window, event *KeyEvent) int32
 }
 
@@ -103,16 +103,16 @@ func gocef_window_delegate_on_window_destroyed(self *C.cef_window_delegate_t, wi
 // not be clipped to the parent window bounds. Set |can_activate_menu| to
 // false (0) if |is_menu| is true (1) and |window| should not be activated
 // (given keyboard focus) when displayed.
-func (d *WindowDelegate) GetParentWindow(window *Window, is_menu, can_activate_menu *int32) *Window {
-	return lookupWindowDelegateProxy(d.Base().Base.Base()).GetParentWindow(d, window, is_menu, can_activate_menu)
+func (d *WindowDelegate) GetParentWindow(window *Window, isMenu, canActivateMenu *int32) *Window {
+	return lookupWindowDelegateProxy(d.Base().Base.Base()).GetParentWindow(d, window, isMenu, canActivateMenu)
 }
 
 //nolint:gocritic
 //export gocef_window_delegate_get_parent_window
-func gocef_window_delegate_get_parent_window(self *C.cef_window_delegate_t, window *C.cef_window_t, is_menu *C.int, can_activate_menu *C.int) *C.cef_window_t {
+func gocef_window_delegate_get_parent_window(self *C.cef_window_delegate_t, window *C.cef_window_t, isMenu *C.int, canActivateMenu *C.int) *C.cef_window_t {
 	me__ := (*WindowDelegate)(self)
 	proxy__ := lookupWindowDelegateProxy(me__.Base().Base.Base())
-	return (proxy__.GetParentWindow(me__, (*Window)(window), (*int32)(is_menu), (*int32)(can_activate_menu))).toNative()
+	return (proxy__.GetParentWindow(me__, (*Window)(window), (*int32)(isMenu), (*int32)(canActivateMenu))).toNative()
 }
 
 // IsFrameless (is_frameless)
@@ -192,16 +192,16 @@ func gocef_window_delegate_can_close(self *C.cef_window_delegate_t, window *C.ce
 // Called when a keyboard accelerator registered with
 // cef_window_t::SetAccelerator is triggered. Return true (1) if the
 // accelerator was handled or false (0) otherwise.
-func (d *WindowDelegate) OnAccelerator(window *Window, command_id int32) int32 {
-	return lookupWindowDelegateProxy(d.Base().Base.Base()).OnAccelerator(d, window, command_id)
+func (d *WindowDelegate) OnAccelerator(window *Window, commandID int32) int32 {
+	return lookupWindowDelegateProxy(d.Base().Base.Base()).OnAccelerator(d, window, commandID)
 }
 
 //nolint:gocritic
 //export gocef_window_delegate_on_accelerator
-func gocef_window_delegate_on_accelerator(self *C.cef_window_delegate_t, window *C.cef_window_t, command_id C.int) C.int {
+func gocef_window_delegate_on_accelerator(self *C.cef_window_delegate_t, window *C.cef_window_t, commandID C.int) C.int {
 	me__ := (*WindowDelegate)(self)
 	proxy__ := lookupWindowDelegateProxy(me__.Base().Base.Base())
-	return C.int(proxy__.OnAccelerator(me__, (*Window)(window), int32(command_id)))
+	return C.int(proxy__.OnAccelerator(me__, (*Window)(window), int32(commandID)))
 }
 
 // OnKeyEvent (on_key_event)

@@ -19,10 +19,7 @@ const (
 	stringPtrGoType  = "*string"
 )
 
-var (
-	cNamesToPrefixForAccess = []string{"range", "type"}
-	paramRenames            = []string{"chan", "defer", "error", "fallthrough", "func", "go", "import", "interface", "map", "package", "range", "select", "string", "type", "var"}
-)
+var cNamesToPrefixForAccess = []string{"range", "type"}
 
 type variable struct {
 	Name        string
@@ -41,7 +38,7 @@ func newCVar(name, typeInfo string, pos position) *variable {
 	name = strings.TrimSpace(name)
 	v := &variable{
 		Name:   name,
-		GoName: txt.ToCamelCase(name),
+		GoName: translateName(name),
 	}
 	for _, one := range cNamesToPrefixForAccess {
 		if one == name {
@@ -64,8 +61,8 @@ func newCVar(name, typeInfo string, pos position) *variable {
 			jot.Fatal(1, errs.Newf("Extracted param names (%v) don't match params (%v) for %s: %v", paramNames, paramList, name, pos))
 		}
 		typeInfo = strings.TrimSpace(typeInfo[:fp])
-		for i, param := range paramList {
-			one := newCVar(paramNames[i], param, pos)
+		for i, p := range paramList {
+			one := newCVar(paramNames[i], p, pos)
 			if one.NeedUnsafe {
 				v.NeedUnsafe = true
 			}
@@ -154,10 +151,10 @@ func extractParameterNames(pos position) []string {
 			if i = strings.Index(line, ")"); i != -1 {
 				var params []string
 				line = txt.CollapseSpaces(strings.TrimSpace(line[:i]))
-				for j, param := range strings.Split(line, ",") {
-					param = strings.TrimSpace(param)
-					if i = strings.LastIndex(param, " "); i != -1 {
-						params = append(params, adjustedParamName(param[i+1:]))
+				for j, p := range strings.Split(line, ",") {
+					p = strings.TrimSpace(p)
+					if i = strings.LastIndex(p, " "); i != -1 {
+						params = append(params, adjustedParamName(p[i+1:]))
 					} else {
 						jot.Fatal(1, errs.Newf("Unable to extract parameter name %d from: %s", j, line))
 					}
@@ -168,15 +165,6 @@ func extractParameterNames(pos position) []string {
 	}
 	jot.Fatal(1, errs.Newf("Unable to extract parameter names from: %s", line))
 	return nil
-}
-
-func adjustedParamName(name string) string {
-	for _, one := range paramRenames {
-		if name == one {
-			return name + "_r"
-		}
-	}
-	return name
 }
 
 func (v *variable) paramGoType() string {
@@ -202,7 +190,7 @@ func (v *variable) transformCToGo(w io.Writer) string {
 			return fmt.Sprintf("%s_", v.Name)
 		}
 	} else {
-		_, exists := edefsMap[v.BaseType]
+		_, exists = edefsMap[v.BaseType]
 		switch {
 		case exists:
 			switch v.Ptrs {

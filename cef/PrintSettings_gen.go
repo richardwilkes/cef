@@ -9,7 +9,7 @@ import (
 	// cef_print_settings_t * gocef_print_settings_copy(cef_print_settings_t * self, cef_print_settings_t * (CEF_CALLBACK *callback__)(cef_print_settings_t *)) { return callback__(self); }
 	// void gocef_print_settings_set_orientation(cef_print_settings_t * self, int landscape, void (CEF_CALLBACK *callback__)(cef_print_settings_t *, int)) { return callback__(self, landscape); }
 	// int gocef_print_settings_is_landscape(cef_print_settings_t * self, int (CEF_CALLBACK *callback__)(cef_print_settings_t *)) { return callback__(self); }
-	// void gocef_print_settings_set_printer_printable_area(cef_print_settings_t * self, cef_size_t * physical_size_device_units, cef_rect_t * printable_area_device_units, int landscape_needs_flip, void (CEF_CALLBACK *callback__)(cef_print_settings_t *, cef_size_t *, cef_rect_t *, int)) { return callback__(self, physical_size_device_units, printable_area_device_units, landscape_needs_flip); }
+	// void gocef_print_settings_set_printer_printable_area(cef_print_settings_t * self, cef_size_t * physicalSizeDeviceUnits, cef_rect_t * printableAreaDeviceUnits, int landscapeNeedsFlip, void (CEF_CALLBACK *callback__)(cef_print_settings_t *, cef_size_t *, cef_rect_t *, int)) { return callback__(self, physicalSizeDeviceUnits, printableAreaDeviceUnits, landscapeNeedsFlip); }
 	// void gocef_print_settings_set_device_name(cef_print_settings_t * self, cef_string_t * name, void (CEF_CALLBACK *callback__)(cef_print_settings_t *, cef_string_t *)) { return callback__(self, name); }
 	// cef_string_userfree_t gocef_print_settings_get_device_name(cef_print_settings_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_print_settings_t *)) { return callback__(self); }
 	// void gocef_print_settings_set_dpi(cef_print_settings_t * self, int dpi, void (CEF_CALLBACK *callback__)(cef_print_settings_t *, int)) { return callback__(self, dpi); }
@@ -17,7 +17,7 @@ import (
 	// void gocef_print_settings_set_page_ranges(cef_print_settings_t * self, size_t rangesCount, cef_range_t * ranges, void (CEF_CALLBACK *callback__)(cef_print_settings_t *, size_t, cef_range_t *)) { return callback__(self, rangesCount, ranges); }
 	// size_t gocef_print_settings_get_page_ranges_count(cef_print_settings_t * self, size_t (CEF_CALLBACK *callback__)(cef_print_settings_t *)) { return callback__(self); }
 	// void gocef_print_settings_get_page_ranges(cef_print_settings_t * self, size_t * rangesCount, cef_range_t * ranges, void (CEF_CALLBACK *callback__)(cef_print_settings_t *, size_t *, cef_range_t *)) { return callback__(self, rangesCount, ranges); }
-	// void gocef_print_settings_set_selection_only(cef_print_settings_t * self, int selection_only, void (CEF_CALLBACK *callback__)(cef_print_settings_t *, int)) { return callback__(self, selection_only); }
+	// void gocef_print_settings_set_selection_only(cef_print_settings_t * self, int selectionOnly, void (CEF_CALLBACK *callback__)(cef_print_settings_t *, int)) { return callback__(self, selectionOnly); }
 	// int gocef_print_settings_is_selection_only(cef_print_settings_t * self, int (CEF_CALLBACK *callback__)(cef_print_settings_t *)) { return callback__(self); }
 	// void gocef_print_settings_set_collate(cef_print_settings_t * self, int collate, void (CEF_CALLBACK *callback__)(cef_print_settings_t *, int)) { return callback__(self, collate); }
 	// int gocef_print_settings_will_collate(cef_print_settings_t * self, int (CEF_CALLBACK *callback__)(cef_print_settings_t *)) { return callback__(self); }
@@ -80,8 +80,8 @@ func (d *PrintSettings) IsLandscape() int32 {
 // Set the printer printable area in device units. Some platforms already
 // provide flipped area. Set |landscape_needs_flip| to false (0) on those
 // platforms to avoid double flipping.
-func (d *PrintSettings) SetPrinterPrintableArea(physical_size_device_units *Size, printable_area_device_units *Rect, landscape_needs_flip int32) {
-	C.gocef_print_settings_set_printer_printable_area(d.toNative(), physical_size_device_units.toNative(&C.cef_size_t{}), printable_area_device_units.toNative(&C.cef_rect_t{}), C.int(landscape_needs_flip), d.set_printer_printable_area)
+func (d *PrintSettings) SetPrinterPrintableArea(physicalSizeDeviceUnits *Size, printableAreaDeviceUnits *Rect, landscapeNeedsFlip int32) {
+	C.gocef_print_settings_set_printer_printable_area(d.toNative(), physicalSizeDeviceUnits.toNative(&C.cef_size_t{}), printableAreaDeviceUnits.toNative(&C.cef_rect_t{}), C.int(landscapeNeedsFlip), d.set_printer_printable_area)
 }
 
 // SetDeviceName (set_device_name)
@@ -134,8 +134,8 @@ func (d *PrintSettings) GetPageRanges(rangesCount *uint64, ranges *Range) {
 
 // SetSelectionOnly (set_selection_only)
 // Set whether only the selection will be printed.
-func (d *PrintSettings) SetSelectionOnly(selection_only int32) {
-	C.gocef_print_settings_set_selection_only(d.toNative(), C.int(selection_only), d.set_selection_only)
+func (d *PrintSettings) SetSelectionOnly(selectionOnly int32) {
+	C.gocef_print_settings_set_selection_only(d.toNative(), C.int(selectionOnly), d.set_selection_only)
 }
 
 // IsSelectionOnly (is_selection_only)

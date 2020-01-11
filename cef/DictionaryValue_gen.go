@@ -9,7 +9,7 @@ import (
 	// int gocef_dictionary_value_is_read_only(cef_dictionary_value_t * self, int (CEF_CALLBACK *callback__)(cef_dictionary_value_t *)) { return callback__(self); }
 	// int gocef_dictionary_value_is_same(cef_dictionary_value_t * self, cef_dictionary_value_t * that, int (CEF_CALLBACK *callback__)(cef_dictionary_value_t *, cef_dictionary_value_t *)) { return callback__(self, that); }
 	// int gocef_dictionary_value_is_equal(cef_dictionary_value_t * self, cef_dictionary_value_t * that, int (CEF_CALLBACK *callback__)(cef_dictionary_value_t *, cef_dictionary_value_t *)) { return callback__(self, that); }
-	// cef_dictionary_value_t * gocef_dictionary_value_copy(cef_dictionary_value_t * self, int exclude_empty_children, cef_dictionary_value_t * (CEF_CALLBACK *callback__)(cef_dictionary_value_t *, int)) { return callback__(self, exclude_empty_children); }
+	// cef_dictionary_value_t * gocef_dictionary_value_copy(cef_dictionary_value_t * self, int excludeEmptyChildren, cef_dictionary_value_t * (CEF_CALLBACK *callback__)(cef_dictionary_value_t *, int)) { return callback__(self, excludeEmptyChildren); }
 	// size_t gocef_dictionary_value_get_size(cef_dictionary_value_t * self, size_t (CEF_CALLBACK *callback__)(cef_dictionary_value_t *)) { return callback__(self); }
 	// int gocef_dictionary_value_clear(cef_dictionary_value_t * self, int (CEF_CALLBACK *callback__)(cef_dictionary_value_t *)) { return callback__(self); }
 	// int gocef_dictionary_value_has_key(cef_dictionary_value_t * self, cef_string_t * key, int (CEF_CALLBACK *callback__)(cef_dictionary_value_t *, cef_string_t *)) { return callback__(self, key); }
@@ -91,8 +91,8 @@ func (d *DictionaryValue) IsEqual(that *DictionaryValue) int32 {
 // Copy (copy)
 // Returns a writable copy of this object. If |exclude_NULL_children| is true
 // (1) any NULL dictionaries or lists will be excluded from the copy.
-func (d *DictionaryValue) Copy(exclude_empty_children int32) *DictionaryValue {
-	return (*DictionaryValue)(C.gocef_dictionary_value_copy(d.toNative(), C.int(exclude_empty_children), d.copy))
+func (d *DictionaryValue) Copy(excludeEmptyChildren int32) *DictionaryValue {
+	return (*DictionaryValue)(C.gocef_dictionary_value_copy(d.toNative(), C.int(excludeEmptyChildren), d.copy))
 }
 
 // GetSize (get_size)

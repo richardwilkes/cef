@@ -8,7 +8,7 @@ import (
 	// void gocef_waitable_event_signal(cef_waitable_event_t * self, void (CEF_CALLBACK *callback__)(cef_waitable_event_t *)) { return callback__(self); }
 	// int gocef_waitable_event_is_signaled(cef_waitable_event_t * self, int (CEF_CALLBACK *callback__)(cef_waitable_event_t *)) { return callback__(self); }
 	// void gocef_waitable_event_wait(cef_waitable_event_t * self, void (CEF_CALLBACK *callback__)(cef_waitable_event_t *)) { return callback__(self); }
-	// int gocef_waitable_event_timed_wait(cef_waitable_event_t * self, int64 max_ms, int (CEF_CALLBACK *callback__)(cef_waitable_event_t *, int64)) { return callback__(self, max_ms); }
+	// int gocef_waitable_event_timed_wait(cef_waitable_event_t * self, int64 maxMs, int (CEF_CALLBACK *callback__)(cef_waitable_event_t *, int64)) { return callback__(self, maxMs); }
 	"C"
 )
 
@@ -69,6 +69,6 @@ func (d *WaitableEvent) Wait() {
 // necessarily mean that |max_ms| was exceeded. This function will not return
 // until after the call to signal() has completed. This function cannot be
 // called on the browser process UI or IO threads.
-func (d *WaitableEvent) TimedWait(max_ms int64) int32 {
-	return int32(C.gocef_waitable_event_timed_wait(d.toNative(), C.int64(max_ms), d.timed_wait))
+func (d *WaitableEvent) TimedWait(maxMs int64) int32 {
+	return int32(C.gocef_waitable_event_timed_wait(d.toNative(), C.int64(maxMs), d.timed_wait))
 }

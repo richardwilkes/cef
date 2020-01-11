@@ -228,12 +228,12 @@ type Settings struct {
 	// for individual CefRequestContext instances via the
 	// CefRequestContextSettings.accept_language_list value.
 	AcceptLanguageList string
-	// ApplicationClientIdForFileScanning (application_client_id_for_file_scanning)
+	// ApplicationClientIDForFileScanning (application_client_id_for_file_scanning)
 	// GUID string used for identifying the application. This is passed to the
 	// system AV function for scanning downloaded files. By default, the GUID
 	// will be an empty string and the file will be treated as an untrusted
 	// file when the GUID is empty.
-	ApplicationClientIdForFileScanning string
+	ApplicationClientIDForFileScanning string
 }
 
 // NewSettings creates a new Settings.
@@ -282,7 +282,7 @@ func (d *Settings) toNative(native *C.cef_settings_t) *C.cef_settings_t {
 	native.enable_net_security_expiration = C.int(d.EnableNetSecurityExpiration)
 	native.background_color = C.cef_color_t(d.BackgroundColor)
 	setCEFStr(d.AcceptLanguageList, &native.accept_language_list)
-	setCEFStr(d.ApplicationClientIdForFileScanning, &native.application_client_id_for_file_scanning)
+	setCEFStr(d.ApplicationClientIDForFileScanning, &native.application_client_id_for_file_scanning)
 	return native
 }
 
@@ -325,5 +325,5 @@ func (n *C.cef_settings_t) intoGo(d *Settings) {
 	d.EnableNetSecurityExpiration = int32(n.enable_net_security_expiration)
 	d.BackgroundColor = Color(n.background_color)
 	d.AcceptLanguageList = cefstrToString(&n.accept_language_list)
-	d.ApplicationClientIdForFileScanning = cefstrToString(&n.application_client_id_for_file_scanning)
+	d.ApplicationClientIDForFileScanning = cefstrToString(&n.application_client_id_for_file_scanning)
 }

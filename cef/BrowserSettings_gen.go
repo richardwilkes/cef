@@ -67,12 +67,12 @@ type BrowserSettings struct {
 	// Controls whether JavaScript can access the clipboard. Also configurable
 	// using the "disable-javascript-access-clipboard" command-line switch.
 	JavascriptAccessClipboard State
-	// JavascriptDomPaste (javascript_dom_paste)
+	// JavascriptDOMPaste (javascript_dom_paste)
 	// Controls whether DOM pasting is supported in the editor via
 	// execCommand("paste"). The |javascript_access_clipboard| setting must also
 	// be enabled. Also configurable using the "disable-javascript-dom-paste"
 	// command-line switch.
-	JavascriptDomPaste State
+	JavascriptDOMPaste State
 	// Plugins (plugins)
 	// Controls whether any plugins will be loaded. Also configurable using the
 	// "disable-plugins" command-line switch.
@@ -172,7 +172,7 @@ func (d *BrowserSettings) toNative(native *C.cef_browser_settings_t) *C.cef_brow
 	native.javascript = C.cef_state_t(d.Javascript)
 	native.javascript_close_windows = C.cef_state_t(d.JavascriptCloseWindows)
 	native.javascript_access_clipboard = C.cef_state_t(d.JavascriptAccessClipboard)
-	native.javascript_dom_paste = C.cef_state_t(d.JavascriptDomPaste)
+	native.javascript_dom_paste = C.cef_state_t(d.JavascriptDOMPaste)
 	native.plugins = C.cef_state_t(d.Plugins)
 	native.universal_access_from_file_urls = C.cef_state_t(d.UniversalAccessFromFileUrls)
 	native.file_access_from_file_urls = C.cef_state_t(d.FileAccessFromFileUrls)
@@ -217,7 +217,7 @@ func (n *C.cef_browser_settings_t) intoGo(d *BrowserSettings) {
 	d.Javascript = State(n.javascript)
 	d.JavascriptCloseWindows = State(n.javascript_close_windows)
 	d.JavascriptAccessClipboard = State(n.javascript_access_clipboard)
-	d.JavascriptDomPaste = State(n.javascript_dom_paste)
+	d.JavascriptDOMPaste = State(n.javascript_dom_paste)
 	d.Plugins = State(n.plugins)
 	d.UniversalAccessFromFileUrls = State(n.universal_access_from_file_urls)
 	d.FileAccessFromFileUrls = State(n.file_access_from_file_urls)

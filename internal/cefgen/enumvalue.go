@@ -16,7 +16,7 @@ type enumValue struct {
 func newEnumValue(name, value string, pos position) *enumValue {
 	e := &enumValue{
 		Name:     name,
-		GoName:   translateConstantName(name),
+		GoName:   translateName(name),
 		Position: pos,
 	}
 	e.setValue(value)

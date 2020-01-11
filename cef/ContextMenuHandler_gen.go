@@ -18,7 +18,7 @@ import (
 type ContextMenuHandlerProxy interface {
 	OnBeforeContextMenu(self *ContextMenuHandler, browser *Browser, frame *Frame, params *ContextMenuParams, model *MenuModel)
 	RunContextMenu(self *ContextMenuHandler, browser *Browser, frame *Frame, params *ContextMenuParams, model *MenuModel, callback *RunContextMenuCallback) int32
-	OnContextMenuCommand(self *ContextMenuHandler, browser *Browser, frame *Frame, params *ContextMenuParams, command_id int32, event_flags EventFlags) int32
+	OnContextMenuCommand(self *ContextMenuHandler, browser *Browser, frame *Frame, params *ContextMenuParams, commandID int32, eventFlags EventFlags) int32
 	OnContextMenuDismissed(self *ContextMenuHandler, browser *Browser, frame *Frame)
 }
 
@@ -104,16 +104,16 @@ func gocef_context_menu_handler_run_context_menu(self *C.cef_context_menu_handle
 // MENU_ID_USER_LAST. |params| will have the same values as what was passed to
 // on_before_context_menu(). Do not keep a reference to |params| outside of
 // this callback.
-func (d *ContextMenuHandler) OnContextMenuCommand(browser *Browser, frame *Frame, params *ContextMenuParams, command_id int32, event_flags EventFlags) int32 {
-	return lookupContextMenuHandlerProxy(d.Base()).OnContextMenuCommand(d, browser, frame, params, command_id, event_flags)
+func (d *ContextMenuHandler) OnContextMenuCommand(browser *Browser, frame *Frame, params *ContextMenuParams, commandID int32, eventFlags EventFlags) int32 {
+	return lookupContextMenuHandlerProxy(d.Base()).OnContextMenuCommand(d, browser, frame, params, commandID, eventFlags)
 }
 
 //nolint:gocritic
 //export gocef_context_menu_handler_on_context_menu_command
-func gocef_context_menu_handler_on_context_menu_command(self *C.cef_context_menu_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, params *C.cef_context_menu_params_t, command_id C.int, event_flags C.cef_event_flags_t) C.int {
+func gocef_context_menu_handler_on_context_menu_command(self *C.cef_context_menu_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, params *C.cef_context_menu_params_t, commandID C.int, eventFlags C.cef_event_flags_t) C.int {
 	me__ := (*ContextMenuHandler)(self)
 	proxy__ := lookupContextMenuHandlerProxy(me__.Base())
-	return C.int(proxy__.OnContextMenuCommand(me__, (*Browser)(browser), (*Frame)(frame), (*ContextMenuParams)(params), int32(command_id), EventFlags(event_flags)))
+	return C.int(proxy__.OnContextMenuCommand(me__, (*Browser)(browser), (*Frame)(frame), (*ContextMenuParams)(params), int32(commandID), EventFlags(eventFlags)))
 }
 
 // OnContextMenuDismissed (on_context_menu_dismissed)

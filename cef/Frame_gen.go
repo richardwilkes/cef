@@ -16,9 +16,9 @@ import (
 	// void gocef_frame_get_source(cef_frame_t * self, cef_string_visitor_t * visitor, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_string_visitor_t *)) { return callback__(self, visitor); }
 	// void gocef_frame_get_text(cef_frame_t * self, cef_string_visitor_t * visitor, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_string_visitor_t *)) { return callback__(self, visitor); }
 	// void gocef_frame_load_request(cef_frame_t * self, cef_request_t * request, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_request_t *)) { return callback__(self, request); }
-	// void gocef_frame_load_url(cef_frame_t * self, cef_string_t * url, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_string_t *)) { return callback__(self, url); }
-	// void gocef_frame_load_string(cef_frame_t * self, cef_string_t * string_val, cef_string_t * url, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_string_t *, cef_string_t *)) { return callback__(self, string_val, url); }
-	// void gocef_frame_execute_java_script(cef_frame_t * self, cef_string_t * code, cef_string_t * script_url, int start_line, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_string_t *, cef_string_t *, int)) { return callback__(self, code, script_url, start_line); }
+	// void gocef_frame_load_url(cef_frame_t * self, cef_string_t * uRL, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_string_t *)) { return callback__(self, uRL); }
+	// void gocef_frame_load_string(cef_frame_t * self, cef_string_t * stringVal, cef_string_t * uRL, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_string_t *, cef_string_t *)) { return callback__(self, stringVal, uRL); }
+	// void gocef_frame_execute_java_script(cef_frame_t * self, cef_string_t * code, cef_string_t * scriptURL, int startLine, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_string_t *, cef_string_t *, int)) { return callback__(self, code, scriptURL, startLine); }
 	// int gocef_frame_is_main(cef_frame_t * self, int (CEF_CALLBACK *callback__)(cef_frame_t *)) { return callback__(self); }
 	// int gocef_frame_is_focused(cef_frame_t * self, int (CEF_CALLBACK *callback__)(cef_frame_t *)) { return callback__(self); }
 	// cef_string_userfree_t gocef_frame_get_name(cef_frame_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_frame_t *)) { return callback__(self); }
@@ -29,7 +29,7 @@ import (
 	// cef_v8context_t * gocef_frame_get_v8context(cef_frame_t * self, cef_v8context_t * (CEF_CALLBACK *callback__)(cef_frame_t *)) { return callback__(self); }
 	// void gocef_frame_visit_dom(cef_frame_t * self, cef_domvisitor_t * visitor, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_domvisitor_t *)) { return callback__(self, visitor); }
 	// cef_urlrequest_t * gocef_frame_create_urlrequest(cef_frame_t * self, cef_request_t * request, cef_urlrequest_client_t * client, cef_urlrequest_t * (CEF_CALLBACK *callback__)(cef_frame_t *, cef_request_t *, cef_urlrequest_client_t *)) { return callback__(self, request, client); }
-	// void gocef_frame_send_process_message(cef_frame_t * self, cef_process_id_t target_process, cef_process_message_t * message, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_process_id_t, cef_process_message_t *)) { return callback__(self, target_process, message); }
+	// void gocef_frame_send_process_message(cef_frame_t * self, cef_process_id_t targetProcess, cef_process_message_t * message, void (CEF_CALLBACK *callback__)(cef_frame_t *, cef_process_id_t, cef_process_message_t *)) { return callback__(self, targetProcess, message); }
 	"C"
 )
 
@@ -126,33 +126,33 @@ func (d *Frame) LoadRequest(request *Request) {
 	C.gocef_frame_load_request(d.toNative(), request.toNative(), d.load_request)
 }
 
-// LoadUrl (load_url)
+// LoadURL (load_url)
 // Load the specified |url|.
-func (d *Frame) LoadUrl(url string) {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func (d *Frame) LoadURL(uRL string) {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	C.gocef_frame_load_url(d.toNative(), (*C.cef_string_t)(url_), d.load_url)
+	C.gocef_frame_load_url(d.toNative(), (*C.cef_string_t)(uRL_), d.load_url)
 }
 
 // LoadString (load_string)
 // Load the contents of |string_val| with the specified dummy |url|. |url|
 // should have a standard scheme (for example, http scheme) or behaviors like
 // link clicks and web security restrictions may not behave as expected.
-func (d *Frame) LoadString(string_val, url string) {
-	string_val_ := C.cef_string_userfree_alloc()
-	setCEFStr(string_val, string_val_)
+func (d *Frame) LoadString(stringVal, uRL string) {
+	stringVal_ := C.cef_string_userfree_alloc()
+	setCEFStr(stringVal, stringVal_)
 	defer func() {
-		C.cef_string_userfree_free(string_val_)
+		C.cef_string_userfree_free(stringVal_)
 	}()
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	C.gocef_frame_load_string(d.toNative(), (*C.cef_string_t)(string_val_), (*C.cef_string_t)(url_), d.load_string)
+	C.gocef_frame_load_string(d.toNative(), (*C.cef_string_t)(stringVal_), (*C.cef_string_t)(uRL_), d.load_string)
 }
 
 // ExecuteJavaScript (execute_java_script)
@@ -161,18 +161,18 @@ func (d *Frame) LoadString(string_val, url string) {
 // renderer may request this URL to show the developer the source of the
 // error.  The |start_line| parameter is the base line number to use for error
 // reporting.
-func (d *Frame) ExecuteJavaScript(code, script_url string, start_line int32) {
+func (d *Frame) ExecuteJavaScript(code, scriptURL string, startLine int32) {
 	code_ := C.cef_string_userfree_alloc()
 	setCEFStr(code, code_)
 	defer func() {
 		C.cef_string_userfree_free(code_)
 	}()
-	script_url_ := C.cef_string_userfree_alloc()
-	setCEFStr(script_url, script_url_)
+	scriptURL_ := C.cef_string_userfree_alloc()
+	setCEFStr(scriptURL, scriptURL_)
 	defer func() {
-		C.cef_string_userfree_free(script_url_)
+		C.cef_string_userfree_free(scriptURL_)
 	}()
-	C.gocef_frame_execute_java_script(d.toNative(), (*C.cef_string_t)(code_), (*C.cef_string_t)(script_url_), C.int(start_line), d.execute_java_script)
+	C.gocef_frame_execute_java_script(d.toNative(), (*C.cef_string_t)(code_), (*C.cef_string_t)(scriptURL_), C.int(startLine), d.execute_java_script)
 }
 
 // IsMain (is_main)
@@ -212,10 +212,10 @@ func (d *Frame) GetParent() *Frame {
 	return (*Frame)(C.gocef_frame_get_parent(d.toNative(), d.get_parent))
 }
 
-// GetUrl (get_url)
+// GetURL (get_url)
 // Returns the URL currently loaded in this frame.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *Frame) GetUrl() string {
+func (d *Frame) GetURL() string {
 	return cefuserfreestrToString(C.gocef_frame_get_url(d.toNative(), d.get_url))
 }
 
@@ -232,10 +232,10 @@ func (d *Frame) GetV8context() *V8context {
 	return (*V8context)(C.gocef_frame_get_v8context(d.toNative(), d.get_v8context))
 }
 
-// VisitDom (visit_dom)
+// VisitDOM (visit_dom)
 // Visit the DOM document. This function can only be called from the render
 // process.
-func (d *Frame) VisitDom(visitor *Domvisitor) {
+func (d *Frame) VisitDOM(visitor *Domvisitor) {
 	C.gocef_frame_visit_dom(d.toNative(), visitor.toNative(), d.visit_dom)
 }
 
@@ -269,6 +269,6 @@ func (d *Frame) CreateUrlrequest(request *Request, client *UrlrequestClient) *Ur
 // guaranteed in all cases (for example, if the browser is closing,
 // navigating, or if the target process crashes). Send an ACK message back
 // from the target process if confirmation is required.
-func (d *Frame) SendProcessMessage(target_process ProcessID, message *ProcessMessage) {
-	C.gocef_frame_send_process_message(d.toNative(), C.cef_process_id_t(target_process), message.toNative(), d.send_process_message)
+func (d *Frame) SendProcessMessage(targetProcess ProcessID, message *ProcessMessage) {
+	C.gocef_frame_send_process_message(d.toNative(), C.cef_process_id_t(targetProcess), message.toNative(), d.send_process_message)
 }

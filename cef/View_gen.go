@@ -10,18 +10,18 @@ import (
 	// cef_scroll_view_t * gocef_view_as_scroll_view(cef_view_t * self, cef_scroll_view_t * (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
 	// cef_textfield_t * gocef_view_as_textfield(cef_view_t * self, cef_textfield_t * (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
 	// cef_string_userfree_t gocef_view_get_type_string(cef_view_t * self, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
-	// cef_string_userfree_t gocef_view_to_string(cef_view_t * self, int include_children, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_view_t *, int)) { return callback__(self, include_children); }
+	// cef_string_userfree_t gocef_view_to_string(cef_view_t * self, int includeChildren, cef_string_userfree_t (CEF_CALLBACK *callback__)(cef_view_t *, int)) { return callback__(self, includeChildren); }
 	// int gocef_view_is_valid(cef_view_t * self, int (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
 	// int gocef_view_is_attached(cef_view_t * self, int (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
 	// int gocef_view_is_same(cef_view_t * self, cef_view_t * that, int (CEF_CALLBACK *callback__)(cef_view_t *, cef_view_t *)) { return callback__(self, that); }
 	// cef_view_delegate_t * gocef_view_get_delegate(cef_view_t * self, cef_view_delegate_t * (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
 	// cef_window_t * gocef_view_get_window(cef_view_t * self, cef_window_t * (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
 	// int gocef_view_get_id(cef_view_t * self, int (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
-	// void gocef_view_set_id(cef_view_t * self, int id, void (CEF_CALLBACK *callback__)(cef_view_t *, int)) { return callback__(self, id); }
+	// void gocef_view_set_id(cef_view_t * self, int iD, void (CEF_CALLBACK *callback__)(cef_view_t *, int)) { return callback__(self, iD); }
 	// int gocef_view_get_group_id(cef_view_t * self, int (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
-	// void gocef_view_set_group_id(cef_view_t * self, int group_id, void (CEF_CALLBACK *callback__)(cef_view_t *, int)) { return callback__(self, group_id); }
+	// void gocef_view_set_group_id(cef_view_t * self, int groupID, void (CEF_CALLBACK *callback__)(cef_view_t *, int)) { return callback__(self, groupID); }
 	// cef_view_t * gocef_view_get_parent_view(cef_view_t * self, cef_view_t * (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
-	// cef_view_t * gocef_view_get_view_for_id(cef_view_t * self, int id, cef_view_t * (CEF_CALLBACK *callback__)(cef_view_t *, int)) { return callback__(self, id); }
+	// cef_view_t * gocef_view_get_view_for_id(cef_view_t * self, int iD, cef_view_t * (CEF_CALLBACK *callback__)(cef_view_t *, int)) { return callback__(self, iD); }
 	// void gocef_view_set_bounds(cef_view_t * self, cef_rect_t * bounds, void (CEF_CALLBACK *callback__)(cef_view_t *, cef_rect_t *)) { return callback__(self, bounds); }
 	// cef_rect_t gocef_view_get_bounds(cef_view_t * self, cef_rect_t (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
 	// cef_rect_t gocef_view_get_bounds_in_screen(cef_view_t * self, cef_rect_t (CEF_CALLBACK *callback__)(cef_view_t *)) { return callback__(self); }
@@ -116,8 +116,8 @@ func (d *View) GetTypeString() string {
 // (1) any child Views will also be included. Used primarily for testing
 // purposes.
 // The resulting string must be freed by calling cef_string_userfree_free().
-func (d *View) ToString(include_children int32) string {
-	return cefuserfreestrToString(C.gocef_view_to_string(d.toNative(), C.int(include_children), d.to_string))
+func (d *View) ToString(includeChildren int32) string {
+	return cefuserfreestrToString(C.gocef_view_to_string(d.toNative(), C.int(includeChildren), d.to_string))
 }
 
 // IsValid (is_valid)
@@ -151,31 +151,31 @@ func (d *View) GetWindow() *Window {
 	return (*Window)(C.gocef_view_get_window(d.toNative(), d.get_window))
 }
 
-// GetId (get_id)
+// GetID (get_id)
 // Returns the ID for this View.
-func (d *View) GetId() int32 {
+func (d *View) GetID() int32 {
 	return int32(C.gocef_view_get_id(d.toNative(), d.get_id))
 }
 
-// SetId (set_id)
+// SetID (set_id)
 // Sets the ID for this View. ID should be unique within the subtree that you
 // intend to search for it. 0 is the default ID for views.
-func (d *View) SetId(id int32) {
-	C.gocef_view_set_id(d.toNative(), C.int(id), d.set_id)
+func (d *View) SetID(iD int32) {
+	C.gocef_view_set_id(d.toNative(), C.int(iD), d.set_id)
 }
 
-// GetGroupId (get_group_id)
+// GetGroupID (get_group_id)
 // Returns the group id of this View, or -1 if not set.
-func (d *View) GetGroupId() int32 {
+func (d *View) GetGroupID() int32 {
 	return int32(C.gocef_view_get_group_id(d.toNative(), d.get_group_id))
 }
 
-// SetGroupId (set_group_id)
+// SetGroupID (set_group_id)
 // A group id is used to tag Views which are part of the same logical group.
 // Focus can be moved between views with the same group using the arrow keys.
 // The group id is immutable once it's set.
-func (d *View) SetGroupId(group_id int32) {
-	C.gocef_view_set_group_id(d.toNative(), C.int(group_id), d.set_group_id)
+func (d *View) SetGroupID(groupID int32) {
+	C.gocef_view_set_group_id(d.toNative(), C.int(groupID), d.set_group_id)
 }
 
 // GetParentView (get_parent_view)
@@ -184,12 +184,12 @@ func (d *View) GetParentView() *View {
 	return (*View)(C.gocef_view_get_parent_view(d.toNative(), d.get_parent_view))
 }
 
-// GetViewForId (get_view_for_id)
+// GetViewForID (get_view_for_id)
 // Recursively descends the view tree starting at this View, and returns the
 // first child that it encounters with the given ID. Returns NULL if no
 // matching child view is found.
-func (d *View) GetViewForId(id int32) *View {
-	return (*View)(C.gocef_view_get_view_for_id(d.toNative(), C.int(id), d.get_view_for_id))
+func (d *View) GetViewForID(iD int32) *View {
+	return (*View)(C.gocef_view_get_view_for_id(d.toNative(), C.int(iD), d.get_view_for_id))
 }
 
 // SetBounds (set_bounds)

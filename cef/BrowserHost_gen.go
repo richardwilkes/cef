@@ -7,7 +7,7 @@ import "unsafe"
 import (
 	// #include "capi_gen.h"
 	// cef_browser_t * gocef_browser_host_get_browser(cef_browser_host_t * self, cef_browser_t * (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
-	// void gocef_browser_host_close_browser(cef_browser_host_t * self, int force_close, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, force_close); }
+	// void gocef_browser_host_close_browser(cef_browser_host_t * self, int forceClose, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, forceClose); }
 	// int gocef_browser_host_try_close_browser(cef_browser_host_t * self, int (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_set_focus(cef_browser_host_t * self, int focus, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, focus); }
 	// void * gocef_browser_host_get_window_handle(cef_browser_host_t * self, void * (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
@@ -17,17 +17,17 @@ import (
 	// cef_request_context_t * gocef_browser_host_get_request_context(cef_browser_host_t * self, cef_request_context_t * (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// double gocef_browser_host_get_zoom_level(cef_browser_host_t * self, double (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_set_zoom_level(cef_browser_host_t * self, double zoomLevel, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, double)) { return callback__(self, zoomLevel); }
-	// void gocef_browser_host_run_file_dialog(cef_browser_host_t * self, cef_file_dialog_mode_t mode, cef_string_t * title, cef_string_t * default_file_path, cef_string_list_t accept_filters, int selected_accept_filter, cef_run_file_dialog_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_file_dialog_mode_t, cef_string_t *, cef_string_t *, cef_string_list_t, int, cef_run_file_dialog_callback_t *)) { return callback__(self, mode, title, default_file_path, accept_filters, selected_accept_filter, callback); }
-	// void gocef_browser_host_start_download(cef_browser_host_t * self, cef_string_t * url, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_string_t *)) { return callback__(self, url); }
-	// void gocef_browser_host_download_image(cef_browser_host_t * self, cef_string_t * image_url, int is_favicon, uint32 max_image_size, int bypass_cache, cef_download_image_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_string_t *, int, uint32, int, cef_download_image_callback_t *)) { return callback__(self, image_url, is_favicon, max_image_size, bypass_cache, callback); }
+	// void gocef_browser_host_run_file_dialog(cef_browser_host_t * self, cef_file_dialog_mode_t mode, cef_string_t * title, cef_string_t * defaultFilePath, cef_string_list_t acceptFilters, int selectedAcceptFilter, cef_run_file_dialog_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_file_dialog_mode_t, cef_string_t *, cef_string_t *, cef_string_list_t, int, cef_run_file_dialog_callback_t *)) { return callback__(self, mode, title, defaultFilePath, acceptFilters, selectedAcceptFilter, callback); }
+	// void gocef_browser_host_start_download(cef_browser_host_t * self, cef_string_t * uRL, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_string_t *)) { return callback__(self, uRL); }
+	// void gocef_browser_host_download_image(cef_browser_host_t * self, cef_string_t * imageURL, int isFavicon, uint32 maxImageSize, int bypassCache, cef_download_image_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_string_t *, int, uint32, int, cef_download_image_callback_t *)) { return callback__(self, imageURL, isFavicon, maxImageSize, bypassCache, callback); }
 	// void gocef_browser_host_print(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_print_to_pdf(cef_browser_host_t * self, cef_string_t * path, cef_pdf_print_settings_t * settings, cef_pdf_print_callback_t * callback, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_string_t *, cef_pdf_print_settings_t *, cef_pdf_print_callback_t *)) { return callback__(self, path, settings, callback); }
 	// void gocef_browser_host_find(cef_browser_host_t * self, int identifier, cef_string_t * searchText, int forward, int matchCase, int findNext, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int, cef_string_t *, int, int, int)) { return callback__(self, identifier, searchText, forward, matchCase, findNext); }
 	// void gocef_browser_host_stop_finding(cef_browser_host_t * self, int clearSelection, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, clearSelection); }
-	// void gocef_browser_host_show_dev_tools(cef_browser_host_t * self, cef_window_info_t * windowInfo, cef_client_t * client, cef_browser_settings_t * settings, cef_point_t * inspect_element_at, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_window_info_t *, cef_client_t *, cef_browser_settings_t *, cef_point_t *)) { return callback__(self, windowInfo, client, settings, inspect_element_at); }
+	// void gocef_browser_host_show_dev_tools(cef_browser_host_t * self, cef_window_info_t * windowInfo, cef_client_t * client, cef_browser_settings_t * settings, cef_point_t * inspectElementAt, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_window_info_t *, cef_client_t *, cef_browser_settings_t *, cef_point_t *)) { return callback__(self, windowInfo, client, settings, inspectElementAt); }
 	// void gocef_browser_host_close_dev_tools(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// int gocef_browser_host_has_dev_tools(cef_browser_host_t * self, int (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
-	// void gocef_browser_host_get_navigation_entries(cef_browser_host_t * self, cef_navigation_entry_visitor_t * visitor, int current_only, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_navigation_entry_visitor_t *, int)) { return callback__(self, visitor, current_only); }
+	// void gocef_browser_host_get_navigation_entries(cef_browser_host_t * self, cef_navigation_entry_visitor_t * visitor, int currentOnly, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_navigation_entry_visitor_t *, int)) { return callback__(self, visitor, currentOnly); }
 	// void gocef_browser_host_set_mouse_cursor_change_disabled(cef_browser_host_t * self, int disabled, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, disabled); }
 	// int gocef_browser_host_is_mouse_cursor_change_disabled(cef_browser_host_t * self, int (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_replace_misspelling(cef_browser_host_t * self, cef_string_t * word, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_string_t *)) { return callback__(self, word); }
@@ -47,20 +47,20 @@ import (
 	// void gocef_browser_host_send_capture_lost_event(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_notify_move_or_resize_started(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// int gocef_browser_host_get_windowless_frame_rate(cef_browser_host_t * self, int (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
-	// void gocef_browser_host_set_windowless_frame_rate(cef_browser_host_t * self, int frame_rate, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, frame_rate); }
-	// void gocef_browser_host_ime_set_composition(cef_browser_host_t * self, cef_string_t * text, size_t underlinesCount, cef_composition_underline_t * underlines, cef_range_t * replacement_range, cef_range_t * selection_range, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_string_t *, size_t, cef_composition_underline_t *, cef_range_t *, cef_range_t *)) { return callback__(self, text, underlinesCount, underlines, replacement_range, selection_range); }
-	// void gocef_browser_host_ime_commit_text(cef_browser_host_t * self, cef_string_t * text, cef_range_t * replacement_range, int relative_cursor_pos, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_string_t *, cef_range_t *, int)) { return callback__(self, text, replacement_range, relative_cursor_pos); }
-	// void gocef_browser_host_ime_finish_composing_text(cef_browser_host_t * self, int keep_selection, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, keep_selection); }
+	// void gocef_browser_host_set_windowless_frame_rate(cef_browser_host_t * self, int frameRate, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, frameRate); }
+	// void gocef_browser_host_ime_set_composition(cef_browser_host_t * self, cef_string_t * text, size_t underlinesCount, cef_composition_underline_t * underlines, cef_range_t * replacementRange, cef_range_t * selectionRange, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_string_t *, size_t, cef_composition_underline_t *, cef_range_t *, cef_range_t *)) { return callback__(self, text, underlinesCount, underlines, replacementRange, selectionRange); }
+	// void gocef_browser_host_ime_commit_text(cef_browser_host_t * self, cef_string_t * text, cef_range_t * replacementRange, int relativeCursorPos, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_string_t *, cef_range_t *, int)) { return callback__(self, text, replacementRange, relativeCursorPos); }
+	// void gocef_browser_host_ime_finish_composing_text(cef_browser_host_t * self, int keepSelection, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, keepSelection); }
 	// void gocef_browser_host_ime_cancel_composition(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
-	// void gocef_browser_host_drag_target_drag_enter(cef_browser_host_t * self, cef_drag_data_t * drag_data, cef_mouse_event_t * event, cef_drag_operations_mask_t allowed_ops, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_drag_data_t *, cef_mouse_event_t *, cef_drag_operations_mask_t)) { return callback__(self, drag_data, event, allowed_ops); }
-	// void gocef_browser_host_drag_target_drag_over(cef_browser_host_t * self, cef_mouse_event_t * event, cef_drag_operations_mask_t allowed_ops, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, cef_drag_operations_mask_t)) { return callback__(self, event, allowed_ops); }
+	// void gocef_browser_host_drag_target_drag_enter(cef_browser_host_t * self, cef_drag_data_t * dragData, cef_mouse_event_t * event, cef_drag_operations_mask_t allowedOps, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_drag_data_t *, cef_mouse_event_t *, cef_drag_operations_mask_t)) { return callback__(self, dragData, event, allowedOps); }
+	// void gocef_browser_host_drag_target_drag_over(cef_browser_host_t * self, cef_mouse_event_t * event, cef_drag_operations_mask_t allowedOps, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *, cef_drag_operations_mask_t)) { return callback__(self, event, allowedOps); }
 	// void gocef_browser_host_drag_target_drag_leave(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_drag_target_drop(cef_browser_host_t * self, cef_mouse_event_t * event, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_mouse_event_t *)) { return callback__(self, event); }
 	// void gocef_browser_host_drag_source_ended_at(cef_browser_host_t * self, int x, int y, cef_drag_operations_mask_t op, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int, int, cef_drag_operations_mask_t)) { return callback__(self, x, y, op); }
 	// void gocef_browser_host_drag_source_system_drag_ended(cef_browser_host_t * self, void (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// cef_navigation_entry_t * gocef_browser_host_get_visible_navigation_entry(cef_browser_host_t * self, cef_navigation_entry_t * (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
-	// void gocef_browser_host_set_accessibility_state(cef_browser_host_t * self, cef_state_t accessibility_state, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_state_t)) { return callback__(self, accessibility_state); }
-	// void gocef_browser_host_set_auto_resize_enabled(cef_browser_host_t * self, int enabled, cef_size_t * min_size, cef_size_t * max_size, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int, cef_size_t *, cef_size_t *)) { return callback__(self, enabled, min_size, max_size); }
+	// void gocef_browser_host_set_accessibility_state(cef_browser_host_t * self, cef_state_t accessibilityState, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, cef_state_t)) { return callback__(self, accessibilityState); }
+	// void gocef_browser_host_set_auto_resize_enabled(cef_browser_host_t * self, int enabled, cef_size_t * minSize, cef_size_t * maxSize, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int, cef_size_t *, cef_size_t *)) { return callback__(self, enabled, minSize, maxSize); }
 	// cef_extension_t * gocef_browser_host_get_extension(cef_browser_host_t * self, cef_extension_t * (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// int gocef_browser_host_is_background_host(cef_browser_host_t * self, int (CEF_CALLBACK *callback__)(cef_browser_host_t *)) { return callback__(self); }
 	// void gocef_browser_host_set_audio_muted(cef_browser_host_t * self, int mute, void (CEF_CALLBACK *callback__)(cef_browser_host_t *, int)) { return callback__(self, mute); }
@@ -100,8 +100,8 @@ func (d *BrowserHost) GetBrowser() *Browser {
 // the event handler allows the close or if |force_close| is true (1). See
 // cef_life_span_handler_t::do_close() documentation for additional usage
 // information.
-func (d *BrowserHost) CloseBrowser(force_close int32) {
-	C.gocef_browser_host_close_browser(d.toNative(), C.int(force_close), d.close_browser)
+func (d *BrowserHost) CloseBrowser(forceClose int32) {
+	C.gocef_browser_host_close_browser(d.toNative(), C.int(forceClose), d.close_browser)
 }
 
 // TryCloseBrowser (try_close_browser)
@@ -186,29 +186,29 @@ func (d *BrowserHost) SetZoomLevel(zoomLevel float64) {
 // selected by default. |callback| will be executed after the dialog is
 // dismissed or immediately if another dialog is already pending. The dialog
 // will be initiated asynchronously on the UI thread.
-func (d *BrowserHost) RunFileDialog(mode FileDialogMode, title, default_file_path string, accept_filters StringList, selected_accept_filter int32, callback *RunFileDialogCallback) {
+func (d *BrowserHost) RunFileDialog(mode FileDialogMode, title, defaultFilePath string, acceptFilters StringList, selectedAcceptFilter int32, callback *RunFileDialogCallback) {
 	title_ := C.cef_string_userfree_alloc()
 	setCEFStr(title, title_)
 	defer func() {
 		C.cef_string_userfree_free(title_)
 	}()
-	default_file_path_ := C.cef_string_userfree_alloc()
-	setCEFStr(default_file_path, default_file_path_)
+	defaultFilePath_ := C.cef_string_userfree_alloc()
+	setCEFStr(defaultFilePath, defaultFilePath_)
 	defer func() {
-		C.cef_string_userfree_free(default_file_path_)
+		C.cef_string_userfree_free(defaultFilePath_)
 	}()
-	C.gocef_browser_host_run_file_dialog(d.toNative(), C.cef_file_dialog_mode_t(mode), (*C.cef_string_t)(title_), (*C.cef_string_t)(default_file_path_), C.cef_string_list_t(accept_filters), C.int(selected_accept_filter), callback.toNative(), d.run_file_dialog)
+	C.gocef_browser_host_run_file_dialog(d.toNative(), C.cef_file_dialog_mode_t(mode), (*C.cef_string_t)(title_), (*C.cef_string_t)(defaultFilePath_), C.cef_string_list_t(acceptFilters), C.int(selectedAcceptFilter), callback.toNative(), d.run_file_dialog)
 }
 
 // StartDownload (start_download)
 // Download the file at |url| using cef_download_handler_t.
-func (d *BrowserHost) StartDownload(url string) {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func (d *BrowserHost) StartDownload(uRL string) {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	C.gocef_browser_host_start_download(d.toNative(), (*C.cef_string_t)(url_), d.start_download)
+	C.gocef_browser_host_start_download(d.toNative(), (*C.cef_string_t)(uRL_), d.start_download)
 }
 
 // DownloadImage (download_image)
@@ -222,13 +222,13 @@ func (d *BrowserHost) StartDownload(url string) {
 // to |max_image_size| and is the only result. A |max_image_size| of 0 means
 // unlimited. If |bypass_cache| is true (1) then |image_url| is requested from
 // the server even if it is present in the browser cache.
-func (d *BrowserHost) DownloadImage(image_url string, is_favicon int32, max_image_size uint32, bypass_cache int32, callback *DownloadImageCallback) {
-	image_url_ := C.cef_string_userfree_alloc()
-	setCEFStr(image_url, image_url_)
+func (d *BrowserHost) DownloadImage(imageURL string, isFavicon int32, maxImageSize uint32, bypassCache int32, callback *DownloadImageCallback) {
+	imageURL_ := C.cef_string_userfree_alloc()
+	setCEFStr(imageURL, imageURL_)
 	defer func() {
-		C.cef_string_userfree_free(image_url_)
+		C.cef_string_userfree_free(imageURL_)
 	}()
-	C.gocef_browser_host_download_image(d.toNative(), (*C.cef_string_t)(image_url_), C.int(is_favicon), C.uint32(max_image_size), C.int(bypass_cache), callback.toNative(), d.download_image)
+	C.gocef_browser_host_download_image(d.toNative(), (*C.cef_string_t)(imageURL_), C.int(isFavicon), C.uint32(maxImageSize), C.int(bypassCache), callback.toNative(), d.download_image)
 }
 
 // Print (print)
@@ -237,12 +237,12 @@ func (d *BrowserHost) Print() {
 	C.gocef_browser_host_print(d.toNative(), d.print)
 }
 
-// PrintToPdf (print_to_pdf)
+// PrintToPDF (print_to_pdf)
 // Print the current browser contents to the PDF file specified by |path| and
 // execute |callback| on completion. The caller is responsible for deleting
 // |path| when done. For PDF printing to work on Linux you must implement the
 // cef_print_handler_t::GetPdfPaperSize function.
-func (d *BrowserHost) PrintToPdf(path string, settings *PDFPrintSettings, callback *PDFPrintCallback) {
+func (d *BrowserHost) PrintToPDF(path string, settings *PDFPrintSettings, callback *PDFPrintCallback) {
 	path_ := C.cef_string_userfree_alloc()
 	setCEFStr(path, path_)
 	defer func() {
@@ -284,8 +284,8 @@ func (d *BrowserHost) StopFinding(clearSelection int32) {
 // is non-NULL then the element at the specified (x,y) location will be
 // inspected. The |windowInfo| parameter will be ignored if this browser is
 // wrapped in a cef_browser_view_t.
-func (d *BrowserHost) ShowDevTools(windowInfo *WindowInfo, client *Client, settings *BrowserSettings, inspect_element_at *Point) {
-	C.gocef_browser_host_show_dev_tools(d.toNative(), windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), settings.toNative(&C.cef_browser_settings_t{}), inspect_element_at.toNative(&C.cef_point_t{}), d.show_dev_tools)
+func (d *BrowserHost) ShowDevTools(windowInfo *WindowInfo, client *Client, settings *BrowserSettings, inspectElementAt *Point) {
+	C.gocef_browser_host_show_dev_tools(d.toNative(), windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), settings.toNative(&C.cef_browser_settings_t{}), inspectElementAt.toNative(&C.cef_point_t{}), d.show_dev_tools)
 }
 
 // CloseDevTools (close_dev_tools)
@@ -306,8 +306,8 @@ func (d *BrowserHost) HasDevTools() int32 {
 // specified visitor. If |current_only| is true (1) only the current
 // navigation entry will be sent, otherwise all navigation entries will be
 // sent.
-func (d *BrowserHost) GetNavigationEntries(visitor *NavigationEntryVisitor, current_only int32) {
-	C.gocef_browser_host_get_navigation_entries(d.toNative(), visitor.toNative(), C.int(current_only), d.get_navigation_entries)
+func (d *BrowserHost) GetNavigationEntries(visitor *NavigationEntryVisitor, currentOnly int32) {
+	C.gocef_browser_host_get_navigation_entries(d.toNative(), visitor.toNative(), C.int(currentOnly), d.get_navigation_entries)
 }
 
 // SetMouseCursorChangeDisabled (set_mouse_cursor_change_disabled)
@@ -465,8 +465,8 @@ func (d *BrowserHost) GetWindowlessFrameRate() int32 {
 // lower if the browser cannot generate frames at the requested rate. The
 // minimum value is 1 and the maximum value is 60 (default 30). Can also be
 // set at browser creation via cef_browser_tSettings.windowless_frame_rate.
-func (d *BrowserHost) SetWindowlessFrameRate(frame_rate int32) {
-	C.gocef_browser_host_set_windowless_frame_rate(d.toNative(), C.int(frame_rate), d.set_windowless_frame_rate)
+func (d *BrowserHost) SetWindowlessFrameRate(frameRate int32) {
+	C.gocef_browser_host_set_windowless_frame_rate(d.toNative(), C.int(frameRate), d.set_windowless_frame_rate)
 }
 
 // ImeSetComposition (ime_set_composition)
@@ -491,13 +491,13 @@ func (d *BrowserHost) SetWindowlessFrameRate(frame_rate int32) {
 //   C. insertText of NSTextInput is called (on Mac).
 //
 // This function is only used when window rendering is disabled.
-func (d *BrowserHost) ImeSetComposition(text string, underlinesCount uint64, underlines *CompositionUnderline, replacement_range, selection_range *Range) {
+func (d *BrowserHost) ImeSetComposition(text string, underlinesCount uint64, underlines *CompositionUnderline, replacementRange, selectionRange *Range) {
 	text_ := C.cef_string_userfree_alloc()
 	setCEFStr(text, text_)
 	defer func() {
 		C.cef_string_userfree_free(text_)
 	}()
-	C.gocef_browser_host_ime_set_composition(d.toNative(), (*C.cef_string_t)(text_), C.size_t(underlinesCount), underlines.toNative(&C.cef_composition_underline_t{}), replacement_range.toNative(&C.cef_range_t{}), selection_range.toNative(&C.cef_range_t{}), d.ime_set_composition)
+	C.gocef_browser_host_ime_set_composition(d.toNative(), (*C.cef_string_t)(text_), C.size_t(underlinesCount), underlines.toNative(&C.cef_composition_underline_t{}), replacementRange.toNative(&C.cef_range_t{}), selectionRange.toNative(&C.cef_range_t{}), d.ime_set_composition)
 }
 
 // ImeCommitText (ime_commit_text)
@@ -508,13 +508,13 @@ func (d *BrowserHost) ImeSetComposition(text string, underlinesCount uint64, und
 // comments on ImeSetComposition for usage. The |replacement_range| and
 // |relative_cursor_pos| values are only used on OS X. This function is only
 // used when window rendering is disabled.
-func (d *BrowserHost) ImeCommitText(text string, replacement_range *Range, relative_cursor_pos int32) {
+func (d *BrowserHost) ImeCommitText(text string, replacementRange *Range, relativeCursorPos int32) {
 	text_ := C.cef_string_userfree_alloc()
 	setCEFStr(text, text_)
 	defer func() {
 		C.cef_string_userfree_free(text_)
 	}()
-	C.gocef_browser_host_ime_commit_text(d.toNative(), (*C.cef_string_t)(text_), replacement_range.toNative(&C.cef_range_t{}), C.int(relative_cursor_pos), d.ime_commit_text)
+	C.gocef_browser_host_ime_commit_text(d.toNative(), (*C.cef_string_t)(text_), replacementRange.toNative(&C.cef_range_t{}), C.int(relativeCursorPos), d.ime_commit_text)
 }
 
 // ImeFinishComposingText (ime_finish_composing_text)
@@ -522,8 +522,8 @@ func (d *BrowserHost) ImeCommitText(text string, replacement_range *Range, relat
 // contents. If |keep_selection| is false (0) the current selection, if any,
 // will be discarded. See comments on ImeSetComposition for usage. This
 // function is only used when window rendering is disabled.
-func (d *BrowserHost) ImeFinishComposingText(keep_selection int32) {
-	C.gocef_browser_host_ime_finish_composing_text(d.toNative(), C.int(keep_selection), d.ime_finish_composing_text)
+func (d *BrowserHost) ImeFinishComposingText(keepSelection int32) {
+	C.gocef_browser_host_ime_finish_composing_text(d.toNative(), C.int(keepSelection), d.ime_finish_composing_text)
 }
 
 // ImeCancelComposition (ime_cancel_composition)
@@ -542,8 +542,8 @@ func (d *BrowserHost) ImeCancelComposition() {
 // cef_drag_data_t::ResetFileContents (for example, if |drag_data| comes from
 // cef_render_handler_t::StartDragging). This function is only used when
 // window rendering is disabled.
-func (d *BrowserHost) DragTargetDragEnter(drag_data *DragData, event *MouseEvent, allowed_ops DragOperationsMask) {
-	C.gocef_browser_host_drag_target_drag_enter(d.toNative(), drag_data.toNative(), event.toNative(&C.cef_mouse_event_t{}), C.cef_drag_operations_mask_t(allowed_ops), d.drag_target_drag_enter)
+func (d *BrowserHost) DragTargetDragEnter(dragData *DragData, event *MouseEvent, allowedOps DragOperationsMask) {
+	C.gocef_browser_host_drag_target_drag_enter(d.toNative(), dragData.toNative(), event.toNative(&C.cef_mouse_event_t{}), C.cef_drag_operations_mask_t(allowedOps), d.drag_target_drag_enter)
 }
 
 // DragTargetDragOver (drag_target_drag_over)
@@ -551,8 +551,8 @@ func (d *BrowserHost) DragTargetDragEnter(drag_data *DragData, event *MouseEvent
 // a drag operation (after calling DragTargetDragEnter and before calling
 // DragTargetDragLeave/DragTargetDrop). This function is only used when window
 // rendering is disabled.
-func (d *BrowserHost) DragTargetDragOver(event *MouseEvent, allowed_ops DragOperationsMask) {
-	C.gocef_browser_host_drag_target_drag_over(d.toNative(), event.toNative(&C.cef_mouse_event_t{}), C.cef_drag_operations_mask_t(allowed_ops), d.drag_target_drag_over)
+func (d *BrowserHost) DragTargetDragOver(event *MouseEvent, allowedOps DragOperationsMask) {
+	C.gocef_browser_host_drag_target_drag_over(d.toNative(), event.toNative(&C.cef_mouse_event_t{}), C.cef_drag_operations_mask_t(allowedOps), d.drag_target_drag_over)
 }
 
 // DragTargetDragLeave (drag_target_drag_leave)
@@ -627,16 +627,16 @@ func (d *BrowserHost) GetVisibleNavigationEntry() *NavigationEntry {
 // events are passed to CefAccessibiltyHandler, but platform accessibility
 // objects are not created. The client may implement platform accessibility
 // objects using CefAccessibiltyHandler callbacks if desired.
-func (d *BrowserHost) SetAccessibilityState(accessibility_state State) {
-	C.gocef_browser_host_set_accessibility_state(d.toNative(), C.cef_state_t(accessibility_state), d.set_accessibility_state)
+func (d *BrowserHost) SetAccessibilityState(accessibilityState State) {
+	C.gocef_browser_host_set_accessibility_state(d.toNative(), C.cef_state_t(accessibilityState), d.set_accessibility_state)
 }
 
 // SetAutoResizeEnabled (set_auto_resize_enabled)
 // Enable notifications of auto resize via
 // cef_display_handler_t::OnAutoResize. Notifications are disabled by default.
 // |min_size| and |max_size| define the range of allowed sizes.
-func (d *BrowserHost) SetAutoResizeEnabled(enabled int32, min_size, max_size *Size) {
-	C.gocef_browser_host_set_auto_resize_enabled(d.toNative(), C.int(enabled), min_size.toNative(&C.cef_size_t{}), max_size.toNative(&C.cef_size_t{}), d.set_auto_resize_enabled)
+func (d *BrowserHost) SetAutoResizeEnabled(enabled int32, minSize, maxSize *Size) {
+	C.gocef_browser_host_set_auto_resize_enabled(d.toNative(), C.int(enabled), minSize.toNative(&C.cef_size_t{}), maxSize.toNative(&C.cef_size_t{}), d.set_auto_resize_enabled)
 }
 
 // GetExtension (get_extension)

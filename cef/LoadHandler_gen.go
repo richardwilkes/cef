@@ -17,9 +17,9 @@ import (
 // LoadHandlerProxy defines methods required for using LoadHandler.
 type LoadHandlerProxy interface {
 	OnLoadingStateChange(self *LoadHandler, browser *Browser, isLoading, canGoBack, canGoForward int32)
-	OnLoadStart(self *LoadHandler, browser *Browser, frame *Frame, transition_type TransitionType)
-	OnLoadEnd(self *LoadHandler, browser *Browser, frame *Frame, httpStatusCode int32)
-	OnLoadError(self *LoadHandler, browser *Browser, frame *Frame, errorCode Errorcode, errorText, failedUrl string)
+	OnLoadStart(self *LoadHandler, browser *Browser, frame *Frame, transitionType TransitionType)
+	OnLoadEnd(self *LoadHandler, browser *Browser, frame *Frame, hTTPStatusCode int32)
+	OnLoadError(self *LoadHandler, browser *Browser, frame *Frame, errorCode Errorcode, errorText, failedURL string)
 }
 
 // LoadHandler (cef_load_handler_t from include/capi/cef_load_handler_capi.h)
@@ -89,16 +89,16 @@ func gocef_load_handler_on_loading_state_change(self *C.cef_load_handler_t, brow
 // called for same page navigations (fragments, history state, etc.) or for
 // navigations that fail or are canceled before commit. For notification of
 // overall browser load status use OnLoadingStateChange instead.
-func (d *LoadHandler) OnLoadStart(browser *Browser, frame *Frame, transition_type TransitionType) {
-	lookupLoadHandlerProxy(d.Base()).OnLoadStart(d, browser, frame, transition_type)
+func (d *LoadHandler) OnLoadStart(browser *Browser, frame *Frame, transitionType TransitionType) {
+	lookupLoadHandlerProxy(d.Base()).OnLoadStart(d, browser, frame, transitionType)
 }
 
 //nolint:gocritic
 //export gocef_load_handler_on_load_start
-func gocef_load_handler_on_load_start(self *C.cef_load_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, transition_type C.cef_transition_type_t) {
+func gocef_load_handler_on_load_start(self *C.cef_load_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, transitionType C.cef_transition_type_t) {
 	me__ := (*LoadHandler)(self)
 	proxy__ := lookupLoadHandlerProxy(me__.Base())
-	proxy__.OnLoadStart(me__, (*Browser)(browser), (*Frame)(frame), TransitionType(transition_type))
+	proxy__.OnLoadStart(me__, (*Browser)(browser), (*Frame)(frame), TransitionType(transitionType))
 }
 
 // OnLoadEnd (on_load_end)
@@ -110,16 +110,16 @@ func gocef_load_handler_on_load_start(self *C.cef_load_handler_t, browser *C.cef
 // state, etc.) or for navigations that fail or are canceled before commit.
 // For notification of overall browser load status use OnLoadingStateChange
 // instead.
-func (d *LoadHandler) OnLoadEnd(browser *Browser, frame *Frame, httpStatusCode int32) {
-	lookupLoadHandlerProxy(d.Base()).OnLoadEnd(d, browser, frame, httpStatusCode)
+func (d *LoadHandler) OnLoadEnd(browser *Browser, frame *Frame, hTTPStatusCode int32) {
+	lookupLoadHandlerProxy(d.Base()).OnLoadEnd(d, browser, frame, hTTPStatusCode)
 }
 
 //nolint:gocritic
 //export gocef_load_handler_on_load_end
-func gocef_load_handler_on_load_end(self *C.cef_load_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, httpStatusCode C.int) {
+func gocef_load_handler_on_load_end(self *C.cef_load_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, hTTPStatusCode C.int) {
 	me__ := (*LoadHandler)(self)
 	proxy__ := lookupLoadHandlerProxy(me__.Base())
-	proxy__.OnLoadEnd(me__, (*Browser)(browser), (*Frame)(frame), int32(httpStatusCode))
+	proxy__.OnLoadEnd(me__, (*Browser)(browser), (*Frame)(frame), int32(hTTPStatusCode))
 }
 
 // OnLoadError (on_load_error)
@@ -128,16 +128,16 @@ func gocef_load_handler_on_load_end(self *C.cef_load_handler_t, browser *C.cef_b
 // after commit. |errorCode| is the error code number, |errorText| is the
 // error text and |failedUrl| is the URL that failed to load. See
 // net\base\net_error_list.h for complete descriptions of the error codes.
-func (d *LoadHandler) OnLoadError(browser *Browser, frame *Frame, errorCode Errorcode, errorText, failedUrl string) {
-	lookupLoadHandlerProxy(d.Base()).OnLoadError(d, browser, frame, errorCode, errorText, failedUrl)
+func (d *LoadHandler) OnLoadError(browser *Browser, frame *Frame, errorCode Errorcode, errorText, failedURL string) {
+	lookupLoadHandlerProxy(d.Base()).OnLoadError(d, browser, frame, errorCode, errorText, failedURL)
 }
 
 //nolint:gocritic
 //export gocef_load_handler_on_load_error
-func gocef_load_handler_on_load_error(self *C.cef_load_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, errorCode C.cef_errorcode_t, errorText *C.cef_string_t, failedUrl *C.cef_string_t) {
+func gocef_load_handler_on_load_error(self *C.cef_load_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, errorCode C.cef_errorcode_t, errorText *C.cef_string_t, failedURL *C.cef_string_t) {
 	me__ := (*LoadHandler)(self)
 	proxy__ := lookupLoadHandlerProxy(me__.Base())
 	errorText_ := cefstrToString(errorText)
-	failedUrl_ := cefstrToString(failedUrl)
-	proxy__.OnLoadError(me__, (*Browser)(browser), (*Frame)(frame), Errorcode(errorCode), errorText_, failedUrl_)
+	failedURL_ := cefstrToString(failedURL)
+	proxy__.OnLoadError(me__, (*Browser)(browser), (*Frame)(frame), Errorcode(errorCode), errorText_, failedURL_)
 }

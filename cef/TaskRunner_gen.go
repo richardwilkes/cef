@@ -6,9 +6,9 @@ import (
 	// #include "capi_gen.h"
 	// int gocef_task_runner_is_same(cef_task_runner_t * self, cef_task_runner_t * that, int (CEF_CALLBACK *callback__)(cef_task_runner_t *, cef_task_runner_t *)) { return callback__(self, that); }
 	// int gocef_task_runner_belongs_to_current_thread(cef_task_runner_t * self, int (CEF_CALLBACK *callback__)(cef_task_runner_t *)) { return callback__(self); }
-	// int gocef_task_runner_belongs_to_thread(cef_task_runner_t * self, cef_thread_id_t threadId, int (CEF_CALLBACK *callback__)(cef_task_runner_t *, cef_thread_id_t)) { return callback__(self, threadId); }
+	// int gocef_task_runner_belongs_to_thread(cef_task_runner_t * self, cef_thread_id_t threadID, int (CEF_CALLBACK *callback__)(cef_task_runner_t *, cef_thread_id_t)) { return callback__(self, threadID); }
 	// int gocef_task_runner_post_task(cef_task_runner_t * self, cef_task_t * task, int (CEF_CALLBACK *callback__)(cef_task_runner_t *, cef_task_t *)) { return callback__(self, task); }
-	// int gocef_task_runner_post_delayed_task(cef_task_runner_t * self, cef_task_t * task, int64 delay_ms, int (CEF_CALLBACK *callback__)(cef_task_runner_t *, cef_task_t *, int64)) { return callback__(self, task, delay_ms); }
+	// int gocef_task_runner_post_delayed_task(cef_task_runner_t * self, cef_task_t * task, int64 delayMs, int (CEF_CALLBACK *callback__)(cef_task_runner_t *, cef_task_t *, int64)) { return callback__(self, task, delayMs); }
 	"C"
 )
 
@@ -47,8 +47,8 @@ func (d *TaskRunner) BelongsToCurrentThread() int32 {
 
 // BelongsToThread (belongs_to_thread)
 // Returns true (1) if this task runner is for the specified CEF thread.
-func (d *TaskRunner) BelongsToThread(threadId ThreadID) int32 {
-	return int32(C.gocef_task_runner_belongs_to_thread(d.toNative(), C.cef_thread_id_t(threadId), d.belongs_to_thread))
+func (d *TaskRunner) BelongsToThread(threadID ThreadID) int32 {
+	return int32(C.gocef_task_runner_belongs_to_thread(d.toNative(), C.cef_thread_id_t(threadID), d.belongs_to_thread))
 }
 
 // PostTask (post_task)
@@ -63,6 +63,6 @@ func (d *TaskRunner) PostTask(task *Task) int32 {
 // runner. Execution will occur asynchronously. Delayed tasks are not
 // supported on V8 WebWorker threads and will be executed without the
 // specified delay.
-func (d *TaskRunner) PostDelayedTask(task *Task, delay_ms int64) int32 {
-	return int32(C.gocef_task_runner_post_delayed_task(d.toNative(), task.toNative(), C.int64(delay_ms), d.post_delayed_task))
+func (d *TaskRunner) PostDelayedTask(task *Task, delayMs int64) int32 {
+	return int32(C.gocef_task_runner_post_delayed_task(d.toNative(), task.toNative(), C.int64(delayMs), d.post_delayed_task))
 }

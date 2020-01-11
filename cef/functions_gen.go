@@ -44,30 +44,30 @@ import (
 //
 // This function may be called on any thread. Returns false (0) if
 // |source_origin| is invalid or the whitelist cannot be accessed.
-func AddCrossOriginWhitelistEntry(source_origin, target_protocol, target_domain string, allow_target_subdomains int32) int32 {
-	source_origin_ := C.cef_string_userfree_alloc()
-	setCEFStr(source_origin, source_origin_)
+func AddCrossOriginWhitelistEntry(sourceOrigin, targetProtocol, targetDomain string, allowTargetSubdomains int32) int32 {
+	sourceOrigin_ := C.cef_string_userfree_alloc()
+	setCEFStr(sourceOrigin, sourceOrigin_)
 	defer func() {
-		C.cef_string_userfree_free(source_origin_)
+		C.cef_string_userfree_free(sourceOrigin_)
 	}()
-	target_protocol_ := C.cef_string_userfree_alloc()
-	setCEFStr(target_protocol, target_protocol_)
+	targetProtocol_ := C.cef_string_userfree_alloc()
+	setCEFStr(targetProtocol, targetProtocol_)
 	defer func() {
-		C.cef_string_userfree_free(target_protocol_)
+		C.cef_string_userfree_free(targetProtocol_)
 	}()
-	target_domain_ := C.cef_string_userfree_alloc()
-	setCEFStr(target_domain, target_domain_)
+	targetDomain_ := C.cef_string_userfree_alloc()
+	setCEFStr(targetDomain, targetDomain_)
 	defer func() {
-		C.cef_string_userfree_free(target_domain_)
+		C.cef_string_userfree_free(targetDomain_)
 	}()
-	return int32(C.cef_add_cross_origin_whitelist_entry((*C.cef_string_t)(source_origin_), (*C.cef_string_t)(target_protocol_), (*C.cef_string_t)(target_domain_), C.int(allow_target_subdomains)))
+	return int32(C.cef_add_cross_origin_whitelist_entry((*C.cef_string_t)(sourceOrigin_), (*C.cef_string_t)(targetProtocol_), (*C.cef_string_t)(targetDomain_), C.int(allowTargetSubdomains)))
 }
 
 // BinaryValueCreate (cef_binary_value_create from include/capi/cef_values_capi.h)
 // Creates a new object that is not owned by any other object. The specified
 // |data| will be copied.
-func BinaryValueCreate(data unsafe.Pointer, data_size uint64) *BinaryValue {
-	return (*BinaryValue)(C.cef_binary_value_create(data, C.size_t(data_size)))
+func BinaryValueCreate(data unsafe.Pointer, dataSize uint64) *BinaryValue {
+	return (*BinaryValue)(C.cef_binary_value_create(data, C.size_t(dataSize)))
 }
 
 // BrowserHostCreateBrowser (cef_browser_host_create_browser from include/capi/cef_browser_capi.h)
@@ -79,13 +79,13 @@ func BinaryValueCreate(data unsafe.Pointer, data_size uint64) *BinaryValue {
 // opportunity to specify extra information specific to the created browser that
 // will be passed to cef_render_process_handler_t::on_browser_created() in the
 // render process.
-func BrowserHostCreateBrowser(windowInfo *WindowInfo, client *Client, url string, settings *BrowserSettings, extra_info *DictionaryValue, request_context *RequestContext) int32 {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func BrowserHostCreateBrowser(windowInfo *WindowInfo, client *Client, uRL string, settings *BrowserSettings, extraInfo *DictionaryValue, requestContext *RequestContext) int32 {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	return int32(C.cef_browser_host_create_browser(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), extra_info.toNative(), request_context.toNative()))
+	return int32(C.cef_browser_host_create_browser(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(uRL_), settings.toNative(&C.cef_browser_settings_t{}), extraInfo.toNative(), requestContext.toNative()))
 }
 
 // BrowserHostCreateBrowserSync (cef_browser_host_create_browser_sync from include/capi/cef_browser_capi.h)
@@ -95,13 +95,13 @@ func BrowserHostCreateBrowser(windowInfo *WindowInfo, client *Client, url string
 // optional |extra_info| parameter provides an opportunity to specify extra
 // information specific to the created browser that will be passed to
 // cef_render_process_handler_t::on_browser_created() in the render process.
-func BrowserHostCreateBrowserSync(windowInfo *WindowInfo, client *Client, url string, settings *BrowserSettings, extra_info *DictionaryValue, request_context *RequestContext) *Browser {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func BrowserHostCreateBrowserSync(windowInfo *WindowInfo, client *Client, uRL string, settings *BrowserSettings, extraInfo *DictionaryValue, requestContext *RequestContext) *Browser {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
-	return (*Browser)(C.cef_browser_host_create_browser_sync(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), extra_info.toNative(), request_context.toNative()))
+	return (*Browser)(C.cef_browser_host_create_browser_sync(windowInfo.toNative(&C.cef_window_info_t{}), client.toNative(), (*C.cef_string_t)(uRL_), settings.toNative(&C.cef_browser_settings_t{}), extraInfo.toNative(), requestContext.toNative()))
 }
 
 // BrowserViewCreate (cef_browser_view_create from include/capi/views/cef_browser_view_capi.h)
@@ -110,17 +110,17 @@ func BrowserHostCreateBrowserSync(windowInfo *WindowInfo, client *Client, url st
 // parameter provides an opportunity to specify extra information specific to
 // the created browser that will be passed to
 // cef_render_process_handler_t::on_browser_created() in the render process.
-func BrowserViewCreate(client *Client, url string, settings *BrowserSettings, extra_info *DictionaryValue, request_context *RequestContext, delegate *BrowserViewDelegate) *BrowserView {
-	url_ := C.cef_string_userfree_alloc()
-	setCEFStr(url, url_)
+func BrowserViewCreate(client *Client, uRL string, settings *BrowserSettings, extraInfo *DictionaryValue, requestContext *RequestContext, delegate *BrowserViewDelegate) *BrowserView {
+	uRL_ := C.cef_string_userfree_alloc()
+	setCEFStr(uRL, uRL_)
 	defer func() {
-		C.cef_string_userfree_free(url_)
+		C.cef_string_userfree_free(uRL_)
 	}()
 	var delegate_ *C.cef_browser_view_delegate_t
 	if delegate != nil {
 		delegate_ = delegate.toNative()
 	}
-	return (*BrowserView)(C.cef_browser_view_create(client.toNative(), (*C.cef_string_t)(url_), settings.toNative(&C.cef_browser_settings_t{}), extra_info.toNative(), request_context.toNative(), delegate_))
+	return (*BrowserView)(C.cef_browser_view_create(client.toNative(), (*C.cef_string_t)(uRL_), settings.toNative(&C.cef_browser_settings_t{}), extraInfo.toNative(), requestContext.toNative(), delegate_))
 }
 
 // BrowserViewGetForBrowser (cef_browser_view_get_for_browser from include/capi/views/cef_browser_view_capi.h)
@@ -180,8 +180,8 @@ func CreateContextShared(other *RequestContext, handler *RequestContextHandler) 
 // CurrentlyOn (cef_currently_on from include/capi/cef_task_capi.h)
 // Returns true (1) if called on the specified thread. Equivalent to using
 // cef_task_tRunner::GetForThread(threadId)->belongs_to_current_thread().
-func CurrentlyOn(threadId ThreadID) int32 {
-	return int32(C.cef_currently_on(C.cef_thread_id_t(threadId)))
+func CurrentlyOn(threadID ThreadID) int32 {
+	return int32(C.cef_currently_on(C.cef_thread_id_t(threadID)))
 }
 
 // DictionaryValueCreate (cef_dictionary_value_create from include/capi/cef_values_capi.h)
@@ -209,15 +209,15 @@ func DisplayGetCount() uint64 {
 // Returns the Display that most closely intersects |bounds|.  Set
 // |input_pixel_coords| to true (1) if |bounds| is in pixel coordinates instead
 // of density independent pixels (DIP).
-func DisplayGetMatchingBounds(bounds *Rect, input_pixel_coords int32) *Display {
-	return (*Display)(C.cef_display_get_matching_bounds(bounds.toNative(&C.cef_rect_t{}), C.int(input_pixel_coords)))
+func DisplayGetMatchingBounds(bounds *Rect, inputPixelCoords int32) *Display {
+	return (*Display)(C.cef_display_get_matching_bounds(bounds.toNative(&C.cef_rect_t{}), C.int(inputPixelCoords)))
 }
 
 // DisplayGetNearestPoint (cef_display_get_nearest_point from include/capi/views/cef_display_capi.h)
 // Returns the Display nearest |point|. Set |input_pixel_coords| to true (1) if
 // |point| is in pixel coordinates instead of density independent pixels (DIP).
-func DisplayGetNearestPoint(point *Point, input_pixel_coords int32) *Display {
-	return (*Display)(C.cef_display_get_nearest_point(point.toNative(&C.cef_point_t{}), C.int(input_pixel_coords)))
+func DisplayGetNearestPoint(point *Point, inputPixelCoords int32) *Display {
+	return (*Display)(C.cef_display_get_nearest_point(point.toNative(&C.cef_point_t{}), C.int(inputPixelCoords)))
 }
 
 // DisplayGetPrimary (cef_display_get_primary from include/capi/views/cef_display_capi.h)
@@ -269,8 +269,8 @@ func EnableHighdpiSupport() {
 // the process exit code. The |application| parameter may be NULL. The
 // |windows_sandbox_info| parameter is only used on Windows and may be NULL (see
 // cef_sandbox_win.h for details).
-func ExecuteProcess(args *MainArgs, application *App, windows_sandbox_info unsafe.Pointer) int32 {
-	return int32(C.cef_execute_process(args.toNative(&C.cef_main_args_t{}), application.toNative(), windows_sandbox_info))
+func ExecuteProcess(args *MainArgs, application *App, windowsSandboxInfo unsafe.Pointer) int32 {
+	return int32(C.cef_execute_process(args.toNative(&C.cef_main_args_t{}), application.toNative(), windowsSandboxInfo))
 }
 
 // ImageCreate (cef_image_create from include/capi/cef_image_capi.h)
@@ -286,8 +286,8 @@ func ImageCreate() *Image {
 // value of true (1) indicates that it succeeded and false (0) indicates that it
 // failed. The |windows_sandbox_info| parameter is only used on Windows and may
 // be NULL (see cef_sandbox_win.h for details).
-func Initialize(args *MainArgs, settings *Settings, application *App, windows_sandbox_info unsafe.Pointer) int32 {
-	return int32(C.cef_initialize(args.toNative(&C.cef_main_args_t{}), settings.toNative(&C.cef_settings_t{}), application.toNative(), windows_sandbox_info))
+func Initialize(args *MainArgs, settings *Settings, application *App, windowsSandboxInfo unsafe.Pointer) int32 {
+	return int32(C.cef_initialize(args.toNative(&C.cef_main_args_t{}), settings.toNative(&C.cef_settings_t{}), application.toNative(), windowsSandboxInfo))
 }
 
 // IsCertStatusError (cef_is_cert_status_error from include/capi/cef_ssl_info_capi.h)
@@ -395,15 +395,15 @@ func PostDataElementCreate() *PostDataElement {
 // Post a task for delayed execution on the specified thread. Equivalent to
 // using cef_task_tRunner::GetForThread(threadId)->PostDelayedTask(task,
 // delay_ms).
-func PostDelayedTask(threadId ThreadID, task *Task, delay_ms int64) int32 {
-	return int32(C.cef_post_delayed_task(C.cef_thread_id_t(threadId), task.toNative(), C.int64(delay_ms)))
+func PostDelayedTask(threadID ThreadID, task *Task, delayMs int64) int32 {
+	return int32(C.cef_post_delayed_task(C.cef_thread_id_t(threadID), task.toNative(), C.int64(delayMs)))
 }
 
 // PostTask (cef_post_task from include/capi/cef_task_capi.h)
 // Post a task for execution on the specified thread. Equivalent to using
 // cef_task_tRunner::GetForThread(threadId)->PostTask(task).
-func PostTask(threadId ThreadID, task *Task) int32 {
-	return int32(C.cef_post_task(C.cef_thread_id_t(threadId), task.toNative()))
+func PostTask(threadID ThreadID, task *Task) int32 {
+	return int32(C.cef_post_task(C.cef_thread_id_t(threadID), task.toNative()))
 }
 
 // PrintSettingsCreate (cef_print_settings_create from include/capi/cef_print_settings_capi.h)
@@ -494,18 +494,18 @@ func RefreshWebPlugins() {
 //   // Call another function.
 //   example.test.increment();
 // </pre>
-func RegisterExtension(extension_name, javascript_code string, handler *V8handler) int32 {
-	extension_name_ := C.cef_string_userfree_alloc()
-	setCEFStr(extension_name, extension_name_)
+func RegisterExtension(extensionName, javascriptCode string, handler *V8handler) int32 {
+	extensionName_ := C.cef_string_userfree_alloc()
+	setCEFStr(extensionName, extensionName_)
 	defer func() {
-		C.cef_string_userfree_free(extension_name_)
+		C.cef_string_userfree_free(extensionName_)
 	}()
-	javascript_code_ := C.cef_string_userfree_alloc()
-	setCEFStr(javascript_code, javascript_code_)
+	javascriptCode_ := C.cef_string_userfree_alloc()
+	setCEFStr(javascriptCode, javascriptCode_)
 	defer func() {
-		C.cef_string_userfree_free(javascript_code_)
+		C.cef_string_userfree_free(javascriptCode_)
 	}()
-	return int32(C.cef_register_extension((*C.cef_string_t)(extension_name_), (*C.cef_string_t)(javascript_code_), handler.toNative()))
+	return int32(C.cef_register_extension((*C.cef_string_t)(extensionName_), (*C.cef_string_t)(javascriptCode_), handler.toNative()))
 }
 
 // RegisterSchemeHandlerFactory (cef_register_scheme_handler_factory from include/capi/cef_scheme_capi.h)
@@ -522,18 +522,18 @@ func RegisterExtension(extension_name, javascript_code string, handler *V8handle
 // browser process. Using this function is equivalent to calling cef_request_tCo
 // ntext::cef_request_context_get_global_context()->register_scheme_handler_fact
 // ory().
-func RegisterSchemeHandlerFactory(scheme_name, domain_name string, factory *SchemeHandlerFactory) int32 {
-	scheme_name_ := C.cef_string_userfree_alloc()
-	setCEFStr(scheme_name, scheme_name_)
+func RegisterSchemeHandlerFactory(schemeName, domainName string, factory *SchemeHandlerFactory) int32 {
+	schemeName_ := C.cef_string_userfree_alloc()
+	setCEFStr(schemeName, schemeName_)
 	defer func() {
-		C.cef_string_userfree_free(scheme_name_)
+		C.cef_string_userfree_free(schemeName_)
 	}()
-	domain_name_ := C.cef_string_userfree_alloc()
-	setCEFStr(domain_name, domain_name_)
+	domainName_ := C.cef_string_userfree_alloc()
+	setCEFStr(domainName, domainName_)
 	defer func() {
-		C.cef_string_userfree_free(domain_name_)
+		C.cef_string_userfree_free(domainName_)
 	}()
-	return int32(C.cef_register_scheme_handler_factory((*C.cef_string_t)(scheme_name_), (*C.cef_string_t)(domain_name_), factory.toNative()))
+	return int32(C.cef_register_scheme_handler_factory((*C.cef_string_t)(schemeName_), (*C.cef_string_t)(domainName_), factory.toNative()))
 }
 
 // RegisterWebPluginCrash (cef_register_web_plugin_crash from include/capi/cef_web_plugin_capi.h)
@@ -601,23 +601,23 @@ func RegisterWidevineCdm(path string, callback *RegisterCdmCallback) {
 // RemoveCrossOriginWhitelistEntry (cef_remove_cross_origin_whitelist_entry from include/capi/cef_origin_whitelist_capi.h)
 // Remove an entry from the cross-origin access whitelist. Returns false (0) if
 // |source_origin| is invalid or the whitelist cannot be accessed.
-func RemoveCrossOriginWhitelistEntry(source_origin, target_protocol, target_domain string, allow_target_subdomains int32) int32 {
-	source_origin_ := C.cef_string_userfree_alloc()
-	setCEFStr(source_origin, source_origin_)
+func RemoveCrossOriginWhitelistEntry(sourceOrigin, targetProtocol, targetDomain string, allowTargetSubdomains int32) int32 {
+	sourceOrigin_ := C.cef_string_userfree_alloc()
+	setCEFStr(sourceOrigin, sourceOrigin_)
 	defer func() {
-		C.cef_string_userfree_free(source_origin_)
+		C.cef_string_userfree_free(sourceOrigin_)
 	}()
-	target_protocol_ := C.cef_string_userfree_alloc()
-	setCEFStr(target_protocol, target_protocol_)
+	targetProtocol_ := C.cef_string_userfree_alloc()
+	setCEFStr(targetProtocol, targetProtocol_)
 	defer func() {
-		C.cef_string_userfree_free(target_protocol_)
+		C.cef_string_userfree_free(targetProtocol_)
 	}()
-	target_domain_ := C.cef_string_userfree_alloc()
-	setCEFStr(target_domain, target_domain_)
+	targetDomain_ := C.cef_string_userfree_alloc()
+	setCEFStr(targetDomain, targetDomain_)
 	defer func() {
-		C.cef_string_userfree_free(target_domain_)
+		C.cef_string_userfree_free(targetDomain_)
 	}()
-	return int32(C.cef_remove_cross_origin_whitelist_entry((*C.cef_string_t)(source_origin_), (*C.cef_string_t)(target_protocol_), (*C.cef_string_t)(target_domain_), C.int(allow_target_subdomains)))
+	return int32(C.cef_remove_cross_origin_whitelist_entry((*C.cef_string_t)(sourceOrigin_), (*C.cef_string_t)(targetProtocol_), (*C.cef_string_t)(targetDomain_), C.int(allowTargetSubdomains)))
 }
 
 // RequestContextCreateContext (cef_request_context_create_context from include/capi/cef_request_context_capi.h)
@@ -913,7 +913,7 @@ func StringMultimapClear(map_r StringMultimap) {
 
 // StringMultimapEnumerate (cef_string_multimap_enumerate from include/internal/cef_string_multimap.h)
 // Return the value_index-th value with the specified key.
-func StringMultimapEnumerate(map_r StringMultimap, key string, value_index uint64, value *string) int32 {
+func StringMultimapEnumerate(map_r StringMultimap, key string, valueIndex uint64, value *string) int32 {
 	key_ := C.cef_string_userfree_alloc()
 	setCEFStr(key, key_)
 	defer func() {
@@ -925,7 +925,7 @@ func StringMultimapEnumerate(map_r StringMultimap, key string, value_index uint6
 		*value = cefstrToString(value_)
 		C.cef_string_userfree_free(value_)
 	}()
-	return int32(C.cef_string_multimap_enumerate(C.cef_string_multimap_t(map_r), (*C.cef_string_t)(key_), C.size_t(value_index), (*C.cef_string_t)(value_)))
+	return int32(C.cef_string_multimap_enumerate(C.cef_string_multimap_t(map_r), (*C.cef_string_t)(key_), C.size_t(valueIndex), (*C.cef_string_t)(value_)))
 }
 
 // StringMultimapFindCount (cef_string_multimap_find_count from include/internal/cef_string_multimap.h)
@@ -985,8 +985,8 @@ func TaskRunnerGetForCurrentThread() *TaskRunner {
 
 // TaskRunnerGetForThread (cef_task_runner_get_for_thread from include/capi/cef_task_capi.h)
 // Returns the task runner for the specified CEF thread.
-func TaskRunnerGetForThread(threadId ThreadID) *TaskRunner {
-	return (*TaskRunner)(C.cef_task_runner_get_for_thread(C.cef_thread_id_t(threadId)))
+func TaskRunnerGetForThread(threadID ThreadID) *TaskRunner {
+	return (*TaskRunner)(C.cef_task_runner_get_for_thread(C.cef_thread_id_t(threadID)))
 }
 
 // TextfieldCreate (cef_textfield_create from include/capi/views/cef_textfield_capi.h)
@@ -1002,25 +1002,25 @@ func TextfieldCreate(delegate *TextfieldDelegate) *Textfield {
 // TimeDelta (cef_time_delta from include/internal/cef_time.h)
 // Retrieve the delta in milliseconds between two time values.
 //
-func TimeDelta(cef_time1, cef_time2 *Time, delta *int64) int32 {
-	return int32(C.cef_time_delta(cef_time1.toNative(&C.cef_time_t{}), cef_time2.toNative(&C.cef_time_t{}), (*C.longlong)(delta)))
+func TimeDelta(cefTime1, cefTime2 *Time, delta *int64) int32 {
+	return int32(C.cef_time_delta(cefTime1.toNative(&C.cef_time_t{}), cefTime2.toNative(&C.cef_time_t{}), (*C.longlong)(delta)))
 }
 
 // TimeFromDoublet (cef_time_from_doublet from include/internal/cef_time.h)
-func TimeFromDoublet(time float64, cef_time *Time) int32 {
-	return int32(C.cef_time_from_doublet(C.double(time), cef_time.toNative(&C.cef_time_t{})))
+func TimeFromDoublet(time float64, cefTime *Time) int32 {
+	return int32(C.cef_time_from_doublet(C.double(time), cefTime.toNative(&C.cef_time_t{})))
 }
 
 // TimeFromTimet (cef_time_from_timet from include/internal/cef_time.h)
-func TimeFromTimet(time int64, cef_time *Time) int32 {
-	return int32(C.cef_time_from_timet(C.time_t(time), cef_time.toNative(&C.cef_time_t{})))
+func TimeFromTimet(time int64, cefTime *Time) int32 {
+	return int32(C.cef_time_from_timet(C.time_t(time), cefTime.toNative(&C.cef_time_t{})))
 }
 
 // TimeNow (cef_time_now from include/internal/cef_time.h)
 // Retrieve the current system time.
 //
-func TimeNow(cef_time *Time) int32 {
-	return int32(C.cef_time_now(cef_time.toNative(&C.cef_time_t{})))
+func TimeNow(cefTime *Time) int32 {
+	return int32(C.cef_time_now(cefTime.toNative(&C.cef_time_t{})))
 }
 
 // TimeToDoublet (cef_time_to_doublet from include/internal/cef_time.h)
@@ -1028,15 +1028,15 @@ func TimeNow(cef_time *Time) int32 {
 // epoch (Jan 1, 1970). Webkit uses this format to represent time. A value of 0
 // means "not initialized". Returns true (1) on success and false (0) on
 // failure.
-func TimeToDoublet(cef_time *Time, time *float64) int32 {
-	return int32(C.cef_time_to_doublet(cef_time.toNative(&C.cef_time_t{}), (*C.double)(time)))
+func TimeToDoublet(cefTime *Time, time *float64) int32 {
+	return int32(C.cef_time_to_doublet(cefTime.toNative(&C.cef_time_t{}), (*C.double)(time)))
 }
 
 // TimeToTimet (cef_time_to_timet from include/internal/cef_time.h)
 // Converts cef_time_t to/from time_t. Returns true (1) on success and false (0)
 // on failure.
-func TimeToTimet(cef_time *Time, time *int64) int32 {
-	return int32(C.cef_time_to_timet(cef_time.toNative(&C.cef_time_t{}), (*C.time_t)(time)))
+func TimeToTimet(cefTime *Time, time *int64) int32 {
+	return int32(C.cef_time_to_timet(cefTime.toNative(&C.cef_time_t{}), (*C.time_t)(time)))
 }
 
 // UnregisterInternalWebPlugin (cef_unregister_internal_web_plugin from include/capi/cef_web_plugin_capi.h)
@@ -1072,8 +1072,8 @@ func UnregisterInternalWebPlugin(path string) {
 //   - The |request_context| parameter must be NULL.
 //
 // The |request| object will be marked as read-only after calling this function.
-func UrlrequestCreate(request *Request, client *UrlrequestClient, request_context *RequestContext) *Urlrequest {
-	return (*Urlrequest)(C.cef_urlrequest_create(request.toNative(), client.toNative(), request_context.toNative()))
+func UrlrequestCreate(request *Request, client *UrlrequestClient, requestContext *RequestContext) *Urlrequest {
+	return (*Urlrequest)(C.cef_urlrequest_create(request.toNative(), client.toNative(), requestContext.toNative()))
 }
 
 // V8contextGetCurrentContext (cef_v8context_get_current_context from include/capi/cef_v8_capi.h)
@@ -1097,8 +1097,8 @@ func V8contextInContext() int32 {
 // V8stackTraceGetCurrent (cef_v8stack_trace_get_current from include/capi/cef_v8_capi.h)
 // Returns the stack trace for the currently active context. |frame_limit| is
 // the maximum number of frames that will be captured.
-func V8stackTraceGetCurrent(frame_limit int32) *V8stackTrace {
-	return (*V8stackTrace)(C.cef_v8stack_trace_get_current(C.int(frame_limit)))
+func V8stackTraceGetCurrent(frameLimit int32) *V8stackTrace {
+	return (*V8stackTrace)(C.cef_v8stack_trace_get_current(C.int(frameLimit)))
 }
 
 // V8valueCreateArray (cef_v8value_create_array from include/capi/cef_v8_capi.h)
@@ -1121,8 +1121,8 @@ func V8valueCreateArray(length int32) *V8value {
 // cef_render_process_handler_t, cef_v8handler_t or cef_v8accessor_t callback,
 // or in combination with calling enter() and exit() on a stored cef_v8context_t
 // reference.
-func V8valueCreateArrayBuffer(buffer unsafe.Pointer, length uint64, release_callback *V8arrayBufferReleaseCallback) *V8value {
-	return (*V8value)(C.cef_v8value_create_array_buffer(buffer, C.size_t(length), release_callback.toNative()))
+func V8valueCreateArrayBuffer(buffer unsafe.Pointer, length uint64, releaseCallback *V8arrayBufferReleaseCallback) *V8value {
+	return (*V8value)(C.cef_v8value_create_array_buffer(buffer, C.size_t(length), releaseCallback.toNative()))
 }
 
 // V8valueCreateBool (cef_v8value_create_bool from include/capi/cef_v8_capi.h)
@@ -1224,8 +1224,8 @@ func VisitWebPluginInfo(visitor *WebPluginInfoVisitor) {
 // been released; otherwise, the state remains signaled until reset() is called
 // manually. If |initially_signaled| is true (1) then the event will start in
 // the signaled state.
-func WaitableEventCreate(automatic_reset, initially_signaled int32) *WaitableEvent {
-	return (*WaitableEvent)(C.cef_waitable_event_create(C.int(automatic_reset), C.int(initially_signaled)))
+func WaitableEventCreate(automaticReset, initiallySignaled int32) *WaitableEvent {
+	return (*WaitableEvent)(C.cef_waitable_event_create(C.int(automaticReset), C.int(initiallySignaled)))
 }
 
 // WindowCreateTopLevel (cef_window_create_top_level from include/capi/views/cef_window_capi.h)

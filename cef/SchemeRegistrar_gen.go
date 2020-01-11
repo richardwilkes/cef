@@ -4,7 +4,7 @@ package cef
 
 import (
 	// #include "capi_gen.h"
-	// int gocef_scheme_registrar_add_custom_scheme(cef_scheme_registrar_t * self, cef_string_t * scheme_name, int options, int (CEF_CALLBACK *callback__)(cef_scheme_registrar_t *, cef_string_t *, int)) { return callback__(self, scheme_name, options); }
+	// int gocef_scheme_registrar_add_custom_scheme(cef_scheme_registrar_t * self, cef_string_t * schemeName, int options, int (CEF_CALLBACK *callback__)(cef_scheme_registrar_t *, cef_string_t *, int)) { return callback__(self, schemeName, options); }
 	"C"
 )
 
@@ -31,11 +31,11 @@ func (d *SchemeRegistrar) Base() *BaseScoped {
 // This function may be called on any thread. It should only be called once
 // per unique |scheme_name| value. If |scheme_name| is already registered or
 // if an error occurs this function will return false (0).
-func (d *SchemeRegistrar) AddCustomScheme(scheme_name string, options int32) int32 {
-	scheme_name_ := C.cef_string_userfree_alloc()
-	setCEFStr(scheme_name, scheme_name_)
+func (d *SchemeRegistrar) AddCustomScheme(schemeName string, options int32) int32 {
+	schemeName_ := C.cef_string_userfree_alloc()
+	setCEFStr(schemeName, schemeName_)
 	defer func() {
-		C.cef_string_userfree_free(scheme_name_)
+		C.cef_string_userfree_free(schemeName_)
 	}()
-	return int32(C.gocef_scheme_registrar_add_custom_scheme(d.toNative(), (*C.cef_string_t)(scheme_name_), C.int(options), d.add_custom_scheme))
+	return int32(C.gocef_scheme_registrar_add_custom_scheme(d.toNative(), (*C.cef_string_t)(schemeName_), C.int(options), d.add_custom_scheme))
 }

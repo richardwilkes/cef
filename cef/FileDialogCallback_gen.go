@@ -16,7 +16,7 @@ import (
 
 // FileDialogCallbackProxy defines methods required for using FileDialogCallback.
 type FileDialogCallbackProxy interface {
-	Cont(self *FileDialogCallback, selected_accept_filter int32, file_paths StringList)
+	Cont(self *FileDialogCallback, selectedAcceptFilter int32, filePaths StringList)
 	Cancel(self *FileDialogCallback)
 }
 
@@ -62,16 +62,16 @@ func (d *FileDialogCallback) Base() *BaseRefCounted {
 // cef_dialog_handler_t::OnFileDialog. |file_paths| should be a single value
 // or a list of values depending on the dialog mode. An NULL |file_paths|
 // value is treated the same as calling cancel().
-func (d *FileDialogCallback) Cont(selected_accept_filter int32, file_paths StringList) {
-	lookupFileDialogCallbackProxy(d.Base()).Cont(d, selected_accept_filter, file_paths)
+func (d *FileDialogCallback) Cont(selectedAcceptFilter int32, filePaths StringList) {
+	lookupFileDialogCallbackProxy(d.Base()).Cont(d, selectedAcceptFilter, filePaths)
 }
 
 //nolint:gocritic
 //export gocef_file_dialog_callback_cont
-func gocef_file_dialog_callback_cont(self *C.cef_file_dialog_callback_t, selected_accept_filter C.int, file_paths C.cef_string_list_t) {
+func gocef_file_dialog_callback_cont(self *C.cef_file_dialog_callback_t, selectedAcceptFilter C.int, filePaths C.cef_string_list_t) {
 	me__ := (*FileDialogCallback)(self)
 	proxy__ := lookupFileDialogCallbackProxy(me__.Base())
-	proxy__.Cont(me__, int32(selected_accept_filter), StringList(file_paths))
+	proxy__.Cont(me__, int32(selectedAcceptFilter), StringList(filePaths))
 }
 
 // Cancel (cancel)

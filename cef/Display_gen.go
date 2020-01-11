@@ -33,9 +33,9 @@ func (d *Display) Base() *BaseRefCounted {
 	return (*BaseRefCounted)(&d.base)
 }
 
-// GetId (get_id)
+// GetID (get_id)
 // Returns the unique identifier for this Display.
-func (d *Display) GetId() int64 {
+func (d *Display) GetID() int64 {
 	return int64(C.gocef_display_get_id(d.toNative(), d.get_id))
 }
 

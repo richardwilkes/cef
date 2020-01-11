@@ -19,11 +19,11 @@ type ResourceRequestHandlerProxy interface {
 	GetCookieAccessFilter(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request) *CookieAccessFilter
 	OnBeforeResourceLoad(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request, callback *RequestCallback) ReturnValue
 	GetResourceHandler(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request) *ResourceHandler
-	OnResourceRedirect(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request, response *Response, new_url *string)
+	OnResourceRedirect(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request, response *Response, newURL *string)
 	OnResourceResponse(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request, response *Response) int32
 	GetResourceResponseFilter(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request, response *Response) *ResponseFilter
-	OnResourceLoadComplete(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request, response *Response, status UrlrequestStatus, received_content_length int64)
-	OnProtocolExecution(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request, allow_os_execution *int32)
+	OnResourceLoadComplete(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request, response *Response, status UrlrequestStatus, receivedContentLength int64)
+	OnProtocolExecution(self *ResourceRequestHandler, browser *Browser, frame *Frame, request *Request, allowOsExecution *int32)
 }
 
 // ResourceRequestHandler (cef_resource_request_handler_t from include/capi/cef_resource_request_handler_capi.h)
@@ -133,17 +133,17 @@ func gocef_resource_request_handler_get_resource_handler(self *C.cef_resource_re
 // resulted in the redirect. The |new_url| parameter will contain the new URL
 // and can be changed if desired. The |request| and |response| objects cannot
 // be modified in this callback.
-func (d *ResourceRequestHandler) OnResourceRedirect(browser *Browser, frame *Frame, request *Request, response *Response, new_url *string) {
-	lookupResourceRequestHandlerProxy(d.Base()).OnResourceRedirect(d, browser, frame, request, response, new_url)
+func (d *ResourceRequestHandler) OnResourceRedirect(browser *Browser, frame *Frame, request *Request, response *Response, newURL *string) {
+	lookupResourceRequestHandlerProxy(d.Base()).OnResourceRedirect(d, browser, frame, request, response, newURL)
 }
 
 //nolint:gocritic
 //export gocef_resource_request_handler_on_resource_redirect
-func gocef_resource_request_handler_on_resource_redirect(self *C.cef_resource_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t, new_url *C.cef_string_t) {
+func gocef_resource_request_handler_on_resource_redirect(self *C.cef_resource_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t, newURL *C.cef_string_t) {
 	me__ := (*ResourceRequestHandler)(self)
 	proxy__ := lookupResourceRequestHandlerProxy(me__.Base())
-	new_url_ := cefstrToString(new_url)
-	proxy__.OnResourceRedirect(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*Response)(response), &new_url_)
+	newURL_ := cefstrToString(newURL)
+	proxy__.OnResourceRedirect(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*Response)(response), &newURL_)
 }
 
 // OnResourceResponse (on_resource_response)
@@ -203,16 +203,16 @@ func gocef_resource_request_handler_get_resource_response_filter(self *C.cef_res
 // this situation, and care should be taken not to call |browser| or |frame|
 // functions that modify state (like LoadURL, SendProcessMessage, etc.) if the
 // frame is invalid.
-func (d *ResourceRequestHandler) OnResourceLoadComplete(browser *Browser, frame *Frame, request *Request, response *Response, status UrlrequestStatus, received_content_length int64) {
-	lookupResourceRequestHandlerProxy(d.Base()).OnResourceLoadComplete(d, browser, frame, request, response, status, received_content_length)
+func (d *ResourceRequestHandler) OnResourceLoadComplete(browser *Browser, frame *Frame, request *Request, response *Response, status UrlrequestStatus, receivedContentLength int64) {
+	lookupResourceRequestHandlerProxy(d.Base()).OnResourceLoadComplete(d, browser, frame, request, response, status, receivedContentLength)
 }
 
 //nolint:gocritic
 //export gocef_resource_request_handler_on_resource_load_complete
-func gocef_resource_request_handler_on_resource_load_complete(self *C.cef_resource_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t, status C.cef_urlrequest_status_t, received_content_length C.int64) {
+func gocef_resource_request_handler_on_resource_load_complete(self *C.cef_resource_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, response *C.cef_response_t, status C.cef_urlrequest_status_t, receivedContentLength C.int64) {
 	me__ := (*ResourceRequestHandler)(self)
 	proxy__ := lookupResourceRequestHandlerProxy(me__.Base())
-	proxy__.OnResourceLoadComplete(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*Response)(response), UrlrequestStatus(status), int64(received_content_length))
+	proxy__.OnResourceLoadComplete(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*Response)(response), UrlrequestStatus(status), int64(receivedContentLength))
 }
 
 // OnProtocolExecution (on_protocol_execution)
@@ -224,14 +224,14 @@ func gocef_resource_request_handler_on_resource_load_complete(self *C.cef_resour
 // registered OS protocol handler, if any. SECURITY WARNING: YOU SHOULD USE
 // THIS METHOD TO ENFORCE RESTRICTIONS BASED ON SCHEME, HOST OR OTHER URL
 // ANALYSIS BEFORE ALLOWING OS EXECUTION.
-func (d *ResourceRequestHandler) OnProtocolExecution(browser *Browser, frame *Frame, request *Request, allow_os_execution *int32) {
-	lookupResourceRequestHandlerProxy(d.Base()).OnProtocolExecution(d, browser, frame, request, allow_os_execution)
+func (d *ResourceRequestHandler) OnProtocolExecution(browser *Browser, frame *Frame, request *Request, allowOsExecution *int32) {
+	lookupResourceRequestHandlerProxy(d.Base()).OnProtocolExecution(d, browser, frame, request, allowOsExecution)
 }
 
 //nolint:gocritic
 //export gocef_resource_request_handler_on_protocol_execution
-func gocef_resource_request_handler_on_protocol_execution(self *C.cef_resource_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, allow_os_execution *C.int) {
+func gocef_resource_request_handler_on_protocol_execution(self *C.cef_resource_request_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, request *C.cef_request_t, allowOsExecution *C.int) {
 	me__ := (*ResourceRequestHandler)(self)
 	proxy__ := lookupResourceRequestHandlerProxy(me__.Base())
-	proxy__.OnProtocolExecution(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*int32)(allow_os_execution))
+	proxy__.OnProtocolExecution(me__, (*Browser)(browser), (*Frame)(frame), (*Request)(request), (*int32)(allowOsExecution))
 }

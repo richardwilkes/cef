@@ -16,7 +16,7 @@ import (
 
 // RunFileDialogCallbackProxy defines methods required for using RunFileDialogCallback.
 type RunFileDialogCallbackProxy interface {
-	OnFileDialogDismissed(self *RunFileDialogCallback, selected_accept_filter int32, file_paths StringList)
+	OnFileDialogDismissed(self *RunFileDialogCallback, selectedAcceptFilter int32, filePaths StringList)
 }
 
 // RunFileDialogCallback (cef_run_file_dialog_callback_t from include/capi/cef_browser_capi.h)
@@ -62,14 +62,14 @@ func (d *RunFileDialogCallback) Base() *BaseRefCounted {
 // the accept filters array passed to cef_browser_host_t::RunFileDialog.
 // |file_paths| will be a single value or a list of values depending on the
 // dialog mode. If the selection was cancelled |file_paths| will be NULL.
-func (d *RunFileDialogCallback) OnFileDialogDismissed(selected_accept_filter int32, file_paths StringList) {
-	lookupRunFileDialogCallbackProxy(d.Base()).OnFileDialogDismissed(d, selected_accept_filter, file_paths)
+func (d *RunFileDialogCallback) OnFileDialogDismissed(selectedAcceptFilter int32, filePaths StringList) {
+	lookupRunFileDialogCallbackProxy(d.Base()).OnFileDialogDismissed(d, selectedAcceptFilter, filePaths)
 }
 
 //nolint:gocritic
 //export gocef_run_file_dialog_callback_on_file_dialog_dismissed
-func gocef_run_file_dialog_callback_on_file_dialog_dismissed(self *C.cef_run_file_dialog_callback_t, selected_accept_filter C.int, file_paths C.cef_string_list_t) {
+func gocef_run_file_dialog_callback_on_file_dialog_dismissed(self *C.cef_run_file_dialog_callback_t, selectedAcceptFilter C.int, filePaths C.cef_string_list_t) {
 	me__ := (*RunFileDialogCallback)(self)
 	proxy__ := lookupRunFileDialogCallbackProxy(me__.Base())
-	proxy__.OnFileDialogDismissed(me__, int32(selected_accept_filter), StringList(file_paths))
+	proxy__.OnFileDialogDismissed(me__, int32(selectedAcceptFilter), StringList(filePaths))
 }

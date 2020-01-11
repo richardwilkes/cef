@@ -101,7 +101,7 @@ for i, one := range %[1]s {
 				fmt.Fprintf(&buffer, "var delegate_ %sC.%s\n", p.Ptrs, p.BaseType)
 				buffer.WriteString("if delegate != nil {\n")
 				buffer.WriteString("delegate_ = delegate.toNative(")
-				if sdef, exists := sdefsMap[p.BaseType]; exists && !sdef.isClassEquivalent() {
+				if sdef, exists2 := sdefsMap[p.BaseType]; exists2 && !sdef.isClassEquivalent() {
 					fmt.Fprintf(&buffer, "&C.%s{}", p.BaseType)
 				}
 				buffer.WriteString(")\n")
@@ -197,7 +197,7 @@ func processFunctionDecl(block []lineInfo) {
 			if _, exclude := fdefsMap[name]; !exclude {
 				fdef := &funcDef{
 					Name:     name,
-					GoName:   translateConstantName(name[4:]),
+					GoName:   translateName(name[4:]),
 					Return:   newCVar("result", result[0][2], block[0].Position),
 					Position: block[0].Position,
 				}

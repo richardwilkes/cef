@@ -16,7 +16,7 @@ import (
 
 // RegisterCdmCallbackProxy defines methods required for using RegisterCdmCallback.
 type RegisterCdmCallbackProxy interface {
-	OnCdmRegistrationComplete(self *RegisterCdmCallback, result CdmRegistrationError, error_message string)
+	OnCdmRegistrationComplete(self *RegisterCdmCallback, result CdmRegistrationError, errorMessage string)
 }
 
 // RegisterCdmCallback (cef_register_cdm_callback_t from include/capi/cef_web_plugin_capi.h)
@@ -62,15 +62,15 @@ func (d *RegisterCdmCallback) Base() *BaseRefCounted {
 // be CEF_CDM_REGISTRATION_ERROR_NONE if registration completed successfully.
 // Otherwise, |result| and |error_message| will contain additional information
 // about why registration failed.
-func (d *RegisterCdmCallback) OnCdmRegistrationComplete(result CdmRegistrationError, error_message string) {
-	lookupRegisterCdmCallbackProxy(d.Base()).OnCdmRegistrationComplete(d, result, error_message)
+func (d *RegisterCdmCallback) OnCdmRegistrationComplete(result CdmRegistrationError, errorMessage string) {
+	lookupRegisterCdmCallbackProxy(d.Base()).OnCdmRegistrationComplete(d, result, errorMessage)
 }
 
 //nolint:gocritic
 //export gocef_register_cdm_callback_on_cdm_registration_complete
-func gocef_register_cdm_callback_on_cdm_registration_complete(self *C.cef_register_cdm_callback_t, result C.cef_cdm_registration_error_t, error_message *C.cef_string_t) {
+func gocef_register_cdm_callback_on_cdm_registration_complete(self *C.cef_register_cdm_callback_t, result C.cef_cdm_registration_error_t, errorMessage *C.cef_string_t) {
 	me__ := (*RegisterCdmCallback)(self)
 	proxy__ := lookupRegisterCdmCallbackProxy(me__.Base())
-	error_message_ := cefstrToString(error_message)
-	proxy__.OnCdmRegistrationComplete(me__, CdmRegistrationError(result), error_message_)
+	errorMessage_ := cefstrToString(errorMessage)
+	proxy__.OnCdmRegistrationComplete(me__, CdmRegistrationError(result), errorMessage_)
 }

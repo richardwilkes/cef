@@ -48,9 +48,9 @@ func (d *StreamReader) Tell() int64 {
 	return int64(C.gocef_stream_reader_tell(d.toNative(), d.tell))
 }
 
-// Eof (eof)
+// EOF (eof)
 // Return non-zero if at end of file.
-func (d *StreamReader) Eof() int32 {
+func (d *StreamReader) EOF() int32 {
 	return int32(C.gocef_stream_reader_eof(d.toNative(), d.eof))
 }
 

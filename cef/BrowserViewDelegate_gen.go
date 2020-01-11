@@ -16,10 +16,10 @@ import (
 
 // BrowserViewDelegateProxy defines methods required for using BrowserViewDelegate.
 type BrowserViewDelegateProxy interface {
-	OnBrowserCreated(self *BrowserViewDelegate, browser_view *BrowserView, browser *Browser)
-	OnBrowserDestroyed(self *BrowserViewDelegate, browser_view *BrowserView, browser *Browser)
-	GetDelegateForPopupBrowserView(self *BrowserViewDelegate, browser_view *BrowserView, settings *BrowserSettings, client *Client, is_devtools int32) *BrowserViewDelegate
-	OnPopupBrowserViewCreated(self *BrowserViewDelegate, browser_view, popup_browser_view *BrowserView, is_devtools int32) int32
+	OnBrowserCreated(self *BrowserViewDelegate, browserView *BrowserView, browser *Browser)
+	OnBrowserDestroyed(self *BrowserViewDelegate, browserView *BrowserView, browser *Browser)
+	GetDelegateForPopupBrowserView(self *BrowserViewDelegate, browserView *BrowserView, settings *BrowserSettings, client *Client, isDevtools int32) *BrowserViewDelegate
+	OnPopupBrowserViewCreated(self *BrowserViewDelegate, browserView, popupBrowserView *BrowserView, isDevtools int32) int32
 }
 
 // BrowserViewDelegate (cef_browser_view_delegate_t from include/capi/views/cef_browser_view_delegate_capi.h)
@@ -65,16 +65,16 @@ func (d *BrowserViewDelegate) Base() *ViewDelegate {
 // function will be called after cef_life_span_handler_t::on_after_created()
 // is called for |browser| and before on_popup_browser_view_created() is
 // called for |browser|'s parent delegate if |browser| is a popup.
-func (d *BrowserViewDelegate) OnBrowserCreated(browser_view *BrowserView, browser *Browser) {
-	lookupBrowserViewDelegateProxy(d.Base().Base()).OnBrowserCreated(d, browser_view, browser)
+func (d *BrowserViewDelegate) OnBrowserCreated(browserView *BrowserView, browser *Browser) {
+	lookupBrowserViewDelegateProxy(d.Base().Base()).OnBrowserCreated(d, browserView, browser)
 }
 
 //nolint:gocritic
 //export gocef_browser_view_delegate_on_browser_created
-func gocef_browser_view_delegate_on_browser_created(self *C.cef_browser_view_delegate_t, browser_view *C.cef_browser_view_t, browser *C.cef_browser_t) {
+func gocef_browser_view_delegate_on_browser_created(self *C.cef_browser_view_delegate_t, browserView *C.cef_browser_view_t, browser *C.cef_browser_t) {
 	me__ := (*BrowserViewDelegate)(self)
 	proxy__ := lookupBrowserViewDelegateProxy(me__.Base().Base())
-	proxy__.OnBrowserCreated(me__, (*BrowserView)(browser_view), (*Browser)(browser))
+	proxy__.OnBrowserCreated(me__, (*BrowserView)(browserView), (*Browser)(browser))
 }
 
 // OnBrowserDestroyed (on_browser_destroyed)
@@ -82,16 +82,16 @@ func gocef_browser_view_delegate_on_browser_created(self *C.cef_browser_view_del
 // all references to |browser| and do not attempt to execute any functions on
 // |browser| after this callback returns. This function will be called before
 // cef_life_span_handler_t::on_before_close() is called for |browser|.
-func (d *BrowserViewDelegate) OnBrowserDestroyed(browser_view *BrowserView, browser *Browser) {
-	lookupBrowserViewDelegateProxy(d.Base().Base()).OnBrowserDestroyed(d, browser_view, browser)
+func (d *BrowserViewDelegate) OnBrowserDestroyed(browserView *BrowserView, browser *Browser) {
+	lookupBrowserViewDelegateProxy(d.Base().Base()).OnBrowserDestroyed(d, browserView, browser)
 }
 
 //nolint:gocritic
 //export gocef_browser_view_delegate_on_browser_destroyed
-func gocef_browser_view_delegate_on_browser_destroyed(self *C.cef_browser_view_delegate_t, browser_view *C.cef_browser_view_t, browser *C.cef_browser_t) {
+func gocef_browser_view_delegate_on_browser_destroyed(self *C.cef_browser_view_delegate_t, browserView *C.cef_browser_view_t, browser *C.cef_browser_t) {
 	me__ := (*BrowserViewDelegate)(self)
 	proxy__ := lookupBrowserViewDelegateProxy(me__.Base().Base())
-	proxy__.OnBrowserDestroyed(me__, (*BrowserView)(browser_view), (*Browser)(browser))
+	proxy__.OnBrowserDestroyed(me__, (*BrowserView)(browserView), (*Browser)(browser))
 }
 
 // GetDelegateForPopupBrowserView (get_delegate_for_popup_browser_view)
@@ -100,17 +100,17 @@ func gocef_browser_view_delegate_on_browser_destroyed(self *C.cef_browser_view_d
 // cef_life_span_handler_t::on_before_popup(). |is_devtools| will be true (1)
 // if the popup will be a DevTools browser. Return the delegate that will be
 // used for the new popup BrowserView.
-func (d *BrowserViewDelegate) GetDelegateForPopupBrowserView(browser_view *BrowserView, settings *BrowserSettings, client *Client, is_devtools int32) *BrowserViewDelegate {
-	return lookupBrowserViewDelegateProxy(d.Base().Base()).GetDelegateForPopupBrowserView(d, browser_view, settings, client, is_devtools)
+func (d *BrowserViewDelegate) GetDelegateForPopupBrowserView(browserView *BrowserView, settings *BrowserSettings, client *Client, isDevtools int32) *BrowserViewDelegate {
+	return lookupBrowserViewDelegateProxy(d.Base().Base()).GetDelegateForPopupBrowserView(d, browserView, settings, client, isDevtools)
 }
 
 //nolint:gocritic
 //export gocef_browser_view_delegate_get_delegate_for_popup_browser_view
-func gocef_browser_view_delegate_get_delegate_for_popup_browser_view(self *C.cef_browser_view_delegate_t, browser_view *C.cef_browser_view_t, settings *C.cef_browser_settings_t, client *C.cef_client_t, is_devtools C.int) *C.cef_browser_view_delegate_t {
+func gocef_browser_view_delegate_get_delegate_for_popup_browser_view(self *C.cef_browser_view_delegate_t, browserView *C.cef_browser_view_t, settings *C.cef_browser_settings_t, client *C.cef_client_t, isDevtools C.int) *C.cef_browser_view_delegate_t {
 	me__ := (*BrowserViewDelegate)(self)
 	proxy__ := lookupBrowserViewDelegateProxy(me__.Base().Base())
 	settings_ := settings.toGo()
-	return (proxy__.GetDelegateForPopupBrowserView(me__, (*BrowserView)(browser_view), settings_, (*Client)(client), int32(is_devtools))).toNative()
+	return (proxy__.GetDelegateForPopupBrowserView(me__, (*BrowserView)(browserView), settings_, (*Client)(client), int32(isDevtools))).toNative()
 }
 
 // OnPopupBrowserViewCreated (on_popup_browser_view_created)
@@ -121,14 +121,14 @@ func gocef_browser_view_delegate_get_delegate_for_popup_browser_view(self *C.cef
 // browser. Optionally add |popup_browser_view| to the views hierarchy
 // yourself and return true (1). Otherwise return false (0) and a default
 // cef_window_t will be created for the popup.
-func (d *BrowserViewDelegate) OnPopupBrowserViewCreated(browser_view, popup_browser_view *BrowserView, is_devtools int32) int32 {
-	return lookupBrowserViewDelegateProxy(d.Base().Base()).OnPopupBrowserViewCreated(d, browser_view, popup_browser_view, is_devtools)
+func (d *BrowserViewDelegate) OnPopupBrowserViewCreated(browserView, popupBrowserView *BrowserView, isDevtools int32) int32 {
+	return lookupBrowserViewDelegateProxy(d.Base().Base()).OnPopupBrowserViewCreated(d, browserView, popupBrowserView, isDevtools)
 }
 
 //nolint:gocritic
 //export gocef_browser_view_delegate_on_popup_browser_view_created
-func gocef_browser_view_delegate_on_popup_browser_view_created(self *C.cef_browser_view_delegate_t, browser_view *C.cef_browser_view_t, popup_browser_view *C.cef_browser_view_t, is_devtools C.int) C.int {
+func gocef_browser_view_delegate_on_popup_browser_view_created(self *C.cef_browser_view_delegate_t, browserView *C.cef_browser_view_t, popupBrowserView *C.cef_browser_view_t, isDevtools C.int) C.int {
 	me__ := (*BrowserViewDelegate)(self)
 	proxy__ := lookupBrowserViewDelegateProxy(me__.Base().Base())
-	return C.int(proxy__.OnPopupBrowserViewCreated(me__, (*BrowserView)(browser_view), (*BrowserView)(popup_browser_view), int32(is_devtools)))
+	return C.int(proxy__.OnPopupBrowserViewCreated(me__, (*BrowserView)(browserView), (*BrowserView)(popupBrowserView), int32(isDevtools)))
 }

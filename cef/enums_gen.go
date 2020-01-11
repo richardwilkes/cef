@@ -525,7 +525,7 @@ const (
 	ErrUploadStreamRewindNotSupported            Errorcode = 25  // ERR_UPLOAD_STREAM_REWIND_NOT_SUPPORTED
 	ErrContextShutDown                           Errorcode = 26  // ERR_CONTEXT_SHUT_DOWN
 	ErrBlockedByResponse                         Errorcode = 27  // ERR_BLOCKED_BY_RESPONSE
-	ErrBlockedByXssAuditor                       Errorcode = 28  // ERR_BLOCKED_BY_XSS_AUDITOR
+	ErrBlockedByXSSAuditor                       Errorcode = 28  // ERR_BLOCKED_BY_XSS_AUDITOR
 	ErrCleartextNotPermitted                     Errorcode = 29  // ERR_CLEARTEXT_NOT_PERMITTED
 	ErrConnectionClosed                          Errorcode = 30  // ERR_CONNECTION_CLOSED
 	ErrConnectionReset                           Errorcode = 31  // ERR_CONNECTION_RESET
@@ -565,7 +565,7 @@ const (
 	ErrNameResolutionFailed                      Errorcode = 65  // ERR_NAME_RESOLUTION_FAILED
 	ErrNetworkAccessDenied                       Errorcode = 66  // ERR_NETWORK_ACCESS_DENIED
 	ErrTemporarilyThrottled                      Errorcode = 67  // ERR_TEMPORARILY_THROTTLED
-	ErrHttpsProxyTunnelResponseRedirect          Errorcode = 68  // ERR_HTTPS_PROXY_TUNNEL_RESPONSE_REDIRECT
+	ErrHTTPSProxyTunnelResponseRedirect          Errorcode = 68  // ERR_HTTPS_PROXY_TUNNEL_RESPONSE_REDIRECT
 	ErrSSLClientAuthSignatureFailed              Errorcode = 69  // ERR_SSL_CLIENT_AUTH_SIGNATURE_FAILED
 	ErrMsgTooBig                                 Errorcode = 70  // ERR_MSG_TOO_BIG
 	ErrWsProtocolError                           Errorcode = 71  // ERR_WS_PROTOCOL_ERROR
@@ -597,7 +597,7 @@ const (
 	ErrSSLClientAuthNoCommonAlgorithms           Errorcode = 97  // ERR_SSL_CLIENT_AUTH_NO_COMMON_ALGORITHMS
 	ErrEarlyDataRejected                         Errorcode = 98  // ERR_EARLY_DATA_REJECTED
 	ErrWrongVersionOnEarlyData                   Errorcode = 99  // ERR_WRONG_VERSION_ON_EARLY_DATA
-	ErrTls13DowngradeDetected                    Errorcode = 100 // ERR_TLS13_DOWNGRADE_DETECTED
+	ErrTLS13DowngradeDetected                    Errorcode = 100 // ERR_TLS13_DOWNGRADE_DETECTED
 	ErrSSLKeyUsageIncompatible                   Errorcode = 101 // ERR_SSL_KEY_USAGE_INCOMPATIBLE
 	ErrCertCommonNameInvalid                     Errorcode = 102 // ERR_CERT_COMMON_NAME_INVALID
 	ErrCertDateInvalid                           Errorcode = 103 // ERR_CERT_DATE_INVALID
@@ -714,14 +714,14 @@ const (
 	ErrPrivateKeyExportFailed                    Errorcode = 214 // ERR_PRIVATE_KEY_EXPORT_FAILED
 	ErrSelfSignedCertGenerationFailed            Errorcode = 215 // ERR_SELF_SIGNED_CERT_GENERATION_FAILED
 	ErrCertDatabaseChanged                       Errorcode = 216 // ERR_CERT_DATABASE_CHANGED
-	ErrDnsMalformedResponse                      Errorcode = 217 // ERR_DNS_MALFORMED_RESPONSE
-	ErrDnsServerRequiresTcp                      Errorcode = 218 // ERR_DNS_SERVER_REQUIRES_TCP
-	ErrDnsServerFailed                           Errorcode = 219 // ERR_DNS_SERVER_FAILED
-	ErrDnsTimedOut                               Errorcode = 220 // ERR_DNS_TIMED_OUT
-	ErrDnsCacheMiss                              Errorcode = 221 // ERR_DNS_CACHE_MISS
-	ErrDnsSearchEmpty                            Errorcode = 222 // ERR_DNS_SEARCH_EMPTY
-	ErrDnsSortError                              Errorcode = 223 // ERR_DNS_SORT_ERROR
-	ErrDnsHTTPFailed                             Errorcode = 224 // ERR_DNS_HTTP_FAILED
+	ErrDNSMalformedResponse                      Errorcode = 217 // ERR_DNS_MALFORMED_RESPONSE
+	ErrDNSServerRequiresTCP                      Errorcode = 218 // ERR_DNS_SERVER_REQUIRES_TCP
+	ErrDNSServerFailed                           Errorcode = 219 // ERR_DNS_SERVER_FAILED
+	ErrDNSTimedOut                               Errorcode = 220 // ERR_DNS_TIMED_OUT
+	ErrDNSCacheMiss                              Errorcode = 221 // ERR_DNS_CACHE_MISS
+	ErrDNSSearchEmpty                            Errorcode = 222 // ERR_DNS_SEARCH_EMPTY
+	ErrDNSSortError                              Errorcode = 223 // ERR_DNS_SORT_ERROR
+	ErrDNSHTTPFailed                             Errorcode = 224 // ERR_DNS_HTTP_FAILED
 )
 
 // EventFlags (cef_event_flags_t from include/internal/cef_types.h)
@@ -1795,9 +1795,9 @@ type XMLEncodingType int
 // Possible values for XMLEncodingType
 const (
 	XMLEncodingNone    XMLEncodingType = 0 // XML_ENCODING_NONE
-	XMLEncodingUtf8    XMLEncodingType = 1 // XML_ENCODING_UTF8
-	XMLEncodingUtf16le XMLEncodingType = 2 // XML_ENCODING_UTF16LE
-	XMLEncodingUtf16be XMLEncodingType = 3 // XML_ENCODING_UTF16BE
+	XMLEncodingUTF8    XMLEncodingType = 1 // XML_ENCODING_UTF8
+	XMLEncodingUTF16LE XMLEncodingType = 2 // XML_ENCODING_UTF16LE
+	XMLEncodingUTF16BE XMLEncodingType = 3 // XML_ENCODING_UTF16BE
 	XMLEncodingASCII   XMLEncodingType = 4 // XML_ENCODING_ASCII
 )
 

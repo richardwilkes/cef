@@ -16,14 +16,14 @@ import (
 
 // DisplayHandlerProxy defines methods required for using DisplayHandler.
 type DisplayHandlerProxy interface {
-	OnAddressChange(self *DisplayHandler, browser *Browser, frame *Frame, url string)
+	OnAddressChange(self *DisplayHandler, browser *Browser, frame *Frame, uRL string)
 	OnTitleChange(self *DisplayHandler, browser *Browser, title string)
-	OnFaviconUrlchange(self *DisplayHandler, browser *Browser, icon_urls StringList)
+	OnFaviconUrlchange(self *DisplayHandler, browser *Browser, iconUrls StringList)
 	OnFullscreenModeChange(self *DisplayHandler, browser *Browser, fullscreen int32)
 	OnTooltip(self *DisplayHandler, browser *Browser, text *string) int32
 	OnStatusMessage(self *DisplayHandler, browser *Browser, value string)
 	OnConsoleMessage(self *DisplayHandler, browser *Browser, level LogSeverity, message, source string, line int32) int32
-	OnAutoResize(self *DisplayHandler, browser *Browser, new_size *Size) int32
+	OnAutoResize(self *DisplayHandler, browser *Browser, newSize *Size) int32
 	OnLoadingProgressChange(self *DisplayHandler, browser *Browser, progress float64)
 }
 
@@ -66,17 +66,17 @@ func (d *DisplayHandler) Base() *BaseRefCounted {
 
 // OnAddressChange (on_address_change)
 // Called when a frame's address has changed.
-func (d *DisplayHandler) OnAddressChange(browser *Browser, frame *Frame, url string) {
-	lookupDisplayHandlerProxy(d.Base()).OnAddressChange(d, browser, frame, url)
+func (d *DisplayHandler) OnAddressChange(browser *Browser, frame *Frame, uRL string) {
+	lookupDisplayHandlerProxy(d.Base()).OnAddressChange(d, browser, frame, uRL)
 }
 
 //nolint:gocritic
 //export gocef_display_handler_on_address_change
-func gocef_display_handler_on_address_change(self *C.cef_display_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, url *C.cef_string_t) {
+func gocef_display_handler_on_address_change(self *C.cef_display_handler_t, browser *C.cef_browser_t, frame *C.cef_frame_t, uRL *C.cef_string_t) {
 	me__ := (*DisplayHandler)(self)
 	proxy__ := lookupDisplayHandlerProxy(me__.Base())
-	url_ := cefstrToString(url)
-	proxy__.OnAddressChange(me__, (*Browser)(browser), (*Frame)(frame), url_)
+	uRL_ := cefstrToString(uRL)
+	proxy__.OnAddressChange(me__, (*Browser)(browser), (*Frame)(frame), uRL_)
 }
 
 // OnTitleChange (on_title_change)
@@ -96,16 +96,16 @@ func gocef_display_handler_on_title_change(self *C.cef_display_handler_t, browse
 
 // OnFaviconUrlchange (on_favicon_urlchange)
 // Called when the page icon changes.
-func (d *DisplayHandler) OnFaviconUrlchange(browser *Browser, icon_urls StringList) {
-	lookupDisplayHandlerProxy(d.Base()).OnFaviconUrlchange(d, browser, icon_urls)
+func (d *DisplayHandler) OnFaviconUrlchange(browser *Browser, iconUrls StringList) {
+	lookupDisplayHandlerProxy(d.Base()).OnFaviconUrlchange(d, browser, iconUrls)
 }
 
 //nolint:gocritic
 //export gocef_display_handler_on_favicon_urlchange
-func gocef_display_handler_on_favicon_urlchange(self *C.cef_display_handler_t, browser *C.cef_browser_t, icon_urls C.cef_string_list_t) {
+func gocef_display_handler_on_favicon_urlchange(self *C.cef_display_handler_t, browser *C.cef_browser_t, iconUrls C.cef_string_list_t) {
 	me__ := (*DisplayHandler)(self)
 	proxy__ := lookupDisplayHandlerProxy(me__.Base())
-	proxy__.OnFaviconUrlchange(me__, (*Browser)(browser), StringList(icon_urls))
+	proxy__.OnFaviconUrlchange(me__, (*Browser)(browser), StringList(iconUrls))
 }
 
 // OnFullscreenModeChange (on_fullscreen_mode_change)
@@ -184,17 +184,17 @@ func gocef_display_handler_on_console_message(self *C.cef_display_handler_t, bro
 // cef_browser_host_t::SetAutoResizeEnabled and the contents have auto-
 // resized. |new_size| will be the desired size in view coordinates. Return
 // true (1) if the resize was handled or false (0) for default handling.
-func (d *DisplayHandler) OnAutoResize(browser *Browser, new_size *Size) int32 {
-	return lookupDisplayHandlerProxy(d.Base()).OnAutoResize(d, browser, new_size)
+func (d *DisplayHandler) OnAutoResize(browser *Browser, newSize *Size) int32 {
+	return lookupDisplayHandlerProxy(d.Base()).OnAutoResize(d, browser, newSize)
 }
 
 //nolint:gocritic
 //export gocef_display_handler_on_auto_resize
-func gocef_display_handler_on_auto_resize(self *C.cef_display_handler_t, browser *C.cef_browser_t, new_size *C.cef_size_t) C.int {
+func gocef_display_handler_on_auto_resize(self *C.cef_display_handler_t, browser *C.cef_browser_t, newSize *C.cef_size_t) C.int {
 	me__ := (*DisplayHandler)(self)
 	proxy__ := lookupDisplayHandlerProxy(me__.Base())
-	new_size_ := new_size.toGo()
-	return C.int(proxy__.OnAutoResize(me__, (*Browser)(browser), new_size_))
+	newSize_ := newSize.toGo()
+	return C.int(proxy__.OnAutoResize(me__, (*Browser)(browser), newSize_))
 }
 
 // OnLoadingProgressChange (on_loading_progress_change)
