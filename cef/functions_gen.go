@@ -1,3 +1,12 @@
+// Copyright ©2018-2020 by Richard A. Wilkes. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, version 2.0. If a copy of the MPL was not distributed with
+// this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+// This Source Code Form is "Incompatible With Secondary Licenses", as
+// defined by the Mozilla Public License, version 2.0.
+
 // Code created from "funcdef.go.tmpl" - don't edit by hand
 
 package cef
@@ -318,8 +327,12 @@ func IsWebPluginUnstable(path string, callback *WebPluginUnstableCallback) {
 // LabelButtonCreate (cef_label_button_create from include/capi/views/cef_label_button_capi.h)
 // Create a new LabelButton. A |delegate| must be provided to handle the button
 // click. |text| will be shown on the LabelButton and used as the default
-// accessible name.
-func LabelButtonCreate(delegate *ButtonDelegate, text string) *LabelButton {
+// accessible name. If |with_frame| is true (1) the button will have a visible
+// frame at all times, center alignment, additional padding and a default
+// minimum size of 70x33 DIP. If |with_frame| is false (0) the button will only
+// have a visible frame on hover/press, left alignment, less padding and no
+// default minimum size.
+func LabelButtonCreate(delegate *ButtonDelegate, text string, withFrame int32) *LabelButton {
 	var delegate_ *C.cef_button_delegate_t
 	if delegate != nil {
 		delegate_ = delegate.toNative()
@@ -329,7 +342,7 @@ func LabelButtonCreate(delegate *ButtonDelegate, text string) *LabelButton {
 	defer func() {
 		C.cef_string_userfree_free(text_)
 	}()
-	return (*LabelButton)(C.cef_label_button_create(delegate_, (*C.cef_string_t)(text_)))
+	return (*LabelButton)(C.cef_label_button_create(delegate_, (*C.cef_string_t)(text_), C.int(withFrame)))
 }
 
 // ListValueCreate (cef_list_value_create from include/capi/cef_values_capi.h)
@@ -346,7 +359,7 @@ func ListValueCreate() *ListValue {
 // default minimum size of 70x33 DIP. If |with_frame| is false (0) the button
 // will only have a visible frame on hover/press, left alignment, less padding
 // and no default minimum size.
-func MenuButtonCreate(delegate *MenuButtonDelegate, text string) *MenuButton {
+func MenuButtonCreate(delegate *MenuButtonDelegate, text string, withFrame int32) *MenuButton {
 	var delegate_ *C.cef_menu_button_delegate_t
 	if delegate != nil {
 		delegate_ = delegate.toNative()
@@ -356,7 +369,7 @@ func MenuButtonCreate(delegate *MenuButtonDelegate, text string) *MenuButton {
 	defer func() {
 		C.cef_string_userfree_free(text_)
 	}()
-	return (*MenuButton)(C.cef_menu_button_create(delegate_, (*C.cef_string_t)(text_)))
+	return (*MenuButton)(C.cef_menu_button_create(delegate_, (*C.cef_string_t)(text_), C.int(withFrame)))
 }
 
 // MenuModelCreate (cef_menu_model_create from include/capi/cef_menu_model_capi.h)

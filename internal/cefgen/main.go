@@ -1,3 +1,12 @@
+// Copyright ©2018-2020 by Richard A. Wilkes. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, version 2.0. If a copy of the MPL was not distributed with
+// this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+// This Source Code Form is "Incompatible With Secondary Licenses", as
+// defined by the Mozilla Public License, version 2.0.
+
 package main
 
 //go:generate go run .
@@ -120,7 +129,18 @@ func processBlock(curBlock, prevBlock []lineInfo) {
 
 func genSourceFile(tmpl *template.Template, tmplName, fileName string, data interface{}) {
 	var buffer bytes.Buffer
-	fmt.Fprintf(&buffer, "// Code created from %q - don't edit by hand\n\n", tmplName)
+	fmt.Fprintf(&buffer, `// Copyright ©2018-2020 by Richard A. Wilkes. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, version 2.0. If a copy of the MPL was not distributed with
+// this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+// This Source Code Form is "Incompatible With Secondary Licenses", as
+// defined by the Mozilla Public License, version 2.0.
+
+// Code created from %q - don't edit by hand
+
+`, tmplName)
 	jot.FatalIfErr(tmpl.ExecuteTemplate(&buffer, tmplName, data))
 	path := filepath.Join(outputBaseDir, fileName)
 	var d []byte
@@ -195,7 +215,16 @@ func clangArgs(headers []string) []string {
 func createCommonHeader(headers []string) {
 	f, err := os.Create(filepath.Join(outputBaseDir, "capi_gen.h"))
 	jot.FatalIfErr(err)
-	_, err = f.WriteString(`// Code generated - DO NOT EDIT.
+	_, err = f.WriteString(`// Copyright ©2018-2020 by Richard A. Wilkes. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, version 2.0. If a copy of the MPL was not distributed with
+// this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+// This Source Code Form is "Incompatible With Secondary Licenses", as
+// defined by the Mozilla Public License, version 2.0.
+
+// Code generated - DO NOT EDIT.
 
 #ifndef GOCEF_CAPI_H_
 #define GOCEF_CAPI_H_

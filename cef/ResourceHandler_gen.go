@@ -1,3 +1,12 @@
+// Copyright ©2018-2020 by Richard A. Wilkes. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, version 2.0. If a copy of the MPL was not distributed with
+// this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+// This Source Code Form is "Incompatible With Secondary Licenses", as
+// defined by the Mozilla Public License, version 2.0.
+
 // Code created from "callback.go.tmpl" - don't edit by hand
 
 package cef
@@ -133,9 +142,9 @@ func gocef_resource_handler_get_response_headers(self *C.cef_resource_handler_t,
 // Skip (skip)
 // Skip response data when requested by a Range header. Skip over and discard
 // |bytes_to_skip| bytes of response data. If data is available immediately
-// set |bytes_skipped| to the number of bytes skipped and return true (1). To
-// read the data at a later time set |bytes_skipped| to 0, return true (1) and
-// execute |callback| when the data is available. To indicate failure set
+// set |bytes_skipped| to the number of of bytes skipped and return true (1).
+// To read the data at a later time set |bytes_skipped| to 0, return true (1)
+// and execute |callback| when the data is available. To indicate failure set
 // |bytes_skipped| to < 0 (e.g. -2 for ERR_FAILED) and return false (0). This
 // function will be called in sequence but not from a dedicated thread.
 func (d *ResourceHandler) Skip(bytesToSkip int64, bytesSkipped *int64, callback *ResourceSkipCallback) int32 {
