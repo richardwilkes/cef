@@ -1,3 +1,13 @@
+# NOTE:
+*While this repo should still be functional for the specific revision of CEF it
+was created for at the time, the project I originally created it for was
+abandoned when the company decided it didn't want to embed a web browser after
+all. This code has not been updated since and will likely not receive any more
+attention from me. In particular, I know that the CEF project was in the process
+of forcing the use of the sandbox when I stopped work on this. I did not spend
+any time determining what changes would be necessary to enable that functionality
+with those newer versions.*
+
 # cef
 Go bindings for the
 [Chromium Embedded Framework (CEF)](https://bitbucket.org/chromiumembedded/cef).
